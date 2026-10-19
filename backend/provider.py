@@ -18,6 +18,7 @@ from _shared.services.model_gateway import (
 )
 from pydantic import BaseModel, Field
 
+from .provider_schema import openai_schema
 from .routing import TASKS, ModelTask, ProviderPlugin, ProviderRegistry, TaskRoute, gateway_id
 from .settings import Settings
 
@@ -96,7 +97,9 @@ class HostedBackend:
             raise ModelBackendError("Model calls require a usage receipt")
         headers = {"Authorization": "Bearer " + self.settings.openai_key}
         try:
-            with httpx.Client(timeout=httpx.Timeout(100, connect=10)) as client:
+            with httpx.Client(
+                timeout=httpx.Timeout(self.settings.provider_timeout_seconds, connect=10)
+            ) as client:
                 if self._model_id == self.settings.speech_model:
                     text = request.prompt or ""
                     if len(text) > 9000:
@@ -126,6 +129,7 @@ class HostedBackend:
                     "input": messages,
                     "max_output_tokens": request.max_tokens,
                     "store": False,
+                    "reasoning": {"effort": self.settings.reasoning_effort},
                 }
                 if request.grammar:
                     body["text"] = {
@@ -133,7 +137,7 @@ class HostedBackend:
                             "type": "json_schema",
                             "name": "lesson_response",
                             "strict": True,
-                            "schema": json.loads(request.grammar),
+                            "schema": openai_schema(json.loads(request.grammar)),
                         }
                     }
                 # Research is used for new lesson authoring only, never ordinary chat.
@@ -185,7 +189,7 @@ def configure_gateway(settings: Settings, registry: ProviderRegistry | None = No
 
 
 async def _invoke_task(
-    task: ModelTask, prompt: str, *, schema: dict[str, object] | None, max_tokens: int
+    task: ModelTask, prompt: str, *, schema: dict[str, object] | None, max_tokens: int, timeout_ms: int
 ) -> str:
     """Log bounded metadata, excluding prompts, answers and credentials."""
     started = time.monotonic()
@@ -195,7 +199,7 @@ async def _invoke_task(
             models=[gateway_id(task)],
             grammar=json.dumps(schema) if schema else None,
             max_tokens=max_tokens,
-            timeout_ms=110000,
+            timeout_ms=timeout_ms,
         )
     except Exception as exc:
         # Log metadata then propagate; callers retain uncertain billing and checkpoints.
@@ -229,10 +233,17 @@ async def model_text(
         prompt,
         schema=schema,
         max_tokens=settings.max_chat_tokens if chat else settings.max_output_tokens,
+        timeout_ms=(settings.provider_timeout_seconds + 10) * 1000,
     )
 
 
 async def model_speech(narration: str, settings: Settings) -> bytes:
     """Synthesize one stage through the dedicated speech route."""
-    result = await _invoke_task("speech", narration, schema=None, max_tokens=1)
+    result = await _invoke_task(
+        "speech",
+        narration,
+        schema=None,
+        max_tokens=1,
+        timeout_ms=(settings.provider_timeout_seconds + 10) * 1000,
+    )
     return base64.b64decode(result, validate=True)

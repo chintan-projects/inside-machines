@@ -1,4 +1,6 @@
 model: gpt-6.1-sol
+reasoning_effort: low
+provider_timeout_seconds: 210
 speech_model: gpt-4o-mini-tts
 speech_voice: marin
 input_usd_per_million: 2.0

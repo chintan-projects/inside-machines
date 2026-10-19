@@ -24,6 +24,8 @@ class Settings:
     session_secret: str
     budget_usd: float
     model: str
+    reasoning_effort: str
+    provider_timeout_seconds: int
     speech_model: str
     speech_voice: str
     input_rate: float
@@ -77,6 +79,13 @@ class Settings:
             raise ValueError("Video dimensions or frame rate exceed alpha bounds")
         if self.video_width % 2 or self.video_height % 2:
             raise ValueError("Video dimensions must be even for mobile-compatible encoding")
+        if self.reasoning_effort not in ("low", "medium", "high"):
+            raise ValueError("Unsupported reasoning effort")
+        if (
+            not 10 <= self.provider_timeout_seconds <= 210
+            or self.lease_seconds < self.provider_timeout_seconds + 20
+        ):
+            raise ValueError("Provider deadline must fit inside the worker lease")
         if self.max_output_tokens < 1 or self.max_chat_tokens < 1 or self.lease_seconds < 120:
             raise ValueError(
                 "Token limits must be positive and job leases must cover a bounded provider call"
@@ -110,6 +119,8 @@ def load_settings() -> Settings:
         session_secret=get_env("INSIDE_SESSION_SECRET", "") or "",
         budget_usd=float(get_env("INSIDE_BUDGET_USD", "0") or "0"),
         model=text("model"),
+        reasoning_effort=text("reasoning_effort"),
+        provider_timeout_seconds=int(number("provider_timeout_seconds")),
         speech_model=text("speech_model"),
         speech_voice=text("speech_voice"),
         input_rate=number("input_usd_per_million"),

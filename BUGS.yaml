@@ -6,3 +6,17 @@ bugs:
     evidence: Synchronized eight real connections reproduced pg_type unique violation
     fix: Transaction-scoped advisory lock serializes schema initialization
     regression: tests/backend/test_postgres.py
+  - id: BUG-002
+    title: Lesson source URI format is rejected by provider structured output
+    severity: high
+    status: fixed
+    evidence: Hosted authoring returned HTTP 400; corrected schema passed request admission
+    fix: Provider-specific schema copy omits unsupported URI format; domain URL validation remains
+    regression: tests/backend/test_provider.py
+  - id: BUG-003
+    title: Full lesson authoring exceeds the original 100 second request deadline
+    severity: high
+    status: fixed
+    evidence: Hosted authoring failed after 100 seconds with unknown provider billing
+    fix: Configure low reasoning and 210 second provider deadline within the 240 second lease
+    regression: tests/backend/test_queue_settings.py; complete live generation passed

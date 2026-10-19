@@ -12,7 +12,7 @@ interface Props { readonly lesson: Lesson; readonly member: Member; readonly onl
 export function LessonView({ lesson, member, online }: Props): ReactElement {
   const { spec } = lesson, total = duration(spec);
   const key = progressKey(member.id, lesson.id);
-  const [initial] = useState(() => readProgress(key, total, spec.parts.map(p => p.id)));
+  const [initial] = useState(() => readProgress(key, total, [...spec.stages[0].parts, ...spec.parts.map(p => p.id)]));
   const [seconds, setSeconds] = useState(initial.seconds), [playing, setPlaying] = useState(false), [speed, setSpeed] = useState(initial.speed);
   const [selected, setSelected] = useState(initial.selected);
   const [mode, setMode] = useState<'explore' | 'watch'>(initial.mode);

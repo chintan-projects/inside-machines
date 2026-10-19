@@ -26,14 +26,44 @@ The objective remains the complete growing-library family alpha on Vercel, with 
 - Production access material is stored privately at `.vercel/alpha-access.json` with owner-only file permissions. It must not be published or shared as a family invite: it also contains owner/server credentials.
 - Current verification: 63 backend tests, 87.09% coverage, strict Python/TypeScript checks, frontend lint and five JavaScript tests pass. Rebuild and rerun the final gates before publishing.
 
-## External inputs required
+## Setup resolved and protected deployment verification
 
-1. The human must review and accept [Neon's marketplace terms](https://vercel.com/chintan-4466s-projects/~/integrations/accept-terms/neon?source=cli). Provisioning currently returns `integration_terms_acceptance_required`; no acceptance has been performed by the agent.
-2. Configure a server-side `OPENAI_API_KEY` locally or in the project environment. Do not paste it into chat or a browser-facing `VITE_` variable.
-3. Supply an explicit total app-AI spending ceiling. No paid app-model requests have been made; generation remains disabled.
+The user accepted Neon's terms and authorized **$50 total app-AI spend**. The budget
+is configured in Vercel Production, Preview and Development. This app-level ledger
+is independent of hosting/storage charges and any OpenAI account billing limit.
 
-These conditions have persisted across multiple consecutive goal turns. Independent implementation, storage preparation and local integration checks are complete enough that further release progress now requires human input or an external-state change.
+- Personal GitHub: `chintan-projects/inside-machines` (private).
+- Personal Vercel scope: `chintan-4466s-projects`; project `inside-machines-alpha`.
+- Neon `inside-machines-db` provisioned on the free plan and connected. Three
+  authored starter lessons imported; local users/chats/analytics were excluded.
+- `OPENAI_API_KEY` is Sensitive and Production-only. It is intentionally unavailable
+  to local environment pulls. Do not remove that protection to run tests.
+- Vercel deployment is Ready and remains behind Vercel Authentication. Hosted
+  sign-in, catalog and private MP4 byte-range delivery passed.
+- A live chat used 1,853 input / 97 output tokens for $0.004676 at configured rates.
+- Initial queued authoring reached the provider but returned HTTP 400. Unsupported
+  URI format is removed only from the outbound provider schema; application HttpUrl
+  validation remains. Regression coverage added; corrected live generation passed through publication.
+- Initial schema rejection and subsequent 100-second timeout retain $1.30 total as **uncertain billing**, not
+  reported as confirmed provider charges. Do not erase these allowances to improve the benchmark.
+- A controlled retry uses configured low reasoning and a 210-second provider deadline
+  inside the 240-second lease. It completed in 6m16s for $0.234596 including estimated speech.
+  No implicit model fallback or paid retry is enabled.
+- Hosted two-member starter reuse, private chat isolation, owner-route isolation,
+  session revocation, MP4 range delivery and PWA shell assets all passed.
 
-## Resume sequence
+## Remaining release work
 
-Provision/link the managed database, import only the prepared starter lessons, configure the approved provider/budget, run an actual new-machine generation and private follow-up, measure tokens/cost including failures, verify second-member reuse, resolve failures, finish the human UI/device review, then deploy and verify the complete hosted/PWA experience. Do not call the goal complete before that evidence exists.
+Live new-lesson generation, contextual follow-up and two-member generated-artifact
+reuse passed. See [LIVE-BENCHMARK.md](LIVE-BENCHMARK.md) for usage, costs, failures
+and limitations. The catalog now contains three authored starters and one actual
+AI-created lesson. Latest backend checks: 72 pass, one disposable-Postgres test
+skipped; 86.58% coverage. Frontend strict checks, lint, five tests and build pass.
+
+Human UI/device review remains before family access. The design-quality skill
+requires the person's release decision. Vercel Authentication is still enabled;
+do not tell family members this is an unrestricted invite-only release yet.
+Native device install, accessibility review and hosted offline behavior on the
+actual target phones need the human walkthrough. The requirement table above is
+the earlier audit baseline; this section and the live benchmark supersede its
+unverified hosted-generation rows. The full release objective is not complete.

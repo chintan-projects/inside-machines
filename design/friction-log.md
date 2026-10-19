@@ -45,3 +45,13 @@ The observations above concern the earlier visual lab. The following review cove
 Agent assessment: authored learning has a clear main task and usable controls (**utility 4/5 for existing lessons**, seen/inferred); core browser journeys are coherent (**usability 4/5 in tested Chrome**, seen). The visual language is consistent but schematic detail needs real-phone judgment (**desirability 3/5**, judgment). The causal experiment adds a useful learning moment; whether it is memorable is untested (**surprisingly great 3/5**, inferred).
 
 These scores do not approve a release. Human device/accessibility review, live generation and the product owner's release decision remain pending.
+
+## Live generated lesson — October 19
+
+Seen: a 35-part vacuum cutaway, five stages and narrated video were created on
+Vercel; authenticated video delivery and two-member reuse passed. First generation
+took 6m16s, so the existing multi-minute waiting copy is necessary. Seen in Chrome:
+the default selected shape was a decorative backdrop. Changed the initial focus
+to a part referenced by the opening stage; saved user selections still restore.
+The generated lesson remains schematic and needs human device review before family
+release. Hosted entry is still protected by Vercel Authentication.

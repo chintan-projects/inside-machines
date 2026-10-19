@@ -58,6 +58,7 @@ async def test_gateway_structured_research_and_speech(
         receipt_context.reset(token)
     assert observed[0]["max_tool_calls"] == 3
     assert observed[0]["store"] is False
+    assert observed[0]["reasoning"] == {"effort": settings.reasoning_effort}
     assert observed[0]["text"] == {
         "format": {
             "type": "json_schema",
@@ -114,4 +115,29 @@ def test_provider_requires_receipt(settings: Settings) -> None:
     with pytest.raises(ModelBackendError, match="usage receipt"):
         HostedBackend(settings.model, settings).run(
             Request(prompt="Test", messages=None, grammar=None, max_tokens=5, label_tokens=None)
+        )
+
+
+def test_lesson_schema_translation_preserves_domain_url_validation() -> None:
+    """Provider schema accepts URL strings; domain boundary still rejects unsafe URLs."""
+    from pydantic import ValidationError
+
+    from backend.contracts import LessonSpec, Source
+    from backend.provider_schema import openai_schema
+
+    schema = LessonSpec.model_json_schema()
+    translated = openai_schema(schema)
+    original_json = json.dumps(schema)
+    assert '"format": "uri"' in original_json
+    assert '"format": "uri"' not in json.dumps(translated)
+    assert json.dumps(schema) == original_json
+    assert translated["additionalProperties"] is False
+    assert translated["required"] == schema["required"]
+    with pytest.raises(ValidationError):
+        Source.model_validate(
+            {
+                "title": "Invalid source",
+                "url": "javascript:alert(1)",
+                "supports": "A deliberately invalid source URL",
+            }
         )

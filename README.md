@@ -16,13 +16,15 @@ playback position. Feedback records the lesson version and current stage. Privat
 separately from the shared artifact. The owner report shows demand, reuse, feedback, jobs and a
 cost ledger without conversation text.
 
-**Not yet a completed release:** live model generation, measured provider costs, deployed private-video
-delivery and deployed queue operation still require integration verification. A private Blob write/read/cleanup passed. The model key,
-explicit spending ceiling and production database are not configured. No test fixture is
+**Not yet a completed release:** the personal Vercel project is deployed behind Vercel
+Authentication. Neon is connected, three starter lessons are imported, private video delivery
+and a live AI chat have passed. A $50 app-AI budget is configured; hosting/storage are separate.
+A complete live generation and shared reuse passed; human/device review remains pending. No test fixture is
 presented as live AI output. Native apps and exact-model manual ingestion are later releases.
 
 See [BUILD-PLAN.md](docs/BUILD-PLAN.md) for the current scope and completion evidence.
 The [release audit](docs/RELEASE-AUDIT.md) distinguishes implemented behavior from unverified hosted requirements.
+The [first live benchmark](docs/LIVE-BENCHMARK.md) records a complete $0.235 generation, estimated speech, earlier failures and latency.
 
 ## Run locally
 

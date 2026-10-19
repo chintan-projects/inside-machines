@@ -27,7 +27,7 @@ Use the ancestor workspace's Python FastAPI and React/TypeScript/Vite pattern. V
 
 Generate a bounded declarative scene and lesson schema rather than executable model-produced code. Render interactive and video views from the same scene/animation data. Video encoding runs with a bounded ffmpeg process. Store job phases and results durably so retries continue from a completed phase. Do not run expensive work in an untracked request that reports success before artifacts exist.
 
-Provider credentials and a spending ceiling are not yet configured. Implement integrations and tests while awaiting those inputs; no mock output may be represented as a completed live generation benchmark.
+Production credentials, a $50 app-AI ceiling and Neon are now configured on the personal Vercel project. Live private-video delivery and chat passed; full generation, generated-artifact reuse and fresh contextual follow-up passed. See LIVE-BENCHMARK.md; human/device release review remains. No mock output may be represented as a completed live generation benchmark.
 
 ## Implemented backend evidence — October 19
 

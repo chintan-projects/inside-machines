@@ -53,6 +53,9 @@ async def test_local_dispatch_is_explicitly_local(
         ("video_fps", 60),
         ("video_width", 321),
         ("lease_seconds", 10),
+        ("lease_seconds", 220),
+        ("provider_timeout_seconds", 300),
+        ("provider_timeout_seconds", 0),
     ],
 )
 def test_unsafe_settings_rejected(settings: Settings, field: str, value: float) -> None:
