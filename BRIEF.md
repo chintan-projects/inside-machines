@@ -1,5 +1,13 @@
 # Inside product design brief
 
+**Active teaching contract:** [ADR 0001](docs/architecture-decisions/0001-concept-explanation.md)
+and the [concept explanation spec](docs/CONCEPT-EXPLANATION-SPEC.md) govern subsequent
+lesson iterations. Grant's visual reasoning, Feynman's causal simplicity,
+Veritasium's misconception/prediction structure and Anatomy's physical craft must
+produce visible design choices and testable learner outcomes. Use the
+[AC benchmark spec](design/lessons/air-conditioner.md) for the next build. The dated
+directions below remain context; they do not establish current learning acceptance.
+
 Draft direction for the next product iteration, October 19, 2026. This specifies future design; it does not restyle the existing prototype.
 
 **Person:** An adult who has just asked a concrete question about an everyday machine and cannot picture the mechanism.

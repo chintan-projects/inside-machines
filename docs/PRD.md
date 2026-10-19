@@ -1,5 +1,13 @@
 # Inside visual machine explainer product requirements
 
+**Active concept-explanation decision:** [ADR 0001](architecture-decisions/0001-concept-explanation.md)
+and the [teaching spec](CONCEPT-EXPLANATION-SPEC.md) govern explanation quality and
+subsequent implementation. Lessons build a causal mental model through a concrete
+question, prediction, observation, explanation, system recombination and transfer.
+Use the [AC benchmark](../design/lessons/air-conditioner.md) before expanding the
+craft claim to other machines or generated content. Its formative acceptance test
+complements the later comparative pilot below; neither has been completed.
+
 **Active family-alpha addendum:** The user's later request moves shared on-demand creation into the first hosted alpha: look up first, generate a missing generic lesson with both interactive and narrated-video outputs, then reuse it for others. Family invites, private follow-up chat, thumbs/reasons, demand analytics and an explicit AI ceiling are included. Three authored lessons are a starting library rather than a catalog limit. The [current build plan](BUILD-PLAN.md) controls this revised delivery target; the release sequence below preserves the original product rationale. Exact-model document ingestion and native store releases remain later stages. Installed web use supports explicit lesson downloads; an uninstalled app still needs its initial network visit and invite.
 
 Version 1.0 draft for product decisions. October 19, 2026. Product owner: Chintan. Stage: exploration. Initial delivery: personal local pilot, followed by an optional consumer release.

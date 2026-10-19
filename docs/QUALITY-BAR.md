@@ -1,5 +1,23 @@
 # Learning quality is a release requirement
 
+## Active concept-explanation standard
+
+Follow [ADR 0001](architecture-decisions/0001-concept-explanation.md) and all CE
+requirements in the [concept explanation spec](CONCEPT-EXPLANATION-SPEC.md).
+Grant's visual reasoning, Feynman's plain mechanism, Veritasium's prediction and
+misconception work, and Anatomy's physical craft are explicit review anchors. The
+[lesson worksheet](templates/lesson-iteration.md) records how each changes the
+implementation; the [AC spec](../design/lessons/air-conditioner.md) is the next build.
+
+Review four independent forms of evidence: engineering behavior, technical truth,
+craft/accessibility and beginner teach-back/transfer. The spec defines a formative
+five-beginner evaluation and its proposed acceptance gate; these results are still
+unmeasured. Agreement to the direction is not an approval of today's lesson.
+Current `backend.quality` is only the implemented structural floor. New prediction,
+causal-inset and media-parity requirements are not automatically enforced yet.
+
+## Current implementation and historical evidence
+
 **Latest status:** the owner also rejected the first labeled revision as ordinary.
 The action-led studio supersedes its presentation. See
 [the reference teardown and verification scope](../design/visual-learning-teardown.md).
@@ -56,8 +74,10 @@ This is a generic split system in cooling mode. It omits controls, humidity remo
 superheat/subcooling and refrigerant-specific details. Colors and motion are
 qualitative. No operating temperatures, pressures or flow rates are claimed.
 The compressor shell is shown; its internal pump is not animated. The voice uses
-local computer speech, disclosed in the UI. Shared lesson data drives both the
-SVG interaction and the Pillow-rendered MP4; the renderers are not pixel-identical.
+local computer speech, disclosed in the UI. The earlier SVG and Pillow-rendered
+MP4 shared lesson data. The current studio adds separately authored geometry and
+story; its media parity remains incomplete. The new contract requires shared
+mechanism/storyboard meaning across outputs, not pixel-identical rendering.
 
 ## Verification record — October 19 revision
 

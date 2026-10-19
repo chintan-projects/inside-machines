@@ -1,5 +1,23 @@
 # Family alpha implementation
 
+## Active teaching iteration
+
+The next work follows [ADR 0001](architecture-decisions/0001-concept-explanation.md),
+the [concept explanation spec](CONCEPT-EXPLANATION-SPEC.md) and the filled
+[AC benchmark](../design/lessons/air-conditioner.md). They make Grant, Feynman,
+Veritasium and Anatomy part of the build and review contract. Start from the
+[lesson worksheet](templates/lesson-iteration.md), implement one complete causal
+path, align media, and review engineering, factual truth, craft and learning
+separately. Validate AC, then prove reuse with a different mechanism before widening
+generation. Existing budgets, privacy and immutable publication rules remain required.
+
+The documents are implemented guidance; the new causal scenes, versioned teaching
+contracts and semantic media parity remain planned. Hosted draft publication does
+not constitute family-release or benchmark acceptance. Dated implementation notes
+below retain historical evidence and limitations.
+
+## Family-alpha scope
+
 The active goal supersedes the fixed-catalog staging in the initial PRD. Deliver a growing shared library, with lookup before generation, both interactive and narrated video output, feedback, private contextual chat, alpha analytics, deployment on Vercel, and an installable PWA. Native clients reuse the API and lesson contract later; building App Store binaries is not the current delivery target.
 
 ## Completion evidence

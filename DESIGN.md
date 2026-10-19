@@ -22,6 +22,26 @@ rounded:
 
 # Inside design direction
 
+## Concept explanation contract
+
+[ADR 0001](docs/architecture-decisions/0001-concept-explanation.md) and the
+[concept explanation spec](docs/CONCEPT-EXPLANATION-SPEC.md) govern the teaching
+experience. Keep these four anchors visible in every lesson worksheet:
+
+- Grant: concrete questions, visual intuition and purposeful synchronized motion.
+- Feynman: plain causal mechanisms, prerequisite bridges and honest model limits.
+- Veritasium: a prediction, a plausible misconception and an explanatory payoff.
+- Anatomy: a recognizable object with purposeful physical detail and model-linked behavior.
+
+Prioritize truth, causal legibility/accessibility, teaching interaction, then polish.
+Retain core labels and opt-in motion under the project's Anatomy overrides. Review
+the whole system after isolated mechanisms. Use
+[the worksheet](docs/templates/lesson-iteration.md) and the
+[AC build spec](design/lessons/air-conditioner.md); engineering passes do not establish
+human craft approval or learner understanding.
+
+## Existing visual direction
+
 The React family-alpha interface now uses these tokens; the original visual lab remains separate. Posture: calm, precise, hands-on. Person: an adult with a machine question. Job: connect an action to its consequence. References: Ciechanowski's adjacent controls and Tinybop's manipulable mechanisms. Direct lesson entry begins with the mechanism and its controls.
 
 ## Ranked tenets

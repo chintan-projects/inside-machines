@@ -108,6 +108,12 @@ No measured live cost-per-machine benchmark exists yet.
 
 ## Product and research
 
+- [Accepted concept-explanation ADR](docs/architecture-decisions/0001-concept-explanation.md),
+  [teaching/build spec](docs/CONCEPT-EXPLANATION-SPEC.md),
+  [lesson iteration worksheet](docs/templates/lesson-iteration.md) and
+  [next AC benchmark spec](design/lessons/air-conditioner.md). These make Grant,
+  Feynman, Veritasium and Anatomy explicit build/review anchors; implementation
+  and human learning acceptance remain incomplete.
 - [PRD](docs/PRD.md), [current build plan](docs/BUILD-PLAN.md), [verification](docs/VERIFICATION.md)
 - [Technical mobile path](docs/MOBILE-PATH.md)
 - [Market research](docs/MARKET-RESEARCH.md), [iOS/business model](docs/IOS-AND-BUSINESS-MODEL.md)

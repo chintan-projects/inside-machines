@@ -1,6 +1,7 @@
 goal: Build and deploy the growing-library family alpha
 status: quality_revision
 current:
+  - Accepted ADR 0001 and teaching spec link Grant, Feynman, Veritasium and Anatomy to lesson iteration
   - Human rejected the labeled AC revision as ordinary; rebuilt as an action-led isometric studio
   - Physical cutaway, component-focused phone view and same-room enclosure experiment
   - New lesson publication requires component labels and chapter evidence
@@ -8,6 +9,7 @@ needs_input:
   - Human craft review and real-phone walkthrough remain required before family release
   - Independent technical review and generic generation quality evaluation remain outstanding
 verification:
+  - Teaching docs links and CE requirement IDs checked; ADR acceptance does not imply implementation or release approval
   - Latest checks pass 84 backend tests at 85.03 percent coverage; two previously passed Postgres tests skipped
   - Frontend production build, lint and seven JS tests pass
   - Linux API and queue packaging passes with bundled font and encoder
@@ -22,4 +24,4 @@ sessions:
   - date: 2026-10-19
     result: Human rejected AC teaching craft; recorded BUG-004 and held family release
   - date: 2026-10-19
-    result: Replaced rejected AC presentation with an action-led studio; human learning/craft review pending
+    result: Deployed AC studio; documented teaching ADR, iteration worksheet and next AC spec; implementation/review pending

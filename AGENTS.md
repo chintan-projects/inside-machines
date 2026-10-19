@@ -71,6 +71,31 @@ report deployment failures rather than implying a successful release.
 
 ## Learning publication contract
 
+Before changing lesson content, authoring/review prompts, mechanism state,
+renderers or assessments, read and follow
+[ADR 0001](docs/architecture-decisions/0001-concept-explanation.md) and the
+[concept explanation spec](docs/CONCEPT-EXPLANATION-SPEC.md). Keep Grant Sanderson's
+visual reasoning, Feynman's plain causal explanations, Veritasium's prediction and
+misconception work, and [Anatomy's physical craft](vendor/anatomy/SKILL.md) explicit
+in the lesson's design choices. These are build/review requirements, not stylistic
+name-dropping or a claim of creator endorsement.
+
+Start each lesson iteration with the
+[worksheet](docs/templates/lesson-iteration.md), a claim ledger, one falsifiable
+learning hypothesis and a transfer rubric. The
+[AC benchmark](design/lessons/air-conditioner.md) is the first build spec. Trace
+changes and evidence to CE requirement IDs. Keep causal rules out of UI/rendering
+adapters; align interactive, narration, captions, video and static outputs through
+the same versioned mechanism/storyboard. Preserve old revisions and stage meaning.
+
+Review engineering, technical truth, craft/accessibility and beginner learning
+separately. Record observed versus inferred results and missing evidence in the
+lesson record, friction log and journal. Iterate on the most consequential failure;
+do not promote other machines or generated drafts based on AC-only evidence.
+Documentation, structural checks and model review do not implement or satisfy the
+new semantic gates by themselves. Owner agreement to the ADR is not lesson release
+approval. The ADR records the project's label/motion overrides to Anatomy.
+
 Apply `backend.quality` before review, after review and before publication. Every
 core component needs an on-scene label; every chapter needs a labeled focus,
 input/output and evidence. Preserve immutable published revisions and private
