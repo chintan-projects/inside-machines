@@ -60,3 +60,33 @@ Seen on the hosted personal Vercel URL: download, network-offline full reload an
 actual 66.02-second downloaded video playback/captions passed. The network override
 was restored. Desktop review screenshot: `shots/live-vacuum-review.jpg` (ignored).
 This browser verification does not replace the person's phone walkthrough or release decision.
+
+## Human review — October 19, 15:05
+
+Release not approved. The owner reports that the AC schematic lacks visible labels
+for named components and that its four stages do not build understanding. Seen in
+the supplied screenshots: only Indoor/Outdoor labels; component discovery relies on
+a long dropdown that mixes casings with functional parts. Video narration names an
+unidentified compressor, and captions cover the lower circuit. This is a high
+severity learning-quality failure, tracked as BUG-004. Infrastructure/live cost
+checks do not establish explanation quality. Revise one AC lesson as the benchmark
+before expanding the catalog or requesting another release decision.
+
+## AC craft revision — agent observations, awaiting owner decision
+
+| Round | Finding | Resolution and evidence |
+| --- | --- | --- |
+| 1 | Seen in supplied screenshots: unlabeled parts, dropdown-only discovery, captions over circuit | Four anchored labels persist in scene/video; four visible component controls; transcript outside picture. |
+| 2 | Seen during revised browser review: stage text failed to follow native video seeking | Video time and chapter buttons now synchronize focus, input/output and transcript. Actual 92-second MP4 inspected. |
+| 3 | Seen at 375/320 widths: smaller secondary fittings need inspection support; desktop video initially exceeded available height | Component enlargement includes its label; whole-machine reset; bounded desktop video framing; no horizontal document overflow. |
+
+Utility: 4/5 agent judgment for the revised AC, supported by component/chapter
+interaction. Usability: 4/5 in tested Chrome, with physical-device/accessibility
+review outstanding. Desirability: 3/5; purposeful cutaway and typography improved,
+but this remains schematic. Surprisingly great: 3/5 inferred for misconception
+feedback and linked visual explanation; no user learning result measured.
+
+These are agent critiques, not release approval. Screenshots in ignored
+`shots/ac-craft-phone.jpg` and the final hosted review capture support the owner
+walkthrough. Other catalog lessons remain drafts. BUG-004 stays open until the
+person accepts the revised teaching experience.

@@ -6,7 +6,7 @@ export interface Part {
   x: number; y: number; w: number; h: number; color: string; stroke: string;
   points: number[][]; label: string; layer: number; motion: Motion[];
 }
-export interface Stage { title: string; explanation: string; narration: string; duration: number; parts: string[]; cause: string }
+export interface Stage { title: string; explanation: string; narration: string; duration: number; parts: string[]; cause: string; input_state?: string; output_state?: string; focus?: string; source_indices?: number[] }
 export interface LessonSpec {
   version: 1; title: string; canonical: string; aliases: string[]; family: string;
   question: string; summary: string; big_idea: string; category: string; accent: string;
@@ -17,11 +17,11 @@ export interface LessonSpec {
 }
 export interface Member { id: string; name: string; owner: boolean }
 export interface Feedback { value: 'up' | 'down'; reason: string }
-export interface Lesson { id: string; spec: LessonSpec; quality: string; video_ready: boolean; feedback: Feedback | null }
+export interface Lesson { id: string; spec: LessonSpec; quality: string; review_needed?: boolean; superseded_by?: string | null; video_ready: boolean; feedback: Feedback | null }
 export interface CatalogEntry {
   id: string; title: string; canonical: string; family: string; question: string;
   summary: string; category: string; accent: string; duration: number; parts: number;
-  quality: string; created_at: number; views: number; video_ready: boolean; preview: LessonSpec;
+  quality: string; review_needed?: boolean; created_at: number; views: number; video_ready: boolean; preview: LessonSpec;
 }
 export interface Job { id: string; canonical: string; status: string; phase: string; message: string; error: string | null; lesson_id?: string }
 export interface RequestResult { kind: 'lesson' | 'job' | 'unavailable' | 'budget' | 'specific'; lesson_id?: string; job_id?: string; message?: string; reused?: boolean }

@@ -68,3 +68,11 @@ external checks honestly. Keep `PROGRESS.yaml` below 50 lines.
 Secrets, local data, screenshots and generated artifacts stay ignored. Git pushes
 on the linked main branch may trigger Vercel builds; verify readiness first and
 report deployment failures rather than implying a successful release.
+
+## Learning publication contract
+
+Apply `backend.quality` before review, after review and before publication. Every
+core component needs an on-scene label; every chapter needs a labeled focus,
+input/output and evidence. Preserve immutable published revisions and private
+conversations when replacing a lesson. Read `docs/QUALITY-BAR.md`; structural tests
+and automated model review never imply factual certification or human UI approval.

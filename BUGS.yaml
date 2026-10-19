@@ -20,3 +20,10 @@ bugs:
     evidence: Hosted authoring failed after 100 seconds with unknown provider billing
     fix: Configure low reasoning and 210 second provider deadline within the 240 second lease
     regression: tests/backend/test_queue_settings.py; complete live generation passed
+  - id: BUG-004
+    title: Appliance explanations lack visible component labels and beginner causal staging
+    severity: high
+    status: open
+    evidence: Human review of AC screenshots finds unlabeled narrated parts and confusing four-stage cycle
+    fix: Implemented separate labeled six-chapter AC benchmark, synchronized video notes and publication gates; awaiting human review
+    regression: tests/backend/test_learning_quality.py; docs/QUALITY-BAR.md

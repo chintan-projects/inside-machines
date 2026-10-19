@@ -14,9 +14,13 @@ def openai_schema(schema: dict[str, object]) -> dict[str, object]:
     def convert(value: object) -> object:
         if isinstance(value, dict):
             mapping = cast(dict[str, object], value)
-            return {
+            converted = {
                 key: convert(item) for key, item in mapping.items() if not (key == "format" and item == "uri")
             }
+            properties = mapping.get("properties")
+            if mapping.get("type") == "object" and isinstance(properties, dict):
+                converted["required"] = list(properties)
+            return converted
         if isinstance(value, list):
             return [convert(item) for item in cast(list[object], value)]
         return value

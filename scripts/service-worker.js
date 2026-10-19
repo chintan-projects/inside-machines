@@ -6,6 +6,7 @@ self.addEventListener('install', event => {
     const response = await fetch('/shell-assets.json', { cache: 'no-store' });
     if (!response.ok) throw new Error('Offline shell manifest is unavailable');
     await cache.addAll(await response.json());
+    await self.skipWaiting();
   })());
 });
 self.addEventListener('activate', event => {
@@ -22,7 +23,7 @@ self.addEventListener('fetch', event => {
       const cached = await (await caches.open(CACHE)).match('/');
       return cached || new Response('Reconnect once to save the app for offline use.', { status: 503 });
     }));
-  } else if (url.pathname.startsWith('/assets/') || /^\/(icon.*\.(svg|png)|manifest.webmanifest)$/.test(url.pathname)) {
+  } else if (url.pathname.startsWith('/assets/') || url.pathname.startsWith('/fonts/') || /^\/(icon.*\.(svg|png)|manifest.webmanifest)$/.test(url.pathname)) {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE);
       const saved = await cache.match(event.request);

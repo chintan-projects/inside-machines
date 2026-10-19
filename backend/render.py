@@ -11,7 +11,7 @@ import imageio_ffmpeg  # type: ignore[import-untyped]  # package ships no py.typ
 from PIL import Image, ImageDraw, ImageFont
 
 from .contracts import LessonSpec, Part
-from .settings import Settings
+from .settings import ROOT, Settings
 
 
 def stage_at(spec: LessonSpec, seconds: float) -> tuple[int, float]:
@@ -50,10 +50,11 @@ def transformed_point(
 
 
 def draw_scene(spec: LessonSpec, seconds: float, *, width: int = 900, height: int = 540) -> Image.Image:
-    """Draw every shape from the safe scene contract in deterministic painter order."""
+    """Draw the shared safe scene contract, preserving aspect ratio and label positions."""
     image = Image.new("RGB", (900, 540), "#f3f6f7")
     draw = ImageDraw.Draw(image)
-    draw.ellipse((155, 435, 765, 505), fill="#e3e9eb")
+    if spec.canonical != "air-conditioner-craft":
+        draw.ellipse((155, 435, 765, 505), fill="#e3e9eb")
     stage, progress = stage_at(spec, seconds)
     active = set(spec.stages[stage].parts)
     for part in sorted(spec.parts, key=lambda p: p.layer):
@@ -101,24 +102,96 @@ def draw_scene(spec: LessonSpec, seconds: float, *, width: int = 900, height: in
             if part.shape == "polygon":
                 draw.polygon(pts, fill=color, outline=part.stroke, width=2)
             else:
-                draw.line(pts, fill=part.stroke, width=max(2, round(part.w)), joint="curve")
-                if part.id in active and any(m.kind == "flow" and m.stage == stage for m in part.motion):
+                heat = part.id in ("absorbed-heat", "released-heat")
+                if heat:
                     for a, b in zip(pts[:-1], pts[1:], strict=True):
-                        for j in range(6):
-                            t = (j / 6 + progress * 0.6) % 1
+                        distance = math.hypot(b[0] - a[0], b[1] - a[1])
+                        if distance:
+                            for offset in range(0, math.ceil(distance), 11):
+                                t0, t1 = offset / distance, min(1, (offset + 4) / distance)
+                                draw.line(
+                                    [
+                                        (a[0] + (b[0] - a[0]) * t0, a[1] + (b[1] - a[1]) * t0),
+                                        (a[0] + (b[0] - a[0]) * t1, a[1] + (b[1] - a[1]) * t1),
+                                    ],
+                                    fill=part.stroke,
+                                    width=max(2, round(part.w)),
+                                )
+                else:
+                    draw.line(pts, fill=part.stroke, width=max(2, round(part.w)), joint="curve")
+                if any(m.kind == "flow" and m.stage == stage for m in part.motion):
+                    a, b = pts[-2:]
+                    distance = math.hypot(b[0] - a[0], b[1] - a[1]) or 1
+                    ux, uy = (b[0] - a[0]) / distance, (b[1] - a[1]) / distance
+                    draw.polygon(
+                        [
+                            b,
+                            (b[0] - ux * 12 - uy * 6, b[1] - uy * 12 + ux * 6),
+                            (b[0] - ux * 12 + uy * 6, b[1] - uy * 12 - ux * 6),
+                        ],
+                        fill=part.stroke,
+                    )
+                if (
+                    not heat
+                    and part.id in active
+                    and any(m.kind == "flow" and m.stage == stage for m in part.motion)
+                ):
+                    for a, b in zip(pts[:-1], pts[1:], strict=True):
+                        length = math.hypot(b[0] - a[0], b[1] - a[1])
+                        if length < 40:
+                            continue
+                        count = 2 if length > 130 else 1
+                        ux, uy = (b[0] - a[0]) / length, (b[1] - a[1]) / length
+                        for j in range(count):
+                            t = 0.12 + 0.76 * ((j / count + progress * 0.8) % 1)
                             x, y = a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t
-                            draw.ellipse((x - 3, y - 3, x + 3, y + 3), fill=spec.accent)
+                            draw.line(
+                                [
+                                    (x - ux * 7 - uy * 5, y - uy * 7 + ux * 5),
+                                    (x, y),
+                                    (x - ux * 7 + uy * 5, y - uy * 7 - ux * 5),
+                                ],
+                                fill="white",
+                                width=2,
+                            )
         elif part.shape == "text":
+            font = scene_font(max(12, int(part.h)))
+            core_label = part.id.startswith("label-")
+            if core_label:
+                font.set_variation_by_name("SemiBold")  # type: ignore[no-untyped-call]  # Pillow omits this method's annotation.
+            emphasized = core_label and part.id[6:] in active
+            x, y = part.x + dx, part.y + dy
+            if core_label:
+                extent = draw.textlength(part.label, font=font)
+                draw.rounded_rectangle(
+                    (x - 8, y - 6, x + extent + 8, y + part.h + 8),
+                    radius=5,
+                    fill="white",
+                    outline=spec.accent if emphasized else "#d6e1e5",
+                    width=2 if emphasized else 1,
+                )
             draw.text(
-                (part.x + dx, part.y + dy),
-                part.label,
-                fill=part.color,
-                font=ImageFont.load_default(size=max(12, int(part.h))),
+                (x, y), part.label, fill=spec.accent if emphasized else part.color, font=font, anchor="lt"
             )
-        if part.id in active and part.shape not in ("path", "text"):
+        if (
+            spec.canonical != "air-conditioner-craft"
+            and part.id in active
+            and part.shape not in ("path", "text")
+        ):
             x, y = point(part.x + part.w, part.y)
             draw.ellipse((x - 5, y - 5, x + 5, y + 5), fill=spec.accent, outline="white", width=2)
-    return image.resize((width, height), Image.Resampling.LANCZOS) if (width, height) != (900, 540) else image
+    if (width, height) == (900, 540):
+        return image
+    scale = min(width / 900, height / 540)
+    fitted = image.resize((round(900 * scale), round(540 * scale)), Image.Resampling.LANCZOS)
+    output = Image.new("RGB", (width, height), "#f3f6f7")
+    output.paste(fitted, ((width - fitted.width) // 2, (height - fitted.height) // 2))
+    return output
+
+
+def scene_font(size: int) -> ImageFont.FreeTypeFont:
+    """Use the same bundled, licensed typeface for raster and SVG lettering."""
+    return ImageFont.truetype(str(ROOT / "public" / "fonts" / "Inter.ttf"), size=size)
 
 
 def audio_duration(path: Path) -> float:
@@ -237,8 +310,8 @@ def render_video(
     try:
         if process.stdin is None:
             raise RuntimeError("Video encoder input not available")
-        title_font = ImageFont.load_default(size=21)
-        caption_font = ImageFont.load_default(size=18)
+        title_font = scene_font(21)
+        caption_font = scene_font(22)
         for frame in range(math.ceil(total * settings.video_fps)):
             seconds = frame / settings.video_fps
             index, _ = stage_at(spec, seconds)
@@ -250,7 +323,7 @@ def render_video(
             draw.rectangle(
                 (0, settings.video_height - 82, settings.video_width, settings.video_height), fill="#172f37"
             )
-            text = f"{index + 1}. {spec.stages[index].title}"
+            text = spec.stages[index].title
             lines = textwrap.wrap(text, width=85)
             draw.multiline_text(
                 (24, settings.video_height - 68),
@@ -261,7 +334,7 @@ def render_video(
             )
             draw.text(
                 (24, settings.video_height - 26),
-                "inside · computer-generated narration · generic teaching model",
+                f"Chapter {index + 1} of {len(spec.stages)} · generic teaching model · schematic motion",
                 fill="#b8d2d4",
                 font=ImageFont.load_default(size=12),
             )

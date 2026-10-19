@@ -1,30 +1,24 @@
-goal: Build and deploy the complete growing-library family alpha
-status: release_validation
+goal: Build and deploy the growing-library family alpha
+status: quality_revision
 current:
-  - Provider task registry and project AGENTS.md added; OpenAI remains the only implemented adapter
-  - Complete release audit and target-phone review of the connected family alpha
-  - Complete human target-device review before enabling family access
+  - Separate immutable AC craft benchmark replaces discovery of the rejected AC draft
+  - Visible labels, six causal chapters, state changes and synchronized narrated video
+  - New lesson publication requires component labels and chapter evidence
 needs_input:
-  - Human UI and target-device release review after hosted generation checks
-  - Release audit and resume sequence are recorded in docs/RELEASE-AUDIT.md
+  - Human craft review and real-phone walkthrough remain required before family release
+  - Independent technical review and generic generation quality evaluation remain outstanding
 verification:
-  - Completion checklist in docs/BUILD-PLAN.md
-  - Latest provider changes pass 72 backend tests with 86.58 percent coverage; Postgres check skipped
-  - 63 backend tests pass with 87.09 percent coverage, including real Postgres and selective starter import
-  - Frontend production build, lint and 5 JavaScript tests pass; strict Python and TypeScript checks pass
-  - Three real authored MP4s; Chrome offline reload/video/captions, feedback, saved progress and isolation verified
-  - Linux bundle verifier passes for API, queue trigger, shared services, encoder, private exclusions and CDN shell
-  - Real private Blob write/read and temporary-object cleanup pass
-  - Three private starter videos prepared; production-mode ASGI smoke passes with real Postgres and Blob
-  - Production invite, owner and session secrets configured; private access file excluded from uploads
-  - Hosted login, catalog, private video and live chat passed; full lesson generation, contextual follow-up and generated reuse passed
-  - Neon connected and three starters imported; user-authorized 50 USD app-AI budget configured
-  - Complete new lesson costs 0.234596 USD including estimated speech; benchmark in docs/LIVE-BENCHMARK.md
-  - Hosted Chrome offline full reload and downloaded video/captions pass; network override restored
+  - 85 backend tests including real disposable Postgres pass; strict Python and TypeScript pass
+  - Frontend production build, lint and five JS tests pass
+  - Linux API and queue packaging passes with bundled font and encoder
+  - 92-second authored AC video generated locally without paid model calls
+  - Chrome desktop and 375/320-width layouts inspected; component and video chapter synchronization pass
+  - Existing hosted generation, private chat, reuse, offline playback and isolation evidence in docs/LIVE-BENCHMARK.md
+  - User-authorized total app-AI budget remains 50 USD
 sessions:
   - date: 2026-10-19
-    result: Implemented auth, private chat, feedback, usage ledger, checkpointed generation/video and queue adapters
+    result: Deployed protected personal alpha and measured successful live generation
   - date: 2026-10-19
-    result: Connected React/PWA, authored 3 lessons/videos, fixed Postgres cold-start race, verified Linux deployment packaging
+    result: Human rejected AC teaching craft; recorded BUG-004 and held family release
   - date: 2026-10-19
-    result: Configured approved 50 USD budget and Neon; deployed protected alpha and verified complete live generation
+    result: Built authored AC revision and enforceable structural learning checks; final review pending

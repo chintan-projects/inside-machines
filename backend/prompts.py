@@ -36,6 +36,15 @@ Include >=3 useful follow-up questions with answers and existing stage/part refe
 prediction, and its answer. State simplifications explicitly. Do not claim exact physical
 simulation or factual verification. Make geometry schematic, keep cause/effect and units correct.
 The canonical ID below is mandatory. Include common aliases that should reuse this artifact.
+Every chapter must include input_state, output_state, focus (a component ID in its parts),
+and source_indices referencing supporting source entries. Use plain words before jargon.
+Give at least three essential working components permanent on-scene text labels. Each label
+is a text part whose ID is label- plus the exact component ID. Label text is short and at least
+32 px tall. Position labels inside the canvas without overlapping each other or the mechanism;
+connect each to its real component with a thin leader where necessary. Label each chapter's
+focus component. Decorative casing and backdrop shapes do not belong in the working-parts list.
+Explain what the motion represents; never imply a sequential chapter switches off processes
+that actually happen together. Introduce unfamiliar terms before relying on them.
 Only output the requested schema. Source URLs must support their associated claim.
 """ + json.dumps({"topic": question, "canonical": canonical})
 
@@ -49,4 +58,7 @@ Do not reward visual polish over truth. Correct issues you can confidently repai
 FULL corrected lesson with its canonical identity unchanged. Return accepted=true only when the
 result meets these requirements; otherwise return accepted=false with concise notes and the lesson.
 Never claim peer review or human verification. This automated check cannot verify all source claims.
+Check that every focus component is visibly labeled, labels are legible and do not overlap,
+input/output states are explicit and factual, and chapter claims cite source_indices. Reject
+unexplained technical terms, visual/text contradictions and misleading motion or timing.
 Stay within the scene and narration bounds in the schema.\n""" + spec.model_dump_json()

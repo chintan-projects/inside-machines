@@ -18,6 +18,7 @@ from .contracts import LessonSpec, ReviewSpec
 from .domain import Domain
 from .prompts import lesson_prompt, review_prompt
 from .provider import UsageReceipt, model_speech, model_text, receipt_context
+from .quality import LearningQualityError, require_learning_quality
 from .render import audio_duration, render_video
 from .settings import Settings
 from .store import Database, Store
@@ -183,6 +184,7 @@ class Pipeline:
                 spec = LessonSpec.model_validate_json(raw)
                 if spec.canonical != job["canonical"]:
                     raise ValueError("Generated lesson changed its requested identity")
+                require_learning_quality(spec)
                 self._advance(
                     job,
                     "review",
@@ -202,6 +204,7 @@ class Pipeline:
                 if not review.accepted:
                     raise ValueError("Automated editorial check rejected this lesson")
                 reviewed = review.lesson
+                require_learning_quality(reviewed)
                 if reviewed.canonical != job["canonical"]:
                     raise ValueError("Review changed the lesson identity")
                 self._advance(
@@ -221,9 +224,16 @@ class Pipeline:
             # Queue entry boundary: preserve domain state for every adapter failure.
             logger.error("Lesson phase failed", job_id=job_id, phase=phase, error_type=type(exc).__name__)
 
+            failure_type = type(exc).__name__
+            quality_findings = list(exc.issues) if isinstance(exc, LearningQualityError) else []
+
             def fail(db: Database) -> None:
                 current = db.jobs[job_id]
                 if current["lease_token"] == job["lease_token"]:
+                    current["failure_type"] = failure_type
+                    current["failed_phase"] = phase
+                    if quality_findings:
+                        current["quality_issues"] = quality_findings
                     self.domain.settle(
                         db,
                         current,
@@ -282,6 +292,8 @@ class Pipeline:
                 render_video, spec, audio, folder, self.settings, lambda: self._heartbeat(job_id, lease)
             )
             location = await self.assets.put(f"lessons/{job_id}/lesson.mp4", output.read_bytes(), "video/mp4")
+
+        require_learning_quality(spec)
 
         def publish(db: Database) -> None:
             current = db.jobs[job_id]

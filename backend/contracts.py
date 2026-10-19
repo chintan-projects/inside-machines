@@ -69,6 +69,10 @@ class Stage(StrictModel):
     duration: float = Field(ge=5, le=25)
     parts: list[str] = Field(min_length=1, max_length=20)
     cause: str = Field(min_length=10, max_length=300)
+    input_state: str = Field(default="", max_length=160)
+    output_state: str = Field(default="", max_length=160)
+    focus: str = Field(default="", max_length=40)
+    source_indices: list[int] = Field(default_factory=list, max_length=8)
 
 
 class Question(StrictModel):
@@ -95,7 +99,7 @@ class LessonSpec(StrictModel):
     accent: str = Field(pattern=r"^#[0-9a-fA-F]{6}$")
     assumptions: list[str] = Field(min_length=1, max_length=8)
     sources: list[Source] = Field(min_length=1, max_length=8)
-    parts: list[Part] = Field(min_length=8, max_length=65)
+    parts: list[Part] = Field(min_length=8, max_length=120)
     stages: list[Stage] = Field(min_length=3, max_length=7)
     questions: list[Question] = Field(min_length=3, max_length=6)
     prediction: str = Field(min_length=10, max_length=300)
@@ -110,6 +114,11 @@ class LessonSpec(StrictModel):
         for stage in self.stages:
             if not set(stage.parts).issubset(ids):
                 raise ValueError("A stage references an unknown part")
+        for stage in self.stages:
+            if stage.focus and stage.focus not in ids:
+                raise ValueError("Stage focus references an unknown component")
+            if any(index < 0 or index >= len(self.sources) for index in stage.source_indices):
+                raise ValueError("Stage evidence references an unknown source")
         if any(m.stage >= len(self.stages) for p in self.parts for m in p.motion):
             raise ValueError("Motion references an unknown stage")
         if any(q.stage >= len(self.stages) or (q.part and q.part not in ids) for q in self.questions):

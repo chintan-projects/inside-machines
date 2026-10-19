@@ -8,6 +8,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel
 
 from .contracts import LessonSpec, canonicalize
+from .quality import learning_issues
 from .settings import Settings
 from .store import Database, Store
 
@@ -38,6 +39,8 @@ class Domain:
         def read(db: Database) -> list[dict[str, object]]:
             result = []
             for lesson in db.lessons.values():
+                if lesson.get("archived"):
+                    continue
                 spec = LessonSpec.model_validate(lesson["spec"])
                 result.append(
                     {
@@ -52,6 +55,7 @@ class Domain:
                         "duration": sum(s.duration for s in spec.stages),
                         "parts": len(spec.parts),
                         "quality": lesson.get("quality", "generated"),
+                        "review_needed": bool(learning_issues(spec)),
                         "created_at": lesson.get("created_at", 0),
                         "views": lesson.get("views", 0),
                         "video_ready": bool(lesson.get("video")),
@@ -70,6 +74,8 @@ class Domain:
 
         def admit(db: Database) -> dict[str, object]:
             for lesson in db.lessons.values():
+                if lesson.get("archived"):
+                    continue
                 spec = LessonSpec.model_validate(lesson["spec"])
                 names = {spec.canonical, *(canonicalize(a) for a in spec.aliases)}
                 if canonical in names:

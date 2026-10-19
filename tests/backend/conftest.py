@@ -90,6 +90,25 @@ def spec() -> LessonSpec:
                         strict=True,
                     )
                 )
+            ]
+            + [
+                {
+                    "id": f"label-part-{i}",
+                    "name": f"Part {i}",
+                    "description": "Synthetic component label for pipeline contract tests.",
+                    "shape": "text",
+                    "x": 60 + i * 260,
+                    "y": 35,
+                    "w": 0,
+                    "h": 32,
+                    "color": "#17232d",
+                    "stroke": "#49636e",
+                    "label": f"Part {i}",
+                    "points": [],
+                    "layer": 30,
+                    "motion": [],
+                }
+                for i in range(3)
             ],
             "stages": [
                 {
@@ -99,6 +118,10 @@ def spec() -> LessonSpec:
                     "duration": 5,
                     "parts": [f"part-{i}", "part-3"],
                     "cause": "A test action causes a visible change.",
+                    "input_state": "Explicit synthetic input",
+                    "output_state": "Explicit synthetic output",
+                    "focus": f"part-{i}",
+                    "source_indices": [0],
                 }
                 for i, title in enumerate(["Fill", "Wash", "Drain"])
             ],

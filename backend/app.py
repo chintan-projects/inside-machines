@@ -19,6 +19,7 @@ from .contracts import LessonSpec
 from .domain import Domain, User
 from .pipeline import Enqueue
 from .provider import configure_gateway
+from .quality import learning_issues
 from .settings import Settings, load_settings
 from .store import Database, Store
 
@@ -181,6 +182,8 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
                 "id": lesson_id,
                 "spec": record["spec"],
                 "quality": record.get("quality", "generated"),
+                "superseded_by": record.get("superseded_by"),
+                "review_needed": bool(learning_issues(LessonSpec.model_validate(record["spec"]))),
                 "video_ready": bool(record.get("video")),
                 "feedback": db.feedback.get(f"{user.id}:{lesson_id}"),
             }
@@ -300,7 +303,7 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
             "events": week,
             "feedback": list(db.feedback.values()),
             "ledger": list(db.ledger.values()),
-            "jobs": [domain.job(key) for key in db.jobs],
+            "jobs": [{**domain.job(key), "failure_type": raw.get("failure_type"), "failed_phase": raw.get("failed_phase"), "quality_issues": raw.get("quality_issues", [])} for key, raw in db.jobs.items()],
             "members": [{"id": u["id"], "name": u["name"]} for u in db.users.values()],
         }
 

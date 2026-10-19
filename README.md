@@ -132,3 +132,7 @@ receipts, validated rates/reservations and adapter contract tests. Default
 credential readiness and prices currently cover OpenAI only. Claude and open-model
 adapters, runtime provider selection, and comparative quality evaluations are not
 implemented. No automatic paid fallback is configured.
+
+The October 19 craft revision and current family-release hold are documented in
+[the learning quality bar](docs/QUALITY-BAR.md). The new AC benchmark does not
+certify the other catalog lessons or generic generation quality.

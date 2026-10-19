@@ -1,5 +1,10 @@
 # Release audit — October 19, 2026
 
+**Current quality status:** human AC review rejected the previous visual benchmark.
+See [QUALITY-BAR.md](QUALITY-BAR.md) for the revision and remaining release criteria.
+The table below is the historical pre-deployment baseline; the later deployment
+section records resolved infrastructure checks. Family release remains held.
+
 The objective remains the complete growing-library family alpha on Vercel, with a PWA and a documented path to native clients. It is **not achieved**. A local implementation, successful packaging and synthetic-provider tests do not establish live generation or a deployed service.
 
 | Requirement | Current authoritative evidence | Release status |
