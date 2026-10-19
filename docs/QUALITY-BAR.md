@@ -76,3 +76,16 @@ vacuum cost benchmark remains valid for that specific run, not this revised
 quality contract. General generation under the tighter gate and provider quality
 comparisons still require live evaluation. No claim of Anatomy-equivalent craft
 or family-release approval is made.
+
+## Protected hosted verification
+
+The revision is imported in the personal Vercel project's existing protected
+production environment. Private Blob bytes match their SHA-256 manifest. Repeated
+import is idempotent; old lesson content and private chats, feedback, ledger,
+users, sessions and spending/reservations were preserved. Hosted catalog discovery
+and an AC request resolve to the revision; the old URL shows its replacement.
+Authenticated video range delivery, captions, font and service worker pass.
+Actual hosted Chrome video plays through the selected chapter with readyState 4,
+92-second duration and synchronized notes. `shots/ac-craft-hosted.jpg` is the
+ignored review capture. These observations establish a functioning review preview;
+they do not constitute the owner's release decision.

@@ -14,7 +14,8 @@ verification:
   - 92-second authored AC video generated locally without paid model calls
   - Chrome desktop and 375/320-width layouts inspected; component and video chapter synchronization pass
   - Existing hosted generation, private chat, reuse, offline playback and isolation evidence in docs/LIVE-BENCHMARK.md
-  - User-authorized total app-AI budget remains 50 USD
+  - Protected hosted AC revision imported; catalog reuse, video/range, captions and private-history preservation pass
+  - User-authorized total app-AI budget remains 50 USD; no new paid calls for this authored revision
 sessions:
   - date: 2026-10-19
     result: Deployed protected personal alpha and measured successful live generation
