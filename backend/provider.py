@@ -2,10 +2,13 @@
 
 import base64
 import json
+import time
 from contextvars import ContextVar
 from dataclasses import dataclass, field
+from typing import Literal
 
 import httpx
+from _shared.services.logger import get_logger
 from _shared.services.model_gateway import (
     BackendOutput,
     ModelBackendError,
@@ -15,7 +18,10 @@ from _shared.services.model_gateway import (
 )
 from pydantic import BaseModel, Field
 
+from .routing import TASKS, ModelTask, ProviderPlugin, ProviderRegistry, TaskRoute, gateway_id
 from .settings import Settings
+
+logger = get_logger(__name__)
 
 
 class ProviderUsage(BaseModel):
@@ -161,28 +167,72 @@ class HostedBackend:
             raise ModelBackendError("The model provider could not be reached") from exc
 
 
-def configure_gateway(settings: Settings) -> None:
-    """Use the gateway's public extension point; leave shared code unmodified."""
-    set_backend_factory(lambda model_id: HostedBackend(model_id, settings))
+def configure_gateway(settings: Settings, registry: ProviderRegistry | None = None) -> None:
+    """Install explicit task routes using the shared gateway's public extension point.
+
+    Custom registries are trusted startup dependencies, never HTTP request data.
+    OpenAI is currently the only production adapter implemented and evaluated by
+    contract tests. Adding a plugin does not establish its quality or pricing.
+    """
+    selected = registry or ProviderRegistry(
+        {"openai": ProviderPlugin(lambda model: HostedBackend(model, settings), frozenset(TASKS))},
+        {
+            task: TaskRoute("openai", settings.speech_model if task == "speech" else settings.model)
+            for task in TASKS
+        },
+    )
+    set_backend_factory(selected.backend)
 
 
-async def model_text(
-    prompt: str, settings: Settings, *, schema: dict[str, object] | None = None, chat: bool = False
+async def _invoke_task(
+    task: ModelTask, prompt: str, *, schema: dict[str, object] | None, max_tokens: int
 ) -> str:
-    """Call text generation through the shared gateway with explicit bounds."""
-    result = await invoke_model(
-        prompt=prompt,
-        models=[settings.model],
-        grammar=json.dumps(schema) if schema else None,
-        max_tokens=settings.max_chat_tokens if chat else settings.max_output_tokens,
-        timeout_ms=110000,
+    """Log bounded metadata, excluding prompts, answers and credentials."""
+    started = time.monotonic()
+    try:
+        result = await invoke_model(
+            prompt=prompt,
+            models=[gateway_id(task)],
+            grammar=json.dumps(schema) if schema else None,
+            max_tokens=max_tokens,
+            timeout_ms=110000,
+        )
+    except Exception as exc:
+        # Log metadata then propagate; callers retain uncertain billing and checkpoints.
+        logger.warning(
+            "Model task failed",
+            task=task,
+            error_type=type(exc).__name__,
+            duration_ms=round((time.monotonic() - started) * 1000, 1),
+        )
+        raise
+    logger.info(
+        "Model task completed",
+        task=task,
+        route=result.model_id,
+        duration_ms=round((time.monotonic() - started) * 1000, 1),
     )
     return result.text
 
 
-async def model_speech(narration: str, settings: Settings) -> bytes:
-    """Synthesize one stage through the mandatory model gateway."""
-    result = await invoke_model(
-        prompt=narration, models=[settings.speech_model], max_tokens=1, timeout_ms=110000
+async def model_text(
+    prompt: str,
+    settings: Settings,
+    *,
+    schema: dict[str, object] | None = None,
+    chat: bool = False,
+    task: Literal["authoring", "review"] = "authoring",
+) -> str:
+    """Call the selected task through the shared gateway with explicit bounds."""
+    return await _invoke_task(
+        "chat" if chat else task,
+        prompt,
+        schema=schema,
+        max_tokens=settings.max_chat_tokens if chat else settings.max_output_tokens,
     )
-    return base64.b64decode(result.text, validate=True)
+
+
+async def model_speech(narration: str, settings: Settings) -> bytes:
+    """Synthesize one stage through the dedicated speech route."""
+    result = await _invoke_task("speech", narration, schema=None, max_tokens=1)
+    return base64.b64decode(result, validate=True)

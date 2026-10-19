@@ -53,8 +53,11 @@ async def test_full_phase_pipeline_real_mp4(
     async def enqueue(job_id: str, phase: str) -> None:
         deliveries.append((job_id, phase))
 
-    async def text(prompt: str, config: Settings, *, schema: dict[str, object]) -> str:
+    async def text(
+        prompt: str, config: Settings, *, schema: dict[str, object], task: str = "authoring"
+    ) -> str:
         assert config == settings and schema
+        assert task == ("review" if prompt.startswith("Review") else "authoring")
         receipt = receipt_context.get()
         assert receipt is not None
         receipt.models.append("synthetic-test-provider")
@@ -161,7 +164,9 @@ async def test_rejected_review_never_published(
     async def enqueue(job_id: str, phase: str) -> None:
         return None
 
-    async def rejected(prompt: str, config: Settings, *, schema: dict[str, object]) -> str:
+    async def rejected(
+        prompt: str, config: Settings, *, schema: dict[str, object], task: str = "authoring"
+    ) -> str:
         receipt = receipt_context.get()
         assert receipt is not None
         receipt.models.append("test-provider")

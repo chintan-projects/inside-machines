@@ -195,7 +195,7 @@ class Pipeline:
                     job,
                     "review",
                     lambda: model_text(
-                        review_prompt(spec), self.settings, schema=ReviewSpec.model_json_schema()
+                        review_prompt(spec), self.settings, schema=ReviewSpec.model_json_schema(), task="review"
                     ),
                 )
                 review = ReviewSpec.model_validate_json(raw)

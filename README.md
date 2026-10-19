@@ -115,3 +115,18 @@ No measured live cost-per-machine benchmark exists yet.
 The original Anatomy-based visual lab remains separate: `npm run build:lab`, then
 `npm run start:lab` on port 4173. It builds into `dist-lab/`. Upstream is unchanged, pinned to
 `1482e8469b0a9e0d8cc18ea2740a01423d29ae80`, with its MIT license retained in `vendor/anatomy/`.
+
+## Engineering and provider routing
+
+[AGENTS.md](AGENTS.md) records the project engineering contract. Shared gateway
+access remains mandatory. `backend/routing.py` provides typed provider plugins and
+explicit authoring, review, chat and speech routes. `configure_gateway` accepts a
+validated registry at trusted startup composition; the default routes use the
+existing OpenAI adapter and configured text/speech models. Neither clients nor
+lesson prompts select provider endpoints.
+
+Provider additions must supply task capabilities, protocol translation, usage
+receipts, validated rates/reservations and adapter contract tests. Default
+credential readiness and prices currently cover OpenAI only. Claude and open-model
+adapters, runtime provider selection, and comparative quality evaluations are not
+implemented. No automatic paid fallback is configured.

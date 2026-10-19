@@ -1,6 +1,7 @@
 goal: Build and deploy the complete growing-library family alpha
 status: blocked
 current:
+  - Provider task registry and project AGENTS.md added; OpenAI remains the only implemented adapter
   - Complete release audit and target-phone review of the connected family alpha
   - Provision database, verify hosted generation and private storage, deploy on Vercel
 needs_input:
@@ -9,6 +10,7 @@ needs_input:
   - Release audit and resume sequence are recorded in docs/RELEASE-AUDIT.md
 verification:
   - Completion checklist in docs/BUILD-PLAN.md
+  - Latest routing change passes 68 backend tests with 86.53 percent coverage; Postgres check skipped
   - 63 backend tests pass with 87.09 percent coverage, including real Postgres and selective starter import
   - Frontend production build, lint and 5 JavaScript tests pass; strict Python and TypeScript checks pass
   - Three real authored MP4s; Chrome offline reload/video/captions, feedback, saved progress and isolation verified
