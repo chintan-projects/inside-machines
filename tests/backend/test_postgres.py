@@ -60,3 +60,34 @@ def test_postgres_first_request_concurrency(
     with pytest.raises(ValueError):
         store.transaction(fail)
     assert store.snapshot().spent == 0
+
+
+def test_postgres_craft_import_preserves_private_history(settings: Settings, user: User) -> None:
+    """A real serialized publication adds a revision without replacing private history."""
+    from backend.ac_craft import CANONICAL, aircon_craft
+    from backend.craft import CraftArtifact, import_craft
+    from backend.seed_aircon import aircon
+    from backend.starters import digest_spec
+
+    target = urlparse(URL)
+    if target.hostname != "127.0.0.1" or target.port != 55432 or target.path != "/inside_test":
+        pytest.fail("Craft import tests require the disposable loopback Postgres")
+    store = Store(URL, settings.data_dir)
+    old, revised = aircon(), aircon_craft()
+
+    def history(db: Database) -> None:
+        db.lessons["air-conditioner"] = {"id": "air-conditioner", "spec": old.model_dump(mode="json")}
+        db.chats["retained"] = {"lesson_id": "air-conditioner", "messages": [{"text": "prior question"}]}
+        db.feedback["retained"] = {"value": "down", "lesson_id": "air-conditioner"}
+
+    store.transaction(history)
+    before = store.snapshot()
+    artifact = CraftArtifact(spec=revised, spec_sha256=digest_spec(revised), video="test.mp4", video_sha256="0" * 64)
+    assert import_craft(store, artifact)
+    assert not import_craft(store, artifact)
+    after = store.snapshot()
+    assert after.chats == before.chats and after.feedback == before.feedback
+    assert after.spent == before.spent and after.reserved == before.reserved
+    assert after.lessons["air-conditioner"]["spec"] == before.lessons["air-conditioner"]["spec"]
+    assert Domain(store, settings).request("How does AC work?", user) == {"kind": "lesson", "lesson_id": CANONICAL, "reused": True}
+    assert "air-conditioner" not in {item["id"] for item in Domain(store, settings).catalog()}

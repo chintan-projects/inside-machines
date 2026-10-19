@@ -56,14 +56,20 @@ SVG interaction and the Pillow-rendered MP4; the renderers are not pixel-identic
 ## Verification record — October 19 revision
 
 - Strict Python/TypeScript checks, lint, production frontend build and five JS tests pass.
-- 85 backend tests pass, including disposable real Postgres concurrency/rollback.
+- 86 backend tests pass with 85.91% coverage, including disposable real Postgres
+  concurrency/rollback and revision publication preserving private history.
 - Linux API and queue bundle verification passes, including bundled font and encoder.
 - Chrome: component choice selects the matching causal chapter; video chapter
   seeking updates the transcript and state cards. Actual MP4 is 92 seconds with
   one optional caption track. The default transcript is outside the drawing.
 - Desktop and 375/320 CSS-pixel layouts inspected. Document width equals viewport;
   visible component buttons replace dropdown-only discovery. Temporary viewport
-  overrides restored. These are browser simulations, not physical-device tests.
+  overrides restored. Main labels measure 14.4 CSS pixels at 375 width and 12.1
+  at 320 width. These are browser simulations, not physical-device tests.
+- Revised lesson downloaded, reloaded fully offline and played as a local Blob
+  video with captions. Font present in the shell cache; no API responses cached.
+  Network override restored. Misconception feedback changes after wrong/correct
+  choices; no model call is made for these authored questions.
 
 No new paid model calls were used for the authored revision. The earlier live
 vacuum cost benchmark remains valid for that specific run, not this revised

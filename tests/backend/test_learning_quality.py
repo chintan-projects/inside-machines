@@ -144,6 +144,7 @@ def test_provider_schema_requires_defaulted_teaching_fields() -> None:
 
     def check(node: object) -> None:
         if isinstance(node, dict):
+            assert "default" not in node
             if node.get("type") == "object" and "properties" in node:
                 assert set(node["required"]) == set(node["properties"])
             for value in node.values():

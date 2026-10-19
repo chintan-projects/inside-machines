@@ -4,7 +4,7 @@ from typing import cast
 
 
 def openai_schema(schema: dict[str, object]) -> dict[str, object]:
-    """Copy a schema, omitting URI format unsupported by structured outputs.
+    """Copy a strict schema with required fields and no URI format or defaults.
 
     Pydantic HttpUrl validation still runs on every returned lesson. Supported
     formats are listed at developers.openai.com/api/docs/guides/structured-outputs.
@@ -15,7 +15,7 @@ def openai_schema(schema: dict[str, object]) -> dict[str, object]:
         if isinstance(value, dict):
             mapping = cast(dict[str, object], value)
             converted = {
-                key: convert(item) for key, item in mapping.items() if not (key == "format" and item == "uri")
+                key: convert(item) for key, item in mapping.items() if key != "default" and not (key == "format" and item == "uri")
             }
             properties = mapping.get("properties")
             if mapping.get("type") == "object" and isinstance(properties, dict):

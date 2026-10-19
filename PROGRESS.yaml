@@ -8,7 +8,7 @@ needs_input:
   - Human craft review and real-phone walkthrough remain required before family release
   - Independent technical review and generic generation quality evaluation remain outstanding
 verification:
-  - 85 backend tests including real disposable Postgres pass; strict Python and TypeScript pass
+  - 86 backend tests including real disposable Postgres pass; strict Python and TypeScript pass
   - Frontend production build, lint and five JS tests pass
   - Linux API and queue packaging passes with bundled font and encoder
   - 92-second authored AC video generated locally without paid model calls
