@@ -54,8 +54,8 @@ is independent of hosting/storage charges and any OpenAI account billing limit.
 
 ## Remaining release work
 
-Live new-lesson generation, contextual follow-up and two-member generated-artifact
-reuse passed. See [LIVE-BENCHMARK.md](LIVE-BENCHMARK.md) for usage, costs, failures
+Live new-lesson generation, contextual follow-up, two-member generated-artifact
+reuse and hosted Chrome offline reload/video/captions passed. See [LIVE-BENCHMARK.md](LIVE-BENCHMARK.md) for usage, costs, failures
 and limitations. The catalog now contains three authored starters and one actual
 AI-created lesson. Latest backend checks: 72 pass, one disposable-Postgres test
 skipped; 86.58% coverage. Frontend strict checks, lint, five tests and build pass.

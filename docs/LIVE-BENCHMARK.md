@@ -47,6 +47,9 @@ After the successful lesson and two live follow-up chats, the ledger showed
 - Private chat isolation, owner-route isolation and logout/session revocation.
 - Fresh live answers on both an authored starter and the generated lesson.
 - Hosted versioned service worker, shell manifest and PWA manifest.
+- Hosted Chrome download, forced network-offline full reload, and actual downloaded
+  video playback passed: 66.02 seconds, captions present, playback advancing, no
+  media error. Network override was restored afterward.
 - Generated artifact copied alone into local review storage, with no production
   users/chats/analytics copied. Chrome video metadata/captions passed; 375px layout
   showed no page overflow. Real-phone and human release review remain outstanding.

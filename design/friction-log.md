@@ -55,3 +55,8 @@ the default selected shape was a decorative backdrop. Changed the initial focus
 to a part referenced by the opening stage; saved user selections still restore.
 The generated lesson remains schematic and needs human device review before family
 release. Hosted entry is still protected by Vercel Authentication.
+
+Seen on the hosted personal Vercel URL: download, network-offline full reload and
+actual 66.02-second downloaded video playback/captions passed. The network override
+was restored. Desktop review screenshot: `shots/live-vacuum-review.jpg` (ignored).
+This browser verification does not replace the person's phone walkthrough or release decision.
