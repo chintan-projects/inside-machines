@@ -90,3 +90,34 @@ These are agent critiques, not release approval. Screenshots in ignored
 `shots/ac-craft-phone.jpg` and the final hosted review capture support the owner
 walkthrough. Other catalog lessons remain drafts. BUG-004 stays open until the
 person accepts the revised teaching experience.
+
+## Second human rejection and action-led studio
+
+The owner again rejected the visual quality and supplied the microwave example.
+The prior agent ratings did not establish an acceptable craft bar. This revision
+changes both teaching structure and the physical drawing.
+
+| Review round | Seen finding | Resolution |
+| --- | --- | --- |
+| 1: hierarchy and object | Large empty space and page chrome pushed the new figure's next action below the viewport. A detached fastener lacked a supporting frame. | Compact lesson chrome, bounded drawing, single next action; front frame supports the mounting details. |
+| 2: type and phone use | Phone overview text needed larger labels. Selecting a lower step could leave the changed explanation above the user's viewport. | Larger overview labels; automatic component focus; explicit whole-system control; phone step selection reveals the new instruction. |
+| 3: interaction and access | At tablet width the enclosure controls shrank to several short lines. Scene controls could cover a secondary label. Muted text contrast was too low. | Full-width enclosure choices; controls above desktop artwork and outside phone artwork; darker text. Keyboard inspection and reduced-motion behavior checked. |
+
+Five aspects reviewed: hierarchy, typography/contrast, mechanical drawing,
+interaction/state feedback, and responsive/accessibility behavior. Seen: the
+selected compressor chapter paused/seeks narration at 32.54 seconds; subsequent
+playback advanced to the heat-release chapter. Seen: inside/outside choices update
+the same enclosure and change the energy outcome. No numerical performance is
+invented. Seen: 320/375/768 widths have no document overflow; the smallest
+whole-system labels measure 14.5 CSS pixels. Motion preference override was restored.
+
+Agent rubric, subject to the owner's judgment: the concrete heat-tracing job now
+has one dominant action (utility 4/5); tested navigation and recovery are coherent,
+with physical-device review missing (usability 4/5). Purposeful hardware, restrained
+controls and direct labels show more care (desirability 4/5, subjective). The
+sealed-room counterexample provides a causal payoff (surprise 4/5, inferred until
+someone learns from it). These ratings are proposals, not human approval.
+
+Review captures: `shots/ac-studio-phone.jpg` and the protected hosted studio
+capture. Other catalog lessons remain outside this visual revision. See
+`design/visual-learning-teardown.md` for scope and limitations.

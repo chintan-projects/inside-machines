@@ -1,17 +1,9 @@
 import type { ReactElement } from 'react';
 import type { LessonSpec, Part } from './contracts';
 
-export function duration(spec: LessonSpec): number { return spec.stages.reduce((n, s) => n + s.duration, 0); }
-export function stageAt(spec: LessonSpec, seconds: number): [number, number] {
-  let elapsed = 0;
-  for (let i = 0; i < spec.stages.length; i++) {
-    const stage = spec.stages[i];
-    if (seconds < elapsed + stage.duration || i === spec.stages.length - 1)
-      return [i, Math.max(0, Math.min(1, (seconds - elapsed) / stage.duration))];
-    elapsed += stage.duration;
-  }
-  return [0, 0];
-}
+import { stageAt } from './lessonTimeline';
+export { duration, stageAt } from './lessonTimeline';
+import { Hardware } from './ac/Hardware';
 export function partPose(part: Part, stage: number, progress: number): [number, number, number] {
   let dx = 0, dy = 0, angle = 0;
   for (const m of part.motion) {
@@ -24,6 +16,7 @@ export function partPose(part: Part, stage: number, progress: number): [number, 
 
 interface Props { readonly spec: LessonSpec; readonly seconds?: number; readonly selected?: string; readonly onSelect?: (id: string) => void; readonly preview?: boolean; readonly zoom?: boolean }
 export function Scene({ spec, seconds = 0, selected = '', onSelect, preview = false, zoom = false }: Props): ReactElement {
+  if (preview && spec.canonical === 'air-conditioner-craft') return <Hardware step={0} focus="" running={false} placement="outside" onSelect={() => undefined} preview />;
   const [stage, progress] = stageAt(spec, seconds);
   const active = new Set(spec.stages[stage].parts);
   const explorable = new Set(spec.stages.flatMap(s => s.parts));

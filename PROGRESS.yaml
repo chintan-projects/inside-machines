@@ -1,18 +1,18 @@
 goal: Build and deploy the growing-library family alpha
 status: quality_revision
 current:
-  - Separate immutable AC craft benchmark replaces discovery of the rejected AC draft
-  - Visible labels, six causal chapters, state changes and synchronized narrated video
+  - Human rejected the labeled AC revision as ordinary; rebuilt as an action-led isometric studio
+  - Physical cutaway, component-focused phone view and same-room enclosure experiment
   - New lesson publication requires component labels and chapter evidence
 needs_input:
   - Human craft review and real-phone walkthrough remain required before family release
   - Independent technical review and generic generation quality evaluation remain outstanding
 verification:
-  - 86 backend tests including real disposable Postgres pass; strict Python and TypeScript pass
-  - Frontend production build, lint and five JS tests pass
+  - Latest checks pass 84 backend tests at 85.03 percent coverage; two previously passed Postgres tests skipped
+  - Frontend production build, lint and seven JS tests pass
   - Linux API and queue packaging passes with bundled font and encoder
-  - 92-second authored AC video generated locally without paid model calls
-  - Chrome desktop and 375/320-width layouts inspected; component and video chapter synchronization pass
+  - New live cutaway reuses existing narration; stored MP4 and private history remain unchanged
+  - Chrome desktop, tablet and 375/320 layouts inspected; keyboard, narration and reduced motion checked
   - Existing hosted generation, private chat, reuse, offline playback and isolation evidence in docs/LIVE-BENCHMARK.md
   - Protected hosted AC revision imported; catalog reuse, video/range, captions and private-history preservation pass
   - User-authorized total app-AI budget remains 50 USD; no new paid calls for this authored revision
@@ -22,4 +22,4 @@ sessions:
   - date: 2026-10-19
     result: Human rejected AC teaching craft; recorded BUG-004 and held family release
   - date: 2026-10-19
-    result: Built authored AC revision and enforceable structural learning checks; final review pending
+    result: Replaced rejected AC presentation with an action-led studio; human learning/craft review pending

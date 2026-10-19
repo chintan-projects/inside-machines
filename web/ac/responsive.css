@@ -1,0 +1,347 @@
+@media (min-width: 1600px) {
+  .ac-hardware {
+    max-height: 530px;
+  }
+}
+@media (max-width: 1000px) {
+  .ac-lesson {
+    grid-template-columns: 185px minmax(0, 1fr);
+  }
+  .ac-guide {
+    padding: 23px 10px 16px;
+  }
+  .ac-guide li button {
+    font-size: 0.7rem;
+    gap: 9px;
+  }
+  .ac-stage-footer {
+    padding: 17px 18px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .ac-step-copy {
+    padding: 23px 23px 0;
+    min-height: 146px;
+  }
+  .ac-step-copy p {
+    font-size: 0.76rem;
+  }
+  .ac-afterword {
+    gap: 30px;
+  }
+  .ac-heading h1 {
+    font-size: 1.6rem;
+  }
+}
+@media (max-width: 760px) {
+  .ac-heading {
+    gap: 12px;
+    margin-bottom: 19px;
+  }
+  .ac-heading h1 {
+    font-size: 1.5rem;
+    line-height: 1.24;
+    max-width: 500px;
+  }
+  .ac-heading > div > p {
+    font-size: 0.67rem;
+    margin-bottom: 7px;
+  }
+  .ac-heading .save-button {
+    width: 40px;
+    height: 42px;
+    min-width: 40px;
+    padding: 9px;
+    font-size: 0;
+  }
+  .ac-heading .save-button > span {
+    display: none;
+  }
+  .ac-lesson {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+  }
+  .ac-stage {
+    order: 0;
+  }
+  .ac-guide {
+    order: 1;
+    display: block;
+    padding: 12px;
+    border-right: 0;
+    border-top: 1px solid #d0d8c9;
+  }
+  .ac-guide-label {
+    display: none;
+  }
+  .ac-guide ol {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+  .ac-guide li button {
+    font-size: 0.62rem;
+    padding: 7px 6px;
+    gap: 5px;
+    min-height: 48px;
+    line-height: 1.35;
+  }
+  .ac-guide li button > span:first-child {
+    width: 17px;
+    height: 17px;
+    font-size: 0.55rem;
+  }
+  .ac-guide .ac-current-dot {
+    display: none;
+  }
+  .ac-guide-bottom {
+    flex-direction: row;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #d1dac9;
+    justify-content: space-between;
+  }
+  .ac-guide-bottom button {
+    font-size: 0.65rem;
+    min-height: 40px;
+    padding: 8px 10px;
+  }
+  .ac-step-copy {
+    min-height: 0;
+    gap: 10px;
+    padding: 20px 18px 8px;
+  }
+  .ac-step-copy h2 {
+    font-size: 0.94rem;
+    line-height: 1.45;
+    letter-spacing: -0.025em;
+  }
+  .ac-step-copy p {
+    font-size: 0.74rem;
+    line-height: 1.7;
+    margin-top: 9px;
+  }
+  .ac-step-count {
+    display: none;
+  }
+  .ac-hardware {
+    min-height: 220px;
+    max-height: 380px;
+    aspect-ratio: 1100/650;
+  }
+  .ac-art {
+    margin-top: 0;
+    padding-bottom: 38px;
+  }
+  .ac-scene-tools {
+    right: 12px;
+    bottom: 7px;
+  }
+  .ac-scene-tools button {
+    min-height: 32px;
+    font-size: 0.59rem;
+    padding: 5px 8px;
+  }
+  .ac-inline-labels {
+    display: none;
+  }
+  .ac-space-label {
+    font-size: 22px;
+  }
+  .ac-stage-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 15px 16px;
+  }
+  .ac-change {
+    font-size: 0.67rem;
+    line-height: 1.6;
+  }
+  .ac-step-actions {
+    justify-content: space-between;
+  }
+  .ac-step-actions .ac-next {
+    font-size: 0.72rem;
+    flex: 1;
+    justify-content: space-between;
+    padding: 10px 12px;
+  }
+  .ac-figure-note {
+    flex-direction: column;
+    gap: 3px;
+    margin: 12px 1px 28px;
+    font-size: 0.59rem;
+  }
+  .ac-placement {
+    max-width: none;
+    margin-bottom: 18px;
+  }
+  .ac-placement button {
+    font-size: 0.7rem;
+  }
+  .ac-afterword {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    margin-top: 28px;
+  }
+  .ac-afterword > section > h2 {
+    font-size: 1.45rem;
+  }
+  .ac-afterword > section > p {
+    font-size: 0.8rem;
+  }
+  .ac-afterword .chat-panel {
+    padding: 20px;
+  }
+  .ac-details > summary {
+    font-size: 0.72rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ac-running .ac-flow,
+  .ac-running .ac-fan-rotor,
+  .ac-running .ac-heat-active,
+  .ac-running .ac-air-active {
+    animation: none;
+  }
+  .ac-hardware * {
+    transition: none !important;
+  }
+}
+@media (min-height: 900px) and (min-width: 761px) {
+  .ac-hardware {
+    max-height: 480px;
+  }
+}
+@media (max-width: 760px) {
+  .studio-nav {
+    height: 60px;
+  }
+  .studio-shell {
+    padding-top: 16px;
+  }
+  .studio-shell > .back {
+    margin-bottom: 13px;
+    font-size: 0.7rem;
+  }
+  .ac-heading h1 {
+    font-size: 1.42rem;
+  }
+  .ac-step-copy {
+    min-height: 0;
+    padding-top: 18px;
+  }
+  .ac-hardware {
+    max-height: 380px;
+    min-height: 220px;
+  }
+  .ac-hardware:has(.ac-callout-active) {
+    aspect-ratio: auto;
+  }
+  .ac-stage-footer {
+    padding: 14px 15px;
+  }
+}
+@media (max-width: 760px) {
+  .ac-invitation {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+    padding: 22px 0;
+  }
+  .ac-invitation h2 {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .ac-invitation button {
+    justify-content: space-between;
+  }
+  .ac-inline-experiment {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 15px;
+  }
+  .ac-inline-experiment .ac-placement button {
+    font-size: 0.65rem;
+    padding: 6px;
+    min-height: 40px;
+  }
+  .ac-inline-outcome {
+    font-size: 0.73rem;
+  }
+  .ac-stage:has(.ac-inline-experiment) .ac-hardware {
+    min-height: 200px;
+    max-height: 250px;
+  }
+}
+@media (max-width: 760px) {
+  .app-shell.studio-shell {
+    padding-top: 16px;
+  }
+}
+@media (max-width: 760px) {
+  .ac-step-copy p {
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+  .ac-guide li button {
+    font-size: 0.71rem;
+    min-height: 58px;
+  }
+  .ac-guide-bottom button {
+    font-size: 0.73rem;
+  }
+  .ac-scene-tools button {
+    font-size: 0.7rem;
+  }
+  .ac-figure-note {
+    font-size: 0.68rem;
+  }
+  .ac-inline-experiment .ac-placement button {
+    font-size: 0.73rem;
+  }
+}
+@media (max-width: 760px) {
+  .ac-hardware .ac-space-label {
+    display: none;
+  }
+}
+@media (min-width: 761px) {
+  .ac-hardware {
+    max-height: 340px;
+  }
+  .ac-heading {
+    margin-bottom: 16px;
+  }
+  .ac-scene-tools {
+    top: 0;
+    bottom: auto;
+    right: 14px;
+  }
+}
+@media (max-width: 1100px) {
+  .ac-inline-experiment {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .ac-inline-experiment .ac-placement {
+    width: 100%;
+    flex: none;
+  }
+  .ac-inline-outcome {
+    max-width: none;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1100px) {
+  .ac-step-copy p {
+    font-size: 0.86rem;
+  }
+  .ac-guide li button {
+    font-size: 0.75rem;
+  }
+}

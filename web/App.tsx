@@ -155,14 +155,14 @@ export function App(): ReactElement {
 
   const categories = ['All', 'Saved', ...new Set(catalog.map(e => e.category))];
   const entries = catalog.filter(e => filter === 'All' || (filter === 'Saved' ? savedIds.includes(e.id) : filter === e.category));
-  return <><a className="skip-link" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a><header className="topbar"><a href="#/" className="brand" aria-label="Inside home"><Box size={25} strokeWidth={1.6} />inside<span>family alpha</span></a>
+  return <><a className="skip-link" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a><header className={lesson?.id === "air-conditioner-craft" && path.startsWith("lesson/") ? "topbar studio-nav" : "topbar"}><a href="#/" className="brand" aria-label="Inside home"><Box size={25} strokeWidth={1.6} />inside<span>family alpha</span></a>
     <nav aria-label="Main navigation">{member && <><a href="#/" aria-current={!path ? 'page' : undefined}>Library</a>{member.owner && online && <a href="#/owner" aria-current={path === 'owner' ? 'page' : undefined}>Alpha insights</a>}</>}
       <button aria-label="Install Inside" onClick={() => { if (install) void install.prompt(); else setHelp(!help); }}><Download size={18} /><span className="install-label">Install</span></button>
       {member && <button onClick={() => void logout()} disabled={busy} aria-label={`Sign out ${member.name}`}><LogOut size={17} /></button>}</nav>
     </header>
     {help && <aside className="install-help"><strong>Keep Inside close.</strong><p>On iPhone or iPad, open in Safari, tap Share, then Add to Home Screen. On Android or desktop, choose Install app from your browser menu.</p><button onClick={() => setHelp(false)}>Got it</button></aside>}
     {!online && <div className="offline-banner" role="status"><WifiOff size={16} />Offline · Saved explanations work. New lessons, feedback and live chat need a connection.</div>}
-    {loading ? <main id="main" tabIndex={-1} className="loading" aria-live="polite">Opening Inside…</main> : !member ? <>{error && <p role="alert" className="error shell-error">{error}</p>}<Login onLogin={setMember} /></> : <main id="main" tabIndex={-1} className="app-shell">
+    {loading ? <main id="main" tabIndex={-1} className="loading" aria-live="polite">Opening Inside…</main> : !member ? <>{error && <p role="alert" className="error shell-error">{error}</p>}<Login onLogin={setMember} /></> : <main id="main" tabIndex={-1} className={lesson?.id === "air-conditioner-craft" && path.startsWith("lesson/") ? "app-shell studio-shell" : "app-shell"}>
       {error && <div role="alert" className="error">{error}<button onClick={() => setError('')} aria-label="Dismiss error">Dismiss</button></div>}
       {path.startsWith('job/') ? <JobProgress id={path.slice(4)} onReady={ready} /> : path === 'owner' ? <OwnerView /> : path.startsWith('lesson/') ? <>
         <button className="back" onClick={() => navigate()}><ArrowLeft size={16} />All explanations</button>

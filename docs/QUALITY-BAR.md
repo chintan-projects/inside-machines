@@ -1,5 +1,11 @@
 # Learning quality is a release requirement
 
+**Latest status:** the owner also rejected the first labeled revision as ordinary.
+The action-led studio supersedes its presentation. See
+[the reference teardown and verification scope](../design/visual-learning-teardown.md).
+The stored MP4 remains unchanged and supplies audio for the new live drawing;
+standalone server video rendering has not yet adopted the new geometry.
+
 The October 19 AC screenshots failed human review (BUG-004). Working APIs and a
 cheap generation cost did not make the explanation useful. Family release remains
 held. This document supersedes earlier visual self-assessments.

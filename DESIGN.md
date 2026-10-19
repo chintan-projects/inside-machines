@@ -51,3 +51,24 @@ UI transitions use 150–250 ms opacity/transform effects only where orientation
 ## Quality checks
 
 Do show the actual object, preserve useful static explanations, and place assumptions beside affected claims. Do not put a paywall before the first causal answer, scatter decorative motion, or turn parts into identical promotional cards. Review phone, tablet, and desktop layouts, then walk the core journeys on real hardware. Utility and usability must pass before decorative polish.
+
+## Action-led AC studio
+
+- Teach one change at a time; move component detail behind an explicit inspection.
+- Keep the real object large enough to recognize before reading the explanation.
+- Use a physical counterexample to earn the abstract energy-balance explanation.
+- Mechanical detail belongs to fins, housings, mounts and tubing; UI chrome recedes.
+- Keep labels; fewer surrounding panels must not make identification harder.
+
+The studio uses a chalk drawing ground (#F3F2EE) to separate the physical object
+from the app's white controls; dark graphite (#29383D) gives fine outlines weight.
+Teal (#286E75) is reserved for the active action/cold side, copper (#BC7954) for
+actual tubing, and orange (#D47444) for escaping heat. These colors encode roles,
+paired with names, arrowheads and dashed heat paths. Inter remains the shared
+legible drawing font. A compact 30px question replaces the large lesson title;
+step titles are 15px; body copy stays 16–17px. Desktop figure proportions are
+roughly 4:3; mobile uses a separate stacked arrangement with its next action close.
+
+Genericness check: a neutral dashboard with a larger SVG would repeat the rejected
+solution. The distinctive move is the room experiment changing the same physical
+scene and its energy outcome, with a six-action story supplying the orientation.

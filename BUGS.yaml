@@ -25,5 +25,5 @@ bugs:
     severity: high
     status: open
     evidence: Human review of AC screenshots finds unlabeled narrated parts and confusing four-stage cycle
-    fix: Implemented separate labeled six-chapter AC benchmark, synchronized video notes and publication gates; awaiting human review
+    fix: Owner rejected the labeled revision as ordinary; action-led isometric studio and enclosure experiment implemented for a new protected review
     regression: tests/backend/test_learning_quality.py; docs/QUALITY-BAR.md

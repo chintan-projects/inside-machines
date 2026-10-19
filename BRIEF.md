@@ -38,3 +38,30 @@ Navigation, explanatory copy, and evidence controls stay still. Machine motion b
 ## Design hypothesis
 
 The memorable moment is a user changing drum speed and predicting why the clothes stop tumbling. A stylish scene that cannot teach that relationship fails the brief. Validate this hypothesis before polishing an expanded catalog.
+
+## October 19: action-led AC studio (supersedes the panel-heavy AC direction)
+
+The latest human review rejects the labeled schematic as ordinary. A curious
+beginner wants to picture where heat goes, not study refrigeration terminology.
+The first question is “Why does an AC need an outdoor unit?” The job is to trace
+heat out of a room, then predict the result of putting both units inside it.
+Posture: tactile, focused, inviting.
+
+Reference: visual-learning.app/microwave. Observed: a recognizable cutaway fills
+the canvas; each step is a concrete action, a single sentence explains the change,
+and the chocolate/turntable contrast gives the mechanism a reason to exist.
+Take this teaching structure, not its drawing or brand palette. Anatomy supplies
+the mechanical craft reference. Avoid our current screen's simultaneous state
+cards, paragraphs, six tabs, dropdown and duplicate playback controls.
+
+Decisions: one dominant cutaway; a quiet ordered story rail; one next action;
+component names anchored to hardware, jargon secondary; an indoor/outdoor
+experiment demonstrates the point. Technical detail, sources, private chat and
+feedback remain available after the main experience. No invented temperatures or
+measured efficiency. Reuse the stored lesson's facts and narration; no paid model
+calls or changes to published content are required for this presentation revision.
+
+At rest, all controls and diagram labels remain still. An explicit play/listen
+action starts motion. Step changes focus the relevant mechanism; reduced-motion
+users get static direction cues and the same outcome. Saved progress remains
+member-scoped. Offline narration reuses the downloaded media's audio track.

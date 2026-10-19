@@ -136,3 +136,9 @@ implemented. No automatic paid fallback is configured.
 The October 19 craft revision and current family-release hold are documented in
 [the learning quality bar](docs/QUALITY-BAR.md). The new AC benchmark does not
 certify the other catalog lessons or generic generation quality.
+
+The latest [AC studio redesign](design/visual-learning-teardown.md) replaces the
+rejected panel-heavy presentation with an isometric guide and an enclosure
+experiment. The live drawing reuses the existing media’s audio; standalone MP4
+rendering still uses the earlier schematic. Other machines retain their existing
+renderers until separately improved and reviewed.
