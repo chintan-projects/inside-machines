@@ -1,0 +1,26 @@
+goal: Build and deploy the complete growing-library family alpha
+status: blocked
+current:
+  - Complete release audit and target-phone review of the connected family alpha
+  - Provision database, verify hosted generation and private storage, deploy on Vercel
+needs_input:
+  - Hosted model credential and explicit alpha spending ceiling
+  - Human acceptance of Neon integration terms before database provisioning
+  - Release audit and resume sequence are recorded in docs/RELEASE-AUDIT.md
+verification:
+  - Completion checklist in docs/BUILD-PLAN.md
+  - 63 backend tests pass with 87.09 percent coverage, including real Postgres and selective starter import
+  - Frontend production build, lint and 5 JavaScript tests pass; strict Python and TypeScript checks pass
+  - Three real authored MP4s; Chrome offline reload/video/captions, feedback, saved progress and isolation verified
+  - Linux bundle verifier passes for API, queue trigger, shared services, encoder, private exclusions and CDN shell
+  - Real private Blob write/read and temporary-object cleanup pass
+  - Three private starter videos prepared; production-mode ASGI smoke passes with real Postgres and Blob
+  - Production invite, owner and session secrets configured; private access file excluded from uploads
+  - Live generation, deployed private-video delivery and deployed queue remain unverified
+sessions:
+  - date: 2026-10-19
+    result: Implemented auth, private chat, feedback, usage ledger, checkpointed generation/video and queue adapters
+  - date: 2026-10-19
+    result: Connected React/PWA, authored 3 lessons/videos, fixed Postgres cold-start race, verified Linux deployment packaging
+  - date: 2026-10-19
+    result: Prepared deployment access and immutable starter assets; audited remaining release blockers

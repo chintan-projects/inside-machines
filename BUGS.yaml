@@ -1,0 +1,8 @@
+bugs:
+  - id: BUG-001
+    title: Concurrent Postgres cold starts collide during table creation
+    severity: high
+    status: fixed
+    evidence: Synchronized eight real connections reproduced pg_type unique violation
+    fix: Transaction-scoped advisory lock serializes schema initialization
+    regression: tests/backend/test_postgres.py

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f3eb"><meta name="description" content="A local lab for understanding machines, one moving part at a time.">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml"><link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/anatomy.css"><link rel="stylesheet" href="/style.css">
+  <title>Inside / A machine, made understandable</title>
+</head>
+<body>
+  <header><a class="brand" href="/" aria-label="Inside home"><span class="brand-icon">✳</span> inside<span class="brand-period">.</span></a><span class="header-note">A FIELD GUIDE TO EVERYDAY MACHINES</span><span class="lab-badge"><i></i> LOCAL LAB · 001</span></header>
+  <main>
+    <section class="intro">
+      <div><p class="eyebrow">TAKE CURIOSITY APART.</p><h1>So, how does<br>that <em>actually</em> work?</h1><p class="intro-copy">Look inside. Follow the moving parts. <br>Understand the thing you use every day.</p></div>
+      <div class="ask-card"><form id="question-form"><label for="question">WHAT ARE YOU CURIOUS ABOUT?</label><div class="question-row"><input id="question" name="question" value="How does a washing machine work?" maxlength="400" required><button class="ask-button" aria-label="Explore question" type="submit">↗</button></div></form><div class="scope"><button id="general-mode" aria-pressed="true">Just the principles</button><button id="specific-mode" aria-pressed="false">My specific machine</button></div><p id="request-status" role="status">Local proof of concept · front-load washer available</p></div>
+    </section>
+    <section id="specific-panel" class="specific-panel" hidden aria-labelledby="specific-title">
+      <div><p class="eyebrow">LET’S IDENTIFY YOUR MACHINE</p><h2 id="specific-title">Same principle. Different details.</h2><p>Add a model number and a manual excerpt. This local prototype collects context; it does not verify specifications or adapt the model yet.</p></div>
+      <form id="specific-form"><label for="machine-model">Brand & model</label><input id="machine-model" required maxlength="160" placeholder="e.g. the model on your door frame"><label for="manual">Relevant manual excerpt (optional)</label><textarea id="manual" rows="3" maxlength="8000" placeholder="Paste a paragraph from your manual here"></textarea><button class="primary" type="submit">Keep details in this session →</button><p id="evidence-status" role="status">No model-specific evidence checked.</p></form>
+    </section>
+    <section class="lesson" aria-labelledby="lesson-title">
+      <div class="lesson-top"><div class="lesson-heading"><span class="chapter">01 / LAUNDRY</span><h2 id="lesson-title">The washing machine</h2></div><span id="scope-badge" class="outline-badge">GENERIC · FRONT LOAD</span></div>
+      <div class="workbench">
+        <aside class="steps-panel"><p class="eyebrow">ONE CYCLE, FIVE IDEAS</p><nav id="steps" aria-label="Cycle stages"></nav><div class="key-idea"><span>THE THING TO NOTICE</span><p id="why"></p></div></aside>
+        <div class="figure-panel iso" data-theme="light"><div class="figure-label"><span>FIG. 001 — A LOOK UNDER THE COVER</span><button id="labels-toggle" aria-pressed="true">Hide markers</button></div><div id="machine" class="machine"><!-- MACHINE --></div><div class="figure-footer"><span><i class="teal-dot"></i> Water path</span><span>Cutaway · schematic placement</span><span id="rotation-scale">Drum motion ×1/4</span></div></div>
+      </div>
+      <div class="transport"><button id="play" class="primary" aria-label="Play cycle">▶ Play cycle</button><button id="reset" class="reset" aria-label="Restart cycle">↺</button><label class="sr-only" for="timeline">Lesson progress</label><input id="timeline" type="range" min="0" max="72" step="0.05" value="0"><span id="time" class="time">00:00 / 01:12</span></div>
+      <div class="explanation"><div><span class="eyebrow" id="stage-number">01 / FILL</span><h3 id="stage-title"></h3></div><p id="stage-text"></p></div>
+      <div class="readouts"><div><span>WATER IN TUB</span><strong id="water-reading">0.0 <small>L</small></strong></div><div><span>DRUM SPEED</span><strong id="rpm-reading">0 <small>rpm</small></strong></div><div><span>INLET VALVE</span><strong id="valve-reading">Open</strong></div><div><span>DRAIN PUMP</span><strong id="pump-reading">Off</strong></div><div><span>DOOR INTERLOCK</span><strong id="door-reading">Locked</strong></div></div>
+      <p class="model-note">A teaching model, with illustrative volumes and speeds. The 72-second lesson condenses a full cycle; it is not an appliance timer. Mechanism and layout vary by model.</p>
+    </section>
+    <section class="discovery"><div><p class="eyebrow">FOLLOW A PART</p><h2>Three parts. <br>One useful idea.</h2></div><div class="part-cards"><button data-part="inlet" aria-pressed="false"><span>01 / INLET VALVE</span><strong>Let water in.</strong><p>An electrically controlled valve admits water. A level sensor tells the controller when to stop.</p><b>See it fill ↗</b></button><button data-part="drum" aria-pressed="false"><span>02 / INNER DRUM</span><strong>Make clothes move.</strong><p>The drum turns inside a stationary outer tub. Its holes let water through and keep clothes in.</p><b>See it tumble ↗</b></button><button data-part="pump" aria-pressed="false"><span>03 / DRAIN PUMP</span><strong>Take water out.</strong><p>The pump carries used water out through the drain hose, including water released during spinning.</p><b>See it drain ↗</b></button></div></section>
+    <details class="sources"><summary>What is this based on? <span>Sources & assumptions +</span></summary><div><p>General cycle behavior: <a href="https://www.whirlpool.com/blog/washers-and-dryers/how-does-a-washing-machine-work.html" target="_blank" rel="noopener">Whirlpool’s explanation of a washing cycle</a>. This is a generic front-load lesson, not a depiction of a Whirlpool model.</p><p>Drawing primitives: <a href="https://github.com/wheresryan22/anatomy" target="_blank" rel="noopener">Anatomy by Ryan</a>, MIT licensed. The model and cutaway were built locally with Codex. No live AI service is connected.</p><p>Assumptions: 12 L maximum standing water and 1,000 rpm peak are illustrative. Drum dimensions and component locations are schematic. Temperature, load sensing, heating, intermediate spins, and repeated rinses are omitted. The motor is representative; drive systems differ.</p></div></details>
+  </main>
+  <footer><a class="brand" href="/">inside.</a><span>Less mystery. More understanding.</span><a href="/ANATOMY-LICENSE.txt">Anatomy · MIT</a></footer>
+  <script type="module" src="/app.mjs"></script>
+</body>
+</html>
