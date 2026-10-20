@@ -37,6 +37,6 @@ export interface OwnerReport {
   events: { kind: string; user_id?: string; at: number; question?: string; canonical?: string; lesson_id?: string }[];
   feedback: (Feedback & { user_id: string; lesson_id: string; stage?: number | null })[];
   jobs: OwnerJob[];
-  ledger: { operation: string; input_tokens: number; output_tokens: number; charged_usd: number; uncertain: boolean; speech_estimated: boolean }[];
+  ledger: { operation: string; input_tokens: number; output_tokens: number; charged_usd: number; uncertain: boolean; speech_estimated: boolean; search_estimated?:boolean; response_status?:string; incomplete_reason?:string }[];
   members: { id: string; name: string }[];
 }

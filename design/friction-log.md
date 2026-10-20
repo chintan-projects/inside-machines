@@ -142,6 +142,16 @@ actual-phone and beginner learning evidence must be recorded separately below.
 
 ### CE-1 render review rounds (agent observations)
 
+Live generated vacuum draft inspection: the machine locator was recognizable, but
+the independently rendered causal panels contained tiny unlabeled overlays with no
+physical surroundings. This is an observed CE-04/05/07 failure, not a human-approved
+artifact. The draft was never published. Authoring now explicitly requires a
+self-contained large labeled mechanism in each inset; the structural floor rejects
+unlabeled detail panels, and review checks the physical context and scale. This
+finding invalidates reuse of that authored draft under the current quality gate;
+its validated evidence may be reused by a fresh explicit operation. No source
+reference or failed receipt is edited into success.
+
 | Round | Consequential finding | Change and observed check |
 | --- | --- | --- |
 | 1 — hierarchy and interaction | At 375 width, the causal action fell below a tall component/inset stack | Current action remains visible within the teaching workspace while scrolling; actual compression changes the chamber and qualitative state. Desktop question/prediction and restrained step rail inspected. |

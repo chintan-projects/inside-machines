@@ -103,3 +103,10 @@ core component needs an on-scene label; every chapter needs a labeled focus,
 input/output and evidence. Preserve immutable published revisions and private
 conversations when replacing a lesson. Read `docs/QUALITY-BAR.md`; structural tests
 and automated model review never imply factual certification or human UI approval.
+
+Causal insets render independently from the full-machine locator. Each must include
+its own labeled working mechanism and physical surroundings; floating unlabeled
+symbols at whole-machine coordinates fail review. New editorial calls return a
+SHA-bound verdict, not a regenerated copy; rejection or mismatched hash must stop
+publication. Saved draft recovery requires an explicit owner operation and the
+current source/quality gates; it cannot bypass an editorial rejection.

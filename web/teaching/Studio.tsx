@@ -52,7 +52,7 @@ function Studio({lesson,member,online,teaching}:{readonly teaching:TeachingSpec}
     if(answer.stage!==null)jump(answer.stage);else if(answer.part)inspect(answer.part);
     document.querySelector('.ce-workspace')?.scrollIntoView({behavior:reduced?'instant':'smooth',block:'start'});
   }
-  function reset():void {jump(0);setBegun(false);setAttempt(attempt+1);setPrediction(null);}
+  function reset():void {jump(0);setBegun(false);setAttempt(attempt+1);setPrediction(null);requestAnimationFrame(()=>window.scrollTo({top:0,behavior:reduced?'instant':'smooth'}));}
   function count(kind:'prediction_skipped'|'prediction_attempted'|'change_replayed'|'transfer_revealed'|'confusing_beat'):void {
     if(!consent||!online)return;
     void api(`/lessons/${encodeURIComponent(lesson.id)}/learning-event`,{kind,beat:beat.id,consent:true}).catch(e=>setCountError(errorMessage(e)));
@@ -70,7 +70,7 @@ function Studio({lesson,member,online,teaching}:{readonly teaching:TeachingSpec}
     {(player.error||assets.saveError)&&<p className="error" role="alert">{player.error||assets.saveError}</p>}
     {!begun?<div className="ce-intro"><figure>{showContext()}<figcaption>{spec.summary}</figcaption></figure><Prediction key={attempt} task={teaching.prediction} onContinue={choice=>{setPrediction(choice);count(choice===null?'prediction_skipped':'prediction_attempted');setBegun(true);jump(0);}}/></div>:<>
       <section className="ce-workspace" aria-label="Build the explanation">
-        <nav className="ce-steps" aria-label="Learning steps"><p>Follow the cause</p><ol>{teaching.beats.map((b,i)=><li key={b.id}><button aria-current={i===beat.stage?'step':undefined} onClick={()=>jump(i)}><span>{i+1}</span>{b.short}</button></li>)}</ol><button className="ce-reset" onClick={reset}><RotateCcw size={15}/>Start over</button></nav>
+        <nav className="ce-steps" aria-label="Learning steps"><p>Follow the cause</p><ol>{teaching.beats.map((b,i)=><li key={b.id}><button aria-current={i===beat.stage?'step':undefined} onClick={()=>jump(i)}><span>{i+1}</span>{b.short}</button></li>)}</ol><button className="ce-reset" aria-label="Start over" title="Start over" onClick={reset}><RotateCcw size={15}/>Start over</button></nav>
         <div className="ce-main">
           <div className="ce-instruction"><span className="ce-overline">{beat.stage+1} / {spec.stages.length}</span><h2>{stage.title}</h2><p>{beat.bridge}</p></div>
           <div className="ce-visuals">

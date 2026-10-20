@@ -40,10 +40,17 @@ class TextBlock(BaseModel):
     refusal: str = ""
 
 
+class ToolAction(BaseModel):
+    """Distinguish chargeable searches from page opens and in-page finds."""
+
+    type: str = ""
+
+
 class OutputItem(BaseModel):
     """Only the fields needed for bounded output and tool accounting."""
 
     type: str = ""
+    action: ToolAction | None = None
     content: list[TextBlock] = Field(default_factory=list)
 
 
@@ -53,6 +60,7 @@ class ProviderResponse(BaseModel):
     status: str = ""
     output: list[OutputItem] = Field(default_factory=list)
     usage: ProviderUsage = Field(default_factory=ProviderUsage)
+    incomplete_details: dict[str, str] | None = None
 
 
 @dataclass
@@ -62,6 +70,10 @@ class UsageReceipt:
     input_tokens: int = 0
     output_tokens: int = 0
     search_calls: int = 0
+    web_tool_calls: int = 0
+    search_estimated: bool = False
+    response_status: str = ""
+    incomplete_reason: str = ""
     speech_characters: int = 0
     cost_usd: float = 0
     models: list[str] = field(default_factory=list)
@@ -147,7 +159,25 @@ class HostedBackend:
                 response = client.post("https://api.openai.com/v1/responses", headers=headers, json=body)
                 response.raise_for_status()
                 parsed = ProviderResponse.model_validate_json(response.content)
-                searches = sum(item.type == "web_search_call" for item in parsed.output)
+                receipt.response_status = (
+                    parsed.status if parsed.status in ("completed", "incomplete", "failed") else "unknown"
+                )
+                reason = (parsed.incomplete_details or {}).get("reason", "")
+                receipt.incomplete_reason = (
+                    reason if reason in ("max_output_tokens", "content_filter", "") else "unknown"
+                )
+                web_calls = [item for item in parsed.output if item.type == "web_search_call"]
+                # Open/find actions have no search-tool fee. If the provider omits
+                # an action, retain a conservative estimate rather than assume zero.
+                searches = sum(
+                    item.action is None or item.action.type not in ("open_page", "find_in_page")
+                    for item in web_calls
+                )
+                receipt.web_tool_calls += len(web_calls)
+                receipt.search_estimated |= any(
+                    item.action is None or item.action.type not in ("search", "open_page", "find_in_page")
+                    for item in web_calls
+                )
                 receipt.input_tokens += parsed.usage.input_tokens
                 receipt.output_tokens += parsed.usage.output_tokens
                 receipt.search_calls += searches

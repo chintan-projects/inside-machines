@@ -97,3 +97,26 @@ out-of-range positional source reference. The next contract uses exact source UR
 and a larger internal evidence-summary limit while preserving every lesson/craft
 gate. Invalid saved data is not guessed into a successful checkpoint. Owner-only
 diagnostics expose field paths/error types without raw outputs or private input.
+
+The next split run validated research and completed the CE-1 author draft. Review
+then exhausted 10,000 output tokens while returning a full replacement lesson:
+research 22,205 input / 1,032 output ($0.094730), author 4,550 / 8,239 ($0.091490),
+review 11,163 / 10,000 ($0.122326). Total $0.308546; all three receipts identify
+`gpt-6.1-sol`, none have unknown billing. The failed job published nothing and
+remains in the evaluation denominator. The application ledger afterward was
+$2.577297846 spent/retained, $0 reserved, against the unchanged $50 ceiling.
+
+The research receipt's four `search_calls` are observed web-tool output items,
+not a verified count of billable searches. Earlier receipts also used that counting
+rule. Future receipts inspect search/open/find action types and explicitly mark
+missing action metadata as estimated; no historical amounts have been reduced.
+New review uses a concise verdict bound to the full draft hash rather than copying
+the entire scene. Its hosted evaluation remains pending.
+
+The older adapter did not retain the provider's incomplete reason. The review
+output-cap diagnosis is inferred from its exact 10,000-token receipt and unusable
+result. Future receipts retain allowlisted response status/incomplete reason,
+without raw provider bodies. Browser inspection separately rejected the saved
+draft's unlabeled, context-free insets; that drawing cannot be recovered under
+the tightened CE-04/05/07 floor. A fresh explicit operation may reuse its validated
+evidence while authoring the detail views again. See the vacuum worksheet.

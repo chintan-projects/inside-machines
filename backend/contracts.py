@@ -178,6 +178,14 @@ class ReviewSpec(StrictModel):
     lesson: LessonSpec
 
 
+class ReviewDecision(StrictModel):
+    """A verdict bound to the exact draft, without regenerating its scene."""
+
+    accepted: bool
+    notes: list[str] = Field(max_length=10)
+    spec_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
+
+
 class AuthorLessonSpec(LessonSpec):
     """New authoring must use CE-1; historical v1 readers remain supported."""
 

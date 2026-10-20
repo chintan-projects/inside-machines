@@ -73,6 +73,46 @@ async def test_gateway_structured_research_and_speech(
     assert receipt.input_tokens == 100 and receipt.output_tokens == 50 and receipt.search_calls == 1
     assert receipt.cost_usd > 0.01 and receipt.speech_characters > 0
     assert receipt.models == [settings.model, settings.speech_model]
+    assert receipt.web_tool_calls == 1 and receipt.search_estimated
+
+
+def test_search_accounting_distinguishes_page_actions(
+    settings: Settings, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Search fees use action types; omitted/unknown actions stay conservative."""
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            json={
+                "status": "completed",
+                "usage": {"input_tokens": 100, "output_tokens": 20},
+                "output": [
+                    *[
+                        {"type": "web_search_call", "action": {"type": kind}}
+                        for kind in ("search", "open_page", "find_in_page", "future_action")
+                    ],
+                    {"type": "message", "content": [{"type": "output_text", "text": "ok"}]},
+                ],
+            },
+        )
+
+    original = httpx.Client
+    monkeypatch.setattr(
+        "backend.provider.httpx.Client", lambda **kw: original(transport=httpx.MockTransport(handler), **kw)
+    )
+    receipt = UsageReceipt()
+    token = receipt_context.set(receipt)
+    try:
+        HostedBackend(settings.model, settings).run(
+            Request(prompt="Test", messages=None, grammar=None, max_tokens=5, label_tokens=None)
+        )
+    finally:
+        receipt_context.reset(token)
+    assert receipt.web_tool_calls == 4 and receipt.search_calls == 2
+    assert receipt.search_estimated
+    expected = (100 * settings.input_rate + 20 * settings.output_rate) / 1e6 + 0.02
+    assert receipt.cost_usd == pytest.approx(expected)
 
 
 @pytest.mark.parametrize("mode", ["rejected", "timeout", "incomplete", "no-output"])
@@ -90,6 +130,7 @@ def test_provider_failures_never_become_fake_answers(
             200,
             json={
                 "status": "incomplete" if mode == "incomplete" else "completed",
+                "incomplete_details": {"reason": "max_output_tokens"} if mode == "incomplete" else None,
                 "usage": {"input_tokens": 100, "output_tokens": 20},
                 "output": [],
             },
@@ -111,6 +152,8 @@ def test_provider_failures_never_become_fake_answers(
     finally:
         receipt_context.reset(token)
     assert bool(receipt.models) == (mode in ("incomplete", "no-output"))
+    if mode == "incomplete":
+        assert receipt.response_status == "incomplete" and receipt.incomplete_reason == "max_output_tokens"
 
 
 def test_provider_requires_receipt(settings: Settings) -> None:

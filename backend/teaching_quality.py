@@ -60,6 +60,8 @@ def teaching_issues(spec: LessonSpec) -> list[str]:
     claims = {c.id: c for c in teaching.claims}
     for beat in teaching.beats:
         stage = spec.stages[beat.stage]
+        if not any(graphics[id].shape == "text" and graphics[id].label.strip() for id in beat.graphics):
+            issues.append(f"Beat {beat.id} needs a labeled self-contained causal detail view")
         if len(stage.title) > 60 or len(beat.bridge) > 180 or len(beat.static_explanation) > 280:
             issues.append(f"Beat {beat.id} copy exceeds the readable scene layout")
         if sum(len(p.name) + len(p.before) + len(p.after) for p in beat.properties) > 170:

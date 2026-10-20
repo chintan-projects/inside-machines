@@ -28,8 +28,8 @@ This is an implementation record, not the owner's lesson acceptance. BUG-004 rem
 
 ## Verification in this iteration
 
-Observed: Ruff, strict mypy, 118 backend tests including three disposable Postgres tests,
-85.82% backend coverage; TypeScript, ESLint, ten JavaScript tests and production build pass.
+Observed: Ruff, strict mypy, 122 backend tests including three disposable Postgres tests,
+86.04% backend coverage; TypeScript, ESLint, ten JavaScript tests and production build pass.
 The provider in pipeline tests is synthetic; transactions, media encoding and artifacts are real.
 Linux packaging, browser, hosted runtime and paid generation observations are recorded below
 when completed. Their earlier-revision evidence does not automatically transfer here.
@@ -71,6 +71,14 @@ checkpointed task routes. Source boundaries, invalid research, budget limits,
 legacy paid-output migration and failure export are tested. New split-path runtime
 evaluation remains required before claiming generation is reliable. The previous
 successful v1 cost benchmark does not establish CE-1 generation success.
+
+The split path completed evidence and authoring but full-copy review hit the output
+limit. New jobs review the entire artifact using a concise SHA-bound verdict; a
+rejection or wrong hash cannot publish. Explicit same-owner recovery can reuse a
+validated authored checkpoint after a known billed review failure, without paying
+again for evidence/drawing or mutating the failed operation. Runtime acceptance
+of the revised review protocol remains pending. Search-tool accounting now excludes
+known page-open/find actions and labels omitted action data as an estimate.
 
 Catalog lookup follows immutable supersession chains, so older aliases resolve to
 the latest artifact even if a revised author omits them. A regression checks two

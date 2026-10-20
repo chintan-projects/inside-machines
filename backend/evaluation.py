@@ -58,6 +58,7 @@ class EvaluationPacket(BaseModel):
     structural_issues: list[str]
     usage: list[dict[str, object]]
     reused_research_usage: list[dict[str, object]] = Field(default_factory=list)
+    reused_draft_usage: list[dict[str, object]] = Field(default_factory=list)
     ratings: HumanRatings = Field(default_factory=HumanRatings)
     limitation: str = "Structural validation is not a factual, visual or learning evaluation. Empty ratings are unmeasured. Receipts may be absent for authored lessons."
 
@@ -81,6 +82,7 @@ def packet(store: Store, lesson_id: str, case_id: str) -> EvaluationPacket:
     jobs = {id for id, j in db.jobs.items() if j.get("lesson_id") == lesson_id}
     usage = _usage(db, jobs)
     reused = {str(db.jobs[j]["research_reused_from"]) for j in jobs if db.jobs[j].get("research_reused_from")}
+    drafts = {str(db.jobs[j]["draft_reused_from"]) for j in jobs if db.jobs[j].get("draft_reused_from")}
     return EvaluationPacket(
         case=case,
         lesson_id=lesson_id,
@@ -89,7 +91,10 @@ def packet(store: Store, lesson_id: str, case_id: str) -> EvaluationPacket:
         spec=spec,
         structural_issues=learning_issues(spec),
         usage=usage,
-        reused_research_usage=_usage(db, reused),
+        reused_research_usage=[
+            r for r in _usage(db, reused) if str(r.get("operation", "")).endswith(":research")
+        ],
+        reused_draft_usage=[r for r in _usage(db, drafts) if str(r.get("operation", "")).endswith(":author")],
     )
 
 
@@ -101,6 +106,10 @@ def _usage(db: Database, jobs: set[str]) -> list[dict[str, object]]:
         "input_tokens",
         "output_tokens",
         "search_calls",
+        "web_tool_calls",
+        "search_estimated",
+        "response_status",
+        "incomplete_reason",
         "cost_usd",
         "charged_usd",
         "speech_estimated",
@@ -167,7 +176,14 @@ def comparison(packets: list[EvaluationPacket]) -> dict[str, object]:
                 )
                 if candidate.reused_research_usage
                 else None,
-                "has_estimates": any(bool(r.get("speech_estimated")) for r in candidate.usage),
+                "reused_draft_recorded_usd": sum(
+                    float(str(r.get("charged_usd", 0))) for r in candidate.reused_draft_usage
+                )
+                if candidate.reused_draft_usage
+                else None,
+                "has_estimates": any(
+                    bool(r.get("speech_estimated") or r.get("search_estimated")) for r in candidate.usage
+                ),
                 "billing_uncertain": any(bool(r.get("uncertain")) for r in candidate.usage),
                 "structural_issues": candidate.structural_issues,
                 "human_review_complete": complete,

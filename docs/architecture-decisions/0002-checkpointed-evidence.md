@@ -62,3 +62,36 @@ allow 600 characters; all lesson/craft layout gates remain unchanged. Research
 facts now use exact source URLs, validated against the packet's source list, to
 avoid positional ambiguity. The invalid saved packet is retained, not repaired by
 guessing. Further production validation remains required.
+
+## Review verdict protocol
+
+The next split run completed evidence and an 8,239-output-token visual draft, but
+the full-lesson review exhausted its 10,000-token output limit. The known receipts
+total $0.308546; nothing was published. New jobs use `review_protocol=verdict-1`:
+the reviewer inspects the complete draft but returns only accept/reject, actionable
+notes and the exact draft SHA-256. It cannot rewrite geometry or silently repair
+content. A rejection or mismatched hash stops publication. The same structural
+floor runs after review and before publication. Historical full-review checkpoints
+retain their parser. This changes the output protocol, not the editorial criteria.
+
+A fresh, explicit owner revision may reuse the valid evidence and authored draft
+after a billed review transport/incomplete-output failure. The parent hash, question,
+member and seven-day scope must match; research/author/review receipts must be known,
+and current schema/source/quality checks must pass. Editorial rejections cannot
+qualify. Preserve the original failed operation, draft hash and receipts; bind the
+new verdict to the new revision identity. Evaluation packets separate reused research,
+reused authoring and incremental spending. No automatic paid retry is introduced.
+
+Future OpenAI receipts distinguish search actions from page-open/find actions.
+Missing or unknown action metadata retains a conservatively estimated search fee.
+Historical receipts remain unchanged: their `search_calls` counted observed web-tool
+items, which may include page opens. They are application estimates, not invoice
+reconciliation. See [official action accounting](https://developers.openai.com/api/docs/guides/tools-web-search#output-and-citations).
+
+A local browser review then found the completed draft used unlabeled tiny overlays
+in panels that render independently from the machine. CE-04/05/07 therefore block
+its reuse under the current quality floor. Each panel now requires its own label;
+author/editor instructions require a large working mechanism and physical
+surroundings. Current gates are reapplied before every recovery. Valid evidence
+from a known billed review failure may be reused separately; its drawing is not
+automatically accepted. Engineering success remains distinct from craft review.

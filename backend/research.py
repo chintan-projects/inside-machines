@@ -70,8 +70,12 @@ def reusable_research(
     for id, job in reversed(list(db.jobs.items())):
         if (
             job.get("status") != "failed"
-            or job.get("failed_phase") != "queued"
-            or job.get("failure_type") != "ValidationError"
+            or not (
+                job.get("failed_phase") == "queued"
+                and job.get("failure_type") == "ValidationError"
+                or job.get("failed_phase") == "review"
+                and job.get("failure_type") == "ModelUnavailableError"
+            )
             or job.get("revision_parent_sha256") != parent_sha
             or job.get("question") != question
             or job.get("user_id") != user_id
@@ -82,10 +86,16 @@ def reusable_research(
         receipt = db.ledger.get(operation, {})
         outputs = cast(dict[str, dict[str, object]], job.get("call_outputs", {}))
         output = outputs.get(operation)
-        if not output or output.get("bytes") or receipt.get("uncertain") or not receipt.get("models"):
+        if receipt.get("uncertain") or not receipt.get("models"):
             continue
         try:
-            return ResearchSpec.model_validate_json(str(output["value"])), id
+            if job.get("failed_phase") == "review":
+                review = db.ledger.get(f"lesson:{id}:review", {})
+                if review.get("uncertain") or not review.get("models"):
+                    continue
+                return ResearchSpec.model_validate(job.get("research")), id
+            if output and not output.get("bytes"):
+                return ResearchSpec.model_validate_json(str(output["value"])), id
         except ValidationError:
             continue
     return None

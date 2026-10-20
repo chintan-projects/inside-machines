@@ -7,13 +7,14 @@ import imageio_ffmpeg  # type: ignore[import-untyped]  # Upstream package has no
 import pytest
 
 from backend.assets import Assets
-from backend.contracts import LessonSpec, ReviewSpec
+from backend.contracts import LessonSpec, ReviewDecision
 from backend.domain import Domain, User
 from backend.pipeline import Pipeline
 from backend.provider import UsageReceipt, receipt_context
 from backend.render import audio_duration, draw_scene, part_pose, stage_at
 from backend.research import ResearchSpec
 from backend.settings import Settings
+from backend.starters import digest_spec
 from backend.store import Database, Store
 
 
@@ -80,7 +81,7 @@ async def test_full_phase_pipeline_real_mp4(
         if task == "authoring":
             assert str(Domain(store, settings).job(job_id)["message"]).startswith("Building")
         return (
-            ReviewSpec(accepted=True, notes=[], lesson=spec).model_dump_json()
+            ReviewDecision(accepted=True, notes=[], spec_sha256=digest_spec(spec)).model_dump_json()
             if prompt.startswith("Review")
             else spec.model_dump_json()
         )
@@ -194,10 +195,17 @@ async def test_expired_unknown_call_fails_without_spending_twice(
     assert state.ledger[f"lesson:{job_id}:author"]["uncertain"]
 
 
+@pytest.mark.parametrize("mode", ["rejected", "wrong-digest"])
 async def test_rejected_review_never_published(
-    store: Store, settings: Settings, user: User, spec: LessonSpec, monkeypatch: pytest.MonkeyPatch
+    store: Store,
+    settings: Settings,
+    user: User,
+    ce_spec: LessonSpec,
+    monkeypatch: pytest.MonkeyPatch,
+    mode: str,
 ) -> None:
     """Schema validity alone does not make an editorially rejected lesson public."""
+    spec = ce_spec
 
     async def enqueue(job_id: str, phase: str) -> None:
         return None
@@ -209,7 +217,11 @@ async def test_rejected_review_never_published(
         assert receipt is not None
         receipt.models.append("test-provider")
         receipt.cost_usd = 0.01
-        return ReviewSpec(accepted=False, notes=["Wrong flow direction"], lesson=spec).model_dump_json()
+        return ReviewDecision(
+            accepted=mode == "wrong-digest",
+            notes=["Wrong flow direction"],
+            spec_sha256="0" * 64 if mode == "wrong-digest" else digest_spec(spec),
+        ).model_dump_json()
 
     monkeypatch.setattr("backend.pipeline.model_text", rejected)
     job_id = str(Domain(store, settings).request("washer", user)["job_id"])

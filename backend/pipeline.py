@@ -16,7 +16,7 @@ from pydantic import ValidationError
 
 from .accounting import charge
 from .assets import Assets
-from .contracts import AuthorLessonSpec, LessonSpec, ReviewSpec, TeachingReviewSpec
+from .contracts import AuthorLessonSpec, LessonSpec, ReviewDecision, ReviewSpec, TeachingReviewSpec
 from .domain import Domain
 from .prompts import lesson_prompt, review_prompt
 from .provider import UsageReceipt, model_speech, model_text, receipt_context
@@ -231,21 +231,31 @@ class Pipeline:
                 )
             elif phase == "review":
                 spec = LessonSpec.model_validate(job["spec"])
-                review_type = TeachingReviewSpec if spec.version == 2 else ReviewSpec
+                require_learning_quality(spec)
+                decision_only = job.get("review_protocol") == "verdict-1"
+                review_type = (
+                    ReviewDecision
+                    if decision_only
+                    else TeachingReviewSpec
+                    if spec.version == 2
+                    else ReviewSpec
+                )
                 raw = await self._paid(
                     job,
                     "review",
                     lambda: model_text(
-                        review_prompt(spec),
+                        review_prompt(spec, decision_only=decision_only),
                         self.settings,
                         schema=review_type.model_json_schema(),
                         task="review",
                     ),
                 )
                 review = review_type.model_validate_json(raw)
+                if isinstance(review, ReviewDecision) and review.spec_sha256 != digest_spec(spec):
+                    raise ValueError("Review verdict refers to another draft")
                 if not review.accepted:
                     raise ValueError("Automated editorial check rejected this lesson")
-                reviewed = review.lesson
+                reviewed = spec if isinstance(review, ReviewDecision) else review.lesson
                 if job.get("research"):
                     require_evidence_sources(reviewed, ResearchSpec.model_validate(job["research"]))
                 require_learning_quality(reviewed)
@@ -256,6 +266,12 @@ class Pipeline:
                     "voice-0",
                     "Preparing the narrated explanation",
                     spec=reviewed.model_dump(mode="json"),
+                    editorial_review={
+                        "accepted": True,
+                        "notes": review.notes,
+                        "spec_sha256": digest_spec(reviewed),
+                        "method": "model",
+                    },
                 )
             elif phase.startswith("voice-"):
                 await self._voice(job, int(phase.split("-")[1]))

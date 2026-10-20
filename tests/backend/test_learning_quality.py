@@ -169,3 +169,11 @@ def test_provider_schema_requires_defaulted_teaching_fields() -> None:
 
     check(adapted)
     assert original == LessonSpec.model_json_schema()
+
+
+def test_causal_details_cannot_be_unlabeled_floating_overlays(ce_spec: LessonSpec) -> None:
+    """Regression for the observed vacuum draft: context labels cannot label a separate inset."""
+    for graphic in ce_spec.graphics:
+        if graphic.shape == "text":
+            graphic.shape = "box"
+    assert any("self-contained causal detail" in issue for issue in learning_issues(ce_spec))

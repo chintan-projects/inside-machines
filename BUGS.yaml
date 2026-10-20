@@ -38,6 +38,6 @@ bugs:
     title: Combined CE-1 evidence and scene authoring exceeds bounded deadline
     severity: high
     status: open
-    evidence: Live revision failed after 211 seconds; 0.65 USD retained for uncertain billing
-    fix: Separate research and author task routes, budgets and checkpoints; new live evaluation pending
+    evidence: Combined author timed out; split author succeeds but full-copy review hits 10000-token cap
+    fix: Evidence checkpoint plus SHA-bound concise review verdict; hosted end-to-end evaluation pending
     regression: tests/backend/test_research.py; tests/backend/test_pipeline.py; ADR 0002

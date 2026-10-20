@@ -11,6 +11,7 @@ from pydantic import BaseModel
 from .contracts import LessonSpec, canonicalize
 from .quality import learning_issues
 from .research import reusable_research
+from .revision_recovery import reusable_draft
 from .settings import Settings
 from .starters import digest_spec
 from .store import Database, Store
@@ -155,6 +156,7 @@ class Domain:
                     "message": "The alpha's generation budget is reserved or used. You can still explore every existing explanation.",
                 }
             parent_sha = digest_spec(LessonSpec.model_validate(parent["spec"])) if parent else ""
+            draft = reusable_draft(db, parent_sha, question, user.id) if parent else None
             recovered = reusable_research(db, parent_sha, question, user.id) if parent else None
             job_id = secrets.token_urlsafe(18)
             db.jobs[job_id] = {
@@ -163,9 +165,12 @@ class Domain:
                 "question": question,
                 "user_id": user.id,
                 "status": "queued",
-                "phase": "author" if recovered else "queued",
+                "phase": "review" if draft else "author" if recovered else "queued",
                 "pipeline_version": "evidence-first-1",
-                "message": "Using saved evidence; building the visual explanation"
+                "review_protocol": "verdict-1",
+                "message": "Reviewing the saved visual explanation"
+                if draft
+                else "Using saved evidence; building the visual explanation"
                 if recovered
                 else "Waiting to build your explanation",
                 "created_at": time.time(),
@@ -174,7 +179,9 @@ class Domain:
                 "lease_token": "",
                 "attempts": 0,
                 "receipt": {},
-                "spec": None,
+                "spec": draft[0].model_copy(update={"canonical": canonical}).model_dump(mode="json")
+                if draft
+                else None,
                 "audio": [],
                 "video": None,
                 "cost_usd": 0,
@@ -182,8 +189,14 @@ class Domain:
                 "reservation": reserve,
                 "revision_of": revision_of,
                 "revision_parent_sha256": parent_sha or None,
-                "research": recovered[0].model_dump(mode="json") if recovered else None,
-                "research_reused_from": recovered[1] if recovered else None,
+                "research": draft[1].model_dump(mode="json")
+                if draft
+                else recovered[0].model_dump(mode="json")
+                if recovered
+                else None,
+                "research_reused_from": draft[2] if draft else recovered[1] if recovered else None,
+                "draft_reused_from": draft[2] if draft else None,
+                "draft_reused_spec_sha256": digest_spec(draft[0]) if draft else None,
             }
             db.reserved += reserve
             self.event(
