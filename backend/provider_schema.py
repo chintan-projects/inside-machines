@@ -33,7 +33,8 @@ def openai_schema(schema: dict[str, object]) -> dict[str, object]:
 def anthropic_schema(schema: dict[str, object]) -> dict[str, object]:
     """Translate Claude's supported subset; domain validation remains mandatory.
 
-    Numeric/string/array bounds move into descriptions, as Anthropic's SDK does.
+    Numeric/string/array bounds, regex patterns and literal constants move into
+    descriptions, matching Anthropic's SDK's conservative schema transformation.
     The returned JSON must still pass the original Pydantic contract and quality
     gates. Objects remain closed and all properties are required to keep the
     compiled grammar within Claude's documented optional-property limit.
@@ -41,6 +42,7 @@ def anthropic_schema(schema: dict[str, object]) -> dict[str, object]:
     bounds = frozenset({
         "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf",
         "minLength", "maxLength", "minItems", "maxItems", "uniqueItems",
+        "pattern", "const",
     })
 
     def convert(value: object) -> object:

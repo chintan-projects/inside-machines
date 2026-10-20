@@ -3,7 +3,7 @@
 The web application now uses the shared D1 studio from `web/studio` for every
 compatible CE lesson. Local studies import that same player. Historical readers,
 artifact hashes and unavailable-renderer video/text fallbacks remain intact.
-This completes the integration boundary; it does not certify lesson quality.
+This implements the integration boundary; it does not certify lesson quality.
 
 ## Member and owner flow
 
@@ -73,9 +73,9 @@ The owner table exposes all 20 scopes, build/chat token counters, recorded versu
 estimated costs, uncertain billing, historical revisions and unallocated operations.
 It reads the shared operation ledger; it is not a second billing system.
 
-- Seed lessons: local authored content and computer speech, **zero new model calls**.
+- Seed lessons: locally prepared content and computer speech, **zero new paid app API calls**.
   This is not an AI-generated-per-machine price benchmark. Storage, hosting and
-  human authoring/review effort are separate.
+  coding-agent use and human authoring/review effort are separate.
 - Missing requests and repeat views: zero model calls.
 - An owner AI build: the configured **$2 reservation** is an admission allowance,
   not an expected charge or a promise of publishable quality. Each phase settles

@@ -1,25 +1,22 @@
 goal: Build the curated visual concept library and validate learning quality
-status: curated_integration_verification
+status: hosted_authoring_compatibility_repair
 current:
-- Member requests collect interest without paid dispatch; owner triage/build/release/inbox wired
-- Shared D1 CE player adopted by hosted app; per-node chat, audio, lifecycle and offline hash verification
-- Owner path composition preserves graph/artifact history and requires bundle-bound quality evidence
-- Twenty source-led cores authored; prior4 detailed artworks retained;16 new schematic sections and reunion maps
-- Claude structured authoring implemented behind shared gateway; OpenAI tasks separately routed
-- Personal Gmail account and app/Neon/Blob ownership reverified; CLI profile isolated
-- 20 narration/video artifacts rendering locally; protected deployment and runtime checks in progress
+- Curated member requests, owner triage/build, review-gated availability and private inbox wired
+- Shared D1 player serves all20 narrated review cores; offline path and artifact verification wired
+- Personal Gmail production Ready;26 immutable revisions preserve all9 earlier lesson specs
+- Owner costs expose20 scopes, actual receipts, estimates and uncertain billing
+- Live research succeeds; Claude full lesson grammar returns400; bounded transport repair underway
 needs_input:
-- Connect personal GitHub login to Gmail Vercel to restore automatic deployments
-- Independent technical review, actual-phone craft and five initially unfamiliar beginner learning checks
-- Owner taste/release approval for exact artifacts; BUG-004 remains open
+- Connect personal GitHub login to Gmail Vercel for automatic deployments (BUG-008)
+- Independent technical review, real-phone craft and five unfamiliar beginner learning checks
+- Owner taste/release approval; sixteen new schematic cores do not establish selected Anatomy craft
 verification:
-- 21 frontend and28 studio tests passed; types/lint/build pass; no bundle-size warning
-- 'Disposable Postgres5/5: concurrent interests/notices/path attachment, rollback and CAS'
-- Provider, accounting, path and mechanism regressions pass; full suite rerun in progress
-- 375/768/1440/offline/keyboard and multi-tab progress observed in Chrome; real-device gates pending
-- Local seed media uses computer speech and0 new paid model calls; cost table distinguishes allowances/receipts
-- Personal production+preview Claude key configured securely; no paid production experiment yet
+- 260 backend tests pass;6 real Postgres regressions separately pass;90.65 percent coverage
+- Ruff and strict mypy109files pass; frontend types/lint/23tests/build and32studio checks pass
+- Linux packaging verifier passes; protected live20paths/media/captions and free request flow pass
+- Historical lesson/chat/ledger preservation and member owner-API denial observed live
+- 'Paid probe: research0.067506 USD; author0.65 uncertain; two diagnostic allowances0.65 each'
+- No automatic paid retries or fallback; no real human acceptance evidence fabricated
 sessions:
 - date: '2026-10-20'
-  result: Curated request/release pipeline, shared hosted studio and20 review candidates implemented; render/runtime verification
-    ongoing
+  result: Shared curated integration deployed; Claude grammar compatibility blocker found through real runtime audit

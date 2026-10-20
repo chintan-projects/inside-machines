@@ -6,10 +6,13 @@ from dataclasses import replace
 import httpx
 import pytest
 from _shared.services.model_gateway import ModelBackendError, Request
+from pydantic import ValidationError
 
 from backend.anthropic_authoring import ClaudeAuthoringBackend
+from backend.anthropic_document import envelope_schema
 from backend.assets import Assets
-from backend.author_transport import author_schema
+from backend.author_transport import author_schema, compact_author, expand_author
+from backend.contracts import LessonSpec
 from backend.domain import Domain, User
 from backend.pipeline import Pipeline
 from backend.provider import UsageReceipt, configure_gateway, model_speech, model_text, receipt_context
@@ -32,7 +35,9 @@ def stream(mode: str = "success") -> str:
             },
         }},
         {"type": "content_block_start", "content_block": {"type": "text"}},
-        {"type": "content_block_delta", "delta": {"type": "text_delta", "text": '{"value":"synthetic"}'}},
+        {"type": "content_block_delta", "delta": {
+            "type": "text_delta", "text": json.dumps({"document_json": '{"value":"synthetic"}'}),
+        }},
         {"type": "message_delta", "delta": {"stop_reason": "end_turn"}, "usage": {"output_tokens": 50}},
         {"type": "message_stop"},
     ]
@@ -50,6 +55,13 @@ def stream(mode: str = "success") -> str:
         events[2]["delta"] = {
             "type": "text_delta", "text": {"bad-json": "{INVALID", "non-object": "[]", "empty": ""}[mode],
         }
+    if mode in ("bad-document", "extra-envelope", "document-array"):
+        value = (
+            {"document_json": "INVALID INNER"} if mode == "bad-document"
+            else {"document_json": "{}", "extra": True} if mode == "extra-envelope"
+            else {"document_json": "[]"}
+        )
+        events[2]["delta"] = {"type": "text_delta", "text": json.dumps(value)}
     if mode == "tool":
         events[1]["content_block"] = {"type": "tool_use"}
     if mode == "repeated-start":
@@ -60,6 +72,7 @@ def stream(mode: str = "success") -> str:
 @pytest.mark.parametrize("mode", [
     "success", "refusal", "max_tokens", "missing-input", "missing-output", "truncated",
     "wrong-model", "bad-json", "non-object", "empty", "tool", "repeated-start", "malformed", "quota", "timeout",
+    "bad-document", "extra-envelope", "document-array",
 ])
 def test_structured_stream_failure_and_usage(
     settings: Settings, monkeypatch: pytest.MonkeyPatch, mode: str,
@@ -74,7 +87,9 @@ def test_structured_stream_failure_and_usage(
         assert body["model"] == config.anthropic_model and body["stream"]
         assert body["thinking"] == {"type": "between_tools"}
         assert body["output_config"]["format"]["type"] == "json_schema"
-        assert body["system"] == "Synthetic system"
+        assert body["system"].startswith("Synthetic system\n\n")
+        assert "JSON-DOCUMENT-1 TRANSPORT" in body["system"]
+        assert body["output_config"]["format"]["schema"] == envelope_schema()
         assert body["messages"] == [{"role": "user", "content": "Synthetic question"}]
         assert "tools" not in body and "cache_control" not in json.dumps(body)
         assert request.headers["x-api-key"] == "synthetic-claude-key"
@@ -105,7 +120,8 @@ def test_structured_stream_failure_and_usage(
             with pytest.raises(ModelBackendError) as error:
                 ClaudeAuthoringBackend(config.anthropic_model, config).run(request)
             assert "PRIVATE BODY" not in str(error.value)
-            if mode in ("refusal", "max_tokens", "bad-json", "non-object", "empty"):
+            if mode in ("refusal", "max_tokens", "bad-json", "non-object", "empty",
+                        "bad-document", "extra-envelope", "document-array"):
                 assert receipt.billing_complete and receipt.cost_usd > 0
             if mode == "truncated":
                 assert receipt.models and receipt.billing_complete is False
@@ -125,11 +141,48 @@ def test_schema_translation_preserves_original_constraints() -> None:
     assert translated["required"] == list(properties)
     assert translated["additionalProperties"] is False
     assert '"maxLength":' not in json.dumps(translated)
+    assert '"pattern":' not in json.dumps(translated)
+    assert '"const":' not in json.dumps(translated)
     assert "Domain constraints:" in json.dumps(translated)
     with pytest.raises(ValueError, match="local"):
         anthropic_schema({"$ref": "https://example.com/untrusted"})
     with pytest.raises(ValueError, match="closed"):
         anthropic_schema({"type": "object", "additionalProperties": {"type": "string"}})
+
+
+def test_actual_compact_payload_uses_envelope_but_domain_keeps_identity(
+    settings: Settings, ce_spec: LessonSpec,
+) -> None:
+    """The envelope cannot admit invalid versions, shapes or paint into a lesson."""
+    config = claude(settings)
+    original = author_schema()
+    before = json.dumps(original, sort_keys=True)
+    body = ClaudeAuthoringBackend(config.anthropic_model, config).request_body(
+        Request("Synthetic schema preflight only", None, json.dumps(original), 100, None)
+    )
+    output = body["output_config"]
+    assert isinstance(output, dict)
+    response_format = output["format"]
+    assert isinstance(response_format, dict)
+    schema = response_format["schema"]
+    assert isinstance(schema, dict)
+    assert schema == envelope_schema()
+    assert len(json.dumps(schema)) < 200
+    system = body["system"]
+    assert isinstance(system, str)
+    assert json.loads(system.split("\nDOCUMENT_SCHEMA_DATA: ")[1]) == original
+    assert json.dumps(original, sort_keys=True) == before
+    assert expand_author(json.dumps(compact_author(ce_spec))).version == 2
+    for invalid in ("version", "shape", "paint"):
+        document = compact_author(ce_spec)
+        if invalid == "version":
+            document["version"] = 1
+        else:
+            graphics = document["graphics"]
+            assert isinstance(graphics, list) and isinstance(graphics[0], dict)
+            graphics[0][invalid] = "video" if invalid == "shape" else ["red", "red"]
+        with pytest.raises(ValidationError):
+            expand_author(json.dumps(document))
 
 
 def test_preflight_and_readiness_fail_closed(settings: Settings) -> None:

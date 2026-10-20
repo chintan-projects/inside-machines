@@ -5,6 +5,7 @@ from typing import cast
 
 from _shared.services.model_gateway import BackendOutput, ModelBackendError, Request
 
+from .anthropic_document import decode_document, envelope_schema, schema_instructions
 from .anthropic_transport import ClaudeRates, stream_message
 from .provider import receipt_context
 from .provider_schema import anthropic_schema
@@ -42,7 +43,11 @@ class ClaudeAuthoringBackend:
             original: object = json.loads(request.grammar)
             if not isinstance(original, dict) or original.get("type") != "object":
                 raise ValueError("Authoring schema must describe an object")
-            schema = anthropic_schema(cast(dict[str, object], original))
+            # Validate the trusted document schema locally, but do not ask the
+            # provider to compile its large nested grammar. Its original form is
+            # included as data; the existing domain still validates the result.
+            document_schema = cast(dict[str, object], original)
+            anthropic_schema(document_schema)
         except (ValueError, TypeError) as exc:
             raise ModelBackendError("Claude authoring schema is unsupported") from exc
         messages = (
@@ -51,7 +56,10 @@ class ClaudeAuthoringBackend:
         )
         if not messages or any(message["role"] not in ("system", "user", "assistant") for message in messages):
             raise ModelBackendError("Claude authoring message roles are unsupported")
-        system = "\n\n".join(message["content"] for message in messages if message["role"] == "system")
+        system = "\n\n".join([
+            *(message["content"] for message in messages if message["role"] == "system"),
+            schema_instructions(document_schema),
+        ])
         conversation = [message for message in messages if message["role"] != "system"]
         if not conversation or conversation[-1]["role"] != "user":
             raise ModelBackendError("Claude structured authoring requires a final user message")
@@ -62,7 +70,7 @@ class ClaudeAuthoringBackend:
             "stream": True,
             "thinking": {"type": "between_tools"},
             "output_config": {
-                "effort": "medium", "format": {"type": "json_schema", "schema": schema},
+                "effort": "medium", "format": {"type": "json_schema", "schema": envelope_schema()},
             },
         }
         if system:
@@ -86,12 +94,7 @@ class ClaudeAuthoringBackend:
             ),
             receipt=receipt, max_text_characters=request.max_tokens * 16 + 1024,
         )
-        try:
-            parsed: object = json.loads(result.text)
-        except (ValueError, RecursionError):
-            raise ModelBackendError("Claude did not return parseable structured data") from None
-        if not isinstance(parsed, dict):
-            raise ModelBackendError("Claude authoring returned a non-object document")
+        document = decode_document(result.text, max_bytes=request.max_tokens * 16 + 1024)
         # The original full Pydantic schema and all evidence/quality gates still
         # validate this result in the pipeline. Translation never relaxes them.
-        return result
+        return BackendOutput(text=json.dumps(document, ensure_ascii=False, separators=(",", ":")))

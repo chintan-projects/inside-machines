@@ -27,11 +27,25 @@ not the expected cost of a lesson. Full-job reservation remains $2, covering
 research, authoring, review and at most seven narrated stages; receipts retain
 actual observed tokens, model identity, cache categories and computed cost.
 
-Claude's [structured-output grammar subset](https://platform.claude.com/docs/en/build-with-claude/structured-outputs)
-does not enforce every application bound. The transport moves unsupported numeric,
-string and array bounds into schema descriptions; the original Pydantic contracts,
-evidence checkpoint and quality gates still validate every returned lesson.
-Refusals, partial JSON, incomplete streams and identity mismatches stop the phase.
+The adapter selects one explicit `json-document-1` protocol. Claude's
+[structured-output grammar](https://platform.claude.com/docs/en/build-with-claude/structured-outputs)
+covers only the small envelope `{document_json: string}`. The complete original
+compact/full/patch JSON schema appears as data in the trusted transport instructions.
+The model serializes its requested document into that string. The adapter decodes
+one inner JSON object and returns it to the unchanged pipeline. The original
+Pydantic contracts, evidence checkpoint, identity checks and quality gates still
+validate every lesson field. Provider grammar does **not** certify inner compliance.
+
+This protocol avoids the large nested grammar that the provider rejected during
+integration, including after SDK-aligned removal of regex/literal grammar constraints.
+It is the selected protocol for every Claude authoring call, never
+an automatic fallback or retry after a failed request. The adapter rejects extra
+envelope fields, malformed inner/outer JSON, arrays, duplicate keys, nonfinite
+numbers and excessive encoded size or nesting. Refusals, partial JSON, incomplete
+streams and identity mismatches stop the phase. No teaching requirements change.
+An accepted token-count request does not prove that the provider can compile the
+structured-output grammar. A grammar failure stops the attempt; it never causes
+an automatic retry with relaxed validation or another provider.
 
 There is one bounded request with no automatic paid retry, provider fallback,
 retrieval tools or code execution. A terminal usage event is required before
@@ -44,4 +58,8 @@ Automated adapter tests intercept HTTP and cover structured success, refusal,
 token exhaustion, malformed JSON/SSE, quota/timeout, truncated streams, missing
 usage, wrong identity, schema translation, routing isolation and uncertain billing.
 The same product evaluation cases and human lesson gates remain necessary before
-claiming release quality. This change itself made no paid provider calls.
+claiming release quality. Automated tests make no paid calls. A separately accounted
+one-output-token probe using the actual compact authoring schema successfully
+reached provider identity and terminal usage: 6,284 input tokens, one output token,
+$0.012578 recorded cost, no uncertain billing. Its intentional token limit produced
+no lesson. This proves envelope acceptance, not complete authoring or teaching quality.
