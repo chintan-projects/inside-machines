@@ -64,6 +64,8 @@ def test_release_is_required_and_notices_are_idempotent(store: Store, settings: 
     """Synthetic human evidence exercises the protocol; it is not a real review."""
     service = Interests(store, settings)
     request = service.request("refrigerator", user)
+    waiting = User(id="waiting-for-import", name="Synthetic requester", owner=False)
+    service.request("air conditioner", waiting)
     key = str(request["interest_id"])
     owner = User(id="owner", name="Owner", owner=True)
     spec = aircon_concept()
@@ -82,6 +84,8 @@ def test_release_is_required_and_notices_are_idempotent(store: Store, settings: 
         if gate == "learning":
             data["scores"] = [{"participant": f"anon-{i}", "baseline": 0, "causal": 2, "transfer": 2} for i in range(5)]
         reviews.record(spec.canonical, ReviewSubmission.model_validate(data), owner)
+    assert len(service.updates(waiting)) == 1  # Imported core binds earlier matching demand on release.
+    assert service.mine(waiting)[0]["lesson_id"] == spec.canonical
     service.update(key, "available", spec.canonical, "", owner)
     assert len(service.updates(user)) == 1
     other = User(id="later", name="Later", owner=False)
@@ -113,6 +117,21 @@ def test_release_is_required_and_notices_are_idempotent(store: Store, settings: 
     store.transaction(lambda db: db.notifications[notification].update(spec_sha256=digest_spec(spec)))
     store.transaction(lambda db: db.lessons[spec.canonical].update(archived=True))
     assert service.updates(user)[0]["available"] is False
+
+
+def test_demand_and_reuse_events_preserve_weekly_metrics(store: Store, settings: Settings, user: User) -> None:
+    """Idempotent subscriptions count people once; real library lookups remain observable."""
+    service = Interests(store, settings)
+    service.request("How does a car work?", user)
+    service.request("car", user)
+    assert len([e for e in store.snapshot().events if e["kind"] == "requested_topic"]) == 1
+    spec = aircon_concept()
+    store.transaction(lambda db: db.lessons.update({spec.canonical:{"id":spec.canonical,"spec":spec.model_dump(mode="json")}}))
+    result = service.request("air conditioner", user)
+    assert result["kind"] == "lesson"
+    state = store.snapshot()
+    assert len([e for e in state.events if e["kind"] == "catalog_hit"]) == 1
+    assert not state.jobs and not state.ledger and state.spent == state.reserved == 0
 
 
 def test_shared_path_uses_validated_core_and_no_private_history(store: Store, user: User) -> None:

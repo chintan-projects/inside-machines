@@ -8,7 +8,7 @@ from _shared.services.logger import get_logger
 from fastapi import HTTPException
 
 from .contracts import LessonSpec, canonicalize
-from .domain import User
+from .domain import Domain, User
 from .learning_reviews import review_state
 from .settings import Settings
 from .store import Database, Store
@@ -36,7 +36,14 @@ def notify_available(db: Database, lesson_id: str) -> None:
     if not currently_available(db, lesson_id):
         return
     identity = review_state(db, lesson_id)
+    lesson = db.lessons[lesson_id]
+    spec = LessonSpec.model_validate(lesson["spec"])
+    names = {spec.canonical, *(canonicalize(alias) for alias in spec.aliases)}
     for interest in db.topic_interests.values():
+        # Imported or independently authored cores must also satisfy earlier
+        # demand. Depth aliases must never answer a whole-system request.
+        if not interest.get("lesson_id") and not lesson.get("depth_parent") and interest.get("canonical") in names:
+            interest["lesson_id"] = lesson_id
         if interest.get("lesson_id") != lesson_id:
             continue
         interest.update(status="available", updated_at=time.time())
@@ -74,6 +81,7 @@ class Interests:
                     continue
                 spec = LessonSpec.model_validate(lesson["spec"])
                 if canonical in {spec.canonical, *(canonicalize(a) for a in spec.aliases)}:
+                    Domain.event(db, "catalog_hit", user, question=question, lesson_id=lesson["id"])
                     return {"kind": "lesson", "lesson_id": lesson["id"], "reused": True}
             interest = db.topic_interests.get(key)
             if not interest:
@@ -88,7 +96,11 @@ class Interests:
                             "status": "requested", "members": {}, "lesson_id": None,
                             "created_at": time.time(), "updated_at": time.time(), "note": ""}
                 db.topic_interests[key] = interest
-            cast(dict[str, object], interest["members"]).setdefault(user.id, time.time())
+            members = cast(dict[str, object], interest["members"])
+            if user.id not in members:
+                members[user.id] = time.time()
+                Domain.event(db, "requested_topic", user, question=question, canonical=canonical,
+                             interest_id=key)
             if interest.get("lesson_id"):
                 notify_available(db, str(interest["lesson_id"]))
             return {"kind": "interest", "interest_id": key, "status": _current_interest(db, interest)["status"],
