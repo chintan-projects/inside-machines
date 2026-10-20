@@ -110,13 +110,21 @@ class Domain:
                             409, "That revision attempt failed. Explicitly start a new operation to try again"
                         )
             for lesson in db.lessons.values():
-                if lesson.get("archived"):
-                    continue
                 spec = LessonSpec.model_validate(lesson["spec"])
                 names = {spec.canonical, *(canonicalize(a) for a in spec.aliases)}
                 if canonical in names and (not revision_of or spec.canonical == canonical):
-                    self.event(db, "catalog_hit", user, question=question, lesson_id=lesson["id"])
-                    return {"kind": "lesson", "lesson_id": lesson["id"], "reused": True}
+                    # Keep every old query reusable even if a revised model omits its aliases.
+                    latest, visited = lesson, set[str]()
+                    while latest.get("superseded_by"):
+                        target = str(latest["superseded_by"])
+                        if target in visited or target not in db.lessons:
+                            raise HTTPException(409, "This lesson's revision chain needs owner attention")
+                        visited.add(target)
+                        latest = db.lessons[target]
+                    if latest.get("archived"):
+                        continue
+                    self.event(db, "catalog_hit", user, question=question, lesson_id=latest["id"])
+                    return {"kind": "lesson", "lesson_id": latest["id"], "reused": True}
             for job in db.jobs.values():
                 if job["canonical"] == canonical and job["status"] not in ("failed", "complete"):
                     self.event(db, "joined_job", user, question=question, job_id=job["id"])

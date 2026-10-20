@@ -10,7 +10,7 @@ needs_input:
   - Owner actual-phone craft/accessibility walkthrough
   - Five initially unfamiliar beginners for causal and transfer evaluation
 verification:
-  - 113 backend tests including three disposable Postgres tests pass; coverage 85.72 percent
+  - 114 backend tests including three disposable Postgres tests pass; coverage 85.72 percent
   - Ruff and strict mypy pass; TypeScript, ESLint, nine JS tests and production build pass
   - Real MP4 revision test preserves parent content and private conversations
   - JS and Python sample the same piecewise path through the actual drain pump

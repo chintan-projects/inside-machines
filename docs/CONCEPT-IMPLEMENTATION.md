@@ -28,7 +28,7 @@ This is an implementation record, not the owner's lesson acceptance. BUG-004 rem
 
 ## Verification in this iteration
 
-Observed: Ruff, strict mypy, 113 backend tests including three disposable Postgres tests,
+Observed: Ruff, strict mypy, 114 backend tests including three disposable Postgres tests,
 85.72% backend coverage; TypeScript, ESLint, nine JavaScript tests and production build pass.
 The provider in pipeline tests is synthetic; transactions, media encoding and artifacts are real.
 Linux packaging, browser, hosted runtime and paid generation observations are recorded below
@@ -71,3 +71,7 @@ checkpointed task routes. Source boundaries, invalid research, budget limits,
 legacy paid-output migration and failure export are tested. New split-path runtime
 evaluation remains required before claiming generation is reliable. The previous
 successful v1 cost benchmark does not establish CE-1 generation success.
+
+Catalog lookup follows immutable supersession chains, so older aliases resolve to
+the latest artifact even if a revised author omits them. A regression checks two
+revisions, zero new paid work and a corrupt-chain error instead of regeneration.
