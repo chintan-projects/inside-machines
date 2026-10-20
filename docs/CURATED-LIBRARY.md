@@ -20,7 +20,8 @@ This implements the integration boundary; it does not certify lesson quality.
 6. Release creates one in-app update per requester/artifact. Revocation, archive,
    artifact mismatch or a changed learning bundle removes its availability link.
 
-Notifications are in-app. Email delivery, browser push, subscription billing and
+Notifications are in-app and belong to the current family member session.
+Cross-device account recovery, email delivery, browser push, subscription billing and
 automatic arbitrary-topic publication are not implemented or implied.
 The family alpha can inspect clearly labeled drafts; a draft is never a release.
 Specific-model documentation remains outside this generic-system seed library.

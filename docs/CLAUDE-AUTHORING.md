@@ -19,10 +19,14 @@ checked October 20, 2026. A different model needs a pricing/adapter evaluation
 revision. Environment overrides may raise the configured prices but cannot lower
 them below this verified tuple.
 
-The body is bounded to 100,000 UTF-8 bytes, including its schema. With the configured
-10,000 output-token cap, 4,096 token protocol headroom, conservative cache input
-pricing and $0.03 additional headroom, the maximum modeled allowance is $0.546384.
-The existing $0.65 text-phase reservation covers it. This is a reservation ceiling,
+The body is bounded to 100,000 UTF-8 bytes, including its schema. The repository
+default remains 10,000 output tokens. Hosted deployments can explicitly configure
+`INSIDE_MAX_OUTPUT_TOKENS=20000` for the escaped document envelope. With 4,096
+token protocol headroom, conservative cache input pricing and $0.03 additional
+headroom, the maximum modeled allowance is $0.546384 at 10,000 output tokens and
+$0.646384 at 20,000. The existing $0.65 text-phase reservation covers either.
+At those same rates/input limits, 20,361 tokens still fit; 20,362 exceed the
+reservation and settings reject the route before serving. This is a reservation ceiling,
 not the expected cost of a lesson. Full-job reservation remains $2, covering
 research, authoring, review and at most seven narrated stages; receipts retain
 actual observed tokens, model identity, cache categories and computed cost.
@@ -35,6 +39,8 @@ The model serializes its requested document into that string. The adapter decode
 one inner JSON object and returns it to the unchanged pipeline. The original
 Pydantic contracts, evidence checkpoint, identity checks and quality gates still
 validate every lesson field. Provider grammar does **not** certify inner compliance.
+Transport instructions request compact inner JSON without indentation or whitespace
+outside string values, retaining every field and all meaningful lesson text.
 
 This protocol avoids the large nested grammar that the provider rejected during
 integration, including after SDK-aligned removal of regex/literal grammar constraints.

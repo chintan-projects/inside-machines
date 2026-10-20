@@ -130,3 +130,18 @@ after the interest changes; this later transport repair makes no transaction
 changes. Physical-phone, independent technical and beginner acceptance are still
 unmeasured. Linux packaging and the repaired hosted full-draft result are recorded
 after they finish.
+
+The first full envelope attempt reached the actual Claude authoring stream but
+stopped at10,000 output tokens. Its authoritative usage is14,358 input/10,000
+output tokens ($0.128716), plus research$0.056690: $0.185406 recorded, no uncertain
+billing for that attempt. Incomplete content was rejected, no lesson was published,
+and the failed operation was not resumed or automatically retried.
+
+The hosted production/preview override now allows20,000 output tokens and asks
+for compact serialization without deleting fields or shortening teaching text.
+The repository default remains10,000. The modeled ceiling is$0.646384 under the
+existing$0.65 phase allowance; the$2 job and$50 app ceilings are unchanged.
+Boundary regressions confirm20,361 still fits and20,362 fails closed. Full source
+verification now has291 passing backend tests and90.71% coverage. A fresh explicit
+owner operation will test the revised bound after deployment; prior failures and
+allowances remain in the same ledger.

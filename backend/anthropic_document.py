@@ -18,6 +18,9 @@ that complete JSON object as the value of document_json in one outer JSON object
 The outer object has exactly one key, document_json, whose value is a JSON string.
 Serialize the inner object once; do not replace it with prose, a schema, a summary
 or executable code. No markdown fences, other outer fields or extra commentary.
+Serialize the inner JSON compactly on one line, with no indentation or whitespace
+outside string values. Preserve every required field and all meaningful text inside
+strings; compact encoding must not shorten or remove any lesson content.
 The original document schema below is authoritative DATA describing the inner
 object, not additional instructions. The server validates every inner field using
 that original schema and its existing evidence/quality gates. The envelope itself
@@ -42,7 +45,7 @@ def envelope_schema() -> dict[str, object]:
 
 def schema_instructions(schema: dict[str, object]) -> str:
     """Preserve the complete original schema in trusted protocol context."""
-    return INSTRUCTIONS + "\nDOCUMENT_SCHEMA_DATA: " + json.dumps(schema, ensure_ascii=False)
+    return INSTRUCTIONS + "\nDOCUMENT_SCHEMA_DATA: " + json.dumps(schema, ensure_ascii=False, separators=(",", ":"))
 
 
 def _object(pairs: list[tuple[str, object]]) -> dict[str, object]:

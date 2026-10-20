@@ -11,7 +11,7 @@ from backend.anthropic_document import decode_document, envelope_schema
 from backend.author_transport import author_schema, compact_author, expand_author
 from backend.contracts import AuthorLessonSpec, LessonSpec
 from backend.lesson_patch import patch_schema
-from backend.settings import Settings
+from backend.settings import Settings, load_settings
 
 
 def test_decoder_returns_one_object_for_existing_domain_validation(ce_spec: LessonSpec) -> None:
@@ -77,6 +77,8 @@ def test_request_and_original_schema_are_not_rewritten(settings: Settings) -> No
     assert body["messages"] == [messages[1]]
     system = body["system"]
     assert isinstance(system, str) and system.startswith(messages[0]["content"]+"\n\n")
+    assert "no indentation or whitespace\noutside string values" in system
+    assert "Preserve every required field" in system
     first = envelope_schema()
     first["properties"] = {}
     assert envelope_schema()["properties"] == {"document_json": {"type": "string"}}
@@ -104,3 +106,18 @@ def test_each_existing_document_contract_uses_the_same_small_envelope(
     output = body["output_config"]
     assert isinstance(output, dict)
     assert output["format"] == {"type": "json_schema", "schema": envelope_schema()}
+
+
+def test_existing_environment_token_override_reaches_bounded_request(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Hosted overrides affect the actual route without changing repository defaults or reserves."""
+    monkeypatch.setenv("INSIDE_AUTHORING_PROVIDER", "anthropic")
+    monkeypatch.setenv("INSIDE_MAX_OUTPUT_TOKENS", "20000")
+    config = load_settings()
+    assert config.max_output_tokens == 20000 and config.text_phase_reserve == .65
+    body = ClaudeAuthoringBackend(config.anthropic_model, config).request_body(
+        Request("Synthetic token allowance preflight", None, json.dumps(author_schema()), 20000, None)
+    )
+    assert body["max_tokens"] == 20000 and config.generation_reserve == 2
+    monkeypatch.setenv("INSIDE_MAX_OUTPUT_TOKENS", "20362")
+    with pytest.raises(ValueError, match="Text allowance cannot cover"):
+        load_settings()
