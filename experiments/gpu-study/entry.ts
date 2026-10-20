@@ -8,10 +8,7 @@ import { coreNarration, memoryNarration, matrixNarration } from './depth-narrati
 
 declare global {
   interface Window {
-    Anatomy: { k: { ISO_CSS: string } };
     createGpuArt(anatomy: Window['Anatomy']): GpuArt;
-    studioPath: unknown;
-    studioNarrations: Readonly<Record<string, { readonly planId: string; readonly src: string }>>;
   }
 }
 const root = document.getElementById('app');

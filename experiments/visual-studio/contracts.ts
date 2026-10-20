@@ -58,6 +58,9 @@ export interface NarrationPlan {
 export interface Narration extends NarrationPlan {
   readonly src: string;
 }
+export interface NarrationAssets {
+  readonly [planId: string]: { readonly planId: string; readonly src: string };
+}
 export interface Lesson<T extends FrameState> {
   readonly id: string;
   readonly title: string;
@@ -91,5 +94,11 @@ export interface StudioAPI {
 }
 
 declare global {
-  interface Window { lessonStudio: StudioAPI; seek(time: number): void }
+  interface Window {
+    lessonStudio: StudioAPI;
+    seek(time: number): void;
+    Anatomy: { k: { ISO_CSS: string } };
+    studioPath: unknown;
+    studioNarrations: NarrationAssets;
+  }
 }

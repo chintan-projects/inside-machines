@@ -11,7 +11,7 @@ const button = (text: string, action: () => void): HTMLButtonElement => {
 };
 
 /** Mount a trusted lesson adapter into an empty shell; rendering is always derived. */
-export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Lesson<T>, options: { readonly embedded?: boolean } = {}): StudioAPI {
+export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Lesson<T>, options: { readonly embedded?: boolean; readonly predictionFirst?: boolean } = {}): StudioAPI {
   let time = 0, controls: Controls = { ...lesson.defaultControls }, playing = false;
   let stopAt = lesson.duration, last = 0, raf = 0, hasStarted = false;
   let narrated = false;
@@ -43,7 +43,7 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
   const caption = element('p'); caption.className = 'caption';
   const controlArea = element('div'); controlArea.className = 'controls';
   const advanced = element('details'); advanced.className = 'advanced';
-  advanced.append(element('summary', 'One more thing: data'));
+  advanced.append(element('summary', 'More ways to explore'));
   const controlButtons: { key: string; value: string; button: HTMLButtonElement }[] = [];
   const media = lesson.narration ? element('audio') : undefined;
   if (media && lesson.narration) {
@@ -228,8 +228,12 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
     controlArea, advanced, illustration);
   workspace.append(viewer, tools);
   const checks = element('div'); checks.className = 'learning-checks';
-  checks.append(assessment(lesson.prediction, 'Make a prediction'),
-    assessment(lesson.transfer, 'Put the idea to work'), take);
+  const prediction = assessment(lesson.prediction, 'Make a prediction');
+  if (options.predictionFirst) {
+    const before = element('details'); before.className = 'prediction-preview';
+    before.append(element('summary', 'Before you watch: make a prediction'), prediction); main.append(before);
+  } else checks.append(prediction);
+  checks.append(assessment(lesson.transfer, 'Put the idea to work'), take);
   main.append(workspace, checks);
   root.append(header, main, footer);
   if (media) root.append(media);

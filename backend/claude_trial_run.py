@@ -22,6 +22,7 @@ logger = get_logger(__name__)
 TRIAL = ROOT / "experiments/claude-vacuum"
 PRIVATE = ROOT / ".vercel/claude-vacuum/private"
 GPU_TRIAL = ROOT / "experiments/gpu-study"
+ART_TRIALS = (GPU_TRIAL, ROOT / "experiments/refrigerator-study")
 
 
 def denied_backend(model: str) -> ModelBackend:
@@ -43,8 +44,8 @@ def trial_prompt(request_path: Path) -> str:
         paths = [TRIAL / "request-art-first.md", ROOT / "vendor/anatomy/references/kit.md"]
         if request_path.name != "request-art-first.md":
             paths.append(request_path)
-    if request_path.parent == GPU_TRIAL and request_path.name == "request-art-first.md":
-        paths = [GPU_TRIAL / "BRIEF.md", request_path, ROOT / "vendor/anatomy/references/kit.md"]
+    if request_path.parent in ART_TRIALS and request_path.name.startswith("request-art-first"):
+        paths = [request_path.parent / "BRIEF.md", request_path, ROOT / "vendor/anatomy/references/kit.md"]
     references = []
     for path in paths:
         content = path.read_text()

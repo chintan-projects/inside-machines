@@ -1,5 +1,12 @@
 /** Browser media transport, independent of any lesson's causal rules. */
-import type { NarrationCue, NarrationPlan } from './contracts.ts';
+import type { Narration, NarrationAssets, NarrationCue, NarrationPlan } from './contracts.ts';
+
+/** Bind an immutable cue plan to the matching, build-verified embedded track. */
+export function attachNarration(plan: NarrationPlan, assets: NarrationAssets): Narration {
+  const asset = assets[plan.id];
+  if (asset?.planId !== plan.id) throw new Error('Missing reviewed node narration');
+  return { ...plan, src: asset.src };
+}
 
 export type AudioStatus = 'idle' | 'starting' | 'playing' | 'waiting' | 'paused' | 'ended' | 'error';
 export interface MediaPort extends EventTarget {

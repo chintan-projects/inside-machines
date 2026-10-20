@@ -7,6 +7,7 @@ current:
 - Four engine candidates rejected; local Claude/Anatomy trial adds a shared-state bag-wall view
 - GPU-S3 adds a complete core plus insight/data/matrix paths in a shared versioned navigator
 - GPU narration embedded; shared audio clock, captions and sound controls verified locally
+- Refrigerator R1 reuses D1 with complete core, energy/phase depth and physical sections
 - Artifact-bound review workbench; AC agent engineering passed; human gates pending
 - Gmail owns the live app, Neon and private Blob; GitHub login connection pending
 - All 17 assets copied and verified; nine hosted videos retain their byte hashes
@@ -30,11 +31,12 @@ verification:
 - GPU-S4 depth lookup/button and end-of-path recovery verified at 390/768/1280; 21 studio tests pass
 - Claude + Anatomy selected; shared D1 interface reviewed at 375/768/1440; owner design review pending
 - Seven audio/caption regressions pass; offline, seek, mute, interruption and reduced-motion audio observed
+- Refrigerator R1 passes 199 backend tests (87.79%), 25 studio tests and frontend build; human gates pending
 - Migration preserves specs, private history and ledger; protected runtime and media checks pass
 sessions:
-- date: '2026-10-19'
-  result: Vacuum craft rebuilt for isolated Gmail preview; production quality release held
 - date: '2026-10-19'
   result: Claude local trial and explicit Codex teaching window built; no universal system selected
 - date: '2026-10-20'
   result: Shared interface D1, production direction and design brief implemented; no API cost; Vercel unchanged
+- date: '2026-10-20'
+  result: Refrigerator R1 local core/depth built; about 0.29 USD API cost; source/human quality gates pending; Vercel unchanged

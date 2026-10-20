@@ -1,5 +1,6 @@
 /** Concept-specific lesson data. Every node mounts in the same shared player. */
-import type { FrameState, Lesson, Narration, NarrationPlan, Scene } from '../visual-studio/contracts.ts';
+import type { FrameState, Lesson, Narration, Scene } from '../visual-studio/contracts.ts';
+export { attachNarration } from '../visual-studio/narration.ts';
 import { coreNarration, memoryNarration, matrixNarration } from './depth-narration.ts';
 import { coreStateAt, feedStateAt, matrixStateAt } from './depth-model.ts';
 import { coreScene, feedScene, matrixScene } from './depth-scenes.ts';
@@ -8,11 +9,6 @@ const sources = [{ title: 'NVIDIA CUDA Programming Guide: Programming Model',
   url: 'https://docs.nvidia.com/cuda/cuda-programming-guide/01-introduction/programming-model.html',
   locator: '§1.2.1 host/device and launch; §1.2.2 resources; §1.2.3 data and memory. CUDA example; hardware varies.' }];
 const scope = 'A generic discrete-GPU teaching example, not a particular graphics card or a speed benchmark. Eight toy brightness values are 0–7; adding 1 or 2 stays within our illustrative 0–10 shade scale. Four slots are not actual GPU cores/warps. Attention order does not imply that real memory movement and computation cannot overlap. Sources support the stated principles, not a certification of this drawing. Local draft: independent technical, actual-phone and beginner reviews remain pending.';
-export function attachNarration(plan: NarrationPlan, assets: Readonly<Record<string, { readonly planId: string; readonly src: string }>>): Narration {
-  const asset = assets[plan.id];
-  if (asset?.planId !== plan.id) throw new Error('Missing reviewed node narration');
-  return { ...plan, src: asset.src };
-}
 function base<T extends FrameState>(id: string, title: string, summary: string, narration: Narration): Pick<Lesson<T>,
   'id' | 'title' | 'summary' | 'duration' | 'narration' | 'sources' | 'scope'> {
   return { id, title, summary, duration: narration.duration, narration, sources, scope };

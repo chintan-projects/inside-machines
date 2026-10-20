@@ -28,6 +28,22 @@ def test_gpu_trial_reuses_provider_but_isolates_concept_guidance() -> None:
     assert ".env.local" not in prompt and "sk-ant-" not in prompt
 
 
+def test_revised_refrigerator_art_request_does_not_reintroduce_vacuum_prompt() -> None:
+    """A deliberately reduced scope still uses the same trusted concept composition."""
+    prompt = runner.trial_prompt(runner.TRIAL.parent / "refrigerator-study/request-art-first-02.md")
+    assert "ONE complete" in prompt and "Refrigerator R1" in prompt
+    assert "clean-air BAGGED" not in prompt and "CANISTER vacuum" not in prompt
+
+
+def test_refrigerator_art_uses_shared_trial_without_vacuum_or_gpu_rules() -> None:
+    """Trusted concept composition changes guidance, never the provider or accounting."""
+    prompt = runner.trial_prompt(runner.TRIAL.parent / "refrigerator-study/request-art-first.md")
+    assert "window.createRefrigeratorArt" in prompt
+    assert "Refrigerator R1" in prompt
+    assert "clean-air BAGGED" not in prompt and "window.createGpuArt" not in prompt
+    assert ".env.local" not in prompt and "sk-ant-" not in prompt
+
+
 def response_events(mode: str) -> str:
     """A minimal synthetic SSE conversation with explicitly fake model text."""
     events: list[dict[str, object]] = [

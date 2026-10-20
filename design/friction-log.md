@@ -413,3 +413,21 @@ makes that branch denser than fresh core entry. Seen: illustration assumptions
 are expanded initially; they were not traded away for a quieter layout.
 Evidence: ignored `studio-d1-*.jpg`, browser record, D1 journal/hash. Agent render
 review covers 375/768/1440; real-phone, taste and beginner acceptance remain pending.
+
+# Refrigerator R1 · 2026-10-20
+
+Owner requests transfer to refrigerator/car; refrigerator is the bounded candidate.
+Observed, medium, fixed: Compressor and Narrow tube labels overlapped on phone;
+separated anchored labels. Energy arrows crossed 3/4/1 values; moved arrow ends
+and work value apart. The phase heat arrow stopped at the metal wall; it now
+reaches the fluid. Observed, low, fixed: reused interface exposed GPU-only copy;
+placeholder/disclosure now use topic-neutral wording.
+Teaching review, high, fixed before final build: pressure comparison needs an
+explicit fluid/temperature assumption, and no boiling must not mean no heat
+transfer. Optional predictions now precede playback without blocking it. The
+physical cutaway front is explicitly a drawing aid, separate from the door-open
+energy experiment; confusing those remains a beginner-review risk to test.
+Final sampled 375/768/1440 views have no overflow, clipped SVG text, label collisions
+or targets below 44px. Evidence: ignored `fridge-r1-final-*.jpg`, browser review,
+R1 journal/hash. Independent source review, owner physical-phone craft and the
+4/5 beginner-transfer hypothesis remain pending. No catalog/Vercel promotion.

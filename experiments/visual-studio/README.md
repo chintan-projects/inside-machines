@@ -21,8 +21,9 @@ adapter. The shell has no GPU arithmetic, task readiness or provider knowledge.
 Renderers supply stable content identities and scoped attribute updates so progress
 does not remount arithmetic labels every frame. Only trusted rendering adapters
 choose these visual updates; the domain state stays pure.
-The toy scheduler lives in `../gpu-study/model.ts`; physical concepts will supply
-their own rules instead of being forced into execution lanes. This contract is a
+The toy scheduler lives in `../gpu-study/model.ts`; the refrigerator now supplies
+its own qualitative cooling rules and physical sections in `../refrigerator-study/`.
+It reuses this same player/path/audio shell instead of being forced into execution lanes. This contract is a
 local spike, not a new version of the public LessonSpec or an automatic catalog
 generation feature. Generated code never enters the production app.
 
@@ -54,6 +55,15 @@ it fails if words exceed their allotted scene. Synthesizing/viewing incurs no AP
 cost. The packed HTML needs none of those authoring tools or browser speech voices.
 Private API receipts, ledger, original response, derived source and screenshots
 stay ignored under `.vercel/claude-vacuum/private`. Do not reset its ledger.
+
+For the refrigerator, use `node experiments/refrigerator-study/finish.mjs`,
+`node experiments/refrigerator-study/narrate.mjs`, then
+`node experiments/visual-studio/build.mjs refrigerator`. Open `/refrigerator/#core`
+on the same server. The trusted build registry binds the separate source receipt,
+path and three narration plans. `attachNarration` and global asset contracts live
+here; topic adapters do not maintain copies. An optional `predictionFirst` mount
+setting places a non-blocking prediction disclosure ahead of playback. Existing
+lessons keep their default order. See the refrigerator README for scope/evidence.
 
 ```sh
 node_modules/.bin/tsc -p experiments/visual-studio/tsconfig.json

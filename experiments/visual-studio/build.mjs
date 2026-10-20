@@ -6,14 +6,22 @@ import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {gpuNarration} from '../gpu-study/narration.ts';
 import {coreNarration,memoryNarration,matrixNarration} from '../gpu-study/depth-narration.ts';
+import {refrigeratorNarrations} from '../refrigerator-study/narration.ts';
 import {parsePath} from './path-contract.ts';
 import {validateNarration} from './narration.ts';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 // A registry is enough. New studies add a trusted entry and separately reviewed artwork.
 const studies=Object.freeze({gpu:{operation:'gpu-art-1',entry:'experiments/gpu-study/entry.ts',title:'How does a GPU work?',
-  narrations:[gpuNarration,coreNarration,memoryNarration,matrixNarration],
-  pathFile:'experiments/gpu-study/path.json',lessons:['gpu-core-s3','gpu-study-1','gpu-memory-s3','gpu-matrix-s3']}});
+  narrations:[{plan:gpuNarration,folder:'gpu-s2-audio'},...[coreNarration,memoryNarration,matrixNarration].map(plan=>({plan,folder:`gpu-s3-audio/${plan.id}`}))],
+  summary:'A program specifies work; memory supplies data; the GPU calculates and stores results.',
+  authorship:'Claude authored the original Anatomy board and parallel-work artwork. Codex authored the complete story, data-supply and matrix views, pure domain rules and shared studio.',
+  pathFile:'experiments/gpu-study/path.json',lessons:['gpu-core-s3','gpu-study-1','gpu-memory-s3','gpu-matrix-s3']},
+  refrigerator:{operation:'fridge-art-2',entry:'experiments/refrigerator-study/entry.ts',title:'How does a refrigerator work?',
+    narrations:refrigeratorNarrations.map(plan=>({plan,folder:`refrigerator-r1-audio/${plan.id}`})),
+    summary:'A refrigerator moves heat from its cabinet to the room. Electrical work makes the warm side release more heat than the cold side absorbs.',
+    authorship:'Claude authored the Anatomy cabinet and sealed-loop artwork. Codex authored the mechanism insets, declared energy/phase comparisons, scripts, pure rules and shared studio.',
+    pathFile:'experiments/refrigerator-study/path.json',lessons:['refrigerator-r1-core','refrigerator-r1-energy','refrigerator-r1-phase']}});
 const study=process.argv[2]||'gpu';
 if(!Object.hasOwn(studies,study))throw new Error('Unsupported local study');
 const selected=studies[study], operation=selected.operation;
@@ -29,9 +37,9 @@ const [original,art,repairs,css,license]=await Promise.all([
 const sha=s=>createHash('sha256').update(s).digest('hex');
 const learningPath=parsePath(JSON.parse(await readFile(path.join(root,selected.pathFile),'utf8')),selected.lessons);
 const audioAssets={},audioManifests=[];
-for(const plan of selected.narrations) {
+for(const {plan,folder} of selected.narrations) {
   validateNarration(plan);
-  const audioDir=path.join(privateDir,plan.id===gpuNarration.id?'gpu-s2-audio':`gpu-s3-audio/${plan.id}`);
+  const audioDir=path.join(privateDir,folder);
   const [mp3,manifest]=await Promise.all([readFile(path.join(audioDir,'narration.mp3')),
     readFile(path.join(audioDir,'manifest.json'),'utf8').then(JSON.parse)]);
   if(manifest.plan_sha256!==sha(JSON.stringify(plan))||manifest.mp3_sha256!==sha(mp3)||
@@ -64,11 +72,11 @@ const metadata={study,operation,model:receipt.models,input_tokens:receipt.input_
   list_price_cost_usd:receipt.cost_usd,trial_accounted_usd:receipts.spent,api_art_sha256:sha(original),art_sha256:sha(art),
   runtime_sha256:sha(runtime),player_sha256:sha(player),manual_repairs:repairs.changes,
   narrations:audioManifests,learning_path_sha256:sha(JSON.stringify(learningPath)),
-  craft_feedback:'pending for GPU; vacuum received positive owner feedback',technical_review:'pending',learning:'unmeasured'};
+  craft_feedback:'pending for this revision',technical_review:'pending',learning:'unmeasured'};
 const script=code=>`<script>${code.replaceAll('</script','<\\/script')}</script>`;
 const csp="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; media-src data:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'";
 const narration=script(`window.studioNarrations=${JSON.stringify(audioAssets)};window.studioPath=${JSON.stringify(learningPath)};`);
-const html=`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="${csp}"><title>${selected.title}</title><style>${css}</style></head><body><div id="app"></div><noscript>A program specifies work; memory supplies data; the GPU calculates and stores results. This interactive local draft needs JavaScript. Optional paths explain independent work, data supply and matrix multiplication.</noscript><footer class="provenance"><p><a href="http://127.0.0.1:8067/">Revisit the vacuum example</a></p><details><summary>About this local learning study</summary><p>Claude authored the original Anatomy board and parallel-work artwork. Codex authored the new complete story, data-supply and matrix views, pure domain rules, versioned learning path and shared navigation/player. Narration is embedded local computer speech (Samantha); captions follow the same cue plans. Question lookup opens saved explanations; it is not AI chat. This is a manually inspected local experiment; production consumes validated lesson data instead. Viewing makes no model call. No MP4 export or automatic new-topic generation is included. Human technical, actual-device, learning and release gates remain pending.</p><pre>${JSON.stringify(metadata,null,2).replaceAll('<','&lt;')}</pre></details></footer>${script('/* Anatomy MIT license\n'+license+'*/\n'+runtime)}${script(art)}${narration}${script(player)}</body></html>`;
+const html=`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="${csp}"><title>${selected.title}</title><style>${css}</style></head><body><div id="app"></div><noscript>${selected.summary} This interactive local draft needs JavaScript.</noscript><footer class="provenance"><p>${Object.entries(studies).filter(([id])=>id!==study).map(([id,s])=>'<a href="../'+id+'/">'+s.title+'</a>').join(' · ')} · <a href="http://127.0.0.1:8067/">Revisit the vacuum example</a></p><details><summary>About this local learning study</summary><p>${selected.authorship} Narration is embedded local computer speech (Samantha); captions follow the same cue plans. Question lookup opens saved explanations; it is not AI chat. This is a manually inspected local experiment; production consumes validated lesson data instead. Viewing makes no model call. No MP4 export or automatic new-topic generation is included. Human technical, actual-device, learning and release gates remain pending.</p><pre>${JSON.stringify(metadata,null,2).replaceAll('<','&lt;')}</pre></details></footer>${script('/* Anatomy MIT license\n'+license+'*/\n'+runtime)}${script(art)}${narration}${script(player)}</body></html>`;
 await mkdir(out,{recursive:true});await writeFile(path.join(out,'index.html'),html);
 await writeFile(path.join(privateDir,operation+'-studio-manifest.json'),JSON.stringify({...metadata,html_sha256:sha(html)},null,2));
 await writeFile(path.join(out,'learning-path.schema.json'),schema);

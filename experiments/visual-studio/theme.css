@@ -97,6 +97,9 @@ summary:hover { color: var(--ink); }
 .illustration-note { margin-top: 20px; padding-top: 12px; border-top: 1px solid var(--line); }
 .caption { color: var(--muted); font-size: 14px; line-height: 1.65; margin-top: 8px; }
 .learning-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 40px; margin-top: 38px; }
+.prediction-preview { margin: -8px 0 16px; border-bottom: 1px solid var(--line); }
+.prediction-preview > summary { color: #194cbf; }
+.prediction-preview .question { border: 0; padding: 12px 0 20px; max-width: 70ch; }
 .question { border-top: 1px solid var(--line); padding-top: 24px; }
 .question h2 { font-size: 18px; }
 .question p { margin-top: 12px; line-height: 1.65; }

@@ -47,7 +47,7 @@ export function mountPath(root: HTMLElement, value: unknown,
   const next = el('div'); next.className = 'next-questions';
   const form = el('form'); form.className = 'path-search';
   const input = el('input'); input.id = 'find-question'; input.maxLength = 200;
-  input.placeholder = 'Try “dive deeper” or “matrix”';
+  input.placeholder = 'Try “dive deeper”';
   const label = el('label', 'Find a question in this explanation'); label.htmlFor = input.id;
   const submit = el('button', 'Find explanation'); submit.type = 'submit'; form.append(label, input, submit);
   const help = el('p', 'Search the saved explanations. Type a question, then press Enter or Find explanation.');
