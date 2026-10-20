@@ -4,7 +4,7 @@ current:
 - CE-1 contracts, causal player and shared video/static rendering implemented
 - Trusted guides extend the deployed shared engine to physical, GPU and LLM explanations
 - Vacuum CE-5 rebuilt with trusted section artwork; shared detail-first player in review
-- Local single-HTML vacuum study compares four actual visual engines; owner selection pending
+- Four engine candidates rejected; local Claude/Anatomy trial adds a shared-state bag-wall view
 - Artifact-bound review workbench; AC agent engineering passed; human gates pending
 - Gmail owns the live app, Neon and private Blob; GitHub login connection pending
 - All 17 assets copied and verified; nine hosted videos retain their byte hashes
@@ -23,11 +23,12 @@ verification:
 - App-AI ceiling remains 50 USD; BUG-004 remains open; family release held
 - Computing guide routing and zero-cost alias reuse tested; actual GPU/LLM lessons unbuilt
 - Local study has four state tests, decoded boundary checks and browser/offline review; learning unmeasured
+- Claude trial passes 184 backend tests (87.20%); 451-frame scan and three inset tests; human gates pending
 - Migration preserves specs, private history and ledger; protected runtime and media checks pass
 sessions:
-- date: 2026-10-19
-  result: Owner rejected craft; adopted teaching ADR, worksheet and CE requirements
 - date: 2026-10-19
   result: Implemented CE-1 vertical slice and separate review gates; acceptance pending
 - date: '2026-10-19'
   result: Vacuum craft rebuilt for isolated Gmail preview; production quality release held
+- date: '2026-10-19'
+  result: Claude local trial and explicit Codex teaching window built; no universal system selected

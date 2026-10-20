@@ -24,7 +24,7 @@ bugs:
     title: Appliance explanations lack visible component labels and beginner causal staging
     severity: high
     status: open
-    evidence: Owner repeatedly rejects AC and vacuum phone craft; tiny locator and control stack obscure mechanism
+    evidence: Owner rejects AC and vacuum phone craft and all four local visual-engine candidates; no approved visual system
     fix: Shared detail-first player and authored vacuum section candidate built for isolated protected review; independent technical, owner actual-phone and beginner acceptance pending
     regression: tests/backend/test_learning_quality.py; docs/QUALITY-BAR.md
   - id: BUG-005

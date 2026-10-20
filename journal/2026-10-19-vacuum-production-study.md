@@ -72,3 +72,16 @@ the transfer answer. Use the brief's predefined rubric with five initially unfam
 learners. Independent technical review, owner actual-phone craft approval and
 beginner results are still missing. A second concept is needed before selecting a
 universal production default; no family release or global goal completion is claimed.
+
+## Owner verdict and next iteration
+
+The owner explicitly rejected all four candidates: “i candidly dont like any”.
+The earlier provisional agent preference did not predict owner acceptance. None is
+selected, and all remain failed craft candidates. Do not treat working controls,
+encoded frames or an agent rubric as approval.
+
+Next bounded hypothesis: a fresh Claude API authoring session using the actual
+Anatomy toolkit and an action-first physical composition can produce a candidate
+the owner wants to inspect. See `experiments/claude-vacuum/BRIEF.md`. This does not
+presume model superiority or change the production provider. The owner supplied
+the personal API key locally; it is excluded from prompts/artifacts/source control.

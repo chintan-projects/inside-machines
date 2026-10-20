@@ -278,3 +278,38 @@ Agent observations across 390/768/1280 widths, not an actual-device owner walk:
 Direct-file opening could not be automated because browser policy permits HTTP/HTTPS
 only. Loopback HTTP review succeeded. Real phone, VoiceOver, fresh file opening,
 independent technical review and five-beginner learning remain unmeasured. BUG-004 open.
+
+Owner observation after the four-engine study: **High, unresolved** — all four
+visual treatments were rejected as unappealing. The agent's provisional preference
+did not establish the desired craft. Next iteration changes the authoring/design
+approach through a local Claude + actual Anatomy trial, keeping one vacuum and one
+causal learning objective. No rendering engine or model is selected for release.
+
+## Claude + Anatomy · local review · 2026-10-19
+
+Record: [actual calls, repairs and gate status](../journal/2026-10-19-claude-vacuum-study.md).
+Ignored evidence: `.vercel/claude-vacuum/private/review-01.png`,
+`review-02-phone.png`, `final-contact-sheet.jpg`, `transition-review.jpg` and final
+phone/tablet/desktop screenshots. This is agent browser observation, not a person
+walking an actual phone or a learning evaluation.
+
+- Blocker, observed: missing kit fill context rendered black solids. Claude revision
+  restored real material fills. Geometry/flow inconsistencies required feedback
+  and explicit Codex repairs; source ownership is disclosed in About.
+- High, observed: SVG labels rendered at about 5.6px on phone. Final core HTML
+  labels measure 14px, with leaders and the shaft identified.
+- High, observed: chapter frames were nearly identical; highlighting the bag did
+  not show the separating mechanism. New bounded iteration adds an independent
+  labeled porous-wall passage from the same state, then returns to the whole.
+- High, observed: manual loops/dirt counters and tour switching could disagree.
+  Fixed finite segments, canonical seeks, constant symbolic retained dirt and
+  state-derived controls. Native pause/resume and a 45-second endpoint observed.
+- Observed: prediction remains unrevealed until requested; the fan can operate
+  with blocked through-flow; restoring inlet restores live description. Keyboard
+  return, reduced-motion stills and loaded-page offline interaction work.
+- Motion scan flags at 24.1/34.0 seconds were visually reviewed as deliberate
+  0.45-second scene crossfades; no unexplained pop under the declared heuristic.
+- Inferred/open: the physical design is still box-like and the controls substantial.
+  Independent claim/geometry review, owner actual-device craft and beginner transfer
+  are pending. Utility/usability 4/5 agent judgment; desirability/surprise 3/5, not
+  owner approval or a learning result. BUG-004 remains open; no release decision.
