@@ -69,3 +69,10 @@ bugs:
     evidence: Phone render showed white Unmute text on paper because timeline background overrode the pressed state
     fix: Explicit solid green pressed background; browser computed white on rgb(49 106 87) verified
     regression: journal/2026-10-20-gpu-depth.md; private gpu-s3-phone-matrix-changed.jpg
+  - id: BUG-011
+    title: Depth lookup rejects ordinary phrasing and gives a generic error at the final node
+    severity: medium
+    status: fixed
+    evidence: Browser reproduced can-you-dive-deeper rejection at core and exact dive-deeper rejection at matrix
+    fix: Bounded depth intent, visible depth action, explicit submit guidance and honest leaf response with saved alternatives
+    regression: experiments/visual-studio/path-contract.test.mjs; journal/2026-10-20-gpu-depth.md S4

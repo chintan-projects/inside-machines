@@ -1,6 +1,6 @@
 /** Shared question/depth navigation. Topic rules, artwork and providers stay outside. */
 import type { StudioAPI } from './contracts.ts';
-import { parsePath, resolveQuestion, type LearningPath } from './path-contract.ts';
+import { isDepthRequest, parsePath, resolveQuestion, type LearningPath } from './path-contract.ts';
 
 export interface LearningPathAPI {
   select(id: string): void;
@@ -25,7 +25,9 @@ export function mountPath(root: HTMLElement, value: unknown,
   const nav = el('nav'); nav.className = 'path-nav'; nav.setAttribute('aria-label', 'Explanation depth');
   const context = el('div'); context.className = 'path-context';
   const back = btn('', () => api.back()); back.hidden = true;
-  const prerequisite = el('p'); context.append(back, prerequisite);
+  const depth = btn('Dive deeper', () => findQuestion('dive deeper'));
+  const contextActions = el('div'); contextActions.className = 'path-context-actions'; contextActions.append(back, depth);
+  const prerequisite = el('p'); context.append(contextActions, prerequisite);
   const notice = el('p'); notice.className = 'path-notice'; notice.setAttribute('role', 'status');
   const viewport = el('div'); viewport.className = 'path-lesson';
   const deeper = el('section'); deeper.className = 'deeper';
@@ -35,7 +37,10 @@ export function mountPath(root: HTMLElement, value: unknown,
   input.placeholder = 'Try “dive deeper” or “matrix”';
   const label = el('label', 'Find a question in this explanation'); label.htmlFor = input.id;
   const submit = el('button', 'Find explanation'); submit.type = 'submit'; form.append(label, input, submit);
-  deeper.append(el('h2', 'Follow your curiosity'), next, form, notice);
+  const help = el('p', 'Search the saved explanations. Type a question, then press Enter or Find explanation.');
+  help.id = 'question-help'; help.className = 'path-help'; input.setAttribute('aria-describedby', help.id);
+  const deeperHeading = el('h2', 'Follow your curiosity'); deeperHeading.tabIndex = -1;
+  deeper.append(deeperHeading, next, form, help, notice);
   root.append(header, nav, context, viewport, deeper);
   const mounted = new Map<string, { host: HTMLElement; api: StudioAPI }>();
   const buttons = new Map<string, HTMLButtonElement>();
@@ -65,12 +70,14 @@ export function mountPath(root: HTMLElement, value: unknown,
     buttons.forEach((button, key) => button.setAttribute('aria-current', key === id ? 'page' : 'false'));
     const parent = path.nodes.find(n => n.id === history[history.length - 1]);
     back.hidden = !parent; back.textContent = parent ? `Back to ${parent.label.toLowerCase()}` : '';
+    depth.textContent = node.next.length ? 'Dive deeper' : 'Explore other questions';
     prerequisite.textContent = node.prerequisites.length ? `Builds on: ${node.prerequisites.map(id => path.nodes.find(n => n.id === id)!.label.toLowerCase()).join(', ')}. You can return at any time.` : '';
     next.replaceChildren(...node.next.map(id => {
       const child = path.nodes.find(n => n.id === id)!;
       return btn(child.question, () => api.select(id));
     }));
-    if (!node.next.length) next.append(btn('Return to the complete story', () => api.select(path.entry)));
+    if (!node.next.length) next.append(...path.nodes.filter(n => n.id !== current).map(n =>
+      btn(n.role === 'core' ? 'Return to the complete story' : n.question, () => api.select(n.id))));
     notice.textContent = ''; input.value = '';
     historyReplace(id);
     if (focus) {
@@ -88,12 +95,19 @@ export function mountPath(root: HTMLElement, value: unknown,
   path.nodes.forEach(node => {
     const b = btn(node.label, () => api.select(node.id)); buttons.set(node.id, b); nav.append(b);
   });
+  const findQuestion = (question: string): void => {
+    const target = resolveQuestion(path, current, question);
+    if (target) {
+      if (target.id === current) notice.textContent = 'You are viewing that explanation. Use its scene controls to explore.';
+      else api.select(target.id);
+    } else if (isDepthRequest(question)) {
+      notice.textContent = 'You have reached the deepest explanation saved for this topic. The questions above open other saved explanations. A further level has not been created yet.';
+      deeperHeading.focus({ preventScroll: true }); deeper.scrollIntoView({ block: 'start', behavior: 'auto' });
+    } else notice.textContent = 'That question is not covered in this saved explanation yet. Choose one of the questions above.';
+  };
   form.addEventListener('submit', event => {
     event.preventDefault();
-    const target = resolveQuestion(path, current, input.value);
-    if (target) { if (target.id === current) notice.textContent = 'You are viewing that explanation. Use its scene controls to explore.';
-      else api.select(target.id); }
-    else notice.textContent = 'That question is not covered in this saved explanation yet. Choose one of the questions above.';
+    findQuestion(input.value);
   });
   const requested = location.hash.slice(1);
   show(path.nodes.some(n => n.id === requested) ? requested : path.entry, false, false);

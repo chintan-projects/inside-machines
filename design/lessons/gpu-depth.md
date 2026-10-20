@@ -82,3 +82,23 @@ and audio-interruption tests; required engineering checks; three bounded craft
 rounds at 390/768/1280 widths, keyboard, reduced-motion and loaded offline checks.
 No model calls are needed. Independent technical, owner actual-phone, beginner
 learning and owner release decisions remain separate and pending.
+
+## S4: depth request recovery, 2026-10-20
+
+Observed: the owner reports that typing “dive deeper” failed. Browser reproduction
+rejects “can you dive deeper” at core and gives the same generic missing-question
+message for “dive deeper” at the matrix leaf. The input requires a submit action,
+but gives no Enter instruction; the direct depth action is absent.
+
+Person/job/posture: a curious learner wants the next useful explanation without
+learning search syntax; direct, calm, honest. Keep the existing paper/ink tokens.
+Use the existing chapter navigation's explicit actions and the player's visible
+feedback. Avoid implying that local lookup can generate a missing lesson.
+
+Hypothesis: ordinary depth phrases and one visible button let a learner either
+open the next saved explanation or recognize the available-depth boundary without
+a generic error. Success: Enter/click/button work from every node; the matrix leaf
+names the boundary and offers saved alternatives; unsupported topics stay missing.
+Failure: no visible response, silent wraparound, lost scene state, or a claim that
+new content was generated. CE-14/16/17; ADR 0004. No new factual claims or changes
+to the G5–G8 ledger, narration, mechanism rules or transfer rubric.

@@ -71,12 +71,16 @@ export function parsePath(value: unknown, allowedLessons: readonly string[]): Le
   return path;
 }
 const normalized = (s: string): string => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+/** Recognize a bounded depth command; named topics and negations stay explicit queries. */
+export function isDepthRequest(question: string): boolean {
+  return /^(?:please )?(?:(?:can|could|would) you (?:please )?|let s )?(?:deeper|dive deeper|go deeper|tell me more|more|explain more|show me more|explain in more detail|go into more detail)(?: please)?$/.test(normalized(question));
+}
 /** Local retrieval only. Ambiguous/unavailable questions never fabricate an AI answer. */
 export function resolveQuestion(path: LearningPath, current: string, question: string): PathNode | undefined {
   const q = normalized(question);
   if (!q) return undefined;
   const here = path.nodes.find(n => n.id === current);
-  if (['deeper', 'dive deeper', 'go deeper', 'tell me more', 'more'].includes(q)) {
+  if (isDepthRequest(question)) {
     return path.nodes.find(n => n.id === here?.next[0]);
   }
   const exact = path.nodes.filter(n => [n.question, n.label, ...n.queries].some(x => normalized(x) === q));

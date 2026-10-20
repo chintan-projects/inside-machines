@@ -391,3 +391,12 @@ are in `design/lessons/gpu-depth.md` and `journal/2026-10-20-gpu-depth.md`.
   pairs exceed 4.5:1. No full WCAG/VoiceOver/actual-phone certification is implied.
 - Inferred: utility/usability 4/5, desirability/surprise 3/5, with reasons in journal.
   Owner craft and independent beginner learning remain unmeasured; no release pass.
+# GPU-S4 depth request recovery · 2026-10-20
+
+Observed, medium: ordinary depth phrasing was rejected; matrix's exact depth
+request returned a generic error. Fixed in shared navigator/lookup with a direct
+button, submission guidance and an explicit leaf boundary plus saved alternatives.
+Observed, low: phone placeholder truncated beside submit. Fixed with full-width
+phone input. Final browser renders at 390/768/1280 have no horizontal overflow.
+Private evidence: `gpu-s4-phone.jpg`, `gpu-s4-tablet.jpg`, `gpu-s4-desktop.jpg`.
+Real-phone/owner walkthrough pending; this is agent observation, not release approval.
