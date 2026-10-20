@@ -71,6 +71,17 @@ Secrets, local data, screenshots and generated artifacts stay ignored. Git pushe
 on the linked main branch may trigger Vercel builds; verify readiness first and
 report deployment failures rather than implying a successful release.
 
+## Deployment identity contract
+
+Use the owner's verified personal Gmail Vercel identity. A personal-looking
+workspace name does not establish account ownership. Before linking, pushing or
+deploying, verify the authenticated account's primary email, destination scope
+ownership and connected Neon/Blob ownership against the approved destination.
+The current source Hobby scope uses the work-email identity; hold further pushes
+and deployments until the migration in `docs/DEPLOYMENT-OWNERSHIP.md` is resolved.
+Preserve data, environment configuration and protection during that correction;
+granting viewer access or changing the work account's email does not complete it.
+
 ## Learning publication contract
 
 Before changing lesson content, authoring/review prompts, mechanism state,

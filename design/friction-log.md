@@ -186,3 +186,15 @@ identities/ports were unlabeled, and enlarged filtration/bypass motion lacked
 narrative explanation. This rejection is useful observed evidence; it is not
 a technical certification. The next explicit iteration includes the critique
 and matching-evidence scene, with new authoring and fresh review required.
+
+
+19 October, generated vacuum follow-through: the first typed source-bound patch
+cleared airflow collision but introduced/revealed label collisions; agent-rendered
+seated and bypass views reproduced them. Fresh review withheld publication. The
+next explicit patch separated labels and completed review, speech and a 51.03s
+MP4. Hosted prediction/causal chunks/scenario/transfer/enlarge/Escape and 375px
+containment exercised; native video readyState4, one caption track, time advancing.
+Second lookup reused the new revision without new job/spend. Exact parent/history/
+old-ledger hashes unchanged. These are agent engineering observations, not human
+technical/craft/learning/release approvals. Account audit separately found wrong
+owner identity despite personal-named scope; migration is pending, BUG-007 open.

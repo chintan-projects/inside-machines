@@ -37,7 +37,14 @@ bugs:
   - id: BUG-006
     title: CE-1 production generation lacks a completed end-to-end benchmark
     severity: high
-    status: open
-    evidence: Combined author timeout, full-copy review cap, clipped labels and author output cap observed
-    fix: Evidence checkpoint, compact author transport and SHA-bound review; hosted end-to-end evaluation pending
+    status: fixed
+    evidence: Live typed revision completed author, review, narration and 51.03 second captioned MP4; repeat request reused it without new job or cost
+    fix: Evidence checkpoint, compact author transport, SHA-bound review and source-bound repairs; one completed case does not establish broad reliability
     regression: tests/backend/test_research.py; tests/backend/test_pipeline.py; ADR 0002
+  - id: BUG-007
+    title: Personal-named Vercel scope is owned by the work-email identity
+    severity: high
+    status: open
+    evidence: Separate-agent CLI and UI audit confirmed different protected-URL requester and work-email owner; source scope also owns Neon and private Blob
+    fix: Verify authenticated Gmail destination, then migrate project and resources with preserved data, credentials and protection; no migration performed
+    regression: docs/DEPLOYMENT-OWNERSHIP.md

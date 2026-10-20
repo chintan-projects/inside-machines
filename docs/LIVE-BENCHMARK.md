@@ -182,3 +182,40 @@ source/quality gates and a fresh full editorial review. No automatic paid retry.
 Evaluation separates incremental cost, reused evidence/draft receipts and prior
 critique inputs; failed attempts remain in the denominator. Runtime success of
 the patch loop is pending, and no human ratings have been entered.
+
+
+### Completed live typed revision (19 October 2026)
+
+The first typed repair cleared the motor/air collision, but fresh review found
+bag/motor label overlap in the bypass and bag/fan label overlap. It failed closed:
+author 12,820 / 628 tokens, $0.031920; review 8,883 / 445, $0.022216. No publication.
+Agent-rendered seated/bypass views independently reproduced both label failures.
+
+The next explicit typed repair completed in 86.8 seconds, producing immutable
+`household-vacuum-cleaner-ce-6b5e6fa1d2`. Author used 12,808 input / 507 output
+($0.030686); fresh full review used 8,917 / 303 ($0.020864). Both responses returned
+`gpt-6.1-sol`; exact-draft review accepted. Three `gpt-4o-mini-tts` speech receipts
+add $0.018307692 estimated from configured duration rates. Incremental total:
+$0.069857692. Video is 51.03 seconds, and hosted playback reached readyState 4
+with one caption track and advancing time. All three structural gates passed.
+
+This is a repair result, not a one-shot machine cost: reused evidence is $0.094730
+and its paid critique ancestors add $0.297668. Their disjoint recipe total is
+$0.462255692. Earlier unrelated/failed attempts remain in the evaluation denominator.
+The complete application ledger is $3.212849538 spent/retained, $0 reserved,
+unchanged $50 ceiling; historical uncertain allowances remain included.
+
+Hosted Chrome exercised prediction, three causal chunks, before/after, nozzle
+entry, seated/bypass comparison, transfer reasoning, keyboard enlarge/Escape and
+375-pixel containment. A repeat generic lookup reached the new immutable lesson,
+with unchanged job count and spend. Hash comparison confirms the parent's original
+spec/video, private conversations and all pre-existing ledger rows are unchanged.
+Private evaluation packets retain receipts and unmeasured human ratings. One
+completed generated case is not broad factual, visual or reliability acceptance.
+
+Deployment ownership correction: a separate agent confirmed the source Hobby
+workspace is personal-named but its owning identity uses the work email. The
+Gmail requester is another account. This does not make it Liquid AI's organization,
+but it does fail the requested account separation. Project/Neon/Blob migration is
+pending authenticated destination verification; see DEPLOYMENT-OWNERSHIP.md.
+No further push/deployment is intended until that destination is resolved.

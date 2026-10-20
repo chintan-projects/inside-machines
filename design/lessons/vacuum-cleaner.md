@@ -119,3 +119,28 @@ move the solid geometry or route the labeled marker through a visibly open
 passage, preserving physical continuity in both insets. Use a typed patch bound
 to the exact rejected source; review the entire expanded artifact again. CE-04,
 CE-05, CE-07, CE-08 and CE-18 remain requirements. Human gates are unmeasured.
+
+
+### Label clearance repair
+
+The first typed patch cleared the airflow finding but fresh review found label
+collisions: raised bag material crosses the motor input label, and the bag/fan
+labels collide at y=440. This is observed automated critique, pending agent
+visual inspection and independent human review. Keep the same hypothesis and
+claims. The next explicit patch should provide stable label lanes/leaders and
+check both seated and bypass states, without changing the demonstrated cause.
+Trace CE-05/07/14/18; retain the unchanged transfer rubric and human gates.
+
+
+### Observed result of label-clearance iteration
+
+The second typed patch passed fresh editorial review and completed narration and
+video. Agent browser inspection exercised the source-bound final artifact on
+hosted desktop and a 375-pixel viewport: prediction, all three chunks, labeled
+pickup, seated/bypass differences, transfer feedback, enlarge/Escape and captioned
+video playback. Agent-rendered prior snapshots reproduced the actual collisions;
+current enlarged view separates the labels. Parent media/private history/old
+receipts remain unchanged. CE-04/05/07/08/13/14/16/18 have implementation evidence,
+not independent technical or actual-phone approval. No beginner scores exist.
+Keep the original hypothesis and rubric open for human evaluation; do not promote
+other families from this single artifact's result.

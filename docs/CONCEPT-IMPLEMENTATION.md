@@ -96,3 +96,20 @@ full lesson and pose schemas. Hash-preserving round trips and full real-MP4 pipe
 tests cover the new protocol; old paid-output migration keeps its original reader.
 Confirmed output-limit failures remain in private evaluation packets and the ledger.
 No automatic paid retry or reduction in the quality floor is introduced.
+
+
+### Completed generated runtime case
+
+A fresh explicit typed patch repaired an exact rejected source, passed fresh
+full-artifact editorial review, completed three narration calls and produced a
+51.03-second captioned video. Hosted playback, prediction, causal controls,
+counterfactual, transfer reveal, keyboard enlarge/Escape and 375-pixel containment
+were exercised. Repeated lookup reused the new revision with no new job or spend;
+old media/spec, private chats and ledger hashes are unchanged. See LIVE-BENCHMARK.md
+for costs including failed/reused prerequisites. BUG-006 is fixed for the missing
+benchmark, not a claim of broad generation reliability. BUG-004 stays open.
+
+A separate ownership audit found the deployed source scope uses the work-email
+account despite a personal workspace name. Correct Gmail-account migration of
+project, Neon and Blob is pending; BUG-007 records the issue. Further deployment
+is held. No human technical, actual-phone, beginner or owner gate is inferred.

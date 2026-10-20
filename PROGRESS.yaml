@@ -4,8 +4,9 @@ current:
   - CE-1 contracts, causal player and shared video/static rendering implemented
   - AC, washer and cooker have distinct prediction-to-transfer draft storyboards
   - Artifact-bound review workbench; AC agent engineering passed; human gates pending
-  - Personal Vercel CE-1 deployment Ready; hosted offline/media/import checks pass
+  - CE-1 deployed; source Hobby owner uses work email; Gmail migration pending
 needs_input:
+  - Authenticated Gmail-owned Vercel destination for project, Neon and Blob migration
   - Independent technical review of consequential claims and qualitative models
   - Owner actual-phone craft/accessibility walkthrough
   - Five initially unfamiliar beginners for causal and transfer evaluation
@@ -15,7 +16,7 @@ verification:
   - Real MP4 revision test preserves parent content and private conversations
   - JS and Python sample the same piecewise path through the actual drain pump
   - Authored narration/video uses local computer speech and no paid model calls
-  - Evidence checkpoints, compact author transport and SHA-bound review implemented; live proof pending
+  - Evidence, typed repairs and SHA-bound review completed one live CE-1 media revision
   - App-AI ceiling remains 50 USD; BUG-004 remains open; family release held
 sessions:
   - date: 2026-10-19
