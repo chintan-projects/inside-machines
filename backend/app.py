@@ -333,6 +333,7 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
                     "failure_type": raw.get("failure_type"),
                     "failed_phase": raw.get("failed_phase"),
                     "quality_issues": raw.get("quality_issues", []),
+                    "validation_issues": raw.get("validation_issues", []),
                 }
                 for key, raw in db.jobs.items()
             ],

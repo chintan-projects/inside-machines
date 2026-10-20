@@ -202,7 +202,7 @@ def evidence(ce_spec: LessonSpec) -> "ResearchSpec":
         facts=[
             ResearchFact(
                 statement="Synthetic evidence for a controlled test only.",
-                source=i % len(ce_spec.sources),
+                source=ce_spec.sources[i % len(ce_spec.sources)].url,
                 locator="Synthetic fixture section",
             )
             for i in range(3)

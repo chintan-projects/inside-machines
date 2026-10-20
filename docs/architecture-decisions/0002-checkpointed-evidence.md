@@ -16,7 +16,8 @@ Separate the work into durable research → author → review → voice → vide
 Research has its own registry task, small typed evidence schema and 2,500-token
 limit. The existing OpenAI adapter retrieves primary-source evidence. Authoring
 and review consume that checkpoint, perform no new search and cannot introduce
-source URLs outside it. Source presence is not source entailment or expert approval.
+source URLs outside it or reorder its source table. Facts refer to exact source
+URLs; the author receives explicit zero-based source-table indices. Source presence is not source entailment or expert approval.
 Each phase retains its own existing paid-operation receipt, lease and checkpoint.
 
 Research reserves $0.30, author/review $0.65 each and up to seven speech phases
@@ -44,3 +45,20 @@ source-boundary enforcement, paid-output migration and full real-MP4 publication
 Evaluation packets can export terminal failed jobs without prompts, private outputs
 or fake artifacts. A new explicit production operation must demonstrate the split
 path; engineering tests alone do not establish runtime reliability or teaching quality.
+
+
+A completed paid evidence output may be reused only by a fresh explicit owner
+operation for the same member, question and immutable parent within seven days,
+after full validation under the current contract. Unknown billing, invalid source
+references or an editorial response cannot qualify. Original failed records remain
+unchanged. Reused evidence receipts appear separately in evaluation packets so
+incremental cost is not confused with prior evidence cost.
+
+The first split evaluation completed research in 27 seconds ($0.072828 recorded;
+21,844 input / 914 output tokens, two search calls) but failed local validation:
+several summaries exceeded an unnecessarily narrow 240-character internal limit,
+and a numeric source reference was out of range. Internal research summaries now
+allow 600 characters; all lesson/craft layout gates remain unchanged. Research
+facts now use exact source URLs, validated against the packet's source list, to
+avoid positional ambiguity. The invalid saved packet is retained, not repaired by
+guessing. Further production validation remains required.

@@ -57,6 +57,7 @@ class EvaluationPacket(BaseModel):
     failed_phase: str = ""
     structural_issues: list[str]
     usage: list[dict[str, object]]
+    reused_research_usage: list[dict[str, object]] = Field(default_factory=list)
     ratings: HumanRatings = Field(default_factory=HumanRatings)
     limitation: str = "Structural validation is not a factual, visual or learning evaluation. Empty ratings are unmeasured. Receipts may be absent for authored lessons."
 
@@ -79,6 +80,7 @@ def packet(store: Store, lesson_id: str, case_id: str) -> EvaluationPacket:
     spec = LessonSpec.model_validate(lesson["spec"])
     jobs = {id for id, j in db.jobs.items() if j.get("lesson_id") == lesson_id}
     usage = _usage(db, jobs)
+    reused = {str(db.jobs[j]["research_reused_from"]) for j in jobs if db.jobs[j].get("research_reused_from")}
     return EvaluationPacket(
         case=case,
         lesson_id=lesson_id,
@@ -87,6 +89,7 @@ def packet(store: Store, lesson_id: str, case_id: str) -> EvaluationPacket:
         spec=spec,
         structural_issues=learning_issues(spec),
         usage=usage,
+        reused_research_usage=_usage(db, reused),
     )
 
 
@@ -158,6 +161,11 @@ def comparison(packets: list[EvaluationPacket]) -> dict[str, object]:
                 "models": models,
                 "cost_recorded_usd": sum(float(str(r.get("charged_usd", 0))) for r in candidate.usage)
                 if candidate.usage
+                else None,
+                "reused_research_recorded_usd": sum(
+                    float(str(r.get("charged_usd", 0))) for r in candidate.reused_research_usage
+                )
+                if candidate.reused_research_usage
                 else None,
                 "has_estimates": any(bool(r.get("speech_estimated")) for r in candidate.usage),
                 "billing_uncertain": any(bool(r.get("uncertain")) for r in candidate.usage),

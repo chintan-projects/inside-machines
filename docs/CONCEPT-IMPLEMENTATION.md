@@ -28,8 +28,8 @@ This is an implementation record, not the owner's lesson acceptance. BUG-004 rem
 
 ## Verification in this iteration
 
-Observed: Ruff, strict mypy, 114 backend tests including three disposable Postgres tests,
-85.72% backend coverage; TypeScript, ESLint, nine JavaScript tests and production build pass.
+Observed: Ruff, strict mypy, 116 backend tests including three disposable Postgres tests,
+85.81% backend coverage; TypeScript, ESLint, nine JavaScript tests and production build pass.
 The provider in pipeline tests is synthetic; transactions, media encoding and artifacts are real.
 Linux packaging, browser, hosted runtime and paid generation observations are recorded below
 when completed. Their earlier-revision evidence does not automatically transfer here.

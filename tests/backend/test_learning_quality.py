@@ -6,6 +6,7 @@ from backend.ac_craft import CORE, aircon_craft
 from backend.contracts import LessonSpec
 from backend.domain import User
 from backend.quality import learning_issues, require_learning_quality
+from backend.research import ResearchSpec
 from backend.seed_aircon import aircon
 from backend.settings import Settings
 from backend.store import Store
@@ -104,7 +105,12 @@ def test_publication_preserves_history_and_prevents_content_overwrite(store: Sto
 
 
 async def test_missing_labels_stop_before_review_and_speech(
-    store: Store, settings: Settings, user: User, ce_spec: LessonSpec, monkeypatch: pytest.MonkeyPatch
+    store: Store,
+    settings: Settings,
+    user: User,
+    ce_spec: LessonSpec,
+    evidence: ResearchSpec,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """A schema-valid but unlabeled lesson cannot consume more paid stages or publish."""
     from backend.assets import Assets
@@ -129,7 +135,9 @@ async def test_missing_labels_stop_before_review_and_speech(
 
     monkeypatch.setattr("backend.pipeline.model_text", text)
     job_id = str(Domain(store, settings).request("washer", user)["job_id"])
-    store.transaction(lambda db: db.jobs[job_id].update(phase="author"))
+    store.transaction(
+        lambda db: db.jobs[job_id].update(phase="author", research=evidence.model_dump(mode="json"))
+    )
     await Pipeline(store, settings, Assets(settings), enqueue).run(job_id)
     state = store.snapshot()
     assert calls == ["author"]

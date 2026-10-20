@@ -25,7 +25,7 @@ def test_evidence_references_and_author_sources_fail_closed(
         require_evidence_sources(ce_spec, evidence)
     raw = evidence.model_dump(mode="json")
     raw["sources"] = raw["sources"][:2]
-    raw["facts"][0]["source"] = 2
+    raw["facts"][0]["source"] = "https://unresearched.example/page"
     with pytest.raises(ValidationError):
         ResearchSpec.model_validate(raw)
 
@@ -57,7 +57,7 @@ async def test_completed_pre_split_author_checkpoint_does_not_pay_for_research(
         failed=False,
         result=ce_spec.model_dump_json(),
     )
-    store.transaction(lambda db: db.jobs[id].update(lease_until=0))
+    store.transaction(lambda db: db.jobs[id].update(lease_until=0, pipeline_version=None))
     await pipeline.run(id)
     state = store.snapshot()
     assert deliveries == ["review"] and state.jobs[id]["phase"] == "review"
@@ -90,6 +90,7 @@ async def test_invalid_research_stops_before_any_authoring(
     await Pipeline(store, settings, Assets(settings), enqueue).run(id)
     state = store.snapshot()
     assert calls == ["research"] and state.jobs[id]["status"] == "failed"
+    assert state.jobs[id]["validation_issues"]
     assert state.spent == 0.01 and state.reserved == 0 and not state.lessons
 
 
@@ -121,3 +122,73 @@ def test_failed_evaluation_retains_uncertain_cost_without_private_output(store: 
         and row["cost_recorded_usd"] == 0.30
         and row["billing_uncertain"]
     )
+
+
+async def test_missing_evidence_checkpoint_fails_before_payment(
+    store: Store, settings: Settings, user: User, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Corrupt new-phase state cannot quietly skip research and consume paid work."""
+
+    async def never(*args: object, **kwargs: object) -> str:
+        raise AssertionError("No paid request")
+
+    async def enqueue(job_id: str, phase: str) -> None:
+        raise AssertionError("No downstream work")
+
+    monkeypatch.setattr("backend.pipeline.model_text", never)
+    id = str(Domain(store, settings).request("washer", user)["job_id"])
+    store.transaction(lambda db: db.jobs[id].update(phase="author"))
+    await Pipeline(store, settings, Assets(settings), enqueue).run(id)
+    state = store.snapshot()
+    assert state.jobs[id]["status"] == "failed" and not state.ledger and state.reserved == state.spent == 0
+
+
+def test_explicit_new_revision_can_recover_completed_evidence(
+    seeded: Store, settings: Settings, evidence: ResearchSpec
+) -> None:
+    """Recover intact evidence, preserve the failed attempt and charge no second research call."""
+    import time
+
+    from backend.research import reusable_research
+    from backend.starters import digest_spec
+
+    owner = User(id="synthetic-owner", name="Synthetic owner", owner=True)
+    parent = seeded.snapshot().lessons["washing-machine"]
+    parent_spec = LessonSpec.model_validate(parent["spec"])
+    sha, question = digest_spec(parent_spec), parent_spec.question
+    evidence.facts[0].statement = "A complete longer evidence statement. " * 10
+
+    def seed(db: Database) -> None:
+        db.jobs["completed-research"] = {
+            "id": "completed-research",
+            "canonical": "previous-test-revision",
+            "revision_of": "washing-machine",
+            "status": "failed",
+            "failed_phase": "queued",
+            "failure_type": "ValidationError",
+            "revision_parent_sha256": sha,
+            "question": question,
+            "user_id": owner.id,
+            "created_at": time.time(),
+            "call_outputs": {
+                "lesson:completed-research:research": {"bytes": False, "value": evidence.model_dump_json()}
+            },
+        }
+        db.ledger["lesson:completed-research:research"] = {
+            "models": ["synthetic-research-model"],
+            "uncertain": False,
+            "charged_usd": 0.07,
+        }
+
+    seeded.transaction(seed)
+    result = Domain(seeded, settings).request(
+        question, owner, revision_of="washing-machine", operation="explicit-recovery"
+    )
+    state = seeded.snapshot()
+    job = state.jobs[str(result["job_id"])]
+    assert job["phase"] == "author" and job["research_reused_from"] == "completed-research"
+    assert state.jobs["completed-research"]["status"] == "failed" and len(state.ledger) == 1
+    assert ResearchSpec.model_validate(job["research"]).facts[0].statement == evidence.facts[0].statement
+    assert reusable_research(state, sha, question, "another-member") is None
+    state.ledger["lesson:completed-research:research"]["uncertain"] = True
+    assert reusable_research(state, sha, question, owner.id) is None

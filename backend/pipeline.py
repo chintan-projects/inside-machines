@@ -12,6 +12,7 @@ from typing import cast
 
 from _shared.services.logger import get_logger
 from _shared.services.state_manager import StateManager
+from pydantic import ValidationError
 
 from .accounting import charge
 from .assets import Assets
@@ -182,6 +183,11 @@ class Pipeline:
             return
         phase = str(job["phase"])
         try:
+            evidence = ResearchSpec.model_validate(job["research"]) if job.get("research") else None
+            if job.get("pipeline_version") == "evidence-first-1" and phase != "queued" and evidence is None:
+                raise ValueError("This phase requires its completed evidence checkpoint")
+            if evidence and job.get("spec"):
+                require_evidence_sources(LessonSpec.model_validate(job["spec"]), evidence)
             saved_author = f"lesson:{job_id}:author" in cast(dict[str, object], job.get("call_outputs", {}))
             if phase == "queued" and not saved_author:
                 raw = await self._paid(
@@ -202,7 +208,6 @@ class Pipeline:
                     research=researched.model_dump(mode="json"),
                 )
             elif phase == "author" or (phase == "queued" and saved_author):
-                evidence = ResearchSpec.model_validate(job["research"]) if job.get("research") else None
                 raw = await self._paid(
                     job,
                     "author",
@@ -265,12 +270,22 @@ class Pipeline:
 
             failure_type = type(exc).__name__
             quality_findings = list(exc.issues) if isinstance(exc, LearningQualityError) else []
+            validation_findings = (
+                [
+                    ".".join(str(p) for p in e["loc"]) + ": " + e["type"]
+                    for e in exc.errors(include_input=False, include_context=False, include_url=False)[:12]
+                ]
+                if isinstance(exc, ValidationError)
+                else []
+            )
 
             def fail(db: Database) -> None:
                 current = db.jobs[job_id]
                 if current["lease_token"] == job["lease_token"]:
                     current["failure_type"] = failure_type
                     current["failed_phase"] = phase
+                    if validation_findings:
+                        current["validation_issues"] = validation_findings
                     if quality_findings:
                         current["quality_issues"] = quality_findings
                     self.domain.settle(

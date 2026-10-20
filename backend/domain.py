@@ -10,6 +10,7 @@ from pydantic import BaseModel
 
 from .contracts import LessonSpec, canonicalize
 from .quality import learning_issues
+from .research import reusable_research
 from .settings import Settings
 from .starters import digest_spec
 from .store import Database, Store
@@ -153,6 +154,8 @@ class Domain:
                     "kind": "budget",
                     "message": "The alpha's generation budget is reserved or used. You can still explore every existing explanation.",
                 }
+            parent_sha = digest_spec(LessonSpec.model_validate(parent["spec"])) if parent else ""
+            recovered = reusable_research(db, parent_sha, question, user.id) if parent else None
             job_id = secrets.token_urlsafe(18)
             db.jobs[job_id] = {
                 "id": job_id,
@@ -160,9 +163,11 @@ class Domain:
                 "question": question,
                 "user_id": user.id,
                 "status": "queued",
-                "phase": "queued",
+                "phase": "author" if recovered else "queued",
                 "pipeline_version": "evidence-first-1",
-                "message": "Waiting to build your explanation",
+                "message": "Using saved evidence; building the visual explanation"
+                if recovered
+                else "Waiting to build your explanation",
                 "created_at": time.time(),
                 "updated_at": time.time(),
                 "lease_until": 0,
@@ -176,9 +181,9 @@ class Domain:
                 "error": None,
                 "reservation": reserve,
                 "revision_of": revision_of,
-                "revision_parent_sha256": digest_spec(LessonSpec.model_validate(parent["spec"]))
-                if parent
-                else None,
+                "revision_parent_sha256": parent_sha or None,
+                "research": recovered[0].model_dump(mode="json") if recovered else None,
+                "research_reused_from": recovered[1] if recovered else None,
             }
             db.reserved += reserve
             self.event(

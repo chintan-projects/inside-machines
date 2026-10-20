@@ -213,7 +213,11 @@ async def test_rejected_review_never_published(
 
     monkeypatch.setattr("backend.pipeline.model_text", rejected)
     job_id = str(Domain(store, settings).request("washer", user)["job_id"])
-    store.transaction(lambda db: db.jobs[job_id].update(phase="review", spec=spec.model_dump(mode="json")))
+    store.transaction(
+        lambda db: db.jobs[job_id].update(
+            phase="review", pipeline_version=None, spec=spec.model_dump(mode="json")
+        )
+    )
     await Pipeline(store, settings, Assets(settings), enqueue).run(job_id)
     state = store.snapshot()
     assert not state.lessons and state.jobs[job_id]["status"] == "failed"

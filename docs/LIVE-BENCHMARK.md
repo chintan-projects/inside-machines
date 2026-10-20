@@ -87,3 +87,13 @@ nothing was published and no paid call was retried automatically. A private fail
 packet preserves this run in the evaluation denominator. ADR 0002 splits evidence
 retrieval from authoring before the next explicit evaluation. No provider-comparison or learning result is
 inferred from successful infrastructure or a model editorial pass.
+
+
+The first split run completed its research request in 27 seconds: actual model
+`gpt-6.1-sol`, 21,844 input tokens, 914 output tokens and two search calls;
+$0.072828 recorded at configured rates, billing marked known by the receipt. It
+published nothing because local packet validation failed on text limits and an
+out-of-range positional source reference. The next contract uses exact source URLs
+and a larger internal evidence-summary limit while preserving every lesson/craft
+gate. Invalid saved data is not guessed into a successful checkpoint. Owner-only
+diagnostics expose field paths/error types without raw outputs or private input.
