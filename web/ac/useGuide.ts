@@ -111,13 +111,15 @@ export function useGuide(
       pause();
       return;
     }
-    if (!audioRef.current) return;
+    const player = audioRef.current;
+    if (!player) return;
     if (clock.current >= total - 0.1) jump(0);
     setError("");
     setLoading(true);
     const attempt = ++attemptRef.current;
     try {
-      await audioRef.current.play();
+      if (player.readyState >= 1) player.currentTime = clock.current;
+      await player.play();
       if (attempt === attemptRef.current) {
         setListening(true);
         setMotion(true);

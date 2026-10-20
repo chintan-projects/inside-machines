@@ -158,3 +158,33 @@ def seeded(store: Store, spec: LessonSpec) -> Store:
         )
     )
     return store
+
+
+@pytest.fixture
+def ce_spec() -> LessonSpec:
+    """Synthetic truncated pipeline fixture; never imported as a teaching artifact."""
+    from backend.ac_concept import aircon_concept
+    from backend.teaching_contracts import Change, Pose
+
+    candidate = aircon_concept()
+    candidate.canonical, candidate.title = "washing-machine", "Synthetic CE pipeline fixture"
+    candidate.aliases = ["washer"]
+    candidate.stages = candidate.stages[:3]
+    assert candidate.teaching is not None
+    candidate.teaching.renderer = "declarative"
+    candidate.teaching.renderer_fingerprint = ""
+    candidate.teaching.beats = candidate.teaching.beats[:3]
+    for stage in candidate.stages:
+        stage.duration = 5
+    for question in candidate.questions:
+        question.stage = min(2, question.stage)
+    for part in candidate.parts:
+        part.motion = [m for m in part.motion if m.stage < 3]
+    for scenario in candidate.teaching.scenarios:
+        scenario.beat = candidate.teaching.beats[-1].id
+        scenario.context = "none"
+        scenario.changes = []
+    candidate.teaching.scenarios[1].changes = [
+        Change(target="compress-piston", before=Pose(), after=Pose(x=-120))
+    ]
+    return LessonSpec.model_validate(candidate.model_dump())

@@ -1,4 +1,10 @@
-# Family alpha verification — October 19, 2026
+# Family alpha verification — historical pre-CE-1 baseline
+
+Current CE-1 implementation, checks and remaining acceptance evidence live in
+[CONCEPT-IMPLEMENTATION.md](CONCEPT-IMPLEMENTATION.md). The observations below
+belong to earlier revisions; later provisioning/runtime evidence is recorded in
+[LIVE-BENCHMARK.md](LIVE-BENCHMARK.md). The Linux/disposable Postgres commands
+remain the required reproduction workflow.
 
 This is evidence about the implementation, not a release certification or an engineering review.
 

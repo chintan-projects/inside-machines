@@ -312,32 +312,47 @@ def render_video(
             raise RuntimeError("Video encoder input not available")
         title_font = scene_font(21)
         caption_font = scene_font(22)
+        static_frames: dict[tuple[int, float], Image.Image] = {}
         for frame in range(math.ceil(total * settings.video_fps)):
             seconds = frame / settings.video_fps
-            index, _ = stage_at(spec, seconds)
-            canvas = Image.new("RGB", (settings.video_width, settings.video_height), "#f3f6f7")
-            scene = draw_scene(spec, seconds, width=settings.video_width, height=settings.video_height - 105)
-            canvas.paste(scene, (0, 24))
-            draw = ImageDraw.Draw(canvas)
-            draw.text((24, 8), spec.title, fill="#17232d", font=title_font)
-            draw.rectangle(
-                (0, settings.video_height - 82, settings.video_width, settings.video_height), fill="#172f37"
-            )
-            text = spec.stages[index].title
-            lines = textwrap.wrap(text, width=85)
-            draw.multiline_text(
-                (24, settings.video_height - 68),
-                "\n".join(lines[:2]),
-                fill="white",
-                font=caption_font,
-                spacing=6,
-            )
-            draw.text(
-                (24, settings.video_height - 26),
-                f"Chapter {index + 1} of {len(spec.stages)} · generic teaching model · schematic motion",
-                fill="#b8d2d4",
-                font=ImageFont.load_default(size=12),
-            )
+            if spec.version == 2:
+                from .teaching_state import teaching_at
+                from .teaching_svg import teaching_image
+
+                beat, progress = teaching_at(spec, seconds)
+                key = (beat.stage, progress)
+                if progress in (0.0, 1.0) and key in static_frames:
+                    canvas = static_frames[key]
+                else:
+                    canvas = teaching_image(spec, seconds, settings.video_width, settings.video_height)
+                    if progress in (0.0, 1.0):
+                        static_frames[key] = canvas
+            else:
+                index, _ = stage_at(spec, seconds)
+                canvas = Image.new("RGB", (settings.video_width, settings.video_height), "#f3f6f7")
+                scene = draw_scene(
+                    spec, seconds, width=settings.video_width, height=settings.video_height - 105
+                )
+                canvas.paste(scene, (0, 24))
+                draw = ImageDraw.Draw(canvas)
+                draw.text((24, 8), spec.title, fill="#17232d", font=title_font)
+                draw.rectangle(
+                    (0, settings.video_height - 82, settings.video_width, settings.video_height),
+                    fill="#172f37",
+                )
+                draw.multiline_text(
+                    (24, settings.video_height - 68),
+                    "\n".join(textwrap.wrap(spec.stages[index].title, width=85)[:2]),
+                    fill="white",
+                    font=caption_font,
+                    spacing=6,
+                )
+                draw.text(
+                    (24, settings.video_height - 26),
+                    f"Chapter {index + 1} of {len(spec.stages)} · generic teaching model · schematic motion",
+                    fill="#b8d2d4",
+                    font=ImageFont.load_default(size=12),
+                )
             process.stdin.write(canvas.tobytes())
             if frame % (settings.video_fps * 8) == 0:
                 heartbeat()

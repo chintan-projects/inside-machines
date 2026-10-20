@@ -103,7 +103,9 @@ def test_publication_preserves_history_and_prevents_content_overwrite(store: Sto
         import_craft(store, changed)
 
 
-async def test_missing_labels_stop_before_review_and_speech(store: Store, settings: Settings, user: User, spec: LessonSpec, monkeypatch: pytest.MonkeyPatch) -> None:
+async def test_missing_labels_stop_before_review_and_speech(
+    store: Store, settings: Settings, user: User, ce_spec: LessonSpec, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """A schema-valid but unlabeled lesson cannot consume more paid stages or publish."""
     from backend.assets import Assets
     from backend.domain import Domain
@@ -111,20 +113,23 @@ async def test_missing_labels_stop_before_review_and_speech(store: Store, settin
     from backend.provider import receipt_context
 
     calls: list[str] = []
+
     async def enqueue(job_id: str, phase: str) -> None:
         return None
-    async def text(prompt: str, config: Settings, *, schema: dict[str,object]) -> str:
+
+    async def text(prompt: str, config: Settings, *, schema: dict[str, object]) -> str:
         calls.append("author")
         receipt = receipt_context.get()
         assert receipt is not None
         receipt.models.append("explicit-test-provider")
-        receipt.cost_usd = .01
-        draft = spec.model_copy(deep=True)
+        receipt.cost_usd = 0.01
+        draft = ce_spec.model_copy(deep=True)
         draft.parts = [p for p in draft.parts if not p.id.startswith("label-")]
         return draft.model_dump_json()
-    monkeypatch.setattr("backend.pipeline.model_text",text)
-    job_id = str(Domain(store,settings).request("washer",user)["job_id"])
-    await Pipeline(store,settings,Assets(settings),enqueue).run(job_id)
+
+    monkeypatch.setattr("backend.pipeline.model_text", text)
+    job_id = str(Domain(store, settings).request("washer", user)["job_id"])
+    await Pipeline(store, settings, Assets(settings), enqueue).run(job_id)
     state = store.snapshot()
     assert calls == ["author"]
     assert state.jobs[job_id]["failure_type"] == "LearningQualityError"

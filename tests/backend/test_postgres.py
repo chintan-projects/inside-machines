@@ -82,12 +82,57 @@ def test_postgres_craft_import_preserves_private_history(settings: Settings, use
 
     store.transaction(history)
     before = store.snapshot()
-    artifact = CraftArtifact(spec=revised, spec_sha256=digest_spec(revised), video="test.mp4", video_sha256="0" * 64)
+    artifact = CraftArtifact(
+        spec=revised, spec_sha256=digest_spec(revised), video="test.mp4", video_sha256="0" * 64
+    )
     assert import_craft(store, artifact)
     assert not import_craft(store, artifact)
     after = store.snapshot()
     assert after.chats == before.chats and after.feedback == before.feedback
     assert after.spent == before.spent and after.reserved == before.reserved
     assert after.lessons["air-conditioner"]["spec"] == before.lessons["air-conditioner"]["spec"]
-    assert Domain(store, settings).request("How does AC work?", user) == {"kind": "lesson", "lesson_id": CANONICAL, "reused": True}
+    assert Domain(store, settings).request("How does AC work?", user) == {
+        "kind": "lesson",
+        "lesson_id": CANONICAL,
+        "reused": True,
+    }
     assert "air-conditioner" not in {item["id"] for item in Domain(store, settings).catalog()}
+
+
+def test_postgres_concept_and_review_transactions_preserve_history(settings: Settings) -> None:
+    """Real publication/review writes migrate an old payload without dropping private fields."""
+    from backend.ac_concept import aircon_concept
+    from backend.concept_publication import ConceptArtifact, import_concepts
+    from backend.learning_reviews import LearningReviews, ReviewSubmission
+    from backend.starters import digest_spec
+
+    target = urlparse(URL)
+    if target.hostname != "127.0.0.1" or target.port != 55432 or target.path != "/inside_test":
+        pytest.fail("Concept tests require disposable loopback Postgres")
+    store = Store(URL, settings.data_dir)
+    before = store.snapshot()
+    spec = aircon_concept()
+    artifact = ConceptArtifact(
+        spec=spec,
+        spec_sha256=digest_spec(spec),
+        video="synthetic.mp4",
+        video_sha256="0" * 64,
+        replaces=["air-conditioner", "air-conditioner-craft"],
+    )
+    assert import_concepts(store, [artifact]) == (1, 0)
+    owner = User(id="synthetic-review-owner", name="Synthetic test owner", owner=True)
+    record = ReviewSubmission(
+        spec_sha256=digest_spec(spec),
+        video_sha256="0" * 64,
+        gate="engineering",
+        reviewer="Synthetic agent",
+        method="agent",
+        decision="pass",
+        evidence="Synthetic transaction test; not actual human review evidence.",
+    )
+    assert not LearningReviews(store).record(spec.canonical, record, owner)["ready"]
+    after = store.snapshot()
+    assert before.chats == after.chats and before.feedback == after.feedback and before.ledger == after.ledger
+    assert before.spent == after.spent and before.reserved == after.reserved
+    for id, lesson in before.lessons.items():
+        assert after.lessons[id]["spec"] == lesson["spec"]

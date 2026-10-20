@@ -45,6 +45,49 @@ connect each to its real component with a thin leader where necessary. Label eac
 focus component. Decorative casing and backdrop shapes do not belong in the working-parts list.
 Explain what the motion represents; never imply a sequential chapter switches off processes
 that actually happen together. Introduce unfamiliar terms before relying on them.
+VERSION 2 / CE-1 TEACHING CONTRACT (mandatory for new lessons):
+Follow ADR 0001: concrete visual intuition (Grant), plain causal explanations and honest model
+limits (Feynman), a prediction that exposes a misconception (Veritasium), and a recognizable
+purposeful machine (Anatomy). This is a teaching contract, not imitation of a creator's style.
+Set version=2. Supply teaching and graphics; never return a legacy version or omit these fields.
+teaching.renderer must be declarative and renderer_fingerprint="". Machine parts remain in parts. The separate graphics
+array contains small safe schematic insets using the SAME Part vocabulary, at 900x540.
+Use about 18–30 mechanism parts and 12–24 inset graphics TOTAL to fit the output budget. Reuse
+graphics across beats when appropriate. Leave every graphic's motion=[]; CE changes own them.
+Every graphic text label is >=28 px and fits within 900x540. No graphic can leave the canvas
+in any before/after/intermediate pose. Use 3–5 causal stages where that suffices; max 7.
+teaching.core lists 3–6 REAL working component IDs, each with a permanent label-<id> in parts.
+Every stage.focus must be one of these core IDs. No decoration belongs in core.
+teaching.claims has stable IDs, source indexes, precise section/page locators, scope
+(generic/documented-model/inference) and applicability limitations. Never invent a locator.
+Each beat maps one-to-one to stage, in order, with a unique stable id, earlier beat IDs in
+requires, claim IDs, a familiar prerequisite bridge, visible_change, static_explanation,
+an action label, its graphic IDs, properties and changes. stage.source_indices includes ALL
+source indexes of that beat's claims. State comes in / why / leaves in ordinary language.
+Show the INTERNAL mechanism, not a colored casing: vapor compression, water through an actual
+opening, a seal retaining vapor, light acting on a sensor, etc. Each beat has at least one
+geometric/opacity change in its graphics, not color alone. A change targets an existing graphic
+and has before/after poses: x,y translation; sx,sy scale about the part center; angle rotation;
+fill (six-digit hex or empty to retain original); opacity 0..1. Identity pose is x=y=angle=0,
+sx=sy=opacity=1, fill="". Poses are visual illustrations, never calculated operating values.
+Keep stage titles <=60 characters, bridges <=180, static explanations <=280 and all qualitative
+property names/before/after labels together <=170 characters per beat for readable video output.
+Each change may include via=[] or up to six intermediate poses to follow real paths through
+pumps, valves and pipe bends. Markers must travel through openings, never through solid walls.
+Properties give qualitative before/after state (pressure, phase, temperature, position, etc.).
+No invented pressure gauges, numerical simulations or exact-model internals.
+teaching.prediction offers 2–4 distinct choices, zero-based correct index, causal explanation,
+reasoning criteria and a plausible misconception. It motivates the lesson before revealing
+the result. teaching.transfer asks a DIFFERENT situation and supplies the same fields.
+teach_back and teach_back_reasoning define the independent explanation we want to hear.
+The final beat REASSEMBLES the system; teaching.operation and operation_note explicitly state
+what runs simultaneously/sequentially/under control. Supply relevant invariants and limits.
+Provide 2 qualitative scenarios attached to that final beat: a baseline and one meaningful
+counterfactual, with distinct stable IDs, label, kind=qualitative, context=none, outcome,
+causal explanation, claim IDs, and bounded changes that target that beat's graphics. They must
+change a CAUSE and its visible consequence, not just give two captions for identical outcomes.
+No arbitrary code, URLs as drawing assets, unsupported renderer IDs or paid runtime interactions.
+Keep total narration <=260 words; narration and graphics must explain the same causal change.
 Only output the requested schema. Source URLs must support their associated claim.
 """ + json.dumps({"topic": question, "canonical": canonical})
 
@@ -61,4 +104,12 @@ Never claim peer review or human verification. This automated check cannot verif
 Check that every focus component is visibly labeled, labels are legible and do not overlap,
 input/output states are explicit and factual, and chapter claims cite source_indices. Reject
 unexplained technical terms, visual/text contradictions and misleading motion or timing.
+For v2, preserve version=2 and its CE-1 teaching contract. Check prerequisite order, a motivating
+prediction before resolution, plain physical reasoning, causal graphic changes beyond color,
+source locators/claim applicability, all core labels, meaningful counterfactuals, simultaneous
+versus sequential operation, and a genuinely different transfer task with a causal rubric.
+Trace material/energy flows and relevant conservation rules. Reject unsupported numbers or
+scenario outcomes, a colored shell pretending to show an internal process, or matching words
+and images that nevertheless describe incorrect physics. Do not claim learning effectiveness.
+Do not downgrade a v2 lesson to bypass checks. For historical v1 checkpoints preserve v1.
 Stay within the scene and narration bounds in the schema.\n""" + spec.model_dump_json()

@@ -17,11 +17,13 @@ from .auth import COOKIE, Auth
 from .chat import Chats, Conversation
 from .contracts import LessonSpec
 from .domain import Domain, User
+from .learning_reviews import review_state
 from .pipeline import Enqueue
 from .provider import configure_gateway
 from .quality import learning_issues
 from .settings import Settings, load_settings
 from .store import Database, Store
+from .teaching_routes import register_teaching_routes
 
 
 class LoginBody(BaseModel):
@@ -57,6 +59,12 @@ class MessageBody(BaseModel):
     """Client-generated idempotency key prevents duplicate paid replies."""
 
     question: str = Field(min_length=3, max_length=700)
+    operation: str = Field(pattern=r"^[a-zA-Z0-9-]{8,80}$")
+
+
+class RevisionBody(BaseModel):
+    """An explicit owner action admits a new paid draft without changing the old one."""
+
     operation: str = Field(pattern=r"^[a-zA-Z0-9-]{8,80}$")
 
 
@@ -183,7 +191,8 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
                 "spec": record["spec"],
                 "quality": record.get("quality", "generated"),
                 "superseded_by": record.get("superseded_by"),
-                "review_needed": bool(learning_issues(LessonSpec.model_validate(record["spec"]))),
+                "review_needed": bool(learning_issues(LessonSpec.model_validate(record["spec"])))
+                or not review_state(db, lesson_id)["ready"],
                 "video_ready": bool(record.get("video")),
                 "feedback": db.feedback.get(f"{user.id}:{lesson_id}"),
             }
@@ -208,6 +217,20 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
     @app.get("/api/v1/jobs/{job_id}")
     def job(job_id: str, user: Member) -> dict[str, object]:
         return domain.job(job_id)
+
+    @app.post("/api/v1/owner/lessons/{lesson_id}/revise")
+    async def revise(lesson_id: str, body: RevisionBody, user: Member) -> dict[str, object]:
+        if not user.owner:
+            raise HTTPException(403, "Owner access is required")
+        parent = store.snapshot().lessons.get(lesson_id)
+        if not parent:
+            raise HTTPException(404, "Lesson not found")
+        spec = LessonSpec.model_validate(parent["spec"])
+        result = domain.request(spec.question, user, revision_of=lesson_id, operation=body.operation)
+        if result["kind"] == "job":
+            current = domain.job(str(result["job_id"]))
+            await dispatch(str(current["id"]), str(current["phase"]))
+        return result
 
     @app.get("/api/v1/jobs/{job_id}/events")
     async def progress(job_id: str, request: Request, user: Member) -> StreamingResponse:
@@ -299,12 +322,22 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
             "reserved_usd": db.reserved,
             "remaining_usd": max(0, config.budget_usd - db.spent - db.reserved),
             "generation_enabled": config.generation_enabled,
+            "generation_reserve_usd": config.generation_reserve,
             "lesson_count": len(db.lessons),
             "events": week,
             "feedback": list(db.feedback.values()),
             "ledger": list(db.ledger.values()),
-            "jobs": [{**domain.job(key), "failure_type": raw.get("failure_type"), "failed_phase": raw.get("failed_phase"), "quality_issues": raw.get("quality_issues", [])} for key, raw in db.jobs.items()],
+            "jobs": [
+                {
+                    **domain.job(key),
+                    "failure_type": raw.get("failure_type"),
+                    "failed_phase": raw.get("failed_phase"),
+                    "quality_issues": raw.get("quality_issues", []),
+                }
+                for key, raw in db.jobs.items()
+            ],
             "members": [{"id": u["id"], "name": u["name"]} for u in db.users.values()],
         }
 
+    register_teaching_routes(app, store, member)
     return app

@@ -1,0 +1,61 @@
+# CE-1 implementation and evidence
+
+The implementation follows [ADR 0001](architecture-decisions/0001-concept-explanation.md).
+This is an implementation record, not the owner's lesson acceptance. BUG-004 remains open.
+
+| Requirement | Implemented path | Evidence / limitation |
+| --- | --- | --- |
+| CE-01–03 | Three filled lesson records, goal/misconception, prerequisite beat dependencies, optional pre-result prediction; AC starts with touching warmer/cooler blocks | Typed authoring contract and deterministic reveal. Beginner prerequisite comprehension remains unmeasured. |
+| CE-04–07 | Safe declarative causal insets; compression reduces chamber volume, phase changes cross a tube wall, restriction changes the downstream mixture; anchored core labels | Structural checks reject color-only changes, absent labels and sampled clipping. They cannot certify physics or label placement. |
+| CE-08–10 | Shared CE beat clock, piecewise poses and qualitative scenario outcomes consumed by React and server SVG/video | Cross-language pump-path regression and boundary tests; no invented temperature, pressure or efficiency readings. |
+| CE-11 | Whole-system final beat, explicit simultaneous/sequential/controlled operation, normal/counterfactual scenarios | AC energy balance, washer tumble/spin, cooker confinement. Each family remains a separate draft. |
+| CE-12 | Claim ledger with actual URL/section/page, generic/inference scope, limits and per-beat evidence UI | Danfoss printed pp.20/22 inspected for throttling; Whirlpool parts sections 1/2/4 checked. Independent technical review is pending. |
+| CE-13 | New-situation transfer before reveal, optional unsent reasoning and teach-back, predefined reasoning rubric | Recognition and written reasoning are separate. No model grades or stores private answers. Learning gain remains unmeasured. |
+| CE-14 | Static before/after, readable text alternative, keyboard component buttons, reduced-motion snapshots, explicit offline save | Automated checks do not establish actual-device accessibility. Browser and real-phone evidence are distinct. |
+| CE-15 | Owner workbench/API, artifact-bound append-only engineering/technical/craft/learning/release records | Technical pass requires independent human attestation; craft requires real phone; learning requires five initially nonexpert learners and ≥80% causal + transfer score 2. The app cannot authenticate reviewer expertise. No human passes have been fabricated. |
+| CE-16 | v1 reader/digest preserved; v2 author boundary; immutable new IDs/spec/video hashes and trusted renderer fingerprint; owner revision command | Atomic Postgres regression and full real-MP4 revision test preserve the parent's private history. Stale AC renderer data falls back to its preserved video/text. |
+| CE-17 | Playback/assessments/scenarios use no paid call; counts opt-in, no answer text; new drafts/chat use the existing gateway and atomic budget ledger | Duplicate revision clicks share one reservation; failed paid attempt requires an explicit new operation. $50 total app-AI ceiling retained. |
+| CE-18 | One versioned storyboard/pose contract drives insets, computer narration, captions, video and static checkpoints | Exact raster dimensions regression prevents shortened/corrupt video. Trusted AC SVGs are shared with both renderers. Human semantic parity review remains required. |
+
+## Modules and operation
+
+- `backend/teaching_contracts.py`, `teaching_state.py`, `teaching_quality.py`: typed data, pure sampling and publication floor.
+- `backend/teaching_svg.py`, `renderer_assets.py`, `web/teaching/`: bounded rendering and learning experience. No generated executable code.
+- `backend/concept_publication.py`: deterministic local narration/render, verified private upload and immutable atomic import. No paid model calls.
+- `backend/learning_reviews.py`, `teaching_routes.py`: owner review gates and consented coarse events.
+- Existing pipeline: CE-1 author/review schemas and three structural gates; owner revision uses the same budget, queue, checkpoints and receipts.
+- `backend/evaluation.py` and `evals/`: fixed cases, artifact/usage packets and explicit human ratings. Unmeasured fields remain unmeasured; no OpenAI/Claude/open-model equivalence claim.
+
+## Verification in this iteration
+
+Observed: Ruff, strict mypy, 107 backend tests including three disposable Postgres tests,
+85.60% backend coverage; TypeScript, ESLint, nine JavaScript tests and production build pass.
+The provider in pipeline tests is synthetic; transactions, media encoding and artifacts are real.
+Linux packaging, browser, hosted runtime and paid generation observations are recorded below
+when completed. Their earlier-revision evidence does not automatically transfer here.
+
+Pending: independent technical review, actual-phone craft/accessibility walkthrough,
+five-beginner causal/transfer test, optional next-day retention and owner's release decision.
+The product remains a protected review alpha. These are missing observations, not capabilities
+that software can truthfully mark passed on its own.
+
+### Observed local/runtime checks
+
+- Three original authored media files validate against their exact source spec and
+  SHA-256: AC 100.51 s / 804 frames; washer 60.15 s / 481; cooker 57.43 s / 459.
+  The sub-frame video/audio differences are bounded by the 8 fps frame interval.
+- Chrome desktop, 768 tablet and 375/320 phone widths inspected. Narrow layout is
+  contained; component focus, meaningful compression, whole-room counterfactual,
+  transfer reveal, enlarged diagram and Escape/focus restoration exercised.
+- Narration starts at the current causal checkpoint. Reduced motion produces static
+  before/after poses. Explicit save survives full offline reload and narration plays
+  from a local Blob at readyState 4. Offline sign-out stays signed out on reconnect.
+- Owner release submission is disabled without the four required evidence gates.
+  No human review or learner result was entered during agent verification.
+- Linux packaging verifier passes with both API/queue functions, real queue trigger,
+  shared services, font, both trusted SVGs, Linux resvg/ffmpeg and versioned shell;
+  private local inputs are excluded. CLI packets export/compare without paid calls,
+  retaining unmeasured human judgments rather than inventing a provider ranking.
+
+See the friction log for findings and fixes. These are observed implementation
+checks, not independent scientific review, actual-device approval or learning gain.

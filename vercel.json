@@ -8,7 +8,7 @@
   "functions": {
     "main.py": {
       "maxDuration": 300,
-      "includeFiles": "{config/**,vendor/workspace_shared/**,public/fonts/**}",
+      "includeFiles": "{config/**,vendor/workspace_shared/**,public/fonts/**,public/figures/**}",
       "excludeFiles": "{.env*,.data/**,shots/**,tests/**,research/**,vendor/anatomy/**,**/__pycache__/**}"
     }
   },

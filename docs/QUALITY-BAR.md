@@ -1,117 +1,75 @@
 # Learning quality is a release requirement
 
-## Active concept-explanation standard
+Follow [ADR 0001](architecture-decisions/0001-concept-explanation.md) and the
+[CE-01–18 specification](CONCEPT-EXPLANATION-SPEC.md). Grant's visual reasoning,
+Feynman's plain causal explanations, Veritasium's prediction/misconception work
+and Anatomy's connected physical craft are build/review requirements. They are
+not endorsements or a substitute for observed learning.
 
-Follow [ADR 0001](architecture-decisions/0001-concept-explanation.md) and all CE
-requirements in the [concept explanation spec](CONCEPT-EXPLANATION-SPEC.md).
-Grant's visual reasoning, Feynman's plain mechanism, Veritasium's prediction and
-misconception work, and Anatomy's physical craft are explicit review anchors. The
-[lesson worksheet](templates/lesson-iteration.md) records how each changes the
-implementation; the [AC spec](../design/lessons/air-conditioner.md) is the next build.
+**Current status:** CE-1 capabilities are implemented for protected review. The
+quality bar is not yet accepted. BUG-004 remains open after two human rejections.
+See [implementation and evidence](CONCEPT-IMPLEMENTATION.md) for exact scope.
 
-Review four independent forms of evidence: engineering behavior, technical truth,
-craft/accessibility and beginner teach-back/transfer. The spec defines a formative
-five-beginner evaluation and its proposed acceptance gate; these results are still
-unmeasured. Agreement to the direction is not an approval of today's lesson.
-Current `backend.quality` is only the implemented structural floor. New prediction,
-causal-inset and media-parity requirements are not automatically enforced yet.
+## Implementation floor
 
-## Current implementation and historical evidence
+The new authored IDs are `air-conditioner-ce-1`, `washing-machine-ce-1` and
+`pressure-cooker-ce-1`. Each has a distinct causal storyboard, prediction, on-scene
+labels, before/after mechanism change, a qualitative counterfactual, source/claim
+ledger, transfer task and optional teach-back. New narrated media and live insets
+consume the same safe pose/storyboard contract. The AC uses the same trusted
+original SVG cutaway in the browser and server renderer, bound to its fingerprint.
 
-**Latest status:** the owner also rejected the first labeled revision as ordinary.
-The action-led studio supersedes its presentation. See
-[the reference teardown and verification scope](../design/visual-learning-teardown.md).
-The stored MP4 remains unchanged and supplies audio for the new live drawing;
-standalone server video rendering has not yet adopted the new geometry.
+The v2 author/review schema requires the teaching contract. `backend.quality` runs
+before review, after review and before publication. It checks references, labels,
+focus/input/output/evidence, readable layout bounds and sampled intermediate poses;
+color emphasis alone fails. These checks cannot establish source entailment,
+physical truth, explanatory clarity, perceptual label anchoring or learning efficacy.
+An accepted model editorial check is still a teaching draft.
 
-The October 19 AC screenshots failed human review (BUG-004). Working APIs and a
-cheap generation cost did not make the explanation useful. Family release remains
-held. This document supersedes earlier visual self-assessments.
+Published revisions, member progress and private conversations retain their old
+identity. An owner may explicitly request a new budgeted revision. It cannot
+silently retry a failed paid call, overwrite its parent or promote itself. Existing
+v1 readers and stored artifacts remain supported.
 
-## Benchmark and scope
+## Separate release evidence
 
-`air-conditioner-craft` is a separately versioned, authored teaching benchmark.
-It has four permanently labeled working components, six causal chapters, a
-connected cutaway, selective enlargement, state changes, and a narrated video.
-The final chapter reunites the continuously operating cycle after the individual
-component explanations. Three misconception questions provide corrective feedback.
-They do not constitute a validated learning assessment.
+The owner workbench stores append-only results bound to exact spec/video hashes.
 
-Old AC content stays at its original URL with its private conversations. Discovery
-points to the new revision after selective import. Existing washer, pressure-cooker
-and generated vacuum lessons are visibly marked learning drafts when they fail
-the new structural checks. They have not been brought to this craft bar.
-
-## Release checks
-
-| Dimension | Required evidence |
+| Gate | Required evidence |
 | --- | --- |
-| Identify | A beginner can locate every narrated core component without a dropdown; labels remain readable on phone and video. |
-| Understand | Explain what enters, what changes, why it changes, and what leaves. Reassemble the full system; do not imply a continuous system switches on one component at a time. |
-| Craft | Connected, purposeful hardware; visible flow direction; heat, airflow and working fluid distinguishable without color alone. No cropped labels or captions covering components. |
-| Truth | Claims tied to relevant sources, declared generic assumptions, no invented operating readings, no claim of expert verification. |
-| Interaction | Part selection, chapters, scrubbing, native video seeking, descriptions and transcript agree. Keyboard alternatives and adequate control sizes. |
-| Reliability | Private range video, artifact integrity, immutable published versions, offline reload and logout isolation. Failed generation cannot publish or silently consume more paid phases. |
-| Human decision | Owner walkthrough on real phone, beginner teach-back and technical review before declaring the benchmark approved. |
+| Engineering | Required checks and actual runtime/media/privacy/budget behavior; tests alone do not imply craft acceptance. |
+| Technical | Independent human checks consequential claims, flow directions, energy accounting and simplifications against precise source locations. Record expertise/scope. |
+| Craft/accessibility | Human walkthrough on an actual phone: readable labels, purposeful mechanism change, controls/focus, sound-off, reduced motion, offline/reconnect and return to the whole. Browser viewport emulation is separate evidence. |
+| Beginner learning | At least five learners without the causal understanding at baseline; ≥80% score 2 on both teach-back and a changed-situation transfer task before hints. Store anonymous rubric scores only. |
+| Release | Owner decision after the other four gates; new artifacts require new evidence. Later blocking findings invalidate the recorded release. |
 
-`backend.quality` enforces a floor: at least three component-linked labels,
-minimum authoring text size, conservative bounds/nonoverlap, explicit input/output,
-a labeled focus used in every chapter, and evidence indices. Schema validation
-checks references and safe drawing primitives. Gates run before paid review,
-after review and before publication. Owner diagnostics expose bounded findings.
-These checks cannot establish scientific correctness, source entailment, label
-anchoring quality or learning efficacy. Model review is not independent human review.
+Written answers are optional and remain in ephemeral browser memory. Consented
+analytics record coarse events, never answer/chat text. Playback, predictions,
+scenarios and evaluation packet export incur no model calls. Optional next-day
+retention remains unmeasured until tested. The app records human attestations;
+it cannot independently authenticate reviewer identity or expertise.
 
-## Source-to-claim record
+## Technical limits
 
-| Claim | Reference |
-| --- | --- |
-| Separate air streams, sealed refrigerant circuit, evaporation/condensation | [Carrier cycle explanation](https://www.carrier.com/residential/en/ca/products/air-conditioners/how-do-air-conditioners-work/) |
-| Four core components and their functions | [Carrier equipment explanation](https://www.carrier.com/residential/en/ca/products/air-conditioners/air-conditioning-equipment/) |
-| Outdoor heat equals removed room heat plus supplied work | [OpenStax heat pumps](https://openstax.org/books/university-physics-volume-2/pages/4-3-refrigerators-and-heat-pumps) |
+The lessons are generic qualitative models. No measured operating pressure,
+temperature, rate, efficiency or repair instruction is implied. AC gas/phase insets
+are conceptual rather than a drawing of one particular compressor. Washer marker
+counts are not fluid dynamics. Cooker control contact is a conceptual schematic,
+not a wiring diagram. Computer narration is disclosed. Exact appliance details
+need model-specific documentation.
 
-This is a generic split system in cooling mode. It omits controls, humidity removal,
-superheat/subcooling and refrigerant-specific details. Colors and motion are
-qualitative. No operating temperatures, pressures or flow rates are claimed.
-The compressor shell is shown; its internal pump is not animated. The voice uses
-local computer speech, disclosed in the UI. The earlier SVG and Pillow-rendered
-MP4 shared lesson data. The current studio adds separately authored geometry and
-story; its media parity remains incomplete. The new contract requires shared
-mechanism/storyboard meaning across outputs, not pixel-identical rendering.
+The source ledger is embedded in each lesson and visible at the current step.
+AC throttling support was checked against Danfoss printed pp.20/22. Room/open-fridge
+outcomes are explicitly identified as energy-balance inferences. Manufacturer
+sources describe mechanisms; independent review has not been fabricated.
 
-## Verification record — October 19 revision
+## Evidence and open decisions
 
-- Strict Python/TypeScript checks, lint, production frontend build and five JS tests pass.
-- 86 backend tests pass with 85.91% coverage, including disposable real Postgres
-  concurrency/rollback and revision publication preserving private history.
-- Linux API and queue bundle verification passes, including bundled font and encoder.
-- Chrome: component choice selects the matching causal chapter; video chapter
-  seeking updates the transcript and state cards. Actual MP4 is 92 seconds with
-  one optional caption track. The default transcript is outside the drawing.
-- Desktop and 375/320 CSS-pixel layouts inspected. Document width equals viewport;
-  visible component buttons replace dropdown-only discovery. Temporary viewport
-  overrides restored. Main labels measure 14.4 CSS pixels at 375 width and 12.1
-  at 320 width. These are browser simulations, not physical-device tests.
-- Revised lesson downloaded, reloaded fully offline and played as a local Blob
-  video with captions. Font present in the shell cache; no API responses cached.
-  Network override restored. Misconception feedback changes after wrong/correct
-  choices; no model call is made for these authored questions.
+See [CE implementation](CONCEPT-IMPLEMENTATION.md), [friction log](../design/friction-log.md)
+and [lesson record](../design/lessons/air-conditioner.md). Earlier studio browser,
+hosted generation/cost and private-history evidence remains in
+[LIVE-BENCHMARK.md](LIVE-BENCHMARK.md), but does not automatically validate CE-1.
 
-No new paid model calls were used for the authored revision. The earlier live
-vacuum cost benchmark remains valid for that specific run, not this revised
-quality contract. General generation under the tighter gate and provider quality
-comparisons still require live evaluation. No claim of Anatomy-equivalent craft
-or family-release approval is made.
-
-## Protected hosted verification
-
-The revision is imported in the personal Vercel project's existing protected
-production environment. Private Blob bytes match their SHA-256 manifest. Repeated
-import is idempotent; old lesson content and private chats, feedback, ledger,
-users, sessions and spending/reservations were preserved. Hosted catalog discovery
-and an AC request resolve to the revision; the old URL shows its replacement.
-Authenticated video range delivery, captions, font and service worker pass.
-Actual hosted Chrome video plays through the selected chapter with readyState 4,
-92-second duration and synchronized notes. `shots/ac-craft-hosted.jpg` is the
-ignored review capture. These observations establish a functioning review preview;
-they do not constitute the owner's release decision.
+No independent technical, actual-phone or beginner-learning pass is recorded for
+CE-1. Family release remains held. A functioning deployment is a review preview,
+not completion of the agreed quality goal.

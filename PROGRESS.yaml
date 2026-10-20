@@ -1,27 +1,26 @@
 goal: Build and deploy the growing-library family alpha
 status: quality_revision
 current:
-  - Accepted ADR 0001 and teaching spec link Grant, Feynman, Veritasium and Anatomy to lesson iteration
-  - Human rejected the labeled AC revision as ordinary; rebuilt as an action-led isometric studio
-  - Physical cutaway, component-focused phone view and same-room enclosure experiment
-  - New lesson publication requires component labels and chapter evidence
+  - CE-1 contracts, causal player and shared video/static rendering implemented
+  - AC, washer and cooker have distinct prediction-to-transfer draft storyboards
+  - Artifact-bound review workbench and budgeted immutable owner revisions implemented
+  - Browser and protected personal Vercel verification in progress
 needs_input:
-  - Human craft review and real-phone walkthrough remain required before family release
-  - Independent technical review and generic generation quality evaluation remain outstanding
+  - Independent technical review of consequential claims and qualitative models
+  - Owner actual-phone craft/accessibility walkthrough
+  - Five initially unfamiliar beginners for causal and transfer evaluation
 verification:
-  - Teaching docs links and CE requirement IDs checked; ADR acceptance does not imply implementation or release approval
-  - Latest checks pass 84 backend tests at 85.03 percent coverage; two previously passed Postgres tests skipped
-  - Frontend production build, lint and seven JS tests pass
-  - Linux API and queue packaging passes with bundled font and encoder
-  - New live cutaway reuses existing narration; stored MP4 and private history remain unchanged
-  - Chrome desktop, tablet and 375/320 layouts inspected; keyboard, narration and reduced motion checked
-  - Existing hosted generation, private chat, reuse, offline playback and isolation evidence in docs/LIVE-BENCHMARK.md
-  - Protected hosted AC revision imported; catalog reuse, video/range, captions and private-history preservation pass
-  - User-authorized total app-AI budget remains 50 USD; no new paid calls for this authored revision
+  - 107 backend tests including three disposable Postgres tests pass; coverage 85.60 percent
+  - Ruff and strict mypy pass; TypeScript, ESLint, nine JS tests and production build pass
+  - Real MP4 revision test preserves parent content and private conversations
+  - JS and Python sample the same piecewise path through the actual drain pump
+  - Authored narration/video uses local computer speech and no paid model calls
+  - Linux packaging and new hosted generation evidence pending
+  - App-AI ceiling remains 50 USD; BUG-004 remains open; family release held
 sessions:
   - date: 2026-10-19
-    result: Deployed protected personal alpha and measured successful live generation
+    result: Protected personal alpha live generation and immutable AC studio deployed
   - date: 2026-10-19
-    result: Human rejected AC teaching craft; recorded BUG-004 and held family release
+    result: Owner rejected craft; adopted teaching ADR, worksheet and CE requirements
   - date: 2026-10-19
-    result: Deployed AC studio; documented teaching ADR, iteration worksheet and next AC spec; implementation/review pending
+    result: Implemented CE-1 vertical slice and separate review gates; acceptance pending

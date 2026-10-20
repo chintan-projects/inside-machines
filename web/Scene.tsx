@@ -4,6 +4,7 @@ import type { LessonSpec, Part } from './contracts';
 import { stageAt } from './lessonTimeline';
 export { duration, stageAt } from './lessonTimeline';
 import { Hardware } from './ac/Hardware';
+import { Cutaway, acSceneHash } from './teaching/Context';
 export function partPose(part: Part, stage: number, progress: number): [number, number, number] {
   let dx = 0, dy = 0, angle = 0;
   for (const m of part.motion) {
@@ -16,6 +17,7 @@ export function partPose(part: Part, stage: number, progress: number): [number, 
 
 interface Props { readonly spec: LessonSpec; readonly seconds?: number; readonly selected?: string; readonly onSelect?: (id: string) => void; readonly preview?: boolean; readonly zoom?: boolean }
 export function Scene({ spec, seconds = 0, selected = '', onSelect, preview = false, zoom = false }: Props): ReactElement {
+  if(preview && spec.teaching?.renderer==='ac-cutaway-v2' && spec.teaching.renderer_fingerprint===acSceneHash) return <Cutaway/>;
   if (preview && spec.canonical === 'air-conditioner-craft') return <Hardware step={0} focus="" running={false} placement="outside" onSelect={() => undefined} preview />;
   const [stage, progress] = stageAt(spec, seconds);
   const active = new Set(spec.stages[stage].parts);

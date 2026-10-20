@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { ReactElement } from 'react';
 import { api, errorMessage } from './api';
 import type { OwnerReport } from './contracts';
+import { ReviewWorkbench } from './teaching/ReviewWorkbench';
 
 const money = (n: number): string => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 3 }).format(n);
 export function OwnerView(): ReactElement {
@@ -20,5 +21,6 @@ export function OwnerView(): ReactElement {
       <section><h2>Did it help?</h2><p>{positive} positive · {report.feedback.length - positive} negative</p>{report.feedback.map(f => <blockquote key={`${f.user_id}:${f.lesson_id}`}><strong>{f.value === 'up' ? 'Helpful' : 'Needs work'} · {f.lesson_id}{typeof f.stage === 'number' ? ` · step ${f.stage+1}` : ''}</strong><p>{f.reason || 'No written feedback'}</p></blockquote>)}</section></div>
     <h2>Generation jobs</h2>{!report.jobs.length ? <p className="muted">No generation jobs yet. New requests will appear here once AI generation is enabled.</p> : <div className="table-scroll"><table><thead><tr><th>Machine</th><th>Status</th><th>Step</th><th>Issue</th></tr></thead><tbody>{report.jobs.map(job => <tr key={job.id}><td>{job.canonical}</td><td>{job.status}</td><td>{job.phase}</td><td>{job.error || '—'}</td></tr>)}</tbody></table></div>}
     <details><summary>Token and cost ledger ({report.ledger.length} operations)</summary><div className="table-scroll"><table><thead><tr><th>Operation</th><th>Input tokens</th><th>Output tokens</th><th>Recorded cost</th></tr></thead><tbody>{report.ledger.map(row => <tr key={row.operation}><td>{row.operation}</td><td>{row.input_tokens}</td><td>{row.output_tokens}</td><td>{money(row.charged_usd)}{row.uncertain ? ' · billing unknown' : row.speech_estimated ? ' · estimate' : ''}</td></tr>)}</tbody></table></div></details>
+    <ReviewWorkbench reserve={report.generation_reserve_usd}/>
   </section>;
 }

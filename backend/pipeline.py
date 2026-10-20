@@ -2,6 +2,7 @@
 
 import asyncio
 import base64
+import hashlib
 import secrets
 import time
 from collections.abc import Awaitable, Callable
@@ -14,13 +15,14 @@ from _shared.services.state_manager import StateManager
 
 from .accounting import charge
 from .assets import Assets
-from .contracts import LessonSpec, ReviewSpec
+from .contracts import AuthorLessonSpec, LessonSpec, ReviewSpec, TeachingReviewSpec
 from .domain import Domain
 from .prompts import lesson_prompt, review_prompt
 from .provider import UsageReceipt, model_speech, model_text, receipt_context
 from .quality import LearningQualityError, require_learning_quality
 from .render import audio_duration, render_video
 from .settings import Settings
+from .starters import digest_spec
 from .store import Database, Store
 
 logger = get_logger(__name__)
@@ -178,10 +180,10 @@ class Pipeline:
                     lambda: model_text(
                         lesson_prompt(str(job["question"]), str(job["canonical"])),
                         self.settings,
-                        schema=LessonSpec.model_json_schema(),
+                        schema=AuthorLessonSpec.model_json_schema(),
                     ),
                 )
-                spec = LessonSpec.model_validate_json(raw)
+                spec: LessonSpec = AuthorLessonSpec.model_validate_json(raw)
                 if spec.canonical != job["canonical"]:
                     raise ValueError("Generated lesson changed its requested identity")
                 require_learning_quality(spec)
@@ -193,14 +195,18 @@ class Pipeline:
                 )
             elif phase == "review":
                 spec = LessonSpec.model_validate(job["spec"])
+                review_type = TeachingReviewSpec if spec.version == 2 else ReviewSpec
                 raw = await self._paid(
                     job,
                     "review",
                     lambda: model_text(
-                        review_prompt(spec), self.settings, schema=ReviewSpec.model_json_schema(), task="review"
+                        review_prompt(spec),
+                        self.settings,
+                        schema=review_type.model_json_schema(),
+                        task="review",
                     ),
                 )
-                review = ReviewSpec.model_validate_json(raw)
+                review = review_type.model_validate_json(raw)
                 if not review.accepted:
                     raise ValueError("Automated editorial check rejected this lesson")
                 reviewed = review.lesson
@@ -291,7 +297,9 @@ class Pipeline:
             output = await asyncio.to_thread(
                 render_video, spec, audio, folder, self.settings, lambda: self._heartbeat(job_id, lease)
             )
-            location = await self.assets.put(f"lessons/{job_id}/lesson.mp4", output.read_bytes(), "video/mp4")
+            data = output.read_bytes()
+            video_digest = hashlib.sha256(data).hexdigest()
+            location = await self.assets.put(f"lessons/{job_id}/lesson.mp4", data, "video/mp4")
 
         require_learning_quality(spec)
 
@@ -299,6 +307,16 @@ class Pipeline:
             current = db.jobs[job_id]
             if current["lease_token"] != lease:
                 raise RuntimeError("Job lease was lost")
+            if spec.canonical in db.lessons:
+                raise ValueError("Published lesson identities are immutable")
+            previous = db.lessons.get(str(current.get("revision_of"))) if current.get("revision_of") else None
+            if current.get("revision_of") and (
+                previous is None
+                or previous.get("superseded_by")
+                or digest_spec(LessonSpec.model_validate(previous["spec"]))
+                != current.get("revision_parent_sha256")
+            ):
+                raise ValueError("Revision parent changed or was superseded; previous history is preserved")
             db.lessons[spec.canonical] = {
                 "id": spec.canonical,
                 "spec": spec.model_dump(mode="json"),
@@ -308,8 +326,13 @@ class Pipeline:
                 "quality": "ai-reviewed",
                 "views": 0,
                 "cost_usd": current["cost_usd"],
+                "spec_sha256": digest_spec(spec),
+                "video_sha256": video_digest,
+                "storyboard_version": "ce-1" if spec.version == 2 else "legacy-v1",
             }
             current.update(lesson_id=spec.canonical, message="Your explanation is ready", phase="complete")
+            if previous is not None:
+                previous.update(archived=True, superseded_by=spec.canonical)
             self.domain.settle(db, current, "complete")
 
         self.store.transaction(publish)

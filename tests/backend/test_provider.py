@@ -132,7 +132,7 @@ def test_lesson_schema_translation_preserves_domain_url_validation() -> None:
     assert '"format": "uri"' not in json.dumps(translated)
     assert json.dumps(schema) == original_json
     assert translated["additionalProperties"] is False
-    assert translated["required"] == schema["required"]
+    assert translated["required"] == list(schema["properties"])
     with pytest.raises(ValidationError):
         Source.model_validate(
             {

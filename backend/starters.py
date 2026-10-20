@@ -62,7 +62,20 @@ class PreparedStarter(BaseModel):
 
 def digest_spec(spec: LessonSpec) -> str:
     """Fingerprint canonical JSON so key ordering does not change a revision."""
-    payload = json.dumps(spec.model_dump(mode="json"), sort_keys=True, separators=(",", ":"))
+    data = spec.model_dump(mode="json")
+    if spec.version == 1:
+        # Preserve fingerprints of previously published v1 artifacts byte-for-byte.
+        data.pop("teaching", None)
+        data.pop("graphics", None)
+    elif spec.teaching:
+        if not data["teaching"].get("renderer_fingerprint"):
+            data["teaching"].pop("renderer_fingerprint", None)
+        # Empty trajectories preserve the original CE-1 pose semantics/fingerprint.
+        for group in (*data["teaching"]["beats"], *data["teaching"]["scenarios"]):
+            for change in group["changes"]:
+                if not change.get("via"):
+                    change.pop("via", None)
+    payload = json.dumps(data, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(payload.encode()).hexdigest()
 
 

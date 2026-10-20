@@ -31,6 +31,7 @@ class Database(BaseModel):
     feedback: dict[str, dict[str, object]] = Field(default_factory=dict)
     events: list[dict[str, object]] = Field(default_factory=list)
     ledger: dict[str, dict[str, object]] = Field(default_factory=dict)
+    learning_reviews: list[dict[str, object]] = Field(default_factory=list)
     spent: float = 0
     reserved: float = 0
 

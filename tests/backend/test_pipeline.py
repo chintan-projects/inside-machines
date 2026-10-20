@@ -38,15 +38,18 @@ def sound(tmp_path: Path) -> bytes:
     return output.read_bytes()
 
 
+@pytest.mark.parametrize("revision", [False, True])
 async def test_full_phase_pipeline_real_mp4(
     store: Store,
     settings: Settings,
     user: User,
-    spec: LessonSpec,
+    ce_spec: LessonSpec,
     sound: bytes,
     monkeypatch: pytest.MonkeyPatch,
+    revision: bool,
 ) -> None:
     """Only provider output is synthetic; jobs, storage and ffmpeg run for real."""
+    spec = ce_spec
     calls: list[str] = []
     deliveries: list[tuple[str, str]] = []
 
@@ -82,7 +85,25 @@ async def test_full_phase_pipeline_real_mp4(
     monkeypatch.setattr("backend.pipeline.model_speech", speech)
     pipeline = Pipeline(store, settings, Assets(settings), enqueue)
     domain = Domain(store, settings)
-    job_id = str(domain.request("washer", user)["job_id"])
+    if revision:
+        old = spec.model_copy(deep=True)
+
+        def preserve(db: Database) -> None:
+            db.lessons[old.canonical] = {"id": old.canonical, "spec": old.model_dump(mode="json")}
+            db.chats["private-parent"] = {"lesson_id": old.canonical, "messages": []}
+
+        store.transaction(preserve)
+        job_id = str(
+            domain.request(
+                "washer",
+                User(id="owner", name="Test owner", owner=True),
+                revision_of=old.canonical,
+                operation="explicit-test-operation",
+            )["job_id"]
+        )
+        spec.canonical = str(store.snapshot().jobs[job_id]["canonical"])
+    else:
+        job_id = str(domain.request("washer", user)["job_id"])
     await pipeline.run(job_id)
     while deliveries:
         delivered_id, _ = deliveries.pop(0)
@@ -91,7 +112,11 @@ async def test_full_phase_pipeline_real_mp4(
     assert state.jobs[job_id]["status"] == "complete"
     assert calls == ["author", "review", "voice", "voice", "voice"]
     assert state.spent == pytest.approx(0.023) and state.reserved == pytest.approx(0)
-    lesson = state.lessons["washing-machine"]
+    lesson = state.lessons[spec.canonical]
+    if revision:
+        assert state.lessons[old.canonical]["spec"] == old.model_dump(mode="json")
+        assert state.lessons[old.canonical]["superseded_by"] == spec.canonical
+        assert state.chats["private-parent"]["lesson_id"] == old.canonical
     video = settings.data_dir / "assets" / str(lesson["video"])
     assert video.stat().st_size > 1000
     assert audio_duration(video) == pytest.approx(15, abs=0.3)

@@ -12,8 +12,14 @@ export async function api<T>(path: string, body?: unknown): Promise<T> {
   });
   if (!response.ok) {
     const data: unknown = await response.json().catch(() => null);
-    const detail = data && typeof data === 'object' && 'detail' in data && typeof data.detail === 'string'
-      ? data.detail : 'We couldn’t complete that request. Please try again.';
+    let detail='We couldn’t complete that request. Please try again.';
+    if(data && typeof data==='object' && 'detail' in data) {
+      if(typeof data.detail==='string')detail=data.detail;
+      else if(Array.isArray(data.detail)) {
+        const messages=data.detail.filter((item:unknown):item is {msg:string}=>!!item&&typeof item==='object'&&'msg' in item&&typeof item.msg==='string').slice(0,3).map(item=>item.msg.slice(0,240));
+        if(messages.length)detail=messages.join(' ');
+      }
+    }
     if (response.status === 401 && path !== '/auth/login') window.dispatchEvent(new Event('inside:unauthorized'));
     throw new ApiError(detail, response.status);
   }

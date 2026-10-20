@@ -6,6 +6,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, model_validator
 
+from .teaching_contracts import TeachingSpec
+
 
 class StrictModel(BaseModel):
     """Reject undeclared provider output fields."""
@@ -87,7 +89,7 @@ class Question(StrictModel):
 class LessonSpec(StrictModel):
     """Portable visual teaching artifact, independent from runtime model provider."""
 
-    version: Literal[1]
+    version: Literal[1, 2]
     title: str = Field(min_length=3, max_length=90)
     canonical: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$", max_length=80)
     aliases: list[str] = Field(min_length=1, max_length=12)
@@ -104,6 +106,8 @@ class LessonSpec(StrictModel):
     questions: list[Question] = Field(min_length=3, max_length=6)
     prediction: str = Field(min_length=10, max_length=300)
     prediction_answer: str = Field(min_length=20, max_length=500)
+    teaching: TeachingSpec | None = None
+    graphics: list[Part] = Field(default_factory=list, max_length=120)
 
     @model_validator(mode="after")
     def connected_lesson(self) -> "LessonSpec":
@@ -125,7 +129,35 @@ class LessonSpec(StrictModel):
             raise ValueError("Question references an unknown stage or part")
         if sum(len(stage.narration.split()) for stage in self.stages) > 260:
             raise ValueError("Narration exceeds the alpha's 260-word budget")
+        if self.version == 1 and (self.teaching is not None or self.graphics):
+            raise ValueError("Teaching metadata requires a new v2 lesson revision")
+        if self.version == 2:
+            self._validate_teaching(ids)
         return self
+
+    def _validate_teaching(self, ids: set[str]) -> None:
+        """Validate the CE contract against the actual mechanism and drawings."""
+        teaching = self.teaching
+        if teaching is None or len(teaching.beats) != len(self.stages):
+            raise ValueError("V2 requires teaching beats for every stage")
+        if not set(teaching.core) <= ids:
+            raise ValueError("Teaching core refers to unknown components")
+        if any(claim.source >= len(self.sources) for claim in teaching.claims):
+            raise ValueError("Claim refers to an unknown source")
+        graphics = {p.id for p in self.graphics}
+        if len(graphics) != len(self.graphics) or graphics & ids:
+            raise ValueError("Graphics need distinct identities separate from mechanism parts")
+        for beat in teaching.beats:
+            if not set(beat.graphics) <= graphics or not {c.target for c in beat.changes} <= set(
+                beat.graphics
+            ):
+                raise ValueError("Beat changes must target its declared graphics")
+        for scenario in teaching.scenarios:
+            beat = next(b for b in teaching.beats if b.id == scenario.beat)
+            if not {c.target for c in scenario.changes} <= set(beat.graphics):
+                raise ValueError("Scenario changes must target its declared beat graphics")
+        if teaching.renderer == "ac-cutaway-v2" and self.canonical != "air-conditioner-ce-1":
+            raise ValueError("Authored AC renderer is reserved for its immutable revision")
 
 
 class AnswerSpec(StrictModel):
@@ -144,6 +176,20 @@ class ReviewSpec(StrictModel):
     accepted: bool
     notes: list[str] = Field(max_length=10)
     lesson: LessonSpec
+
+
+class AuthorLessonSpec(LessonSpec):
+    """New authoring must use CE-1; historical v1 readers remain supported."""
+
+    version: Literal[2] = 2
+    teaching: TeachingSpec
+    graphics: list[Part] = Field(min_length=2, max_length=120)
+
+
+class TeachingReviewSpec(ReviewSpec):
+    """A new lesson cannot lose its teaching contract during editorial review."""
+
+    lesson: AuthorLessonSpec
 
 
 def canonicalize(question: str) -> str:

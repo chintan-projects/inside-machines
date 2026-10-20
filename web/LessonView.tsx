@@ -5,6 +5,7 @@ import type { Answer, Lesson, Member } from './contracts';
 import { offlineMember } from './offline';
 import { ChatPanel, FeedbackPanel } from './LessonDiscussion';
 import { AcStudio } from './ac/Studio';
+import { TeachingStudio } from './teaching/Studio';
 import { LessonSaveButton, useLessonAssets } from './useLessonAssets';
 import { duration, Scene, stageAt } from './Scene';
 import { progressKey, readProgress } from './progress';
@@ -12,6 +13,7 @@ import { WasherExperiment } from './WasherExperiment';
 
 interface Props { readonly lesson: Lesson; readonly member: Member; readonly online: boolean }
 export function LessonView(props: Props): ReactElement {
+  if(props.lesson.spec.version===2) return <TeachingStudio {...props}/>;
   return props.lesson.id === 'air-conditioner-craft' ? <AcStudio {...props} /> : <StandardLessonView {...props} />;
 }
 function StandardLessonView({ lesson, member, online }: Props): ReactElement {

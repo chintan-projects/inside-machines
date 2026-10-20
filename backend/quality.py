@@ -44,6 +44,10 @@ def learning_issues(spec: LessonSpec) -> list[str]:
             bx, by = b.x + len(b.label) * b.h * 0.62, b.y + b.h + 8
             if max(a.x, b.x) < min(ax, bx) and max(a.y, b.y) < min(ay, by):
                 issues.append(f"Labels {a.id} and {b.id} overlap")
+    if spec.version == 2:
+        from .teaching_quality import teaching_issues
+
+        issues.extend(teaching_issues(spec))
     return issues
 
 

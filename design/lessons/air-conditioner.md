@@ -1,7 +1,7 @@
 # AC benchmark: make the heat-transfer mechanism understandable
 
-Spec version: 1.0, 2026-10-19. Iteration: planned causal revision after the studio.  
-Status: build specification; not implemented or approved.  
+Spec version: 1.0, 2026-10-19. Iteration: CE-1 causal revision implemented; human acceptance pending.
+Status: build specification; not implemented or approved.
 Authority: [ADR 0001](../../docs/architecture-decisions/0001-concept-explanation.md)
 and [concept explanation spec](../../docs/CONCEPT-EXPLANATION-SPEC.md).
 
@@ -144,10 +144,28 @@ app-AI ceiling. Playback and authored assessments do not need a model call.
 
 | Gate | Current result |
 | --- | --- |
-| ADR/spec and acceptance tasks | Written; implementation still planned |
-| New causal scenes and shared artifact parity | Pending |
-| Engineering tests for new behavior | Pending implementation |
-| Independent technical review | Pending; pressure/phase evidence incomplete |
+| ADR/spec and acceptance tasks | Implemented; traced in docs/CONCEPT-IMPLEMENTATION.md |
+| New causal scenes and shared artifact parity | Shared SVG/pose/storyboard implementation and new media; human semantic parity review pending |
+| Engineering tests for new behavior | 107 backend tests, cross-language path sampling and real MP4 revision regression pass |
+| Independent technical review | Pending; Danfoss printed pp.20/22 now support throttling and phase-change treatment |
 | Real-phone owner craft/accessibility decision | Pending |
 | Beginner teach-back and transfer | Unmeasured |
 | Family release | Held; this plan does not approve it |
+
+
+## CE-1 build evidence
+
+`air-conditioner-ce-1` implements AC-B1–6 with a new immutable identity and media.
+Grant's visual reasoning motivates the shrinking compression chamber and spatial
+energy paths; Feynman's causal simplicity motivates heat-contact before refrigerant
+terms; Veritasium's approach motivates the sealed-room prediction and open-fridge
+transfer; Anatomy motivates the original physically connected cutaway. Labels and
+motion follow the ADR's explicit project overrides. These are design choices, not
+creator endorsement or evidence that learners understand them.
+
+The claim ledger is now also executable data in `backend/ac_concept.py`. Source
+inspection corrected an initially guessed Danfoss locator to printed p.20, sections
+3.5–3.6, and p.22 cycle diagram. The valve inset is a restriction with a liquid/vapor
+mixture downstream, not a reversed piston. Compression and heat rejection remain
+distinct. A renderer fingerprint prevents later SVG changes silently reinterpreting
+a saved revision. Independent technical, actual-phone and learning gates stay open.

@@ -121,3 +121,38 @@ someone learns from it). These ratings are proposals, not human approval.
 Review captures: `shots/ac-studio-phone.jpg` and the protected hosted studio
 capture. Other catalog lessons remain outside this visual revision. See
 `design/visual-learning-teardown.md` for scope and limitations.
+
+## CE-1 implementation — observed engineering and teaching risks
+
+- Real encoded regression exposed a frame byte-count mismatch: the rasterizer kept
+  aspect ratio rather than exact requested dimensions. A padded exact-size canvas
+  fixes the MP4 timing/corruption issue; real encoding and dimension tests pass.
+- A water marker took a diagonal shortcut around a pipe bend. Shared piecewise poses
+  now carry it through the actual pump center; JS/Python parity is tested.
+- Color or rotating a symmetric housing does not explain an internal action. The
+  compressor changes chamber volume; the washer has a visible impeller; the cooker
+  uses a labeled conceptual control contact/power state. Independent truth review
+  must still assess whether these simplifications teach the right mechanism.
+- Source URLs alone hid weak locators. Printed Danfoss expansion/cycle pages were
+  inspected; washer inner/outer tub and pump claims now cite relevant manufacturer
+  sections. Circular-path and room-energy applications are marked as inferences.
+
+These observations do not close the human rejection. CE-1 render-review rounds,
+actual-phone and beginner learning evidence must be recorded separately below.
+
+### CE-1 render review rounds (agent observations)
+
+| Round | Consequential finding | Change and observed check |
+| --- | --- | --- |
+| 1 — hierarchy and interaction | At 375 width, the causal action fell below a tall component/inset stack | Current action remains visible within the teaching workspace while scrolling; actual compression changes the chamber and qualitative state. Desktop question/prediction and restrained step rail inspected. |
+| 2 — phone containment and state | The consent label's anonymous flex text overflowed to 434 pixels; narrow media controls needed deterministic handoff | Wrapped a shrinking text span; document width now equals 320. Selected narration starts at the current checkpoint; reduced motion snaps to static end state. Counterfactual changes scene and explanation; transfer stays hidden before reveal. |
+| 3 — tablet legibility and inspection | At 768 width, two small figures made inset labels too small | Stack context/inset at tablet width; add a bounded enlarged diagram with keyboard pan, native focus trap, Escape dismissal and return focus. Distinct washer pump and cooker control/scenario paths inspected. |
+
+All five design aspects were considered: hierarchy, type/contrast, physical mechanism
+craft, interaction/state, responsive/accessibility. Observed AC save → full offline
+reload → Blob narration playback (100.51 seconds, readyState 4); place restored;
+offline sign-out then reconnect returns to entry. Sound-off text and component
+keyboard alternatives remain available. Temporary offline/reduced-motion overrides
+were restored. Browser simulations are not an actual-phone or screen-reader pass.
+No human or beginner quality score is inferred. A new human rejection starts a new
+bounded iteration focused on the most consequential observed failure.

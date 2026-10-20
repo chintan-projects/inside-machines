@@ -14,6 +14,7 @@ __pycache__/
 htmlcov/
 .DS_Store
 research/x-post.json
+research/refs/
 shots/
 .vercel
 .env*.local

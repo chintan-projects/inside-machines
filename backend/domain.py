@@ -1,5 +1,6 @@
 """Catalog lookup, transactional job admission, and private-session accounting."""
 
+import hashlib
 import secrets
 import time
 from typing import Literal
@@ -10,6 +11,7 @@ from pydantic import BaseModel
 from .contracts import LessonSpec, canonicalize
 from .quality import learning_issues
 from .settings import Settings
+from .starters import digest_spec
 from .store import Database, Store
 
 
@@ -37,6 +39,8 @@ class Domain:
         """Project public metadata only; never return owner job data or private chat."""
 
         def read(db: Database) -> list[dict[str, object]]:
+            from .learning_reviews import review_state
+
             result = []
             for lesson in db.lessons.values():
                 if lesson.get("archived"):
@@ -55,7 +59,8 @@ class Domain:
                         "duration": sum(s.duration for s in spec.stages),
                         "parts": len(spec.parts),
                         "quality": lesson.get("quality", "generated"),
-                        "review_needed": bool(learning_issues(spec)),
+                        "review_needed": bool(learning_issues(spec))
+                        or not review_state(db, str(lesson["id"]))["ready"],
                         "created_at": lesson.get("created_at", 0),
                         "views": lesson.get("views", 0),
                         "video_ready": bool(lesson.get("video")),
@@ -66,19 +71,50 @@ class Domain:
 
         return self.store.transaction(read, write=False)
 
-    def request(self, question: str, user: User) -> dict[str, object]:
+    def request(
+        self, question: str, user: User, *, revision_of: str | None = None, operation: str = ""
+    ) -> dict[str, object]:
         """Return a cached lesson, attach to a pending job, or atomically admit new work."""
         canonical = canonicalize(question)
         if not canonical:
             raise HTTPException(422, "Tell us which machine you want to understand.")
+        if revision_of:
+            if not user.owner:
+                raise HTTPException(403, "Owner access is required")
+            if not operation or len(operation) > 80:
+                raise HTTPException(422, "A bounded revision operation ID is required")
+            canonical = (
+                canonical[:60].rstrip("-")
+                + "-ce-"
+                + hashlib.sha256((revision_of + ":" + operation).encode()).hexdigest()[:10]
+            )
 
         def admit(db: Database) -> dict[str, object]:
+            parent = db.lessons.get(revision_of) if revision_of else None
+            if revision_of:
+                if parent is None:
+                    raise HTTPException(404, "Lesson not found")
+                if parent.get("superseded_by"):
+                    existing = db.lessons.get(canonical)
+                    if existing:
+                        return {"kind": "lesson", "lesson_id": canonical, "reused": True}
+                    raise HTTPException(409, "Open the latest revision before requesting another draft")
+                for pending in db.jobs.values():
+                    if pending.get("revision_of") == revision_of and pending["status"] not in (
+                        "failed",
+                        "complete",
+                    ):
+                        return {"kind": "job", "job_id": pending["id"], "reused": True}
+                    if pending["canonical"] == canonical and pending["status"] == "failed":
+                        raise HTTPException(
+                            409, "That revision attempt failed. Explicitly start a new operation to try again"
+                        )
             for lesson in db.lessons.values():
                 if lesson.get("archived"):
                     continue
                 spec = LessonSpec.model_validate(lesson["spec"])
                 names = {spec.canonical, *(canonicalize(a) for a in spec.aliases)}
-                if canonical in names:
+                if canonical in names and (not revision_of or spec.canonical == canonical):
                     self.event(db, "catalog_hit", user, question=question, lesson_id=lesson["id"])
                     return {"kind": "lesson", "lesson_id": lesson["id"], "reused": True}
             for job in db.jobs.values():
@@ -130,6 +166,10 @@ class Domain:
                 "cost_usd": 0,
                 "error": None,
                 "reservation": reserve,
+                "revision_of": revision_of,
+                "revision_parent_sha256": digest_spec(LessonSpec.model_validate(parent["spec"]))
+                if parent
+                else None,
             }
             db.reserved += reserve
             self.event(

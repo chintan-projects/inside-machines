@@ -1,12 +1,13 @@
 # Concept explanation specification
 
-Version: 1.0, 2026-10-19.  
-Authority: [ADR 0001](architecture-decisions/0001-concept-explanation.md).  
+Version: 1.1, 2026-10-19.
+Authority: [ADR 0001](architecture-decisions/0001-concept-explanation.md).
 Scope: authored and generated machine lessons, follow-up visual actions, narration,
 video and static alternatives across web/PWA and future native clients.
 
-This is a build and review contract. It does not add fields to the deployed API,
-alter prompts or implement new automated checks. Current gaps are listed below.
+This is a build and review contract. The CE-1 typed data, prompts, player, media
+and review workflow implement it; see the [implementation/evidence record](CONCEPT-IMPLEMENTATION.md).
+Implementation does not establish technical correctness or human acceptance.
 Grant, Feynman, Veritasium and Anatomy inform the decisions and source notes in the
 ADR; the numbered requirements here are Inside's implementation of those ideas.
 
@@ -47,8 +48,8 @@ reply need not replay the full lesson structure or repeat its assessment.
 
 ## Authoring contract and module boundaries
 
-Start as a reviewed worksheet. Introduce the following as typed, validated data
-only when implementing the next version of the shared lesson contract:
+Start as a reviewed worksheet. The v2 lesson contract introduces the following
+as typed, validated data; legacy v1 revisions retain their reader and identities:
 
 | Record | Required information |
 | --- | --- |
@@ -146,28 +147,25 @@ to another teaching method. The PRD's larger comparative pilot remains later wor
 
 Learner participation and storing an answer are optional. Private answers stay in
 ignored local/private storage, not public lesson artifacts, general logs or analytics.
-Commit only anonymized aggregate findings without identifying details. The future
-telemetry implementation may collect coarse consented events such as a skipped
+Commit only anonymized aggregate findings without identifying details. The
+telemetry implementation collects only coarse consented events such as a skipped
 prediction, reset, confusing beat or thumb; it must not collect answer/chat text
-implicitly. No telemetry or assessment storage is added by this spec.
+implicitly. The API requires explicit consent for counts; written answers remain in ephemeral browser memory.
 
 Thumbs and chat identify confusion and demand; they do not replace teach-back and
 transfer evidence. Human reviewers own any ambiguity in scoring. A model may assist
 review within budget but may neither approve itself nor silently incur evaluation
 cost. Report abstentions and missing observations separately from correct answers.
 
-## Current implementation versus target
+## Implementation and remaining evidence
 
-| Area | Present on 2026-10-19 | Work required |
-| --- | --- | --- |
-| Data and prompts | Safe `LessonSpec`, stages/parts/sources, input/output/focus, prediction and authored Q&A; existing author/review prompts | Versioned misconception/prerequisite/claim/beat/action/evaluation contracts and matching prompts |
-| Structural gates | `backend.quality`: labels, bounds/nonoverlap, chapter focus, input/output and evidence references | Contract-specific validation; semantic support and teaching evaluation remain separate |
-| AC visuals | Original authored cutaway and focused chapters | Demonstrate currently hidden causal changes and pre-result prediction |
-| AC state | Reviewed inside/outside qualitative scenario in `web/ac/story.ts` | Shared authoritative state/checkpoints for all outputs; richer mechanism states only as justified |
-| Narration/video | Studio uses the earlier stored MP4's audio; MP4 retains the old schematic | Shared storyboard and semantic checkpoint parity across updated artifacts |
-| Learning evidence | Authored misconception questions; owner rejection and browser review recorded | Beginner and independent technical evaluation; real-phone owner decision |
-| Other machines/generation | Existing renderers and protected learning drafts | Separate acceptance against this contract; an AC-only fix does not upgrade them |
+The [implementation record](CONCEPT-IMPLEMENTATION.md) traces CE-01–18 to modules,
+tests and limitations. The AC, washer and cooker now have distinct CE-1 draft
+storyboards, causal insets, prediction/transfer, source ledgers and newly rendered
+narrated media. New generation requires the v2 contract. Existing v1 artifacts and
+private conversations remain immutable. The owner workbench records each required
+review against exact spec/video hashes; it does not supply those human judgments.
 
-The [AC benchmark plan](../design/lessons/air-conditioner.md) is the next build spec.
-This document and ADR do not claim its implementation, automated enforcement or
-release acceptance is complete.
+Independent technical review, actual-phone craft/accessibility and five-beginner
+learning evidence are still required. Each family and newly generated draft needs
+its own acceptance; AC evidence cannot promote the rest of the catalog.
