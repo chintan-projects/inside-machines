@@ -1,90 +1,143 @@
-# Deployment ownership audit and correction plan
+# Deployment ownership audit and migration record
 
-Audit date: 2026-10-19. Status: **migration pending authenticated target scope
-verification**. The owner has been asked for the personal workspace URL after
-signing in with Gmail. Hold Git pushes and deployments until that destination is
-verified.
+Updated: 2026-10-19 (Pacific time). **Live application, Neon database and active
+private Blob storage are owned by the verified personal Gmail account. GitHub
+login authorization remains pending for automatic Git deployments.**
 
-## Confirmed findings
+## Verified ownership
 
-- `inside-machines-alpha` belongs to a personal Hobby scope, separate from the
-  Liquid AI organization. The organization does not own this project.
-- The authenticated CLI user and deployment creator are the work-email owner.
-  Account Settings lists only the work email, marked **Verified Primary**. The
-  source Hobby scope also uses the work email for billing.
-- Vercel's External Access list contains a pending request from a distinct
-  requester identity for the stable project alias. The supplied access-request
-  email identifies that requester as the personal Gmail account. The Gmail
-  account's authenticated profile, primary email, workspace ownership and plan
-  have **not** yet been inspected.
-- Vercel Authentication uses **Standard Protection**. The separate requester
-  lacks deployment access, which explains the access request. Vercel sends
-  account notifications to the owner's primary email, explaining delivery to the
-  work address. Approving viewing access would not transfer ownership.
-- The source scope contains the connected Neon database `inside-machines-db`
-  (Free, Available) and private Blob store `inside-machines-assets` (Available).
+| Item | Verified destination |
+| --- | --- |
+| Vercel primary account | `chintansanghvi5@gmail.com`, username `csanghvi` |
+| Workspace | `cdt9s-projects`, `team_5LoBlu5cjsIC1oEzRItHF6o8` |
+| Membership and billing | Confirmed Owner; Hobby active; billing email matches Gmail |
+| Project | `inside-machines-alpha`, `prj_ok8CKAxGVlADIiJyECM6wukxrUnn` |
+| Neon | Existing `inside-machines-db`, `store_ZqexGu717dNkmfMV`, Free |
+| Active private Blob | `inside-machines-assets`, `store_3LF9qetVQ3IptgHA`, `iad1` |
+| Production runtime | `dpl_HY4oCMJcg2wpWXxZVa2dH1WAa1Zk`, Ready, Gmail workspace |
 
-Evidence: read-only CLI/API account, team and project metadata; Account Settings;
-Deployment Protection / External Access; Storage inventory; and the supplied
-access-request screenshot. No database contents or private assets were browsed.
-See [Vercel Authentication][authentication] and [primary email routing][emails].
+Use [Inside Machines](https://inside-machines-alpha.vercel.app) or the
+[Gmail workspace alias](https://inside-machines-alpha-cdt9s-projects.vercel.app).
+The old source-workspace stable alias and its Git-main alias were explicitly
+reassigned to this same deployment to preserve previously shared links.
 
-## Correction plan
+Vercel Authentication remains Standard Protection
+(`all_except_custom_domains`). App family/owner access remains enabled. The
+application's AI ceiling is still **$50** and its recorded spend is unchanged at
+**$3.212849538461539**, with zero outstanding reservations. This application limit
+is not a Vercel account-wide billing limit. No paid model calls or plan upgrades
+were made for the migration.
 
-1. In a separate browser profile or private window, authenticate with the Gmail
-   account. Verify its primary email, personal workspace URL, owner role and plan.
-   Preserve the source login. Prefer moving to this distinct account rather than
-   changing the existing work identity's primary email across its teams.
-2. Before any move, privately inventory environment-variable targets, integration
-   connections, database identity, Blob references, application signing secrets,
-   aliases and Git linkage. Preserve existing data and configuration without
-   recording credentials here. Verify the destination can access the private Git
-   repository and accommodate the project and resources.
-3. Choose the supported project transfer route after verifying both scopes.
-   Standard transfers require ownership of the source and membership of the
-   destination. Cross-account claim transfers are also documented. Project
-   transfers preserve deployments, configuration, aliases, Git linkage and
-   project environment variables, but integrations and Blob require separate
-   handling. Variables defined in `vercel.json` need separate review. The claim
-   documentation only promises automatic associated-resource transfer for Prisma;
-   do not assume it moves Neon or Blob. See [project transfers][projects] and
-   [cross-account claims][claims].
-4. Plan Neon independently, preserving the existing database and its data. A
-   resource transfer requires Owner/Member access on both scopes, Neon installed
-   at the destination, and all project connections disconnected. The documented
-   operation is irreversible. Alternatively, a supported whole-installation
-   transfer requires Neon absent from the destination and all source connections
-   disconnected. Choose one route; their destination prerequisites differ.
-   Disconnecting removes integration variables from project configuration;
-   existing deployments retain their deployed variables. Reconnect the resource
-   and restore the intended environment targets before a new deployment. See
-   [resource transfers][resources] and [installation transfers][installations].
-5. Transfer the existing private Blob store separately through Storage → store →
-   Settings → Transfer Store, subject to verified destination eligibility.
-   Preserve its objects and references, reconnect the project, and verify the
-   private-access configuration. See [store transfers][stores].
-6. After all connections are restored, authenticate the CLI as the Gmail owner,
-   relink the checkout to the verified destination, and inspect environment
-   configuration without printing secret values. Run deployment readiness checks
-   before a controlled deployment. Verify ownership, Git linkage, production
-   health, existing lesson/job records, private asset delivery, session continuity
-   and access while signed in as the Gmail owner. Use existing records for
-   validation; do not trigger a paid lesson merely to test the migration.
+## Original cause
 
-If dual-scope membership or Hobby limitations block resource transfer, stop and
-resolve a supported migration route with the owner. No paid plan upgrade is
-assumed. Keep Vercel Authentication enabled; disabling protection is not an
-ownership correction. Do not uninstall Neon to make room: uninstalling a native
-integration deletes its associated products and data.
+The source Hobby scope `chintan-4466s-projects` was a personal workspace owned by
+an identity whose verified primary and billing email was the work address. It
+was separate from the Liquid AI organization, which did not own this project.
+The distinct Gmail account requested access to its protected deployment; Vercel
+sent the notification to the work-email owner. A personal-looking workspace name
+was insufficient evidence of ownership. Approving viewer access or changing the
+work identity's email would not have moved the application and its resources.
 
-**Audit outcome:** no project settings, access grants, credentials, deployments,
-database data or stored assets were changed or moved. This document records a
-pending plan, not a completed account migration.
+The source login and unrelated Liquid AI team membership were preserved.
 
-[authentication]: https://vercel.com/docs/deployment-protection/methods-to-protect-deployments/vercel-authentication
-[emails]: https://vercel.com/docs/accounts#changing-your-primary-email-address
+## Completed execution
+
+1. Authenticated the Gmail account through Vercel's device login, with its CLI
+   credentials isolated from the existing source login. Verified primary email,
+   owned workspace, membership, plan and billing email through authenticated APIs.
+2. Privately inventoried project configuration, integration connections, aliases
+   and all three environment targets. Exported available environment values;
+   **sensitive values such as the production OpenAI key are not exportable**.
+   Those were preserved by Vercel's native project transfer, and the new hosted
+   runtime confirms generation remains enabled. An environment export alone is
+   not a complete recovery copy of sensitive credentials.
+3. Backed up and validated the complete database and every private Blob object.
+   Saved database/collection hashes and object hashes in ignored, owner-only
+   local files. Rechecked zero active jobs and reservations before transfer.
+4. Installed the free Neon integration in the Gmail workspace, then used the
+   documented [cross-account claim flow][claims] and [Neon resource flow][flows]
+   to transfer the existing project and Neon
+   resource. Vercel returned zero resource-transfer errors and a fulfilled Neon
+   provider result. Both resources retain their IDs and now report the Gmail
+   workspace as owner. Neon remains connected to the project.
+5. The normal [Blob transfer picker][stores] could not select this separate Hobby account.
+   Created a Gmail-owned **private** store instead, copied all **17 objects /
+   12,765,940 bytes**, and downloaded each destination object to verify its hash
+   and size. Reconnected it using the normal `BLOB_READ_WRITE_TOKEN` in production,
+   preview and development. Removed the temporary migration-prefixed connection.
+6. Verified session/invite/owner settings and the budget across all three targets.
+   Relinked the checkout to the Gmail-owned project. Re-ran engineering checks
+   and the Linux deployment packaging verifier before a staged production build.
+7. Built the local runtime from `2e02599` using the verified Gmail CLI identity,
+   holding the existing production domains while the candidate was checked. Its
+   hosted health check confirmed the preserved sensitive API key was injected.
+8. Briefly paused the previous production deployment and took a fresh snapshot.
+   Changed only **25 lesson/job storage references** to the 17 verified new
+   objects in one transaction. Preserved lesson specs, revision identities,
+   artifact bytes/hashes, private history and usage accounting. The reverse
+   mapping was checked against the snapshot for rollback.
+9. Verified the candidate, promoted it, reopened production, and reassigned the
+   legacy stable aliases. The active runtime has no source-owned storage
+   dependency. The disconnected source Blob store is retained solely as a
+   rollback copy; it was not deleted.
+
+All credentials, snapshots, downloaded media, verification sessions and API
+inventories remain ignored by Git and excluded from deployment packaging.
+
+## Observed verification and limits
+
+- Ruff, strict mypy, 163 backend tests including three disposable Postgres tests,
+  86.89% backend coverage, TypeScript, ESLint, ten JavaScript tests, frontend build
+  and Linux packaging verifier passed.
+- Authenticated hosted checks passed: health, generation readiness, owner session,
+  active catalog, all nine existing videos with original byte hashes, MP4 range
+  requests (206), and captions. The family API rejects unauthenticated access
+  (401); the private Blob URL rejects public access.
+- The database comparison preserves every existing user/session, all private
+  chats, feedback, events, learning reviews and the complete ledger. The only new
+  private records retained are an explicitly created migration verification owner
+  user and login event. Its temporary session was revoked after verification;
+  the revoked credential correctly receives 401. Lesson specs and usage totals
+  are unchanged.
+- No new paid generation/chat operation was requested. Queue packaging passed;
+  a new post-migration paid queue job was not run. These checks establish the
+  observed migration behavior, not factual certification, beginner learning
+  quality, or owner approval of the lesson craft. BUG-004 remains open.
+
+## Remaining GitHub authorization
+
+Cross-account claiming cleared the Git repository link. The original private
+repository is still `chintan-projects/inside-machines`; its contents and history
+were not rewritten. Reconnecting it through the Gmail CLI returned Vercel's
+explicit **Add a Login Connection** requirement.
+
+The owner must connect GitHub account `chintan-projects` in the Gmail Vercel
+account's [Authentication settings][connections]. This is separate from CLI
+device authentication. Do not merge accounts or remove a work-account login
+connection silently if Vercel reports a conflict.
+
+After authorization, reconnect the original repository with the Gmail profile,
+verify its `main` branch link, and verify the next Git-triggered deployment's
+owner, resources and Ready state. Automatic Git deployment is not restored merely
+because the CLI deployment succeeded. Track this as BUG-008.
+
+## Future deployment and recovery
+
+The checkout now links to `team_5LoBlu5cjsIC1oEzRItHF6o8`. The default machine-wide
+CLI profile was left separate from the Gmail login for unrelated work. Use the
+isolated personal profile (`--global-config .vercel/migration-target-auth`) and
+`--scope cdt9s-projects`, and reverify the primary email and resource ownership
+before deployments. A missing personal profile must prompt Gmail login, not
+creation of another project under the default work identity.
+
+Keep source snapshots and the disconnected Blob copy until the owner is
+satisfied with the migrated service. A rollback must reverse only the internal
+asset references, restore the matching prior deployment/environment and preserve
+new private activity. Never replace the entire live database with an old snapshot
+or uninstall Neon to repair an integration connection.
+
+[connections]: https://vercel.com/account/authentication
 [projects]: https://vercel.com/docs/projects/transferring-projects
 [claims]: https://vercel.com/docs/deployments/claim-deployments
-[resources]: https://vercel.com/docs/integrations/install-an-integration/product-integration#transfer-a-resource-to-another-team
-[installations]: https://vercel.com/docs/integrations/install-an-integration/transferring-an-integration
+[flows]: https://vercel.com/docs/integrations/create-integration/marketplace-flows
 [stores]: https://vercel.com/docs/storage#transferring-your-store

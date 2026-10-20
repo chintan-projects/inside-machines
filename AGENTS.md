@@ -77,10 +77,15 @@ Use the owner's verified personal Gmail Vercel identity. A personal-looking
 workspace name does not establish account ownership. Before linking, pushing or
 deploying, verify the authenticated account's primary email, destination scope
 ownership and connected Neon/Blob ownership against the approved destination.
-The current source Hobby scope uses the work-email identity; hold further pushes
-and deployments until the migration in `docs/DEPLOYMENT-OWNERSHIP.md` is resolved.
-Preserve data, environment configuration and protection during that correction;
-granting viewer access or changing the work account's email does not complete it.
+The verified destination is `chintansanghvi5@gmail.com` (`csanghvi`), Owner of
+`cdt9s-projects` / `team_5LoBlu5cjsIC1oEzRItHF6o8`. The app, Neon and active private
+Blob store now belong there. The machine-wide CLI still uses the source work
+identity for unrelated work: use the isolated personal CLI profile and verify
+its primary email before deploying; never recreate this app under the default
+work scope. See `docs/DEPLOYMENT-OWNERSHIP.md` for current IDs, recovery and the
+pending GitHub login connection. A CLI deployment does not prove Git automation
+is connected. Preserve data, environment configuration and protection; granting
+viewer access or changing the work account's email does not transfer ownership.
 
 ## Learning publication contract
 

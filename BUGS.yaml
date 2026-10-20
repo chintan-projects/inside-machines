@@ -44,7 +44,14 @@ bugs:
   - id: BUG-007
     title: Personal-named Vercel scope is owned by the work-email identity
     severity: high
+    status: fixed
+    evidence: Authenticated Gmail primary and Owner role verified; project, Neon and private Blob now report the Gmail scope; protected hosted playback passes
+    fix: Native project and Neon claim, verified private Blob copy and atomic reference switch, preserved settings and histories, Gmail deployment and legacy alias reassignment
+    regression: docs/DEPLOYMENT-OWNERSHIP.md
+  - id: BUG-008
+    title: GitHub login connection is missing after cross-account project claim
+    severity: medium
     status: open
-    evidence: Separate-agent CLI and UI audit confirmed different protected-URL requester and work-email owner; source scope also owns Neon and private Blob
-    fix: Verify authenticated Gmail destination, then migrate project and resources with preserved data, credentials and protection; no migration performed
+    evidence: Gmail CLI Git reconnect returned Add a Login Connection; manual deployment succeeds but automatic Git deployment is not linked
+    fix: Owner connects chintan-projects GitHub to Gmail Vercel; then reconnect original private repository and verify a Git-triggered deployment
     regression: docs/DEPLOYMENT-OWNERSHIP.md
