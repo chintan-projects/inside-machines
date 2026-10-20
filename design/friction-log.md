@@ -172,3 +172,10 @@ long labels crossed the canvas. The quality gate rejected both before paid revie
 or media. One label also used padding spaces and a truncated phrase. The next
 author request explicitly limits on-scene labels to short concepts and bounded
 placement. No clipping threshold or minimum type size is relaxed.
+
+Compact-input iteration: unused paint channels and zero-box polygon metadata
+caused format failures; the compiler now handles these explicitly while keeping
+all public-domain constraints. The compiled draft still drew a closed duct end
+while claiming an open outlet. This is a separate observed CE-04/07 physical
+legibility failure, not solved by format validation. Explicit open-passage examples
+now govern authoring; policy-bound recovery cannot reuse the older drawing.

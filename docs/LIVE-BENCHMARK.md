@@ -142,3 +142,16 @@ marked uncertain. Nothing published; ledger $2.769283846, $0 reserved. Compact
 authoring transport now removes repeated keys/empty arrays while preserving the
 exact expanded lesson contract and all quality gates. The next explicit operation
 will test it; no successful runtime or learning result is inferred from unit tests.
+
+Compact authoring completed in 138.8 seconds: 4,775 input / 6,649 output tokens,
+$0.076040, API-returned model `gpt-6.1-sol`, status completed. Initial DTO expansion
+rejected omitted unused paint channels. The compiler now defines these channels
+and zero-box polygon bounds explicitly; expanded data passes unchanged structural
+gates. Browser inspection separately found a closed drawn outlet, so the teaching
+policy was strengthened and invalidates that drawing for recovery. Ledger after
+the run: $2.845323846 spent/retained, $0 reserved, unchanged $50 ceiling.
+
+The AC has an agent engineering record scoped to code a753bf7, artifact hashes,
+local viewport checks and hosted desktop/375/media/offline checks. A second
+append-only record clarifies local versus hosted widths. Technical, actual-phone,
+beginner learning and owner release gates remain false; no human score was added.

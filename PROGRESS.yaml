@@ -3,14 +3,14 @@ status: quality_revision
 current:
   - CE-1 contracts, causal player and shared video/static rendering implemented
   - AC, washer and cooker have distinct prediction-to-transfer draft storyboards
-  - Artifact-bound review workbench and budgeted immutable owner revisions implemented
+  - Artifact-bound review workbench; AC agent engineering passed; human gates pending
   - Personal Vercel CE-1 deployment Ready; hosted offline/media/import checks pass
 needs_input:
   - Independent technical review of consequential claims and qualitative models
   - Owner actual-phone craft/accessibility walkthrough
   - Five initially unfamiliar beginners for causal and transfer evaluation
 verification:
-  - 129 backend tests including three disposable Postgres tests pass; coverage 86.25 percent
+  - 131 backend tests including three disposable Postgres tests pass; coverage 86.30 percent
   - Ruff and strict mypy pass; TypeScript, ESLint, ten JS tests and production build pass
   - Real MP4 revision test preserves parent content and private conversations
   - JS and Python sample the same piecewise path through the actual drain pump

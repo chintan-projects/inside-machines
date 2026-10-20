@@ -103,8 +103,8 @@ at 10,000 tokens ($0.109544; provider-returned identity `gpt-6.1-sol`). New jobs
 carry `author_protocol=compact-1`. A provider-neutral DTO groups coordinates and
 paint, omits mandatory empty static-motion arrays and groups pose numbers with an
 explicit fixed ordering. The server expands the data into the unchanged full
-AuthorLessonSpec before all source, geometry and learning gates. No geometry,
-labels, layers, paths, evidence, limits or causal state are inferred or removed.
+AuthorLessonSpec before all source, geometry and learning gates. No vertices,
+labels, layers, paths, evidence, limits or causal state are omitted.
 Existing paid full-format checkpoints retain their parser. The public lesson/API,
 version, renderer and media meanings are unchanged.
 
@@ -114,3 +114,20 @@ remain errors. The serializer refuses to discard legacy motion. The failed
 vacuum checkpoint serializes to 24,469 compact bytes versus 26,080 full bytes at
 equal minification; token/latency improvement needs the next live run and must not
 be inferred from byte savings. The $2 reservation and $50 ceiling are unchanged.
+
+Compact paint may omit only channels that both renderers never paint (path/ring
+fill or text stroke); visible channels still require hex colours. Polygon
+box=[0,0,0,0] requests a bounding box computed from its vertices, giving the
+rotation an actual geometric centre. Explicit nonzero boxes/pivots are preserved.
+Full historical lesson readers never apply these compact-input conventions.
+Serializer round trips refuse ambiguous legacy zero-box polygons or motion.
+
+A fresh explicit operation may reuse known paid author output after a DTO
+validation failure only if current expansion, source/identity and quality checks
+pass. Receipt origin follows guarded reuse links; unknown charges/cycles fail
+closed. Research and author charges retain their original provenance. Candidate
+reuse also requires the SHA of the current trusted authoring instructions. A
+changed teaching instruction invalidates old drafts while preserving evidence.
+Local browser review found the compiled vacuum passage had a visually closed
+outlet; explicit open-passage examples were added. The old drawing is not eligible
+under that new policy. No paid review is used to rubber-stamp the known problem.

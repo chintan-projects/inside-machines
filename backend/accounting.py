@@ -2,12 +2,26 @@
 
 import time
 from dataclasses import asdict
+from typing import Literal
 
 from fastapi import HTTPException
 
 from .provider import UsageReceipt
 from .settings import Settings
 from .store import Database
+
+
+def receipt_origin(db: Database, job_id: str, phase: Literal["research", "author"]) -> str | None:
+    """Resolve known paid provenance through reuse links, failing closed on cycles."""
+    seen: set[str] = set()
+    field = "research_reused_from" if phase == "research" else "draft_reused_from"
+    while job_id and job_id not in seen:
+        seen.add(job_id)
+        receipt = db.ledger.get(f"lesson:{job_id}:{phase}")
+        if receipt is not None:
+            return job_id if receipt.get("models") and not receipt.get("uncertain") else None
+        job_id = str(db.jobs.get(job_id, {}).get(field) or "")
+    return None
 
 
 def reserve(db: Database, amount: float, settings: Settings) -> None:

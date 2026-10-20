@@ -1,5 +1,6 @@
 """Task-specific instructions kept separate from the application orchestration."""
 
+import hashlib
 import json
 
 from .contracts import LessonSpec
@@ -107,6 +108,11 @@ Keep stage titles <=60 characters, bridges <=180, static explanations <=280 and 
 property names/before/after labels together <=170 characters per beat for readable video output.
 Each change may include via=[] or up to six intermediate poses to follow real paths through
 pumps, valves and pipe bends. Markers must travel through openings, never through solid walls.
+Draw visible inlet/outlet gaps in open passages. For example, a straight left-to-right
+air passage uses TWO separate wall paths: [[150,220],[750,220]] and [[150,390],[750,390]].
+Do not join these walls at either end: a U-shaped polyline closes an end and cannot
+be called an open outlet. Label each port separately. A closed working-fluid loop
+instead needs physically connected tubing; do not add fictitious leaks to it.
 Properties give qualitative before/after state (pressure, phase, temperature, position, etc.).
 No invented pressure gauges, numerical simulations or exact-model internals.
 teaching.prediction offers 2–4 distinct choices, zero-based correct index, causal explanation,
@@ -129,6 +135,9 @@ Only output the requested schema. Source URLs must support their associated clai
             """\nCOMPACT-1 AUTHORING TRANSPORT: geometry arrays use CompactPart from the schema.
 Write box=[x,y,w,h], paint=[fillColor,strokeColor], points, label and layer alongside
 id/name/description/shape. Do NOT output x,y,w,h,color,stroke or motion keys separately.
+Visible paints must be six-digit hex. Empty paint is permitted only for the unused
+fill of paths/rings or unused stroke of text. A polygon box=[0,0,0,0] explicitly
+requests bounds derived from its vertices; rotation then uses that bounds center.
 The server expands these values into the full Part vocabulary described above, with
 motion=[]; teaching changes still own every causal transition. Root lesson/storyboard,
 all geometry, labels, identities and evidence rules are unchanged. Keep names and
@@ -141,6 +150,9 @@ into the shared Pose contract; preserve the physical paths and bounded transform
             else ""
         )
     )
+
+
+AUTHOR_POLICY = hashlib.sha256(lesson_prompt("", "policy", compact=True).encode()).hexdigest()
 
 
 def review_prompt(spec: LessonSpec, *, decision_only: bool = False) -> str:

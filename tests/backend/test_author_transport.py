@@ -5,8 +5,8 @@ import json
 import pytest
 from pydantic import ValidationError
 
-from backend.author_transport import author_schema, compact_author, expand_author
-from backend.contracts import AuthorLessonSpec, LessonSpec, Motion
+from backend.author_transport import CompactPart, author_schema, compact_author, expand_author
+from backend.contracts import AuthorLessonSpec, LessonSpec, Motion, Part
 from backend.provider_schema import openai_schema
 from backend.quality import require_learning_quality
 from backend.starters import digest_spec
@@ -66,3 +66,57 @@ def test_compact_encoder_refuses_to_erase_legacy_motion(ce_spec: LessonSpec) -> 
     ce_spec.parts[0].motion = [Motion(stage=0, kind="rotate", amount=90, axis="x")]
     with pytest.raises(ValueError, match="discard"):
         compact_author(ce_spec)
+
+
+def test_unused_paint_and_polygon_bounds_have_explicit_compiler_meaning(ce_spec: LessonSpec) -> None:
+    """No visible paint is invented; zero boxes derive an actual geometric center."""
+    from backend.teaching_svg import graphic_svg
+
+    for shape in ("path", "ring", "text"):
+        reference = Part.model_validate(
+            dict(
+                id="sample",
+                name="Sample",
+                description="Synthetic test shape",
+                shape=shape,
+                x=100,
+                y=100,
+                w=4,
+                h=32,
+                color="#123456",
+                stroke="#234567",
+                points=[[100, 100], [150, 150]],
+                label="Sample",
+                layer=0,
+                motion=[],
+            )
+        )
+        paints = [reference.color, reference.stroke]
+        paints[1 if shape == "text" else 0] = ""
+        expanded = CompactPart(
+            id=reference.id,
+            name=reference.name,
+            description=reference.description,
+            shape=reference.shape,
+            box=[100, 100, 4, 32],
+            paint=paints,
+            points=reference.points,
+            label=reference.label,
+            layer=0,
+        ).expand()
+        assert graphic_svg(expanded, None, 0) == graphic_svg(reference, None, 0)
+    polygon = CompactPart(
+        id="rotor",
+        name="Rotor",
+        description="Synthetic test rotor",
+        shape="polygon",
+        box=[0, 0, 0, 0],
+        paint=["#123456", "#123456"],
+        points=[[100, 100], [300, 100], [300, 300], [100, 300]],
+        label="",
+        layer=0,
+    )
+    part = polygon.expand()
+    assert (part.x, part.y, part.w, part.h) == (100, 100, 200, 200)
+    polygon.box = [150, 150, 0, 0]
+    assert polygon.expand().x == 150  # An explicit nonzero pivot is never rewritten.

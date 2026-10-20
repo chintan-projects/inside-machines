@@ -2,7 +2,7 @@
 
 import json
 from copy import deepcopy
-from typing import cast
+from typing import Annotated, cast
 
 from pydantic import Field, TypeAdapter
 
@@ -54,6 +54,10 @@ def _poses(document: dict[str, object], *, expand: bool) -> None:
                 change["via"] = [convert(p) for p in via]
 
 
+Paint = Annotated[str, Field(pattern=r"^(#[0-9a-fA-F]{6})?$")]
+Point = Annotated[list[float], Field(min_length=2, max_length=2)]
+
+
 class CompactPart(StrictModel):
     """Remove repeated coordinate keys and static-motion boilerplate, not detail."""
 
@@ -62,15 +66,26 @@ class CompactPart(StrictModel):
     description: str
     shape: PartShape
     box: list[float] = Field(min_length=4, max_length=4)
-    paint: list[str] = Field(min_length=2, max_length=2)
-    points: list[list[float]]
+    paint: list[Paint] = Field(min_length=2, max_length=2)
+    points: list[Point]
     label: str
     layer: int
 
     def expand(self) -> Part:
         """Apply every original geometry/identity constraint at the domain boundary."""
         x, y, w, h = self.box
+        if self.shape == "polygon" and not any(self.box) and self.points:
+            # Explicit compact convention: zero box requests bounds from vertices.
+            # This keeps rotation centered on the actual illustrated mechanism.
+            x, y = min(p[0] for p in self.points), min(p[1] for p in self.points)
+            w, h = max(p[0] for p in self.points) - x, max(p[1] for p in self.points) - y
         color, stroke = self.paint
+        # These channels are never painted by either renderer. Canonicalize only
+        # omitted unused channels; empty visible fills/strokes remain invalid.
+        if not color and self.shape in ("path", "ring"):
+            color = stroke
+        if not stroke and self.shape == "text":
+            stroke = color
         return Part.model_validate(
             {
                 "id": self.id,
@@ -124,6 +139,8 @@ def compact_author(spec: LessonSpec) -> dict[str, object]:
     for field, parts in (("parts", spec.parts), ("graphics", spec.graphics)):
         if any(p.motion for p in parts):
             raise ValueError("Compact authoring cannot discard existing motion")
+        if any(p.shape == "polygon" and not any((p.x, p.y, p.w, p.h)) for p in parts):
+            raise ValueError("An ambiguous legacy polygon box cannot be losslessly compacted")
         document[field] = [
             CompactPart(
                 id=p.id,

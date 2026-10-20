@@ -8,7 +8,9 @@ from typing import Literal
 from fastapi import HTTPException
 from pydantic import BaseModel
 
+from .accounting import receipt_origin
 from .contracts import LessonSpec, canonicalize
+from .prompts import AUTHOR_POLICY
 from .quality import learning_issues
 from .research import reusable_research
 from .revision_recovery import reusable_draft
@@ -169,6 +171,7 @@ class Domain:
                 "pipeline_version": "evidence-first-1",
                 "review_protocol": "verdict-1",
                 "author_protocol": "compact-1",
+                "author_policy_sha256": AUTHOR_POLICY,
                 "message": "Reviewing the saved visual explanation"
                 if draft
                 else "Using saved evidence; building the visual explanation"
@@ -195,8 +198,13 @@ class Domain:
                 else recovered[0].model_dump(mode="json")
                 if recovered
                 else None,
-                "research_reused_from": draft[2] if draft else recovered[1] if recovered else None,
-                "draft_reused_from": draft[2] if draft else None,
+                "research_reused_from": receipt_origin(db, draft[2], "research")
+                if draft
+                else recovered[1]
+                if recovered
+                else None,
+                "draft_reused_from": receipt_origin(db, draft[2], "author") if draft else None,
+                "draft_checkpoint_from": draft[2] if draft else None,
                 "draft_reused_spec_sha256": digest_spec(draft[0]) if draft else None,
             }
             db.reserved += reserve
