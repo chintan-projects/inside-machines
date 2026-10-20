@@ -90,6 +90,11 @@ viewer access or changing the work account's email does not transfer ownership.
 ## Learning publication contract
 
 Concept reuse follows [ADR 0003](docs/architecture-decisions/0003-extensible-concept-lessons.md).
+Progressive depth follows [ADR 0004](docs/architecture-decisions/0004-progressive-learning-paths.md):
+complete the core causal spine before optional branches. Share the versioned path,
+navigator, node-authoring context and player; keep truthful domain rules/adapters
+specific. Local query lookup is not arbitrary AI generation. Never claim a new
+production endpoint or automatic quality from a portable schema alone.
 Keep the lesson/player/media/provider/budget engine shared across appliances, GPUs,
 LLMs and later domains. Specialize trusted concept guidance and pure domain rules;
 do not force logical computations into physical cutaways or fork the player per

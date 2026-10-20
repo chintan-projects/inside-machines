@@ -122,3 +122,22 @@ explicit. Browser playback, loaded-offline use, failure UI and interruption are
 observed; audio content is non-silent and hash-bound. Actual phone/speaker and
 beginner learning checks remain pending. This supplies narrated HTML, not MP4
 parity or production publication. Preserve GPU-S1's silent artifact and evidence.
+
+## Local GPU-S3: complete core and optional depth
+
+The owner accepted the product teardown and requested implementation. The new
+[depth worksheet](gpu-depth.md) defines the causal spine, G5–G8 claims, hypothesis,
+transfer rubric, representation and separate review gates before code. The core
+now traces a program request through memory, calculation and stored pixel results.
+Optional insight, data-supply and matrix paths retain their own honest scope.
+The matrix reuses the original add-one picture's first four results, rearranged
+into two rows; its example weights are not a real model. Data-supply comparison
+explicitly resets the same inputs between runs.
+
+A portable `learning-path-1` envelope, shared navigator/player, planner and node
+prompt context replace a hand-wired sequence. Actual rules and trusted scene
+adapters remain concept-specific. Unknown questions do not fabricate an AI answer.
+Returning restores a paused scene; narration, captions and static poses share each
+node's cue plan. This is authored local HTML, not automatic API generation or
+catalog release. Results and artifact identities are in the S3 journal; independent
+truth, owner actual-device, beginner learning and release decisions remain pending.

@@ -85,7 +85,8 @@ export class NarrationTransport {
     this.setStatus(this.atEnd ? 'ended' : 'paused');
   }
   reset(): void { this.seek(0); this.setStatus('idle'); }
-  toggleMute(): void { this.media.muted = !this.media.muted; this.changed(); }
+  setMuted(muted: boolean): void { this.media.muted = muted; this.changed(); }
+  toggleMute(): void { this.setMuted(!this.media.muted); }
   private finish(): void {
     this.wanted = false; this.revision++; this.media.pause(); this.setStatus('ended');
   }

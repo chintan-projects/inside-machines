@@ -5,6 +5,7 @@ import json
 
 from .concept_guides import ConceptGuide, guide_for, guide_policy
 from .contracts import LessonSpec
+from .learning_paths import EXPLANATION_CONTRACT, NODE_CONTEXT_POLICY, LearningPath
 from .research import ResearchSpec
 from .starters import digest_spec
 
@@ -140,6 +141,7 @@ No arbitrary code, URLs as drawing assets, unsupported renderer IDs or paid runt
 Keep total narration <=260 words; narration and graphics must explain the same causal change.
 Only output the requested schema. Source URLs must support their associated claim.
 """
+        + EXPLANATION_CONTRACT
         + "\nTrusted concept guide: "
         + json.dumps(
             {"id": guide.id, "representation": guide.representation, "instructions": guide.authoring}
@@ -212,11 +214,26 @@ separate source checkpoint is authoritative. A fresh editorial check will review
     )
 
 
+def path_node_prompt(path: LearningPath, node_id: str, canonical: str, evidence: ResearchSpec) -> str:
+    """Reuse the existing lesson author/schema/evidence route with explicit depth context."""
+    node = next((node for node in path.nodes if node.id == node_id), None)
+    if node is None:
+        raise ValueError("Unknown learning-path node")
+    return lesson_prompt(
+        node.question, canonical, evidence, guide=guide_for(path.title + " " + node.question)
+    ) + NODE_CONTEXT_POLICY + "\nLEARNING_PATH_CONTEXT: " + json.dumps({
+        "path_id": path.id, "root_question": path.title, "shared_example": path.example,
+        "node": node.model_dump(mode="json"),
+        "prerequisites": [n.model_dump(mode="json") for n in path.nodes if n.id in node.prerequisites],
+    })
+
+
 def author_policy_fingerprint() -> str:
     """Invalidate paid draft recovery when shared instructions or any guide changes."""
     return hashlib.sha256(
         (
-            lesson_prompt("", "policy", compact=True) + revision_prompt("", "policy", {}) + guide_policy()
+            lesson_prompt("", "policy", compact=True) + revision_prompt("", "policy", {})
+            + guide_policy() + NODE_CONTEXT_POLICY
         ).encode()
     ).hexdigest()
 
@@ -234,6 +251,7 @@ def review_prompt(spec: LessonSpec, *, decision_only: bool = False, guide: Conce
             "spec_sha256 below. Inspect the ENTIRE draft; do not rewrite or return a lesson. "
             "Reject if any consequential issue needs repair. This automated editorial verdict "
             "is not independent technical certification or a human release approval.\n"
+            + EXPLANATION_CONTRACT +
             "Check causal accuracy, source/claim applicability and locators, material/energy "
             "conservation, flow direction, prerequisite order, plain explanations, prediction "
             "and genuinely different transfer with causal reasoning. Check every core label, "
@@ -268,6 +286,7 @@ scenario outcomes, a colored shell pretending to show an internal process, or ma
 and images that nevertheless describe incorrect physics. Do not claim learning effectiveness.
 Do not downgrade a v2 lesson to bypass checks. For historical v1 checkpoints preserve v1.
 Stay within the scene and narration bounds in the schema.\n"""
+        + EXPLANATION_CONTRACT
         + guidance
         + "\n"
         + spec.model_dump_json()

@@ -11,7 +11,7 @@ const button = (text: string, action: () => void): HTMLButtonElement => {
 };
 
 /** Mount a trusted lesson adapter into an empty shell; rendering is always derived. */
-export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Lesson<T>): StudioAPI {
+export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Lesson<T>, options: { readonly embedded?: boolean } = {}): StudioAPI {
   let time = 0, controls: Controls = { ...lesson.defaultControls }, playing = false;
   let stopAt = lesson.duration, last = 0, raf = 0, hasStarted = false;
   let narrated = false;
@@ -19,7 +19,8 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const renderMode = new URLSearchParams(location.search).has('render');
   const header = element('header');
-  header.append(element('p', 'Inside / a small curiosity'), element('h1', lesson.title), element('p', lesson.summary));
+  if (!options.embedded) header.append(element('p', 'Inside / a small curiosity'));
+  header.append(element(options.embedded ? 'h2' : 'h1', lesson.title), element('p', lesson.summary));
   const main = element('main');
   const actions = element('div'); actions.className = 'actions'; actions.setAttribute('role', 'group');
   actions.setAttribute('aria-label', 'Explore the explanation');
@@ -54,7 +55,7 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
   }) : undefined;
   const audioBusy = (): boolean => narrated && (audio?.status === 'starting' || audio?.status === 'waiting');
   const pause = button('Pause', () => playing || audioBusy() ? api.pause() : api.play());
-  pause.id = 'pause'; pause.hidden = true;
+  pause.id = options.embedded ? `${lesson.id}-pause` : 'pause'; pause.hidden = true;
   const mute = button('Mute narration', () => { audio?.toggleMute(); draw(); }); mute.hidden = !audio;
   const soundStatus = element('p');
   soundStatus.className = 'sound-status'; soundStatus.setAttribute('role', 'status');
@@ -69,7 +70,7 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
     } else run(tour);
     revealScene();
   });
-  watch.id = 'watch-listen'; watch.className = 'primary'; actions.append(watch);
+  watch.id = options.embedded ? `${lesson.id}-watch-listen` : 'watch-listen'; watch.className = 'primary'; actions.append(watch);
   timeline.append(pause, button('Reset', () => api.reset()), mute, scrub);
   const questionResets: (() => void)[] = [];
   let lastDescription = '', lastView = '', labelsKey = '', lastContent = '';
@@ -82,7 +83,7 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
     const vp = scene.viewport ?? { x: 0, y: 0, width: 720, height: 620 };
     svg.setAttribute('viewBox', `${vp.x} ${vp.y} ${vp.width} ${vp.height}`);
     stage.style.aspectRatio = `${vp.width}/${vp.height}`;
-    stage.style.width = `min(100%,calc(72vh * ${vp.width} / ${vp.height}))`;
+    stage.style.width = `min(100%,calc(var(--stage-height,72vh) * ${vp.width} / ${vp.height}))`;
     const content = scene.contentKey ?? scene.svg;
     if (content !== lastContent) { svg.innerHTML = scene.svg; lastContent = content; }
     scene.attributes?.forEach(update => svg.querySelectorAll(update.selector).forEach(node => {
@@ -111,7 +112,7 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
       : `${audio ? `Computer narration · ${lesson.duration} seconds.` : 'This study is silent.'} Try-it-yourself experiments are silent.`;
     if (soundStatus.textContent !== status) soundStatus.textContent = status;
     const visible = lesson.controlsVisible(state);
-    controlArea.hidden = !visible; advanced.hidden = !visible;
+    controlArea.hidden = !visible; advanced.hidden = !visible || !lesson.controls.some(c => c.advanced);
     const values = lesson.controlValues(state);
     controlButtons.forEach(item => item.button.setAttribute('aria-pressed', String(values[item.key] === item.value)));
     pause.hidden = !hasStarted;
@@ -157,16 +158,20 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
       if (!definition?.options.some(o => o.value === value)) throw new Error('Unsupported lesson control');
       run(lesson.controlRestart({ ...controls, ...lesson.controlValues(pose()), [key]: value }));
     },
+    setMuted(muted: boolean): void {
+      if (typeof muted !== 'boolean') throw new Error('Unsupported audio preference');
+      audio?.setMuted(muted); draw();
+    },
     getState(): ReturnType<StudioAPI['getState']> { return { ...pose(), time, playing, controls: { ...controls },
       narrated, audioStatus: audio?.status ?? 'unavailable', muted: audio?.muted ?? false }; },
   };
   lesson.actions.forEach(action => {
-    const b = button(action.label, () => run(action)); b.id = action.id; actions.append(b);
+    const b = button(action.label, () => { run(action); revealScene(); }); b.id = options.embedded ? `${lesson.id}-${action.id}` : action.id; actions.append(b);
   });
   lesson.controls.forEach(control => {
     const group = element('fieldset'); group.append(element('legend', control.label));
     control.options.forEach(option => {
-      const b = button(option.label, () => api.setControl(control.key, option.value));
+      const b = button(option.label, () => { api.setControl(control.key, option.value); revealScene(); });
       b.dataset.control = control.key; b.dataset.value = option.value;
       controlButtons.push({ key: control.key, value: option.value, button: b }); group.append(b);
     }); (control.advanced ? advanced : controlArea).append(group);

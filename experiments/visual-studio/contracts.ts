@@ -85,6 +85,7 @@ export interface StudioAPI {
   pause(): void;
   reset(): void;
   setControl(key: string, value: string): void;
+  setMuted(muted: boolean): void;
   getState(): FrameState & { readonly playing: boolean; readonly controls: Controls;
     readonly narrated: boolean; readonly audioStatus: string; readonly muted: boolean };
 }

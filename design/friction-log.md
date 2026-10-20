@@ -369,3 +369,25 @@ GPU artifact/claim/iteration record: `journal/2026-10-19-gpu-study.md` and
   not intelligibility or physical speaker output. 390px phone viewport is separate
   from an actual iPhone/VoiceOver test. New media does not accept the quality bar,
   certify GPU claims or release the lesson. Vercel/catalog/vacuum remain unchanged.
+
+## 2026-10-19–20: GPU-S3 complete core with optional depth
+
+Owner observed an incomplete causal explanation in GPU and vacuum. The new local
+GPU entry traces program → data → calculation → stored output, with optional
+insight, data-supply and matrix nodes. The worksheet and exact artifact evidence
+are in `design/lessons/gpu-depth.md` and `journal/2026-10-20-gpu-depth.md`.
+
+- High, observed/fixed: one principle was presented as the whole GPU explanation.
+  A complete worked example now precedes optional depth; human comprehension pending.
+- High, observed/fixed: control changes happened above the visible area, and waiting
+  labels persisted after completion. Scene reveal and completed/idle state corrected.
+- Medium, observed/fixed (BUG-010): pressed Unmute text became white on paper. Solid
+  green pressed background restored; actual computed colors and phone render checked.
+- Observed: stable bent-path instruction/data copies, exact matrix and pixel results,
+  paused return points, consistent mute, offline narration, reduced-motion stills,
+  saved-question navigation and honest missing coverage. No implicit AI calls.
+- Observed: 390/768/1280 logical-view samples have no horizontal overflow or text
+  beyond the canvas; smallest measured text is 14.23px. Supported brightness numeral
+  pairs exceed 4.5:1. No full WCAG/VoiceOver/actual-phone certification is implied.
+- Inferred: utility/usability 4/5, desirability/surprise 3/5, with reasons in journal.
+  Owner craft and independent beginner learning remain unmeasured; no release pass.

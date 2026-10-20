@@ -24,8 +24,8 @@ bugs:
     title: Appliance explanations lack visible component labels and beginner causal staging
     severity: high
     status: open
-    evidence: Earlier AC, vacuum and four-engine candidates rejected; owner now gives positive craft feedback on local Claude/Anatomy vacuum; GPU candidate unreviewed
-    fix: Local shared studio and pure GPU scheduler built; independent technical, owner actual-phone and beginner acceptance remain pending before catalog release
+    evidence: Owner accepts the teardown that GPU/vacuum explanations omit important connections; new GPU-S3 depth candidate awaits feedback
+    fix: Complete GPU causal spine and optional insight/data/matrix paths implemented locally; original vacuum preserved; independent truth, actual-phone and beginner acceptance remain pending
     regression: tests/backend/test_learning_quality.py; docs/QUALITY-BAR.md
   - id: BUG-005
     title: SVG rasterizer frame dimensions corrupt raw MP4 timing
@@ -62,3 +62,10 @@ bugs:
     evidence: Owner reported silence; GPU-S1 had no media and denied media in CSP
     fix: Embedded computer narration, media-clock captions/scenes, explicit sound controls and scenario interruption; browser playback verified, physical-device audibility pending
     regression: experiments/visual-studio/narration.test.mjs; journal/2026-10-19-gpu-study.md
+  - id: BUG-010
+    title: Muted narration button loses text contrast against transparent timeline background
+    severity: medium
+    status: fixed
+    evidence: Phone render showed white Unmute text on paper because timeline background overrode the pressed state
+    fix: Explicit solid green pressed background; browser computed white on rgb(49 106 87) verified
+    regression: journal/2026-10-20-gpu-depth.md; private gpu-s3-phone-matrix-changed.jpg

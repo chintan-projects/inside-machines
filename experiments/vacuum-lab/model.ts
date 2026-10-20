@@ -1,4 +1,7 @@
 import rawStory from './story.json';
+import type { Point } from '../shared/geometry.ts';
+export { pointAt } from '../shared/geometry.ts';
+export type { Point } from '../shared/geometry.ts';
 
 export interface Beat {
   readonly id: string; readonly start: number; readonly duration: number;
@@ -16,7 +19,6 @@ export interface FrameState {
   readonly time: number; readonly beat: number; readonly angle: number;
   readonly blocked: boolean; readonly air: readonly number[]; readonly dirt: readonly number[];
 }
-export type Point = readonly [number, number];
 export const story: Story = rawStory;
 export const duration = story.beats.reduce((sum, beat) => sum + beat.duration, 0);
 export const ink = '#172432';
@@ -35,22 +37,6 @@ export function stateAt(time: number, blocked = false): FrameState {
     air: blocked ? [] : Array.from({length: 12}, (_, i) => (i / 12 + time * 0.072) % 1),
     dirt: blocked ? [] : Array.from({length: 5}, (_, i) => (i / 5 + time * 0.105) % 1),
   };
-}
-
-/** Map normalized material progress onto adapter-owned geometry. */
-export function pointAt(points: readonly Point[], progress: number): Point {
-  if (points.length < 2 || !Number.isFinite(progress)) throw new Error('Invalid path');
-  const lengths = points.slice(1).map((point, i) => Math.hypot(point[0] - points[i][0], point[1] - points[i][1]));
-  let remaining = Math.max(0, Math.min(1, progress)) * lengths.reduce((sum, length) => sum + length, 0);
-  for (let i = 0; i < lengths.length; i++) {
-    if (remaining <= lengths[i] || i === lengths.length - 1) {
-      const ratio = lengths[i] === 0 ? 0 : remaining / lengths[i];
-      return [points[i][0] + (points[i + 1][0] - points[i][0]) * ratio,
-        points[i][1] + (points[i + 1][1] - points[i][1]) * ratio];
-    }
-    remaining -= lengths[i];
-  }
-  return points[points.length - 1];
 }
 
 /** Fixed collection marks illustrate retained dirt without claiming filtration efficiency. */

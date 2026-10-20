@@ -60,3 +60,39 @@ These checks are defense in depth for
 manually inspected local authoring, not a safe arbitrary-code sandbox. A future
 production adoption must translate the craft into trusted declarative adapters,
 preserve publication/quality gates and align narration/video/static checkpoints.
+
+## Complete core and optional depth (GPU-S3)
+
+The page now consumes `learning-path-1`: core, insight and model nodes reference
+trusted lessons, questions/outcomes, prerequisites, forward edges and reviewed
+query aliases. `path-player.ts` owns navigation and ephemeral mounted-player state;
+returning restores the paused scene and optional answers, with a consistent mute
+preference. No automatic replay or model call occurs on navigation. Reload begins
+the linked node afresh. Unknown/ambiguous questions report missing coverage.
+
+`backend.learning_paths` supplies the same versioned planning schema, validation
+and a provider-neutral `path_prompt`. `backend.prompts.path_node_prompt` reuses the
+existing lesson author/evidence contract, adding the root question, shared example,
+node scope and prerequisites. The author recovery policy fingerprints those rules.
+Planner and node-author helpers prepare requests; they do not create another
+provider, bypass reservations or enable a production path-generation endpoint.
+
+The build validates real path JSON in both Python and TypeScript, rejects unknown
+lesson refs/cycles/unreachable nodes, and emits `learning-path.schema.json` for API
+integration. A vacuum structural fixture proves the envelope has no GPU-specific
+fields; it is not a new vacuum lesson. Topic-specific arithmetic/physics and drawing
+adapters still need authoring and review. Current GPU depth is deliberately authored,
+not evidence that arbitrary AI-generated topics achieve this quality automatically.
+
+```sh
+node experiments/gpu-study/narrate.mjs
+node experiments/gpu-study/narrate-depth.mjs
+node experiments/visual-studio/build.mjs gpu
+node --test experiments/gpu-study/*.test.mjs experiments/visual-studio/*.test.mjs experiments/shared/*.test.mjs
+```
+
+To revoice just one reviewed node, pass its plan ID to `narrate-depth.mjs`. Each
+cue is checked against its scene duration; the build binds every embedded track
+to the script hash. The four-track single HTML is about 4.4 MB, with no network
+needed after loading. No MP4 export, hosted publication, universal simulation or
+arbitrary AI follow-up generation is claimed. See ADR 0004 and the GPU-S3 journal.

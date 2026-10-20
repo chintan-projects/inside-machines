@@ -25,7 +25,7 @@ export async function renderNarration(plan,dir) {
     await writeFile(text,cue.text);
     execute('/usr/bin/say',['-v',voice,'-r',String(wordsPerMinute),'-f',text,'-o',raw]);
     const spoken=duration(raw), available=cue.end-cue.start;
-    if(spoken>available)throw new Error(`Cue ${i} exceeds its scene: ${spoken.toFixed(3)} > ${available}`);
+    if(spoken>available)throw new Error(`${plan.id} cue ${i} exceeds its scene: ${spoken.toFixed(3)} > ${available}`);
     execute('ffmpeg',['-v','error','-y','-i',raw,'-af',`apad=whole_dur=${available}`,
       '-t',String(available),'-ar','24000','-ac','1',wav]);
     clips.push({start:cue.start,end:cue.end,spoken_seconds:spoken,file:wav});
