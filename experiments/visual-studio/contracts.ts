@@ -43,6 +43,21 @@ export interface Source {
   readonly url: string;
   readonly locator: string;
 }
+export interface NarrationCue {
+  readonly start: number;
+  readonly end: number;
+  readonly text: string;
+  /** Reviewed scene pose for this cue when reduced motion is requested. */
+  readonly still: number;
+}
+export interface NarrationPlan {
+  readonly id: string;
+  readonly duration: number;
+  readonly cues: readonly NarrationCue[];
+}
+export interface Narration extends NarrationPlan {
+  readonly src: string;
+}
 export interface Lesson<T extends FrameState> {
   readonly id: string;
   readonly title: string;
@@ -56,6 +71,7 @@ export interface Lesson<T extends FrameState> {
   readonly takeaway: string;
   readonly scope: string;
   readonly sources: readonly Source[];
+  readonly narration?: Narration;
   stateAt(time: number, controls: Controls): T;
   render(state: T): Scene;
   controlsVisible(state: T): boolean;
@@ -69,7 +85,8 @@ export interface StudioAPI {
   pause(): void;
   reset(): void;
   setControl(key: string, value: string): void;
-  getState(): FrameState & { readonly playing: boolean; readonly controls: Controls };
+  getState(): FrameState & { readonly playing: boolean; readonly controls: Controls;
+    readonly narrated: boolean; readonly audioStatus: string; readonly muted: boolean };
 }
 
 declare global {

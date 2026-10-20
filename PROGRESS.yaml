@@ -6,6 +6,7 @@ current:
 - Vacuum CE-5 rebuilt with trusted section artwork; shared detail-first player in review
 - Four engine candidates rejected; local Claude/Anatomy trial adds a shared-state bag-wall view
 - Owner likes local vacuum; GPU study tests a shared studio with a pure dependency model
+- GPU narration embedded; shared audio clock, captions and sound controls verified locally
 - Artifact-bound review workbench; AC agent engineering passed; human gates pending
 - Gmail owns the live app, Neon and private Blob; GitHub login connection pending
 - All 17 assets copied and verified; nine hosted videos retain their byte hashes
@@ -26,6 +27,7 @@ verification:
 - Local study has four state tests, decoded boundary checks and browser/offline review; learning unmeasured
 - Claude trial passes 184 backend tests (87.20%); 451-frame scan and three inset tests; human gates pending
 - GPU study passes 185 backend tests (87.55%) and four domain tests; browser checks pass; human gates pending
+- Seven audio/caption regressions pass; offline, seek, mute, interruption and reduced-motion audio observed
 - Migration preserves specs, private history and ledger; protected runtime and media checks pass
 sessions:
 - date: '2026-10-19'
@@ -33,4 +35,4 @@ sessions:
 - date: '2026-10-19'
   result: Claude local trial and explicit Codex teaching window built; no universal system selected
 - date: '2026-10-19'
-  result: Positive vacuum feedback; local GPU and reusable studio built; Vercel unchanged
+  result: Local GPU/studio built; missing audio fixed with zero API cost; Vercel unchanged

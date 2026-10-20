@@ -95,3 +95,28 @@ Review 390/768/1280 widths in at most three bounded craft rounds, keyboard,
 seeking/reset, reduced motion and loaded offline playback. Engineering tests do
 not establish learning. Technical, actual-device, five-beginner and owner release
 gates remain pending; owner can judge this candidate's craft separately.
+
+## GPU-S2: restore sound deliberately (2026-10-19)
+
+Observed failure: the owner expected audio, but GPU-S1 contained no narration
+track and its CSP denied media. This is a playback omission, not evidence of a
+muted phone. Preserve the silent HTML and its SHA before replacing the local view.
+
+Bounded hypothesis: an explicit “Watch & listen” action with embedded computer
+narration will play an intelligible story whose words, captions and depicted jobs
+agree at arbitrary seek/pause points. A lane, dependency or data change must stop
+that fixed narration before the scenario changes. The G1–G4 claim ledger above
+still applies; add no performance claims. Transfer rubric and human learning
+hypothesis stay unchanged. Grant: words follow visible job states; Feynman: short
+causal sentences; Veritasium: retain prediction and transfer; Anatomy: retain the
+whole-board locator and independent labeled logical view.
+
+CE-08/11/14/18 implementation: one authored cue plan drives local speech synthesis,
+spoken captions and reduced-motion stills. Embedded MP3 provides offline playback
+without a provider call. The media clock drives the tour, with explicit play
+failure, pause, seek, reset, mute and stale-request handling. Free exploration is
+silent and must say so. No autoplay, device volume changes or narrated MP4 claim.
+Review browser decoding/advancing clock, seeking, completion, interruption, offline,
+keyboard and reduced-motion behavior separately from actual speaker/phone audibility.
+Record the new artifact hash and missing human evidence; do not promote a catalog
+lesson or claim the broader quality bar has passed.

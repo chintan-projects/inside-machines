@@ -109,3 +109,16 @@ this trial. No `backend.quality`/publication result is claimed for a non-LessonS
 artifact. Engineering tests, source inspection and craft feedback do not certify
 GPU hardware accuracy or learning. Exact results and limitations live in the
 [journal](../../journal/2026-10-19-gpu-study.md).
+
+## Local GPU-S2: missing sound correction
+
+Owner reported missing audio. GPU-S1 was silent; the omission was in the artifact,
+not a diagnosed device problem. The brief adds a bounded CE-08/11/14/18 iteration
+before writing the script. One eight-cue plan now drives embedded local computer
+speech, captions and reviewed reduced-motion stills. The media clock drives the
+tour; changing any experiment stops the voice before its fixed script can disagree
+with the scenario. Watch/listen, pause/resume, seek, replay, reset and mute are
+explicit. Browser playback, loaded-offline use, failure UI and interruption are
+observed; audio content is non-silent and hash-bound. Actual phone/speaker and
+beginner learning checks remain pending. This supplies narrated HTML, not MP4
+parity or production publication. Preserve GPU-S1's silent artifact and evidence.

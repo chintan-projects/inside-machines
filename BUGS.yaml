@@ -55,3 +55,10 @@ bugs:
     evidence: Gmail CLI Git reconnect returned Add a Login Connection; manual deployment succeeds but automatic Git deployment is not linked
     fix: Owner connects chintan-projects GitHub to Gmail Vercel; then reconnect original private repository and verify a Git-triggered deployment
     regression: docs/DEPLOYMENT-OWNERSHIP.md
+  - id: BUG-009
+    title: Local GPU example has no audio track despite expected narration
+    severity: high
+    status: fixed
+    evidence: Owner reported silence; GPU-S1 had no media and denied media in CSP
+    fix: Embedded computer narration, media-clock captions/scenes, explicit sound controls and scenario interruption; browser playback verified, physical-device audibility pending
+    regression: experiments/visual-studio/narration.test.mjs; journal/2026-10-19-gpu-study.md

@@ -4,10 +4,13 @@ import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
+import {gpuNarration} from '../gpu-study/narration.ts';
+import {validateNarration} from './narration.ts';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 // A registry is enough. New studies add a trusted entry and separately reviewed artwork.
-const studies=Object.freeze({gpu:{operation:'gpu-art-1',entry:'experiments/gpu-study/entry.ts',title:'How does a GPU work?'}});
+const studies=Object.freeze({gpu:{operation:'gpu-art-1',entry:'experiments/gpu-study/entry.ts',title:'How does a GPU work?',
+  narration:gpuNarration,audioDirectory:'gpu-s2-audio'}});
 const study=process.argv[2]||'gpu';
 if(!Object.hasOwn(studies,study))throw new Error('Unsupported local study');
 const selected=studies[study], operation=selected.operation;
@@ -21,6 +24,15 @@ const [original,art,repairs,css,license]=await Promise.all([
   readFile(path.join(root,'vendor/anatomy/LICENSE'),'utf8'),
 ]);
 const sha=s=>createHash('sha256').update(s).digest('hex');
+const plan=selected.narration;
+validateNarration(plan);
+const audioDir=path.join(privateDir,selected.audioDirectory);
+const [mp3,audioManifest]=await Promise.all([readFile(path.join(audioDir,'narration.mp3')),
+  readFile(path.join(audioDir,'manifest.json'),'utf8').then(JSON.parse)]);
+if(audioManifest.plan_sha256!==sha(JSON.stringify(plan))||audioManifest.mp3_sha256!==sha(mp3)||
+    audioManifest.story_seconds!==plan.duration||Math.abs(audioManifest.encoded_seconds-plan.duration)>.15) {
+  throw new Error('Narration asset does not match the reviewed cue plan');
+}
 if(repairs.original_sha256!==sha(original)||repairs.reviewed_sha256!==sha(art))throw new Error('Art repair chain mismatch');
 const forbidden=[/\bfetch\s*\(/,/\bXMLHttpRequest\b/,/\bWebSocket\b/,/\bimport\s*\(/,
   /\beval\s*\(/,/\bFunction\s*\(/,/\blocalStorage\b/,/\bsessionStorage\b/,/\bserviceWorker\b/,
@@ -39,9 +51,11 @@ const metadata={study,operation,model:receipt.models,input_tokens:receipt.input_
   prompt_sha256:receipts.jobs[operation].prompt_sha256,config_sha256:receipts.jobs[operation].config_sha256,
   list_price_cost_usd:receipt.cost_usd,trial_accounted_usd:receipts.spent,api_art_sha256:sha(original),art_sha256:sha(art),
   runtime_sha256:sha(runtime),player_sha256:sha(player),manual_repairs:repairs.changes,
+  narration:{...audioManifest,clips:undefined},
   craft_feedback:'pending for GPU; vacuum received positive owner feedback',technical_review:'pending',learning:'unmeasured'};
 const script=code=>`<script>${code.replaceAll('</script','<\\/script')}</script>`;
-const csp="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; media-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'";
-const html=`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="${csp}"><title>${selected.title}</title><style>${css}</style></head><body><div id="app"></div><noscript>This interactive local draft needs JavaScript. Its core idea: independent jobs can run together; a dependent job must wait for its input. More lanes cannot remove a dependency.</noscript><footer class="provenance"><p><a href="http://127.0.0.1:8067/">Revisit the vacuum example</a></p><details><summary>About this local Claude + Anatomy study</summary><p>Claude authored the board and logical artwork. Codex authored the exact toy scheduler, teaching adapter, shared player and listed art repairs. This is a manually inspected local code-authoring experiment; production consumes validated lesson data instead. Viewing makes no model call. No narrated video export is included. Human technical, actual-device, learning and release gates remain pending.</p><pre>${JSON.stringify(metadata,null,2).replaceAll('<','&lt;')}</pre></details></footer>${script('/* Anatomy MIT license\n'+license+'*/\n'+runtime)}${script(art)}${script(player)}</body></html>`;
+const csp="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; media-src data:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'";
+const narration=script(`window.studioNarration=${JSON.stringify({planId:plan.id,src:'data:audio/mpeg;base64,'+mp3.toString('base64')})};`);
+const html=`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="${csp}"><title>${selected.title}</title><style>${css}</style></head><body><div id="app"></div><noscript>This interactive local draft needs JavaScript. Its core idea: independent jobs can run together; a dependent job must wait for its input. More lanes cannot remove a dependency.</noscript><footer class="provenance"><p><a href="http://127.0.0.1:8067/">Revisit the vacuum example</a></p><details><summary>About this local Claude + Anatomy study</summary><p>Claude authored the board and logical artwork. Codex authored the exact toy scheduler, teaching adapter, shared player and listed art repairs. Narration is embedded local computer speech (Samantha); captions follow the same cue plan. This is a manually inspected local code-authoring experiment; production consumes validated lesson data instead. Viewing makes no model call. No MP4 export is included. Human technical, actual-device, learning and release gates remain pending.</p><pre>${JSON.stringify(metadata,null,2).replaceAll('<','&lt;')}</pre></details></footer>${script('/* Anatomy MIT license\n'+license+'*/\n'+runtime)}${script(art)}${narration}${script(player)}</body></html>`;
 await mkdir(out,{recursive:true});await writeFile(path.join(out,'index.html'),html);
 await writeFile(path.join(privateDir,operation+'-studio-manifest.json'),JSON.stringify({...metadata,html_sha256:sha(html)},null,2));

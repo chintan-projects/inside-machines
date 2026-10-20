@@ -351,3 +351,21 @@ GPU artifact/claim/iteration record: `journal/2026-10-19-gpu-study.md` and
   for the physical board, 3/5 for the logical plate; surprise 3/5. These are agent
   judgments. Owner GPU craft, independent truth and five-beginner transfer remain
   pending. The local trial does not promote a catalog lesson or change Vercel.
+
+## 2026-10-19: GPU-S2 missing audio (BUG-009)
+
+- High, owner observed: “audio is not coming through.” Source inspection found no
+  narration/audio track in GPU-S1 and a CSP that denied media. The earlier silence
+  was an implementation omission; it was not evidence of a device volume problem.
+- Fixed locally: explicit Watch & listen, embedded 42-second Samantha computer
+  narration, matching captions and a shared media clock. Free experiments state
+  that they are silent and stop the fixed voice before any scenario change.
+- Observed in Chrome: decoded media, advancing clock, unmuted volume 1, pause,
+  seek to 22.25 with matching chain/caption, keyboard timeline/replay/reset, mute,
+  loaded-offline playback, reduced-motion stills with continuing speech, endpoint
+  at 42, visible decode failure and successful reload recovery. Seven additional
+  transport/caption regressions cover stale play promises and failures.
+- Audio is non-silent (FFmpeg mean -17.1 dBFS, peak -2.1 dBFS). This measures signal,
+  not intelligibility or physical speaker output. 390px phone viewport is separate
+  from an actual iPhone/VoiceOver test. New media does not accept the quality bar,
+  certify GPU claims or release the lesson. Vercel/catalog/vacuum remain unchanged.
