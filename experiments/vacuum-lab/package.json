@@ -1,0 +1,17 @@
+{
+  "name": "inside-vacuum-production-study",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@motion-canvas/core": "3.17.2",
+    "@motion-canvas/2d": "3.17.2",
+    "@remotion/bundler": "4.0.537",
+    "@remotion/renderer": "4.0.537",
+    "remotion": "4.0.537",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "esbuild": "0.28.2",
+    "puppeteer": "25.14.0",
+    "@resvg/resvg-js": "2.6.2"
+  }
+}

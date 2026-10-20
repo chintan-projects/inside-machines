@@ -251,3 +251,30 @@ Agent rubric (judgment, not release approval): the causal job is prominent — u
 sections carry consistent material/detail choices — desirability 4/5; the blocked
 path comparison is useful, but learner delight is unobserved — surprise 3/5 inferred.
 The owner's verdict and five-beginner transfer evidence remain missing. BUG-004 open.
+
+## Vacuum production comparison · local authored study · 2026-10-19
+
+Evidence: ignored `.vercel/vacuum-lab/review-desktop.jpg`, `review-phone.jpg` and
+encoded media; [record](../journal/2026-10-19-vacuum-production-study.md).
+
+Agent observations across 390/768/1280 widths, not an actual-device owner walk:
+
+- High: the initial Play control appeared below a tall image. Moved controls above
+  it; Play is now visible on the checked initial phone viewport.
+- High: the first Manim treatment repeated a small whole-machine schematic. Rebuilt
+  its fan/nozzle/bag as independent, larger causal views before reassembly.
+- High: exact chapter seek could show a preceding Manim shot for one frame. Fixed
+  the clock; decoded title checks now cover 12/23/34-second boundaries.
+- Medium: small Anatomy labels and framing reduced phone legibility. Enlarged both;
+  preserved the real kit output, readable core labels and the connected air path.
+- Medium: tablet split layout narrowed the picture. Tablet now uses the full width.
+- Medium: experiment copy and narration repeated the same explanation. Replaced the
+  experiment duplicate with an observation cue; narration is an optional disclosure.
+- Observed: matched-time switching, block/restore, static frames, Escape, keyboard
+  tabs/range, reduced-motion initialization and loaded-page offline playback work.
+- Inferred: Manim's closeups are clearer causally and Anatomy's physical construction
+  more tangible. No beginner preference, transfer result or owner approval is implied.
+
+Direct-file opening could not be automated because browser policy permits HTTP/HTTPS
+only. Loopback HTTP review succeeded. Real phone, VoiceOver, fresh file opening,
+independent technical review and five-beginner learning remain unmeasured. BUG-004 open.

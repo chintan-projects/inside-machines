@@ -1,0 +1,49 @@
+{
+  "version": "vacuum-comparison-1",
+  "question": "What actually picks up the dirt?",
+  "scope": "Illustrative bagged cleaner. Not an exact appliance or a measured simulation.",
+  "width": 960,
+  "height": 720,
+  "fps": 24,
+  "beats": [
+    {
+      "id": "fan", "start": 0, "duration": 12,
+      "title": "A fan makes air move.",
+      "short": "Move air",
+      "explanation": "The motor turns a fan. Moving air out lowers the pressure inside, so room air flows in.",
+      "narration": "An electric motor turns a fan. The fan moves air out, lowering air pressure inside the cleaner. That gives room air a reason to flow in.",
+      "claims": ["V1"]
+    },
+    {
+      "id": "inlet", "start": 12, "duration": 11,
+      "title": "Moving air carries loose dirt.",
+      "short": "Carry dirt",
+      "explanation": "Room air enters through the nozzle and hose. Loose dirt travels with it.",
+      "narration": "Air flows through the nozzle and hose, carrying loose dirt with it. Blue markers stand for air; dark specks stand for dirt.",
+      "claims": ["V1", "V2"]
+    },
+    {
+      "id": "bag", "start": 23, "duration": 11,
+      "title": "Air passes through. Dirt stays.",
+      "short": "Keep dirt",
+      "explanation": "A porous bag catches dirt. Air passes through the bag material, then continues to the fan and outlet.",
+      "narration": "A porous bag catches dirt while letting air through its material. The air continues to the fan and leaves through the outlet.",
+      "claims": ["V3"]
+    },
+    {
+      "id": "whole", "start": 34, "duration": 10,
+      "title": "One open path. Three jobs.",
+      "short": "Together",
+      "explanation": "These jobs happen together. The chapters only change what we look at.",
+      "narration": "The fan moves air. The air carries dirt. The bag keeps it. These jobs happen together, along one open path.",
+      "claims": ["V1", "V2", "V3"]
+    }
+  ],
+  "experiment": {
+    "duration": 12,
+    "title": "Still turning. No fresh dirt coming in.",
+    "explanation": "With the inlet sealed, there is no sustained throughflow to carry fresh dirt. A running motor is not enough.",
+    "narration": "The fan is still turning. But with the inlet sealed, there is no continuous air path to carry fresh dirt in. A running motor is not enough.",
+    "claims": ["V4"]
+  }
+}
