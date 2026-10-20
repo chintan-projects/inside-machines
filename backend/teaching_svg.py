@@ -8,6 +8,7 @@ from PIL import Image, ImageOps
 
 from .contracts import LessonSpec, Part
 from .renderer_assets import ac_renderer_fingerprint, authored_context
+from .section_assets import section_asset
 from .settings import ROOT
 from .teaching_contracts import Change
 from .teaching_state import sampled_pose, scenario_for, teaching_at
@@ -45,10 +46,15 @@ def graphic_scene(spec: LessonSpec, seconds: float, scenario_id: str | None = No
     changes = {c.target: c for c in beat.changes}
     if scenario:
         changes.update({c.target: c for c in scenario.changes})
-    return "".join(
+    art, replaced = (
+        section_asset(spec, beat.stage)
+        if spec.teaching and spec.teaching.renderer == "authored-sections-v1"
+        else ("", set())
+    )
+    return art + "".join(
         graphic_svg(p, changes.get(p.id), progress)
         for p in sorted(spec.graphics, key=lambda p: p.layer)
-        if p.id in beat.graphics
+        if p.id in beat.graphics and p.id not in replaced
     )
 
 
@@ -67,6 +73,8 @@ def teaching_svg(spec: LessonSpec, seconds: float, scenario_id: str | None = Non
     teaching = spec.teaching
     if teaching is None:
         raise ValueError("CE export requires teaching data")
+    if teaching.renderer == "authored-sections-v1":
+        return focused_svg(spec, seconds, scenario_id)
     beat, progress = teaching_at(spec, seconds)
     scenario = scenario_for(spec, beat, scenario_id)
     stage = spec.stages[beat.stage]
@@ -102,6 +110,42 @@ def teaching_svg(spec: LessonSpec, seconds: float, scenario_id: str | None = Non
         body += '<text x="500" y="410" font-size="16">Pause and predict. Test it in the lesson.</text>'
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 650" font-family="Inter" fill="#29383d"><rect width="960" height="650" fill="#f3f2ee"/>'
+        + body
+        + "</svg>"
+    )
+
+
+def focused_svg(spec: LessonSpec, seconds: float, scenario_id: str | None = None) -> str:
+    """Versioned detail-first composition; historical paired exports stay unchanged."""
+    teaching = spec.teaching
+    if teaching is None:
+        raise ValueError("CE export requires teaching data")
+    beat, progress = teaching_at(spec, seconds)
+    scenario = scenario_for(spec, beat, scenario_id)
+    body = wrapped_lines(spec.stages[beat.stage].title, 40, 55, 62, 30)
+    body += wrapped_lines(beat.bridge, 40, 93, 100, 16)
+    body += '<rect x="40" y="119" width="880" height="405" rx="14" fill="#f6f9fc"/>'
+    body += '<svg x="135" y="119" width="690" height="414" viewBox="0 0 900 540">'
+    whole = beat.stage == len(teaching.beats) - 1 and progress > 0.5 and scenario_id is None
+    art = section_asset(spec, -1)[0] if whole else graphic_scene(spec, seconds, scenario_id)
+    body += art + "</svg>"
+    body += wrapped_lines(teaching.operation_note if whole else beat.static_explanation, 40, 557, 92, 17)
+    body += wrapped_lines(
+        f"Step {beat.stage + 1} of {len(teaching.beats)} · Qualitative cutaway", 40, 625, 100, 13
+    )
+    if scenario:
+        body += wrapped_lines(scenario.outcome, 470, 625, 55, 13)
+    if scenario_id is None and (
+        (beat.stage == 0 and progress < 0.15) or (beat.stage == len(teaching.beats) - 1 and progress > 0.9)
+    ):
+        task = teaching.prediction if beat.stage == 0 else teaching.transfer
+        body += '<rect x="140" y="159" width="680" height="324" rx="14" fill="#ffffff" stroke="#b8cbe4"/>'
+        body += wrapped_lines(task.prompt, 180, 228, 48, 24)
+        body += (
+            '<text x="180" y="443" font-size="16">Pause and predict. Explore the change in the lesson.</text>'
+        )
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 650" font-family="Inter" fill="#263b55"><rect width="960" height="650" fill="#ffffff"/>'
         + body
         + "</svg>"
     )

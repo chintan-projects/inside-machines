@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" data-replaces="vi-floor-edge vi-floor-top vi-floor-seam-0 vi-floor-seam-1 vi-floor-seam-2 vi-floor-seam-3 vi-nozzle-depth vi-nozzle-shell vi-nozzle-passage vi-hose-back vi-hose-air-space vi-hose-cuff vi-hose-rib-0 vi-hose-rib-1 vi-hose-rib-2 vi-hose-rib-3 vi-left-foot vi-right-foot">
+<defs>
+ <linearGradient id="vn-shell" x2=".4" y2="1"><stop stop-color="#c1d1e2"/><stop offset=".45" stop-color="#8ba3be"/><stop offset="1" stop-color="#425e7d"/></linearGradient>
+ <linearGradient id="vn-tube" x2="1" y2="0"><stop stop-color="#405c7b"/><stop offset=".3" stop-color="#acc3d8"/><stop offset=".55" stop-color="#deebf5"/><stop offset="1" stop-color="#536e8a"/></linearGradient>
+ <linearGradient id="vn-wood" x2="0" y2="1"><stop stop-color="#e4d8c5"/><stop offset="1" stop-color="#baaa93"/></linearGradient>
+</defs>
+<g transform="translate(0 10)"><rect x="50" y="420" width="800" height="29" rx="3" fill="url(#vn-wood)" stroke="#ab9b84" stroke-width="2"/>
+<path d="M50 423 H850 M50 433 H850 M50 447 H850" fill="none" stroke="#b6a58b" stroke-width="1"/>
+<path d="M128 424 l11 23 M320 424 l10 23 M515 424 l10 23 M709 424 l11 23" stroke="#ad9a7d" stroke-width="2"/>
+</g>
+<!-- A cut face opens the plenum down to the floor gap. -->
+<path d="M269 377 L337 281 Q348 264 369 264 H475 Q496 264 510 284 L612 379 V405 H269Z" fill="#344d69" stroke="#2d455f" stroke-width="2"/>
+<path d="M245 372 L325 269 Q337 254 356 254 H476 Q492 254 506 271 L592 372 V394 H245Z" fill="url(#vn-shell)" stroke="#4c6886" stroke-width="2"/>
+<path d="M269 394 L348 295 Q359 283 373 283 H452 Q469 283 480 298 L562 394Z" fill="#eaf4ff" stroke="#96b1cd" stroke-width="2"/>
+<path d="M269 394 L348 295 Q359 283 373 283 H452 Q469 283 480 298 L562 394" fill="none" stroke="#d6e4f3" stroke-width="6"/>
+<path d="M256 374 L330 275 Q341 263 358 263 H476" fill="none" stroke="#d9e5f1" stroke-width="3"/>
+<path d="M243 394 H278 V404 H243Z M557 394 H592 V404 H557Z" fill="#243b54" stroke="#1c3148" stroke-width="2"/>
+<rect x="383" y="137" width="80" height="146" rx="9" fill="url(#vn-tube)" stroke="#4b6783" stroke-width="2"/>
+<rect x="400" y="137" width="46" height="161" fill="#eaf4ff"/>
+<g fill="#a4b9cf" stroke="#587592" stroke-width="1.5"><path d="M381 151H398V159H381ZM448 151H465V159H448Z"/><path d="M381 177H398V185H381ZM448 177H465V185H448Z"/><path d="M381 203H398V211H381ZM448 203H465V211H448Z"/><path d="M381 229H398V237H381ZM448 229H465V237H448Z"/></g>
+<path d="M379 254H400V274H379Z M446 254H467V274H446Z" fill="url(#vn-tube)" stroke="#526e8b" stroke-width="2"/>
+<g fill="#d7e3ef" stroke="#4a6581" stroke-width="2"><circle cx="303" cy="361" r="5"/><circle cx="540" cy="361" r="5"/></g>
+<g stroke="#4e6c89" stroke-width="2"><path d="M300 361H306 M537 361H543"/></g>
+</svg>

@@ -44,7 +44,7 @@ def teaching_issues(spec: LessonSpec) -> list[str]:
     if teaching is None:
         return ["CE lessons require a teaching contract"]
     issues: list[str] = []
-    if teaching.renderer == "declarative" and any(p.motion for p in spec.parts):
+    if teaching.renderer != "ac-cutaway-v2" and any(p.motion for p in spec.parts):
         issues.append("CE context parts must be static; causal motion belongs to teaching graphic changes")
     if teaching.renderer == "ac-cutaway-v2":
         from .renderer_assets import ac_renderer_fingerprint
@@ -59,6 +59,20 @@ def teaching_issues(spec: LessonSpec) -> list[str]:
     graphics = {p.id: p for p in spec.graphics}
     claims = {c.id: c for c in teaching.claims}
     for beat in teaching.beats:
+        if teaching.renderer == "authored-sections-v1":
+            from .section_assets import section_asset
+
+            try:
+                _, replaced = section_asset(spec, beat.stage)
+                moving = {c.target for c in beat.changes} | {
+                    c.target for s in teaching.scenarios if s.beat == beat.id for c in s.changes
+                }
+                if moving & replaced:
+                    issues.append("Static artwork cannot replace an animated mechanism identity")
+                if not replaced <= set(beat.graphics):
+                    issues.append("Artwork replaces unknown geometry")
+            except ValueError:
+                issues.append("Authored section revision is unavailable; preserve its original media")
         stage = spec.stages[beat.stage]
         if not any(graphics[id].shape == "text" and graphics[id].label.strip() for id in beat.graphics):
             issues.append(f"Beat {beat.id} needs a labeled self-contained causal detail view")

@@ -24,8 +24,8 @@ bugs:
     title: Appliance explanations lack visible component labels and beginner causal staging
     severity: high
     status: open
-    evidence: Human review of AC screenshots finds unlabeled narrated parts and confusing four-stage cycle
-    fix: CE-1 causal insets, shared media, prediction/transfer and evidence gates deployed for protected review; independent technical, actual-phone and beginner acceptance pending
+    evidence: Owner repeatedly rejects AC and vacuum phone craft; tiny locator and control stack obscure mechanism
+    fix: Shared detail-first player and authored vacuum section candidate built for isolated protected review; independent technical, owner actual-phone and beginner acceptance pending
     regression: tests/backend/test_learning_quality.py; docs/QUALITY-BAR.md
   - id: BUG-005
     title: SVG rasterizer frame dimensions corrupt raw MP4 timing

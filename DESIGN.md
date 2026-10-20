@@ -92,3 +92,23 @@ roughly 4:3; mobile uses a separate stacked arrangement with its next action clo
 Genericness check: a neutral dashboard with a larger SVG would repeat the rejected
 solution. The distinctive move is the room experiment changing the same physical
 scene and its energy outcome, with a six-action story supplying the orientation.
+
+### 2026-10-19 vacuum rejection: a focused workbench
+
+The owner's phone screenshot rejected the small box-like locator and oversized
+control stack. The causal detail now comes first, with one adjacent action and a
+secondary expandable whole-system locator. The last step opens the whole-system
+locator to reconnect the parts. This shared structure applies to other domains.
+
+White (#FFFFFF) keeps attention on the object. A cool inspection surface (#F6F9FC)
+distinguishes the cut face from the page. Graphite (#202D3B) carries explanation;
+blue (#2676DF) marks directional airflow and brown (#C5823C) marks retained dirt,
+with arrow versus particle shape so color is never the only signal. Blue controls
+(#225BDF) identify the single next action. This replaces the rejected cream/sage
+stack; changing color alone is not the craft improvement.
+
+Trusted, original section artwork supplies curved shells, recesses, material
+shading, couplings, fins, screws and texture on real surfaces. The lesson still
+owns the same safe poses, paths, labels and qualitative outcomes. The asset set is
+SHA-bound to the new revision; historical drawings/videos retain their identity.
+The generic player does not gain vacuum-specific interaction rules.

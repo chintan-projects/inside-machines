@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" data-replaces="vf-shadow vf-outlet-back vf-outlet-passage vf-housing-depth vf-housing-rim vf-air-chamber vf-shaft vf-bearing vf-motor-back vf-motor-core vf-winding-0 vf-winding-1 vf-winding-2 vf-winding-3 vf-winding-4 vf-motor-end vf-motor-foot vf-impeller-back">
+<defs>
+ <linearGradient id="vf-steel" x2="0" y2="1"><stop stop-color="#e4edf6"/><stop offset=".24" stop-color="#aabed1"/><stop offset=".5" stop-color="#e1e9f3"/><stop offset="1" stop-color="#7088a3"/></linearGradient>
+ <linearGradient id="vf-case" x2=".8" y2="1"><stop stop-color="#748ba8"/><stop offset=".45" stop-color="#405b79"/><stop offset="1" stop-color="#283f5a"/></linearGradient>
+ <linearGradient id="vf-copper" x2="0" y2="1"><stop stop-color="#e8c7a3"/><stop offset=".3" stop-color="#cb955e"/><stop offset=".7" stop-color="#ad713a"/><stop offset="1" stop-color="#e2b78a"/></linearGradient>
+ <radialGradient id="vf-recess"><stop stop-color="#c8deef"/><stop offset=".75" stop-color="#dbe9f5"/><stop offset="1" stop-color="#8aa7c2"/></radialGradient>
+</defs>
+<ellipse cx="492" cy="443" rx="283" ry="15" fill="#dfe7f0"/>
+<!-- Tangential outlet and a sectioned volute. No air path crosses the motor. -->
+<path d="M383 150 C444 138 481 153 516 183 L604 183 L604 130 L387 130 Z" fill="url(#vf-case)" stroke="#304862" stroke-width="2"/>
+<path d="M386 142 H615 V178 H482" fill="#d7e8f7" stroke="#809db8" stroke-width="2"/>
+<path d="M393 154 H615" fill="none" stroke="#f8fcff" stroke-width="3"/>
+<path d="M531 285 C531 207 482 153 403 153 L384 153 C303 153 247 209 247 289 C247 370 305 431 386 431 L404 431 C481 431 531 370 531 285Z" fill="url(#vf-case)" stroke="#2d435e" stroke-width="2"/>
+<circle cx="376" cy="290" r="143" fill="url(#vf-steel)" stroke="#516c88" stroke-width="2"/>
+<circle cx="376" cy="290" r="131" fill="#f8fbff" stroke="#7d98b3" stroke-width="2"/>
+<circle cx="376" cy="290" r="121" fill="url(#vf-recess)" stroke="#6a88a7" stroke-width="2"/>
+<path d="M280 364 A121 121 0 0 0 473 365" fill="none" stroke="#6b88a5" stroke-width="5"/>
+<!-- Shaft meets a bearing and the motor end face. -->
+<rect x="401" y="278" width="213" height="18" rx="5" fill="url(#vf-steel)" stroke="#4d6682" stroke-width="2"/>
+<path d="M532 272 H552 V305 H532Z" fill="#677f99" stroke="#3e5672" stroke-width="2"/>
+<path d="M537 273 H544 V304 H537Z" fill="#c8d6e5"/>
+<!-- A cylindrical motor with visible laminated shell, windings and end caps. -->
+<rect x="590" y="230" width="144" height="116" rx="15" fill="url(#vf-case)" stroke="#354e6b" stroke-width="2"/>
+<path d="M609 233 H701 V340 H609 Z" fill="url(#vf-copper)" stroke="#8a6444" stroke-width="2"/>
+<g fill="none" stroke="#895e3b" stroke-width="2"><path d="M616 237V336M629 237V336M642 237V336M655 237V336M668 237V336M681 237V336M694 237V336"/></g>
+<g stroke="#f0d4b6" stroke-width="2"><path d="M619 238V335M632 238V335M645 238V335M658 238V335M671 238V335M684 238V335M697 238V335"/></g>
+<path d="M594 235 Q584 288 594 341 H607 V235Z" fill="url(#vf-steel)" stroke="#4b6581" stroke-width="2"/>
+<path d="M704 233 Q728 226 735 242 V335 Q724 352 704 342Z" fill="url(#vf-steel)" stroke="#4b6581" stroke-width="2"/>
+<g fill="#425c78"><rect x="716" y="250" width="5" height="66" rx="2"/><rect x="727" y="254" width="4" height="59" rx="2"/></g>
+<path d="M605 345 H722 L739 362 H595Z" fill="#5e7692" stroke="#3e5671" stroke-width="2"/>
+<g fill="#c7d6e6" stroke="#516a85" stroke-width="2"><circle cx="608" cy="353" r="4"/><circle cx="721" cy="353" r="4"/></g>
+<!-- Rim fasteners sit on the housing, not in the air passage. -->
+<g fill="#e9f0f7" stroke="#5b7490" stroke-width="2"><circle cx="277" cy="194" r="6"/><circle cx="477" cy="194" r="6"/><circle cx="277" cy="386" r="6"/><circle cx="477" cy="386" r="6"/></g>
+<g stroke="#607990" stroke-width="2"><path d="M274 194h6M474 194h6M274 386h6M474 386h6"/></g>
+<circle cx="376" cy="293" r="92" fill="#92abc3" stroke="#5c7996" stroke-width="2"/>
+<circle cx="376" cy="293" r="86" fill="#c1d2e3" stroke="#d9e5f0" stroke-width="2"/>
+</svg>

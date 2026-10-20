@@ -211,3 +211,43 @@ labels. Utility/usability are observed for this copy change; visual craft is
 otherwise unchanged, and no new surprising teaching moment is claimed. This is
 one focused copy/compatibility pass, not the three craft rounds for a new lesson.
 GPU/LLM representations and human learning remain unbuilt/unmeasured. No deployment.
+
+## 2026-10-19 — vacuum phone owner rejection
+
+Observed, high severity (CE-04/05/14): owner's iPhone screenshot puts a tiny whole
+machine and several component controls above the actual causal mechanism. Ambiguous
+fan label and crude housing undermine trust. Earlier desktop emulation missed this
+first-screen failure. Next iteration: detail first, rebuilt physical close-ups,
+secondary locator. Actual-phone approval and beginner learning remain pending.
+
+### Vacuum iteration: three agent critique rounds (owner acceptance pending)
+
+1. **390 / 768 / 1280, seen:** hierarchy put the working detail first and moved the
+   locator into disclosure. Labels became readable, but primitive surfaces still
+   looked generic. Added trusted curved/shaded housings, couplings, fins, screws,
+   shaft and bag texture. Found oversized arrows crossing the floor opening;
+   corrected marker size and passage alignment. Typography/focus/targets inspected.
+2. **390 / 768 / 1280, seen:** keyframe markers converged into one symbol. Staggered
+   the paths and added non-merging/hose-boundary regressions. The same safe poses
+   drive web and export. Replaced a repeated clogged-bag question with transfer to
+   a different blocked component: the hose. No horizontal overflow observed.
+3. **390 / 768 / 1280, seen:** comparison controls below the explanation hid the
+   changed diagram while selecting a condition. Moved the condition directly
+   above the scene and made a choice explicitly replay its modeled change. The
+   outcome sits below the drawing. Fixed narrated base/comparison mismatch,
+   returned the video to the whole system, and corrected a clipped reassembly line
+   using actual bundled-font bounds. Phone navigation text and reset target enlarged.
+
+Final local observations: labeled working detail and action fit the phone viewport;
+condition and consequence share a screen; 768/1280 content width equals viewport.
+Keyboard slider and Escape from native detail dialog work. Reduced motion reveals
+final states on request. Explicitly saved lesson reloads offline and the bag
+comparison still works. Browser overrides restored. Decoded 24 fps MP4 frames show
+matching artwork and the full-system return. These are agent/emulation observations,
+not actual-device, VoiceOver, independent technical or beginner-learning approval.
+
+Agent rubric (judgment, not release approval): the causal job is prominent — utility
+4/5; navigation/action/condition are explicit — usability 4/5; original physical
+sections carry consistent material/detail choices — desirability 4/5; the blocked
+path comparison is useful, but learner delight is unobserved — surprise 3/5 inferred.
+The owner's verdict and five-beginner transfer evidence remain missing. BUG-004 open.

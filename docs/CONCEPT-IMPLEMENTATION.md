@@ -138,3 +138,20 @@ Vercel ownership migration still holds deployment.
 
 Local Linux deployment packaging also passes; both functions include the new trusted
 concept-guide module. No production push/deployment was performed.
+
+## Detail-first authored section capability — 2026-10-19
+
+The additive CE-1 renderer capability `authored-sections-v1` combines a trusted,
+content-addressed artwork set with existing validated primitive poses. Its trusted
+startup registry is in `backend/section_assets.py`, mirrored by bundled client
+assets. Models and clients cannot supply file paths, markup, URLs or registry code.
+Static SVG surfaces declare which primitive identities they replace; replacing an
+animated or scenario-dependent identity fails quality checks. Unknown fingerprints
+stop export/publication; the web reader preserves the original video/text.
+
+`bagged-vacuum-ce-5` uses this capability and the existing publication engine.
+Its focus composition is versioned; historical `declarative`/AC exports retain the
+paired layout. The shared web player puts the detail before the locator for all
+CE-1 lessons, without changing their mechanism, stage meaning, media or progress IDs.
+This is an authored draft, not proof that arbitrary generated scenes meet the
+craft bar. No new provider call or factual certification is implied.

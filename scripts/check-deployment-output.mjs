@@ -17,7 +17,7 @@ for (const { path, config } of functions) {
   const names = Object.keys(config.filePathMap || {});
   assert.ok(!names.some(name => name === '.env.local' || name.startsWith('.data/') || name === '.vercel/alpha-access.json'), `${path}: private local inputs must be excluded`);
   assert.ok(names.some(name => name.endsWith('public/fonts/Inter.ttf')), `${path}: the diagram font must be bundled`);
-  for (const asset of ['ac-outside.svg', 'ac-inside.svg']) assert.ok(names.some(name => name.endsWith(`public/figures/${asset}`)), `${path}: immutable cutaway sources must be bundled`);
+  for (const asset of ['ac-outside.svg', 'ac-inside.svg', 'vacuum-fan.svg', 'vacuum-nozzle.svg', 'vacuum-bag.svg', 'vacuum-context.svg']) assert.ok(names.some(name => name.endsWith(`public/figures/${asset}`)), `${path}: immutable cutaway sources must be bundled`);
   assert.ok(names.some(name => name.includes('resvg_py/') && name.endsWith('.so')), `${path}: the Linux SVG rasterizer must be bundled`);
   assert.ok(names.some(name => name.includes('_shared/services/model_gateway/')), `${path}: actual shared gateway must be bundled`);
   assert.ok(names.some(name => name.includes('imageio_ffmpeg/binaries/') && name.includes('linux')), `${path}: Linux video encoder must be bundled`);

@@ -12,6 +12,7 @@ import { usePlayer } from './usePlayer';
 import { scenarioFor } from './state';
 import { Cutaway, acSceneHash } from './Context';
 import { Detail } from './Detail';
+import { hasSectionArtwork } from './Sections';
 import { Prediction, Transfer } from './Assessment';
 import { Evidence } from './Evidence';
 import { api, errorMessage } from '../api';
@@ -22,6 +23,7 @@ export function TeachingStudio(props:Props):ReactElement {
   const teaching=props.lesson.spec.teaching;
   if(!teaching || !props.lesson.spec.graphics?.length) return <p role="alert" className="error">This lesson’s teaching data is incomplete. Reconnect and reopen it.</p>;
   if(teaching.renderer==='ac-cutaway-v2'&&teaching.renderer_fingerprint!==acSceneHash)return <EarlierRevision {...props}/>;
+  if(teaching.renderer==='authored-sections-v1'&&!hasSectionArtwork(props.lesson.spec))return <EarlierRevision {...props}/>;
   return <Studio {...props} teaching={teaching}/>;
 }
 function EarlierRevision({lesson,member,online}:Props):ReactElement {
@@ -31,17 +33,15 @@ function EarlierRevision({lesson,member,online}:Props):ReactElement {
 function Studio({lesson,member,online,teaching}:{readonly teaching:TeachingSpec}&Props):ReactElement {
   const audio=useRef<HTMLAudioElement>(null),video=useRef<HTMLVideoElement>(null),transfer=useRef<HTMLElement>(null);
   const reduced=useMedia('(prefers-reduced-motion:reduce)'), player=usePlayer(lesson,member,audio,reduced);
-  const compact=useMedia('(max-width:760px)');
-  const [whole,setWhole]=useState(false);
   const assets=useLessonAssets(lesson,member,online);
   const [begun,setBegun]=useState(player.seconds>0),[scenarioId,setScenario]=useState<string|undefined>(),[attempt,setAttempt]=useState(0);
   const [consent,setConsent]=useState(false),[countError,setCountError]=useState(''),[prediction,setPrediction]=useState<number|null>(null);
   const {spec}=lesson, {beat,progress}=player, stage=spec.stages[beat.stage],last=beat.stage===spec.stages.length-1;
   const scenario=scenarioFor(spec,beat,scenarioId), options=teaching.scenarios.filter(s=>s.beat===beat.id);
-  const showContext=(context:'outside'|'inside'|'none'='outside'):ReactElement=>teaching.renderer==='ac-cutaway-v2'?<Cutaway context={context} focus={begun&&compact&&!whole&&!last&&beat.stage!==0?stage.focus:undefined} onSelect={begun?inspect:undefined}/>:<Scene spec={spec} seconds={player.seconds} selected={stage.focus} zoom={begun&&compact&&!whole&&!last}/>;
+  const showContext=(context:'outside'|'inside'|'none'='outside'):ReactElement=>teaching.renderer==='ac-cutaway-v2'?<Cutaway context={context} onSelect={begun?inspect:undefined}/>:<Scene spec={spec} seconds={player.seconds} selected={stage.focus}/>;
   function jump(index:number):void {
-    video.current?.pause();setScenario(undefined);setWhole(false);player.jump(index);
-    if(matchMedia('(max-width:760px)').matches) requestAnimationFrame(()=>document.querySelector('.ce-instruction')?.scrollIntoView({behavior:reduced?'instant':'smooth',block:'start'}));
+    video.current?.pause();setScenario(undefined);player.jump(index);
+    requestAnimationFrame(()=>document.querySelector('.ce-workspace')?.scrollIntoView({behavior:reduced?'instant':'smooth',block:'start'}));
   }
   function inspect(id:string):void {
     const index=spec.stages.findIndex(s=>s.focus===id);
@@ -67,21 +67,24 @@ function Studio({lesson,member,online,teaching}:{readonly teaching:TeachingSpec}
   }
   return <article className="ce-studio">
     <header className="ce-heading"><div><p>{spec.family}</p><h1>{spec.question}</h1><span className="ce-review-status">{lesson.review_needed?'Teaching draft · review in progress':'Reviewed generic explanation'}</span></div><LessonSaveButton online={online} saved={assets.saved} saving={assets.saving} save={assets.save}/></header>
+    {lesson.superseded_by&&<p className="ce-revision-note">This earlier draft is preserved with your conversation. <a href={`#/lesson/${lesson.superseded_by}`}>Open the revised explanation</a></p>}
     {(player.error||assets.saveError)&&<p className="error" role="alert">{player.error||assets.saveError}</p>}
     {!begun?<div className="ce-intro"><figure>{showContext()}<figcaption>{spec.summary}</figcaption></figure><Prediction key={attempt} task={teaching.prediction} onContinue={choice=>{setPrediction(choice);count(choice===null?'prediction_skipped':'prediction_attempted');setBegun(true);jump(0);}}/></div>:<>
       <section className="ce-workspace" aria-label="Build the explanation">
         <nav className="ce-steps" aria-label="Learning steps"><p>Follow the cause</p><ol>{teaching.beats.map((b,i)=><li key={b.id}><button aria-current={i===beat.stage?'step':undefined} onClick={()=>jump(i)}><span>{i+1}</span>{b.short}</button></li>)}</ol><button className="ce-reset" aria-label="Start over" title="Start over" onClick={reset}><RotateCcw size={15}/>Start over</button></nav>
         <div className="ce-main">
-          <div className="ce-instruction"><span className="ce-overline">{beat.stage+1} / {spec.stages.length}</span><h2>{stage.title}</h2><p>{beat.bridge}</p></div>
+          <div className="ce-instruction"><span className="ce-overline">Step {beat.stage+1} of {spec.stages.length}</span><h2>{stage.title}</h2><p>{beat.bridge}</p></div>
+          {options.length>0&&<section className="ce-scenarios" aria-label="Test a different setup"><h3>{teaching.renderer==='ac-cutaway-v2'?'Where does the hot coil release its heat?':'Change one condition'}</h3><div role="group" aria-label="Scenario">{options.map(s=><button key={s.id} aria-pressed={scenario?.id===s.id} onClick={()=>{video.current?.pause();setScenario(s.id);player.change();}}>{s.label}</button>)}</div></section>}
           <div className="ce-visuals">
-            <figure className="ce-machine">{showContext(scenario?.context)}<figcaption>Locate it in the system</figcaption>{compact&&(teaching.renderer==='declarative'||beat.stage!==0)&&!last&&<button className="ce-whole" onClick={()=>setWhole(!whole)}>{whole?'Focus on this component':teaching.renderer==='ac-cutaway-v2'?'See both units':'See the whole system'}</button>}<div className="ce-components" aria-label="Locate a working component">{teaching.core.map(id=><button key={id} aria-pressed={stage.focus===id} onClick={()=>inspect(id)}>{spec.parts.find(p=>p.id===id)?.name||id}</button>)}</div></figure>
             <Detail spec={spec} seconds={player.seconds} scenario={scenarioId} still={reduced} progress={progress}/>
           </div>
+          {scenario&&options.length>0&&<p className="ce-condition-outcome" role="status">{scenario.outcome}</p>}
+          <div className="ce-animation"><span>Before</span><input aria-label="Inspect the change" type="range" min="0" max="1" step=".01" value={progress} onChange={e=>{video.current?.pause();player.scrub(Number(e.target.value));}}/><span>After</span></div>
+          <footer className="ce-actions"><button aria-label="Previous learning step" disabled={beat.stage===0} onClick={()=>jump(beat.stage-1)}><ArrowLeft size={18}/></button><button className="ce-primary" onClick={primary}>{player.moving?'Show the result':progress<.99?beat.action:last?'Try a new situation':`Next: ${teaching.beats[beat.stage+1].short}`}</button><button aria-label="Replay this change" onClick={()=>{video.current?.pause();count('change_replayed');player.change();}}><Play size={17}/></button></footer>
           <div className="ce-state-strip" aria-label="Qualitative state">{beat.properties.map(p=><div key={p.name}><span>{p.name}</span><strong>{progress<.01?p.before:progress>.99?p.after:`${p.before} → ${p.after}`}</strong></div>)}</div>
           <p className="ce-static-explanation">{beat.static_explanation}</p>
-          <div className="ce-animation"><span>Before</span><input aria-label="Inspect the change" type="range" min="0" max="1" step=".01" value={progress} onChange={e=>{video.current?.pause();player.scrub(Number(e.target.value));}}/><span>After</span></div>
-          {options.length>0&&<section className="ce-scenarios" aria-label="Test a different setup"><h3>{teaching.renderer==='ac-cutaway-v2'?'Where does the hot coil release its heat?':'Change one condition'}</h3><div role="group" aria-label="Scenario">{options.map(s=><button key={s.id} aria-pressed={scenario?.id===s.id} onClick={()=>{video.current?.pause();player.scrub(1);setScenario(s.id);}}>{s.label}</button>)}</div>{scenario&&<div role="status"><strong>{scenario.outcome}</strong><p>{scenario.explanation}</p><small>Qualitative comparison · schematic changes, not measured predictions</small></div>}</section>}
-          <footer className="ce-actions"><button aria-label="Previous learning step" disabled={beat.stage===0} onClick={()=>jump(beat.stage-1)}><ArrowLeft size={18}/></button><button className="ce-primary" onClick={primary}>{player.moving?'Show the result':progress<.99?beat.action:last?'Try a new situation':`Next: ${teaching.beats[beat.stage+1].short}`}</button><button aria-label="Replay this change" onClick={()=>{video.current?.pause();count('change_replayed');player.change();}}><Play size={17}/></button></footer>
+          {scenario&&options.length>0&&<details className="ce-comparison-note"><summary>Why this changes the result</summary><p>{scenario.explanation}</p><small>Qualitative comparison · schematic paths, not measured predictions</small></details>}
+          <details key={beat.id} className="ce-locator" open={last}><summary>See where this fits in the whole system</summary><figure className="ce-machine">{showContext(scenario?.context)}<figcaption>Whole-system locator · use the component buttons to revisit a step</figcaption><div className="ce-components" aria-label="Locate a working component">{teaching.core.map(id=><button key={id} aria-pressed={stage.focus===id} onClick={()=>inspect(id)}>{spec.parts.find(p=>p.id===id)?.name||id}</button>)}</div></figure></details>
         </div>
       </section>
       <div className="ce-playback"><button disabled={!lesson.video_ready||player.loading} onClick={()=>void listen()}>{player.listening?<Pause size={16}/>:<Headphones size={16}/>} {player.loading?'Loading narration…':player.listening?'Pause narration':'Listen to the explanation'}</button><p>{teaching.operation_note}</p></div>

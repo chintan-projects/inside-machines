@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" role="img" aria-label="Generic bagged canister vacuum cutaway: floor nozzle and hose lead to a porous bag, then a powered fan and outlet.">
+<defs>
+ <linearGradient id="vc-case" x2=".2" y2="1"><stop stop-color="#9ab1ca"/><stop offset=".5" stop-color="#6985a4"/><stop offset="1" stop-color="#344f6e"/></linearGradient>
+ <linearGradient id="vc-rim" x2="0" y2="1"><stop stop-color="#dce7f3"/><stop offset=".5" stop-color="#90a9c4"/><stop offset="1" stop-color="#587493"/></linearGradient>
+ <linearGradient id="vc-tire" x2="1" y2=".3"><stop stop-color="#1b3048"/><stop offset=".7" stop-color="#3f5873"/><stop offset="1" stop-color="#1d334c"/></linearGradient>
+ <linearGradient id="vc-paper" x2="1" y2=".2"><stop stop-color="#dfc39a"/><stop offset=".45" stop-color="#f4e3c6"/><stop offset="1" stop-color="#ba9d73"/></linearGradient>
+</defs>
+<ellipse cx="491" cy="466" rx="320" ry="17" fill="#dfe7f0"/>
+<!-- The handle and rear wheel are behind the shell. -->
+<path d="M474 186V163Q474 140 496 140H596Q616 140 616 163V180H595V167Q595 161 588 161H502Q496 161 496 168V186Z" fill="#3d5673" stroke="#2a425d" stroke-width="2"/>
+<ellipse cx="703" cy="400" rx="61" ry="64" fill="#293f58"/>
+<!-- Curved molded shell, opened on one side. -->
+<path d="M332 297Q337 213 434 202L650 191Q742 197 776 267L796 344Q809 405 742 431L426 446Q346 439 335 379Z" fill="url(#vc-case)" stroke="#38536f" stroke-width="2"/>
+<path d="M334 292Q346 225 431 215L650 205Q722 208 755 263L766 292Z" fill="#a8bed5" stroke="#5b7897" stroke-width="2"/>
+<path d="M356 288Q372 245 430 238L651 227Q710 230 733 271L748 379Q709 408 654 408L421 420Q367 416 358 378Z" fill="#d6e4f1" stroke="#6583a0" stroke-width="3"/>
+<path d="M374 301Q381 268 432 259L648 248Q692 250 713 283L729 365Q697 390 646 391L424 403Q385 399 377 371Z" fill="#edf4fa" stroke="#9bb2cb" stroke-width="2"/>
+<path d="M357 288Q375 242 430 236L651 225Q709 228 735 270" fill="none" stroke="#e8f0f8" stroke-width="4"/>
+<!-- Hose coupling enters the bag neck on the left. -->
+<path d="M155 376V203C155 139 175 122 209 122S272 136 281 188L296 269Q302 293 340 299" fill="none" stroke="#334f6c" stroke-width="32" stroke-linecap="round"/>
+<path d="M155 376V203C155 139 175 122 209 122S272 136 281 188L296 269Q302 293 340 299" fill="none" stroke="#8ba5c0" stroke-width="24" stroke-linecap="round"/>
+<path d="M150 376V203C150 144 173 127 209 127S267 141 276 189L291 270Q297 298 340 304" fill="none" stroke="#bfd0e1" stroke-width="5" stroke-linecap="round"/>
+<g fill="none" stroke="#496582" stroke-width="3"><path d="M141 340H169M141 324H169M141 308H169M141 292H169M141 276H169M141 260H169M141 244H169M141 228H169M141 212H169"/><path d="M142 196L170 199M145 179L173 186M152 161L177 174M165 144L184 163M184 132L194 157M204 128L207 153M224 129L219 154M244 136L232 158M260 149L241 168M273 168L249 180M279 189L254 194M283 210L258 215M286 231L262 236M290 252L266 257M296 272L274 285M310 287L298 311M329 293L326 318"/></g>
+<path d="M333 281H367V319H333Z" fill="url(#vc-rim)" stroke="#4f6b87" stroke-width="2"/>
+<path d="M367 288H409V311H367Z" fill="#b9cada" stroke="#66849e" stroke-width="2"/>
+<path d="M405 273Q459 256 510 267L536 381Q482 397 416 383Z" fill="url(#vc-paper)" stroke="#ad8e64" stroke-width="2"/>
+<path d="M421 277L432 371Q475 384 520 375 M499 271L521 371" fill="none" stroke="#c6ab81" stroke-width="2"/>
+<!-- Fan and motor are connected behind the bag, with a visible exhaust grille. -->
+<path d="M580 271L580 389" stroke="#9eb3cb" stroke-width="8"/>
+<circle cx="623" cy="327" r="47" fill="url(#vc-rim)" stroke="#506f8d" stroke-width="2"/>
+<circle cx="623" cy="327" r="38" fill="#bfd3e6" stroke="#7695b2" stroke-width="2"/>
+<path d="M623 295L635 315L655 323L636 335L629 358L615 339L594 330L612 317Z" fill="#f0f6fc" stroke="#63819f" stroke-width="2"/>
+<circle cx="623" cy="327" r="9" fill="#4f6b89"/>
+<path d="M663 321H685V334H663Z" fill="#8aa4bf" stroke="#54718e" stroke-width="2"/>
+<rect x="683" y="308" width="27" height="41" rx="6" fill="#c49a6b" stroke="#856848" stroke-width="2"/>
+<path d="M690 312V346M697 312V346M704 312V346" stroke="#e6c69e" stroke-width="2"/>
+<g stroke="#425f7c" stroke-width="4"><path d="M755 308L761 341M762 303L768 336M769 300L775 330"/></g>
+<ellipse cx="448" cy="422" rx="55" ry="58" fill="url(#vc-tire)" stroke="#253d57" stroke-width="2"/>
+<ellipse cx="443" cy="418" rx="40" ry="43" fill="url(#vc-rim)" stroke="#496783" stroke-width="2"/>
+<ellipse cx="443" cy="418" rx="26" ry="29" fill="#526f8c" stroke="#afc3d6" stroke-width="2"/>
+<ellipse cx="443" cy="418" rx="10" ry="12" fill="#d0deec"/>
+<!-- A broad low floorhead; wand seats into the swivel cuff. -->
+<path d="M101 381L180 381L225 419L218 436H75L71 420Z" fill="#496782" stroke="#304b66" stroke-width="2"/>
+<path d="M101 381L180 381L216 413H80Z" fill="url(#vc-rim)" stroke="#54718e" stroke-width="2"/>
+<path d="M81 417H216V429H81Z" fill="#253f5a"/>
+<ellipse cx="155" cy="383" rx="21" ry="11" fill="#7f9ab5" stroke="#395672" stroke-width="2"/>
+<rect x="145" y="361" width="20" height="22" rx="4" fill="url(#vc-rim)" stroke="#3e5e7d" stroke-width="2"/>
+<g fill="#304862" font-family="Inter,Arial,sans-serif" font-size="42" font-weight="550">
+ <text x="67" y="505">Nozzle</text><text x="485" y="505">Porous bag</text><text x="606" y="114">Fan</text>
+</g>
+<g fill="none" stroke="#6d87a2" stroke-width="2"><path d="M133 469L140 434"/><path d="M550 469L489 385"/><path d="M640 125L624 278"/></g>
+<g fill="#607e9b"><circle cx="140" cy="434" r="3"/><circle cx="489" cy="385" r="3"/><circle cx="624" cy="278" r="3"/></g>
+</svg>

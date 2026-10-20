@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" data-replaces="vb-case-back vb-case-inside vb-intake-tube vb-intake-passage vb-bag vb-bag-inside vb-bag-neck vb-bag-fold vb-bag-seam vb-fan-partition vb-fan-housing vb-fan vb-outlet-space vb-outlet-louver-0 vb-outlet-louver-1 vb-outlet-louver-2">
+<defs>
+ <linearGradient id="vb-wall" x2="0" y2="1"><stop stop-color="#d7e4f0"/><stop offset="1" stop-color="#829db9"/></linearGradient>
+ <linearGradient id="vb-paper" x2="1" y2=".2"><stop stop-color="#dec49b"/><stop offset=".2" stop-color="#f8e8cc"/><stop offset=".7" stop-color="#edd7b4"/><stop offset="1" stop-color="#b99a6f"/></linearGradient>
+ <pattern id="vb-fiber" width="15" height="17" patternUnits="userSpaceOnUse"><path d="M0 2L15 5 M0 11L15 14 M4 0L6 17" stroke="#b99e76" stroke-width=".7" opacity=".4"/></pattern>
+ <linearGradient id="vb-steel" x2="0" y2="1"><stop stop-color="#d5e3ef"/><stop offset=".5" stop-color="#93abc4"/><stop offset="1" stop-color="#5e7a97"/></linearGradient>
+</defs>
+<!-- Physical chamber surrounds the bag; its right wall contains the fan inlet. -->
+<path d="M160 143L190 120H763L763 420L744 448H160Z" fill="#718ca8" stroke="#4b6783" stroke-width="2"/>
+<path d="M160 143H744V448H160Z" fill="url(#vb-wall)" stroke="#597590" stroke-width="2"/>
+<path d="M177 159H726V429H177Z" fill="#e9f1f9" stroke="#8fa8c2" stroke-width="2"/>
+<path d="M177 429L196 410H726" fill="none" stroke="#b8cbdf" stroke-width="3"/>
+<path d="M54 212H225V265H54" fill="url(#vb-steel)" stroke="#4c6c89" stroke-width="2"/>
+<path d="M54 225H242V252H54" fill="#eaf4ff" stroke="#b6cde3" stroke-width="1"/>
+<path d="M219 184Q296 169 386 176L410 201L449 400Q346 417 231 400Z" fill="url(#vb-paper)" stroke="#a1845b" stroke-width="2"/>
+<path d="M239 204Q305 192 378 192L396 215L424 381Q337 390 248 378Z" fill="#fff4e1" stroke="#dbc5a0" stroke-width="2"/>
+<path d="M219 184Q296 169 386 176L410 201L449 400Q346 417 231 400Z" fill="url(#vb-fiber)"/>
+<path d="M248 207L256 365L278 393 M386 194L406 219L431 389 M269 399Q330 410 406 398" fill="none" stroke="#b89d74" stroke-width="2"/>
+<path d="M208 207H238V272H208Z" fill="#d4bd98" stroke="#947a55" stroke-width="2"/>
+<path d="M211 213H234 M211 267H234" stroke="#efdfc5" stroke-width="3"/>
+<path d="M589 162H605V416H589Z" fill="url(#vb-steel)" stroke="#6d88a5" stroke-width="2"/>
+<circle cx="607" cy="301" r="69" fill="#39536f" stroke="#2d4560" stroke-width="2"/>
+<circle cx="607" cy="301" r="60" fill="url(#vb-steel)" stroke="#b7cce0" stroke-width="2"/>
+<circle cx="607" cy="301" r="52" fill="#c9dced" stroke="#7291af" stroke-width="2"/>
+<path d="M672 276H810V326H672" fill="#dce9f5" stroke="#8ba5c0" stroke-width="2"/>
+<g fill="#687f98" stroke="#415c78" stroke-width="1"><rect x="744" y="278" width="7" height="47" rx="2"/><rect x="758" y="278" width="7" height="47" rx="2"/><rect x="772" y="278" width="7" height="47" rx="2"/></g>
+<g fill="#e6eef6" stroke="#607f9f" stroke-width="1.5"><circle cx="178" cy="149" r="4"/><circle cx="733" cy="149" r="4"/><circle cx="178" cy="440" r="4"/><circle cx="733" cy="440" r="4"/></g>
+</svg>

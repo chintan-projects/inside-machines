@@ -106,7 +106,7 @@ class TeachingSpec(TeachingModel):
     """CE-1 contract adds causal teaching without reinterpreting v1 artifacts."""
 
     spec_version: Literal["ce-1"]
-    renderer: Literal["ac-cutaway-v2", "declarative"]
+    renderer: Literal["ac-cutaway-v2", "declarative", "authored-sections-v1"]
     renderer_fingerprint: str = Field(default="", pattern=r"^([a-f0-9]{64})?$")
     goal: str = Field(min_length=20, max_length=300)
     misconception: str = Field(min_length=15, max_length=300)

@@ -3,7 +3,7 @@ status: quality_revision
 current:
 - CE-1 contracts, causal player and shared video/static rendering implemented
 - Trusted guides extend the deployed shared engine to physical, GPU and LLM explanations
-- AC, washer and cooker have distinct prediction-to-transfer draft storyboards
+- Vacuum CE-5 rebuilt with trusted section artwork; shared detail-first player in review
 - Artifact-bound review workbench; AC agent engineering passed; human gates pending
 - Gmail owns the live app, Neon and private Blob; GitHub login connection pending
 - All 17 assets copied and verified; nine hosted videos retain their byte hashes
@@ -13,7 +13,7 @@ needs_input:
 - Owner actual-phone craft/accessibility walkthrough
 - Five initially unfamiliar beginners for causal and transfer evaluation
 verification:
-- 163 backend tests including three disposable Postgres tests pass; coverage 86.89 percent
+- 169 backend tests including three disposable Postgres tests pass; coverage 87.66 percent
 - Ruff and strict mypy pass; TypeScript, ESLint, ten JS tests and production build pass
 - Real MP4 revision test preserves parent content and private conversations
 - JS and Python sample the same piecewise path through the actual drain pump
@@ -28,4 +28,4 @@ sessions:
 - date: 2026-10-19
   result: Implemented CE-1 vertical slice and separate review gates; acceptance pending
 - date: '2026-10-19'
-  result: Computing guidance deployed on verified Gmail resources; GitHub authorization handoff pending
+  result: Vacuum craft rebuilt for isolated Gmail preview; production quality release held

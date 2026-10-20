@@ -41,12 +41,23 @@ class ConceptArtifact(BaseModel):
 def authored_lessons() -> list[tuple[LessonSpec, list[str]]]:
     """Trusted startup composition for reviewed-in-source authoring candidates."""
     from .cooker_concept import cooker_concept
+    from .vacuum_concept import vacuum_concept
     from .washer_concept import washer_concept
 
     return [
         (aircon_concept(), ["air-conditioner", "air-conditioner-craft"]),
         (washer_concept(), ["washing-machine"]),
         (cooker_concept(), ["pressure-cooker"]),
+        (
+            vacuum_concept(),
+            [
+                "household-vacuum-cleaner",
+                "household-vacuum-cleaner-ce-6b5e6fa1d2",
+                "bagged-vacuum-ce-2",
+                "bagged-vacuum-ce-3",
+                "bagged-vacuum-ce-4",
+            ],
+        ),
     ]
 
 
@@ -108,7 +119,7 @@ def import_concepts(store: Store, artifacts: list[ConceptArtifact]) -> tuple[int
     return store.transaction(publish)
 
 
-async def render_concepts(settings: Settings) -> None:
+async def render_concepts(settings: Settings, lesson: str | None = None) -> None:
     """Local deterministic authoring uses computer speech, not a paid provider."""
     local = replace(
         settings,
@@ -117,7 +128,7 @@ async def render_concepts(settings: Settings) -> None:
         production=False,
         video_width=1280,
         video_height=866,
-        video_fps=8,
+        video_fps=24,
     )
     artifacts: list[ConceptArtifact] = []
     cached: dict[str, ConceptArtifact] = {}
@@ -135,6 +146,8 @@ async def render_concepts(settings: Settings) -> None:
                 # Changed source or a different local asset directory needs a new render.
                 continue
     for spec, replaces in authored_lessons():
+        if lesson and spec.canonical != lesson:
+            continue
         require_learning_quality(spec)
         if spec.canonical in cached:
             artifacts.append(cached[spec.canonical])
@@ -196,10 +209,11 @@ async def main() -> None:
     """Separate rendering, verified private asset upload and atomic publication."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("render", "prepare", "import"))
+    parser.add_argument("--lesson", choices=[s.canonical for s, _ in authored_lessons()])
     args = parser.parse_args()
     settings = load_settings()
     if args.action == "render":
-        await render_concepts(settings)
+        await render_concepts(settings, args.lesson)
         return
     artifacts = [ConceptArtifact.model_validate(a) for a in json.loads(MANIFEST.read_text())]
     local_assets = Assets(replace(settings, database_url="", blob_token="", production=False))
