@@ -198,3 +198,16 @@ Second lookup reused the new revision without new job/spend. Exact parent/histor
 old-ledger hashes unchanged. These are agent engineering observations, not human
 technical/craft/learning/release approvals. Account audit separately found wrong
 owner identity despite personal-named scope; migration is pending, BUG-007 open.
+
+
+19 October, computing extension (local): observed code forced every topic into a
+real-machine cutaway and disallowed the logical diagrams a GPU/LLM explanation
+requires. Extracted trusted representation/research/review guides; shared CE state,
+claims, assessments and media remain unchanged. Local intake copy reviewed at
+1512/768/375 widths with no page overflow; generic/specific-model choices remain
+legible, and unsupported exact-model requests return honest generic guidance.
+Existing AC seek and component controls still work with neutral system/change
+labels. Utility/usability are observed for this copy change; visual craft is
+otherwise unchanged, and no new surprising teaching moment is claimed. This is
+one focused copy/compatibility pass, not the three craft rounds for a new lesson.
+GPU/LLM representations and human learning remain unbuilt/unmeasured. No deployment.

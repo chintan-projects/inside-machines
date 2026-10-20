@@ -155,6 +155,45 @@
         "returns cached refrigeration lesson",
         "invented universal motor internals"
       ]
+    },
+    {
+      "id": "gpu",
+      "question": "Why can a GPU help with independent work but not remove every dependency?",
+      "family": "parallel computing overview",
+      "must_explain": [
+        "independent work versus prerequisites",
+        "execution resources and scheduling limits",
+        "memory/data availability",
+        "illustrative lanes are not actual hardware counts or benchmarks"
+      ],
+      "misconception": "More GPU lanes guarantee proportional speedup for every workload.",
+      "transfer": "A new chain needs the previous result at every step; what can more lanes alone change?",
+      "critical_errors": [
+        "tasks proceed before required inputs exist",
+        "invented speedups or universal core counts",
+        "NVIDIA-specific execution presented as every GPU",
+        "decorative chip cutaway replaces the computational explanation"
+      ]
+    },
+    {
+      "id": "llm",
+      "question": "How can a language model respond differently to context without changing its learned parameters?",
+      "family": "autoregressive language-model inference",
+      "must_explain": [
+        "tokens and numeric representations",
+        "context processing with attention and other learned transformations",
+        "candidate scores, selection and repeated generation",
+        "training versus inference and declared architecture limits"
+      ],
+      "misconception": "A different reply proves the model permanently learned new weights during the chat.",
+      "transfer": "Add a prompt example with fixed parameters; can candidate scores change, and what does that establish?",
+      "critical_errors": [
+        "one token is always one word",
+        "attention alone presented as the entire model",
+        "probabilities equated with factual truth",
+        "ordinary inference necessarily updates parameters",
+        "illustrative numbers claimed as actual weights or private reasoning"
+      ]
     }
   ]
 }

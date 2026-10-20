@@ -28,8 +28,8 @@ This is an implementation record, not the owner's lesson acceptance. BUG-004 rem
 
 ## Verification in this iteration
 
-Observed: Ruff, strict mypy, 141 backend tests including three disposable Postgres tests,
-86.68% backend coverage; TypeScript, ESLint, ten JavaScript tests and production build pass.
+Observed: Ruff, strict mypy, 163 backend tests including three disposable Postgres tests,
+86.89% backend coverage; TypeScript, ESLint, ten JavaScript tests and production build pass.
 The provider in pipeline tests is synthetic; transactions, media encoding and artifacts are real.
 Linux packaging, browser, hosted runtime and paid generation observations are recorded below
 when completed. Their earlier-revision evidence does not automatically transfer here.
@@ -113,3 +113,28 @@ A separate ownership audit found the deployed source scope uses the work-email
 account despite a personal workspace name. Correct Gmail-account migration of
 project, Neon and Blob is pending; BUG-007 records the issue. Further deployment
 is held. No human technical, actual-phone, beginner or owner gate is inferred.
+
+
+### Local computing extensibility
+
+[ADR 0003](architecture-decisions/0003-extensible-concept-lessons.md) separates the
+shared CE engine from trusted concept guidance. New jobs record the selected guide
+for research, authoring, revision and review. General/physical/GPU/LLM guides reuse
+existing providers, state, scene/pose contracts, evidence, budget and publication.
+Guide changes invalidate author recovery; unknown versions fail before paid work.
+The public lesson schema and existing artifact hashes are unchanged. Computing
+terms normalize for reuse while meaningful subtopic/vendor qualifiers remain.
+
+163 backend tests pass at 86.89% coverage, including real Postgres and new guide/
+cache/routing checks. TS, lint, ten JS tests and production build pass. Local Chrome
+1512/768/375 layouts contain the revised intake; exact-model scope stays honest;
+an existing AC scene still seeks and displays the shared neutral controls. These
+are engineering/copy checks, not GPU/LLM visual or learner evidence.
+
+The GPU and LLM worksheets and fixed cases are plans. No GPU/LLM artifact or paid
+quality evaluation was generated. No new computed simulator, renderer, native
+client or provider is implied. All per-concept human quality gates remain, and
+Vercel ownership migration still holds deployment.
+
+Local Linux deployment packaging also passes; both functions include the new trusted
+concept-guide module. No production push/deployment was performed.

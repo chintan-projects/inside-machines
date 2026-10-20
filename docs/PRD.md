@@ -1,4 +1,17 @@
-# Inside visual machine explainer product requirements
+# Inside visual concept explainer product requirements
+
+## 19 October scope extension: computing concepts
+
+The owner requires the teaching framework to transfer to GPUs, LLMs and later
+concepts. Reuse lesson packages, playback, evidence, assessment, offline/media,
+private chat, provider routing, budget and quality gates. Specialize representation
+and causal rules per domain: physical cutaways for appliances, execution/dependency
+views for GPUs, and token/representation/generation views for a bounded LLM scope.
+[ADR 0003](architecture-decisions/0003-extensible-concept-lessons.md) governs this
+extension. GPU and LLM worksheets and fixed evaluation cases are planning/engineering
+evidence; their actual lessons, paid quality comparisons and human acceptance are
+pending. Broad topic coverage is not promised by a guide entry. Earlier physical
+alpha sequencing below remains dated context, not an assumption baked into the engine.
 
 **Active concept-explanation decision:** [ADR 0001](architecture-decisions/0001-concept-explanation.md)
 and the [teaching spec](CONCEPT-EXPLANATION-SPEC.md) govern explanation quality and

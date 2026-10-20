@@ -35,7 +35,7 @@ class LoginBody(BaseModel):
 
 
 class RequestBody(BaseModel):
-    """Explicit scope prevents silently treating a specific appliance as generic."""
+    """Explicit scope prevents silently treating a specific model as generic."""
 
     question: str = Field(min_length=3, max_length=180)
     scope: Literal["general", "specific"] = "general"
@@ -206,7 +206,7 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
             # Model-specific evidence is private and not a generic cache identity.
             return {
                 "kind": "specific",
-                "message": "This alpha explains general mechanisms. Tell us the machine type to explore a clearly labelled general lesson. Model-specific manuals and photos are planned; we won't invent details for your appliance.",
+                "message": "This alpha explains general concepts. Choose Understand the principles for a clearly labelled general lesson. Exact-model documentation is planned; we won't invent specifications or internals for a particular model.",
                 "model": body.model,
             }
         result = domain.request(body.question, user)

@@ -1,5 +1,11 @@
 # Inside product design brief
 
+**Scope extension:** [ADR 0003](docs/architecture-decisions/0003-extensible-concept-lessons.md)
+adds computational concepts such as GPUs and LLMs to the same learner job. Their
+representations follow the concept: work/dependency views or token transformations
+rather than invented appliance cutaways. The physical alpha and its open quality
+gates remain the first benchmark; no new GPU/LLM lesson is approved by this change.
+
 **Active teaching contract:** [ADR 0001](docs/architecture-decisions/0001-concept-explanation.md)
 and the [concept explanation spec](docs/CONCEPT-EXPLANATION-SPEC.md) govern subsequent
 lesson iterations. Grant's visual reasoning, Feynman's causal simplicity,

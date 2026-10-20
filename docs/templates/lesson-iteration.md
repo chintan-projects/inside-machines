@@ -1,13 +1,13 @@
 # Lesson iteration worksheet
 
-Copy to `design/lessons/<machine>.md`. Follow [ADR 0001](../architecture-decisions/0001-concept-explanation.md)
+Copy to `design/lessons/<concept>.md`. Follow [ADR 0001](../architecture-decisions/0001-concept-explanation.md)
 and the [concept explanation spec](../CONCEPT-EXPLANATION-SPEC.md). Replace the
 placeholders; keep earlier decisions/results in the journal rather than erasing them.
 This is a planning/review artifact, not the runtime lesson schema.
 
 ## Identity and goal
 
-- Machine/family and generic/exact scope: TODO
+- Concept/family and generic/exact scope: TODO
 - Existing lesson/revision and target revision: TODO
 - Spec version and iteration: TODO
 - Status: planned / implemented for review / accepted / needs iteration
@@ -25,13 +25,13 @@ This is a planning/review artifact, not the runtime lesson schema.
 | Grant: concrete problem and purposeful visual reasoning | TODO |
 | Feynman: plain mechanism, prerequisite bridge, honest limits | TODO |
 | Veritasium: prediction, misconception and explanatory payoff | TODO |
-| Anatomy: recognizable object, purposeful detail and model-linked motion | TODO |
+| Anatomy: truthful physical craft where relevant; coherent components and model-linked motion | TODO |
 
 ## Mechanism and evidence
 
 - Core components, ports/connections and what each does: TODO
 - Prerequisite order, familiar example and terms introduced after their purpose: TODO
-- Material/energy flows and simultaneous/sequential/control behavior: TODO
+- Material/energy/information relationships and simultaneous/sequential/control behavior: TODO
 - Supported qualitative scenarios OR computed model, units/ranges and limits: TODO
 - Relevant invariants and invalid/unsupported states: TODO
 - Visual legend and what arrows, motion, colors and readouts mean: TODO

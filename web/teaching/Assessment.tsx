@@ -21,6 +21,6 @@ export function Transfer({task,teachBack,reasoning,onReveal}:{readonly task:Task
     <p className="ce-private-note">Only on this screen. This answer isn’t stored or sent to AI.</p>
     <button className="ce-primary" onClick={()=>{if(!revealed)onReveal?.();setRevealed(!revealed);}} aria-expanded={revealed}>{revealed?'Hide the explanation':choice===null?'Show the explanation':'Compare my reasoning'}</button>
     {revealed && <div className="ce-reveal" role="status"><h3>{choice===null?'Follow the cause':choice===task.correct?'That prediction fits. Here is why.':'Let’s trace what changes.'}</h3><p>{task.explanation}</p><h4>Check your explanation</h4><ul>{task.reasoning.map(r=><li key={r}>{r}</li>)}</ul><p>Getting the direction right is a start. Being able to explain these causes is the useful part.</p></div>}
-    <details className="ce-teachback"><summary>Explain the whole machine to someone</summary><p>{teachBack}</p><p>Try saying it without the technical names, then check for these ideas:</p><ul>{reasoning.map(r=><li key={r}>{r}</li>)}</ul></details>
+    <details className="ce-teachback"><summary>Explain the whole system to someone</summary><p>{teachBack}</p><p>Try saying it without the technical names, then check for these ideas:</p><ul>{reasoning.map(r=><li key={r}>{r}</li>)}</ul></details>
   </section>;
 }

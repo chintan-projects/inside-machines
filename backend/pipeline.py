@@ -18,6 +18,7 @@ from pydantic import ValidationError
 from .accounting import charge
 from .assets import Assets
 from .author_transport import author_schema, expand_author
+from .concept_guides import guide_for
 from .contracts import AuthorLessonSpec, LessonSpec, ReviewDecision, ReviewSpec, TeachingReviewSpec
 from .domain import Domain
 from .editorial import EditorialReviewError, author_feedback
@@ -191,6 +192,7 @@ class Pipeline:
             return
         phase = str(job["phase"])
         try:
+            guide = guide_for(str(job["question"]), str(job.get("concept_guide") or ""))
             evidence = ResearchSpec.model_validate(job["research"]) if job.get("research") else None
             if job.get("pipeline_version") == "evidence-first-1" and phase != "queued" and evidence is None:
                 raise ValueError("This phase requires its completed evidence checkpoint")
@@ -202,7 +204,7 @@ class Pipeline:
                     job,
                     "research",
                     lambda: model_text(
-                        research_prompt(str(job["question"])),
+                        research_prompt(str(job["question"]), guide=guide),
                         self.settings,
                         schema=ResearchSpec.model_json_schema(),
                         task="research",
@@ -224,7 +226,9 @@ class Pipeline:
                     else None
                 )
                 prompt = (
-                    revision_prompt(str(job["question"]), str(job["canonical"]), critique or {}, evidence)
+                    revision_prompt(
+                        str(job["question"]), str(job["canonical"]), critique or {}, evidence, guide=guide
+                    )
                     if base
                     else lesson_prompt(
                         str(job["question"]),
@@ -232,6 +236,7 @@ class Pipeline:
                         evidence,
                         compact=compact,
                         feedback=critique,
+                        guide=guide,
                     )
                 )
                 schema = (
@@ -284,7 +289,7 @@ class Pipeline:
                     job,
                     "review",
                     lambda: model_text(
-                        review_prompt(spec, decision_only=decision_only),
+                        review_prompt(spec, decision_only=decision_only, guide=guide),
                         self.settings,
                         schema=review_type.model_json_schema(),
                         task="review",

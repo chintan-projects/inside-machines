@@ -1,8 +1,8 @@
 # Concept explanation specification
 
-Version: 1.1, 2026-10-19.
+Version: 1.2, 2026-10-19.
 Authority: [ADR 0001](architecture-decisions/0001-concept-explanation.md).
-Scope: authored and generated machine lessons, follow-up visual actions, narration,
+Scope: authored and generated physical/computational concept lessons, follow-up visual actions, narration,
 video and static alternatives across web/PWA and future native clients.
 
 This is a build and review contract. The CE-1 typed data, prompts, player, media
@@ -13,7 +13,7 @@ ADR; the numbered requirements here are Inside's implementation of those ideas.
 
 ## Learner outcome and teaching structure
 
-For an adult with a concrete machine question, the lesson must make a useful causal
+For an adult with a concrete concept question, the lesson must make a useful causal
 relationship visible and support a new prediction. Recalling component names or
 repeating the headline alone does not demonstrate understanding.
 
@@ -24,12 +24,12 @@ repeating the headline alone does not demonstrate understanding.
 | CE-03 | Map prerequisite ideas and teach the missing relationship with a familiar concrete example. | A beginner can follow the next step without an unexplained prerequisite or a glossary detour. |
 | CE-04 | Each causal beat establishes one new relationship: input → change/action → reason → output. | The learner can point to the visible change; the narration explains that same change. A highlighted shell alone fails for an internal action. |
 | CE-05 | Identify every core component with an anchored on-scene label. Preserve identity through detail views and return to the whole. | Labels are readable at supported phone sizes and in video; selecting/focusing never refers to an unseen, unidentified part. |
-| CE-06 | State the physical job in plain language before relying on its technical name. Use precise terms once motivated. | A reviewer can paraphrase the causal chain without unexplained jargon; simplification does not change the mechanism. |
-| CE-07 | Give motion and visual encodings explicit physical meaning. Distinguish working fluid, surrounding air, heat and electrical work using labels/direction/shape as well as color. | A reviewer can trace each independently; decorative motion does not masquerade as a process or measurement. |
+| CE-06 | State the physical or computational job in plain language before relying on its technical name. Use precise terms once motivated. | A reviewer can paraphrase the causal chain without unexplained jargon; simplification does not change the mechanism. |
+| CE-07 | Give motion and encodings explicit meaning. Distinguish material/energy transfer from information dependencies; identify operands, boundaries and transformations with labels/direction/shape as well as color. | A reviewer can trace each independently; decorative motion does not masquerade as a process or measurement. |
 | CE-08 | Drive all dependent views from one authoritative state and supported scenario rules. | Equivalent state after seek, replay, step change and narration seek; changing a scenario updates the scene, explanation and readouts together. |
 | CE-09 | Include at least one meaningful cause-and-consequence interaction or reviewed counterfactual. Declare whether it is qualitative, computed or an analogy. | The consequence and its limits are defined in the worksheet; arbitrary animation speed or a Next button alone does not satisfy this requirement. |
 | CE-10 | Derive numerical readouts from a declared model with units/ranges and evidence or explicit illustrative assumptions. | Boundary/invariant tests verify implemented rules; no fabricated instrument readings or precision unsupported by the model. Qualitative lessons need no invented numbers. |
-| CE-11 | Reassemble the complete system and identify what operates simultaneously, sequentially or under control. | The whole view connects each taught relationship and correctly depicts the machine's operating order. Chapter order cannot imply false on/off behavior. |
+| CE-11 | Reassemble the complete system and identify what operates simultaneously, sequentially or under control. | The whole view connects each taught relationship and correctly depicts the system's operating/dependency order. Chapter order cannot imply false on/off behavior. |
 | CE-12 | Link consequential claims to supporting source locations and nearby assumptions. Distinguish a generic principle, documented model detail and unverified information. | A technical reviewer checks the actual claim/source relationship, including flow direction and applicable conservation rules. A URL alone is insufficient. |
 | CE-13 | Test transfer with a changed situation before disclosing the answer. Offer an optional plain-language teach-back. | The rubric rewards causal reasoning and checks the targeted misconception; recognition-only questions are supplementary. |
 | CE-14 | Preserve the core explanation without sound, color, motion or a fresh AI call. | Static steps/text, keyboard focus, reduced motion, saved offline playback and real-phone readability are reviewed. Online-only chat clearly reports its state. |
@@ -53,7 +53,7 @@ as typed, validated data; legacy v1 revisions retain their reader and identities
 
 | Record | Required information |
 | --- | --- |
-| Lesson identity | Lesson/revision ID, spec version, machine family, generic/exact scope, primary question, learner outcome and current review status |
+| Lesson identity | Lesson/revision ID, spec version, concept family, generic/exact scope, primary question, learner outcome and current review status |
 | Mechanism | Stable component and connection IDs, material/energy transfers, supported qualitative scenarios or equations, units/ranges, relevant invariants and model limits |
 | Claim | Stable ID, statement, evidence state, source URL and section/page locator, applicability, assumptions and review result |
 | Teaching beat | Stable ID, purpose, prerequisites, focal component(s), input, action, reason, output, claim references, visible cue, short copy, narration and static equivalent |
@@ -62,6 +62,7 @@ as typed, validated data; legacy v1 revisions retain their reader and identities
 | Media manifest | Shared lesson/revision, scene and storyboard versions, checkpoint mapping, narration/caption/artifact identities and parity evidence |
 | Review record | What was checked, method, reviewer, date, artifact revision, results, remaining gaps and owner's release decision |
 
+Physical mechanisms and computational dependencies follow [ADR 0003](architecture-decisions/0003-extensible-concept-lessons.md).
 The mechanism owns causal outcomes; the storyboard selects attention and order;
 renderers display the resulting state. Keep deterministic scenario functions outside
 React components. Adapter-specific geometry is permitted; duplicating physical

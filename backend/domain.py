@@ -9,6 +9,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel
 
 from .accounting import receipt_origin
+from .concept_guides import guide_for
 from .contracts import LessonSpec, canonicalize
 from .editorial import latest_feedback
 from .prompts import AUTHOR_POLICY
@@ -82,7 +83,7 @@ class Domain:
         """Return a cached lesson, attach to a pending job, or atomically admit new work."""
         canonical = canonicalize(question)
         if not canonical:
-            raise HTTPException(422, "Tell us which machine you want to understand.")
+            raise HTTPException(422, "Tell us which concept you want to understand.")
         if revision_of:
             if not user.owner:
                 raise HTTPException(403, "Owner access is required")
@@ -174,6 +175,7 @@ class Domain:
                 "review_protocol": "verdict-1",
                 "author_protocol": "compact-1",
                 "revision_protocol": "patch-1",
+                "concept_guide": guide_for(question).id,
                 "author_policy_sha256": AUTHOR_POLICY,
                 "editorial_feedback": feedback,
                 "message": "Reviewing the saved visual explanation"

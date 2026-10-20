@@ -1,6 +1,6 @@
 {
   "id": "/", "name": "Inside — How machines work", "short_name": "Inside",
-  "description": "Visual explanations of everyday machines. Explore, watch and ask.",
+  "description": "Visual explanations of machines and concepts. Explore, watch and ask.",
   "start_url": "/", "scope": "/", "display": "standalone",
   "background_color": "#f7f8fa", "theme_color": "#006d7c",
   "icons": [

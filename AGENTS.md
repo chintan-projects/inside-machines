@@ -84,6 +84,13 @@ granting viewer access or changing the work account's email does not complete it
 
 ## Learning publication contract
 
+Concept reuse follows [ADR 0003](docs/architecture-decisions/0003-extensible-concept-lessons.md).
+Keep the lesson/player/media/provider/budget engine shared across appliances, GPUs,
+LLMs and later domains. Specialize trusted concept guidance and pure domain rules;
+do not force logical computations into physical cutaways or fork the player per
+topic. New guides, schema coverage and passing engineering tests do not establish
+domain quality or release a new lesson. Preserve old public schemas/artifact hashes.
+
 Before changing lesson content, authoring/review prompts, mechanism state,
 renderers or assessments, read and follow
 [ADR 0001](docs/architecture-decisions/0001-concept-explanation.md) and the

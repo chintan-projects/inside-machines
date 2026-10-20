@@ -204,8 +204,10 @@ class TeachingReviewSpec(ReviewSpec):
 
 
 def canonicalize(question: str) -> str:
-    """Normalize common equivalent machine requests before any paid call."""
+    """Normalize equivalent topics while preserving meaningful computing qualifiers."""
     q = re.sub(r"[^a-z0-9 /-]", " ", question.lower()).replace("-", " ").strip()
+    q = re.sub(r"\b(graphics processing units?|gpus)\b", "gpu", q)
+    q = re.sub(r"\b(large language models?|llms)\b", "llm", q)
     # Preserve mechanism-changing qualifiers instead of returning a misleading hit.
     if re.search(r"\btop[ -]?load(?:ing|er)?\b", q) and re.search(r"wash|laundry", q):
         return "top-load-washing-machine"

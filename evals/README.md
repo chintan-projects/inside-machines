@@ -2,7 +2,8 @@
 
 `concept-cases.json` fixes the same questions, required relationships, misconception,
 transfer task and critical failures for any provider. It includes different machine
-families, ambiguous AC and unsupported exact-machine requests. It is an evaluation
+families, ambiguous AC, unsupported exact-model requests, GPU dependencies and LLM context/inference.
+The two computing cases have planned worksheets, not measured teaching/provider results. It is an evaluation
 set, not measured evidence that one provider is better.
 
 Use the product pipeline and existing task routes/budget for candidate generation;
