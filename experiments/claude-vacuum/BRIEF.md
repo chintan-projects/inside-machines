@@ -5,6 +5,11 @@ rejected ALL four earlier Codex-authored vacuum treatments. No engine or model h
 passed owner craft review. This trial gives Claude a fresh composition rather than
 our old scene layout. Independent technical and beginner evaluation remain pending.
 
+Subsequent owner feedback, 2026-10-19: “this is quite good.” Preserve this positive
+craft response and the original artifact. The owner chose a GPU example to test
+reuse next. This feedback is not independent technical/learning evidence or an
+instruction to publish the trial into the catalog.
+
 ## Person, job, posture and references
 
 An interested beginner, intended range 8–80, opens this on a phone to satisfy a

@@ -313,3 +313,41 @@ walking an actual phone or a learning evaluation.
   Independent claim/geometry review, owner actual-device craft and beginner transfer
   are pending. Utility/usability 4/5 agent judgment; desirability/surprise 3/5, not
   owner approval or a learning result. BUG-004 remains open; no release decision.
+
+## 2026-10-19: positive vacuum feedback and GPU-S1
+
+Owner: “this is quite good” on the local Claude/Anatomy vacuum. They chose GPU as
+the next extensibility example. Preserve that positive craft response separately
+from still-missing independent technical, real-device and learning evidence.
+
+GPU artifact/claim/iteration record: `journal/2026-10-19-gpu-study.md` and
+`experiments/gpu-study/BRIEF.md`. Screenshots are ignored/private
+`.vercel/claude-vacuum/private/gpu-{phone,tablet,desktop}-{board,parallel,chain}.jpg`.
+
+- High, observed/fixed: initial chip/memory labels overlapped; 14px phone HTML
+  labels now have separate anchors. The board fills a cropped viewport rather
+  than floating in an oversized frame. 375/390px had no horizontal overflow.
+- High, observed/fixed: tiny locator hid G/H outputs; removed it and retained a
+  native whole-GPU return. Input/prerequisite labels and calculations no longer
+  share a row. Native controls are at least 44px tall.
+- Medium, observed/fixed: raw numbers hid the visual job. Toy gray levels now show
+  the input and computed brighter result, with IDs and text preserving meaning.
+- High, observed/fixed: low-contrast disabled/gray/copper text. Checked pixel-text
+  pairs have a 4.756:1 minimum; waiting/unavailable text pairs exceed 5:1.
+- Observed: one/four-lane and independent/chain changes follow the same exact toy
+  scheduler; chained successors wait for actual prior results. Input hold produces
+  no jobs/results; restoring inputs works. No real GPU timing claim is made.
+- Observed: answers and takeaway are initially concealed, prediction selection
+  alone reveals nothing, skip/reveal works, and reveal moves focus to the working
+  mechanism. Transfer remains hidden until requested. Reset restores the start.
+- Observed: keyboard Enter returns to the whole GPU with focus preserved; reduced
+  motion uses useful intermediate stills. Loaded offline work and whole return,
+  ordinary pause/resume and deterministic seeking passed. The 42-second story
+  reached 42 and stopped. No browser errors observed.
+- Observed: final phone/tablet/desktop states reviewed separately; arithmetic nodes
+  remain mounted while progress updates. Rapid-resize screenshot transients were
+  recaptured after repaint. No 60fps/geometry audit or actual-device pass is claimed.
+- Inferred: utility/usability 4/5 from the complete working path; desirability 4/5
+  for the physical board, 3/5 for the logical plate; surprise 3/5. These are agent
+  judgments. Owner GPU craft, independent truth and five-beginner transfer remain
+  pending. The local trial does not promote a catalog lesson or change Vercel.

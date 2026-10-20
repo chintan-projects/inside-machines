@@ -18,6 +18,16 @@ def config() -> ClaudeTrialConfig:
     return ClaudeTrialConfig.model_validate_json((runner.TRIAL / "config.json").read_text())
 
 
+def test_gpu_trial_reuses_provider_but_isolates_concept_guidance() -> None:
+    """The second concept cannot inherit the vacuum's causal rules or private output."""
+    prompt = runner.trial_prompt(runner.GPU_TRIAL / "request-art-first.md")
+    assert "GPU: many little jobs" in prompt
+    assert "window.createGpuArt" in prompt
+    assert "Create ONE complete standalone HTML page" not in prompt
+    assert "clean-air BAGGED" not in prompt
+    assert ".env.local" not in prompt and "sk-ant-" not in prompt
+
+
 def response_events(mode: str) -> str:
     """A minimal synthetic SSE conversation with explicitly fake model text."""
     events: list[dict[str, object]] = [

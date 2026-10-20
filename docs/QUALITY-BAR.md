@@ -7,7 +7,9 @@ and Anatomy's connected physical craft are build/review requirements. They are
 not endorsements or a substitute for observed learning.
 
 **Current status:** CE-1 capabilities are implemented for protected review. The
-quality bar is not yet accepted. BUG-004 remains open after two human rejections.
+quality bar is not yet accepted. The owner gave positive craft feedback on the
+later local Claude/Anatomy vacuum candidate; independent technical, actual-device
+and beginner-learning gates remain pending. BUG-004 remains open.
 See [implementation and evidence](CONCEPT-IMPLEMENTATION.md) for exact scope.
 
 ## Implementation floor
