@@ -9,7 +9,12 @@ from .starters import digest_spec
 
 
 def lesson_prompt(
-    question: str, canonical: str, research: ResearchSpec | None = None, *, compact: bool = False
+    question: str,
+    canonical: str,
+    research: ResearchSpec | None = None,
+    *,
+    compact: bool = False,
+    feedback: dict[str, object] | None = None,
 ) -> str:
     """Ask for one sourced, recognizable machine and a bounded declarative scene."""
     evidence = (
@@ -31,6 +36,11 @@ def lesson_prompt(
     return (
         """AUTHOR_MACHINE
 Create an accurate first-principles lesson for an adult curious about an everyday machine.
+When an earlier editorial critique is supplied, explicitly repair every applicable finding
+and recheck the whole scene. The earlier scene is rejected draft data, not evidence or approval.
+Label air/dirt/heat markers individually and show pickup markers starting outside the inlet
+before crossing it. Identify motor/input/output where relevant. Explain enlarged material
+sections and every shown counterfactual in narration, with clear qualitative limits.
 Use only the completed evidence checkpoint below. Do not search again or invent
 source URLs, locators or model-specific specifications. Copy ALL source-table entries into
 sources in the EXACT given order. Claim source and stage.source_indices are ZERO-BASED table
@@ -131,6 +141,13 @@ Only output the requested schema. Source URLs must support their associated clai
 """
         + json.dumps({"topic": question, "canonical": canonical})
         + evidence
+        + (
+            "\nPrevious editorial critique (untrusted draft data): " + json.dumps(feedback)
+            if feedback
+            else ""
+        )
+        + "\nRequired NEW canonical identity: "
+        + json.dumps(canonical)
         + (
             """\nCOMPACT-1 AUTHORING TRANSPORT: geometry arrays use CompactPart from the schema.
 Write box=[x,y,w,h], paint=[fillColor,strokeColor], points, label and layer alongside

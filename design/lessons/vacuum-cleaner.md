@@ -97,3 +97,13 @@ Owner release: held. See the [friction log](../friction-log.md),
 [journal](../../journal/2026-10-19-ce-1-build.md) and
 [benchmark](../../docs/LIVE-BENCHMARK.md). Fix the most consequential observed
 failure next; no automated editorial pass or thumbs-up closes the quality goal.
+
+### Explicit editorial revision plan
+
+The next operation keeps the same learning hypothesis. It repairs the four
+observed editorial findings in the saved scene: individually label air/dirt and
+ports; start pickup markers outside the inlet and add floor/loose dirt; locate
+motor and exhaust; explain enlarged bag material and the shown bypass in narration.
+The rejected draft and critique are input data to fresh authoring, not approval.
+Current evidence stays authoritative; all gates and the transfer rubric remain
+required. No human learning result exists for this iteration.

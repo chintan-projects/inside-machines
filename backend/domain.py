@@ -10,6 +10,7 @@ from pydantic import BaseModel
 
 from .accounting import receipt_origin
 from .contracts import LessonSpec, canonicalize
+from .editorial import latest_feedback
 from .prompts import AUTHOR_POLICY
 from .quality import learning_issues
 from .research import reusable_research
@@ -160,6 +161,7 @@ class Domain:
             parent_sha = digest_spec(LessonSpec.model_validate(parent["spec"])) if parent else ""
             draft = reusable_draft(db, parent_sha, question, user.id) if parent else None
             recovered = reusable_research(db, parent_sha, question, user.id) if parent else None
+            feedback = latest_feedback(db, parent_sha, question, user.id)
             job_id = secrets.token_urlsafe(18)
             db.jobs[job_id] = {
                 "id": job_id,
@@ -172,6 +174,7 @@ class Domain:
                 "review_protocol": "verdict-1",
                 "author_protocol": "compact-1",
                 "author_policy_sha256": AUTHOR_POLICY,
+                "editorial_feedback": feedback,
                 "message": "Reviewing the saved visual explanation"
                 if draft
                 else "Using saved evidence; building the visual explanation"

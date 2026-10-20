@@ -112,7 +112,13 @@ def author_schema() -> dict[str, object]:
     definitions = cast(dict[str, object], schema["$defs"])
     definitions.pop("Part")
     definitions.pop("Motion", None)
-    definitions["CompactPart"] = CompactPart.model_json_schema()
+    compact = CompactPart.model_json_schema()
+    compact_properties = cast(dict[str, dict[str, object]], compact["properties"])
+    canonical_properties = cast(dict[str, dict[str, object]], Part.model_json_schema()["properties"])
+    for name in ("id", "name", "description", "shape", "label", "layer"):
+        compact_properties[name] = deepcopy(canonical_properties[name])
+    compact_properties["points"]["maxItems"] = canonical_properties["points"]["maxItems"]
+    definitions["CompactPart"] = compact
     definitions["Pose"] = CompactPose.model_json_schema()
     properties = cast(dict[str, dict[str, object]], schema["properties"])
     for field in ("parts", "graphics"):

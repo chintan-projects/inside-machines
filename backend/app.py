@@ -17,6 +17,7 @@ from .auth import COOKIE, Auth
 from .chat import Chats, Conversation
 from .contracts import LessonSpec
 from .domain import Domain, User
+from .editorial import editorial_notes
 from .learning_reviews import review_state
 from .pipeline import Enqueue
 from .provider import configure_gateway
@@ -334,6 +335,7 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
                     "failed_phase": raw.get("failed_phase"),
                     "quality_issues": raw.get("quality_issues", []),
                     "validation_issues": raw.get("validation_issues", []),
+                    "editorial_issues": raw.get("editorial_issues") or editorial_notes(key, raw),
                 }
                 for key, raw in db.jobs.items()
             ],

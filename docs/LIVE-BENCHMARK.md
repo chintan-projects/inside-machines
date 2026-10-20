@@ -155,3 +155,15 @@ The AC has an agent engineering record scoped to code a753bf7, artifact hashes,
 local viewport checks and hosted desktop/375/media/offline checks. A second
 append-only record clarifies local versus hosted widths. Technical, actual-phone,
 beginner learning and owner release gates remain false; no human score was added.
+
+The open-passage policy run completed authoring (4,929 input / 6,748 output,
+$0.077338) and concise review (8,151 / 266, $0.018962). Both API responses completed
+with model identity `gpt-6.1-sol`; the verdict hash matched the draft. Review rejected
+the lesson for unlabeled markers/ports, pickup markers starting inside the inlet,
+and narration that did not explain enlarged material/bypass motion. Total
+$0.096300, no publication; ledger $2.941623846, $0 reserved.
+
+A new explicit revision can now use that critique and the rejected scene as input
+to fresh authoring, with the same source/quality/editorial gates and all previous
+failures retained. Owner diagnostics expose bounded critique. Private chats and
+learner reasoning are excluded. Runtime acceptance of this loop is pending.

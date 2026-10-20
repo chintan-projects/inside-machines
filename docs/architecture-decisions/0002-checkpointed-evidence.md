@@ -131,3 +131,24 @@ changed teaching instruction invalidates old drafts while preserving evidence.
 Local browser review found the compiled vacuum passage had a visually closed
 outlet; explicit open-passage examples were added. The old drawing is not eligible
 under that new policy. No paid review is used to rubber-stamp the known problem.
+
+## Editorial feedback in a fresh iteration
+
+A completed author draft passed structural gates, then the concise reviewer
+returned a correctly SHA-bound rejection: missing individual marker/port labels,
+pickup markers already inside the inlet, and insufficient explanation of enlarged
+filter material and bypass motion. No artifact was published.
+
+A fresh explicit request now carries the latest known billed editorial rejection
+for the same member/question/parent and seven-day scope. It is untrusted draft
+context for a new paid authoring pass, never an accepted checkpoint. Scene context
+is included only when the current evidence table still matches; changed evidence
+uses the critique as design constraints with current grounding. Review/quality
+requirements remain unchanged. Unknown billing, wrong hashes, other members and
+private conversations cannot supply this context. Corrupt context stops before
+paid-call admission, with no uncertain charge.
+
+Owner reports project bounded editorial findings, including historical verified
+verdicts, without rewriting failed jobs. A new typed rejection preserves the
+notes separately from logs. The next operation must demonstrate improvement;
+unit tests and a useful critique are not a successful lesson or learner result.

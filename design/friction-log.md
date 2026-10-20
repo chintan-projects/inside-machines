@@ -179,3 +179,10 @@ all public-domain constraints. The compiled draft still drew a closed duct end
 while claiming an open outlet. This is a separate observed CE-04/07 physical
 legibility failure, not solved by format validation. Explicit open-passage examples
 now govern authoring; policy-bound recovery cannot reuse the older drawing.
+
+The SHA-bound editorial check rejected the next structurally valid scene for
+CE-04/05/07/18 failures: pickup markers began inside the inlet, moving-symbol
+identities/ports were unlabeled, and enlarged filtration/bypass motion lacked
+narrative explanation. This rejection is useful observed evidence; it is not
+a technical certification. The next explicit iteration includes the critique
+and matching-evidence scene, with new authoring and fresh review required.

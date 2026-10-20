@@ -29,7 +29,7 @@ export interface Job { pipeline_version?: 'evidence-first-1' | null; id: string;
 export interface RequestResult { kind: 'lesson' | 'job' | 'unavailable' | 'budget' | 'specific'; lesson_id?: string; job_id?: string; message?: string; reused?: boolean }
 export interface Answer { answer: string; stage: number | null; part: string | null; source_indices: number[]; uncertain: boolean }
 export interface Conversation { id: string; lesson_id: string; messages: { role: string; text: string; answer?: Answer | null; at: number }[]; pending: string }
-export interface OwnerJob extends Job {failure_type?:string|null;failed_phase?:string|null;quality_issues?:string[];validation_issues?:string[]}
+export interface OwnerJob extends Job {failure_type?:string|null;failed_phase?:string|null;quality_issues?:string[];validation_issues?:string[];editorial_issues?:string[]}
 export interface OwnerReport {
   generation_reserve_usd:number;
   budget_usd: number; spent_usd: number; reserved_usd: number; remaining_usd: number;

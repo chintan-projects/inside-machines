@@ -9,6 +9,7 @@ from _shared.services.logger import get_logger
 from pydantic import BaseModel, ConfigDict, Field
 
 from .contracts import LessonSpec
+from .editorial import editorial_notes
 from .quality import learning_issues
 from .settings import ROOT, load_settings
 from .starters import digest_spec
@@ -56,6 +57,7 @@ class EvaluationPacket(BaseModel):
     failure_type: str = ""
     failed_phase: str = ""
     structural_issues: list[str]
+    editorial_issues: list[str] = Field(default_factory=list)
     usage: list[dict[str, object]]
     reused_research_usage: list[dict[str, object]] = Field(default_factory=list)
     reused_draft_usage: list[dict[str, object]] = Field(default_factory=list)
@@ -141,6 +143,7 @@ def failed_packet(store: Store, job_id: str, case_id: str) -> EvaluationPacket:
         failure_type=str(job.get("failure_type", "unknown")),
         failed_phase=str(job.get("failed_phase", "")),
         structural_issues=cast(list[str], job.get("quality_issues", [])),
+        editorial_issues=editorial_notes(job_id, job),
         usage=_usage(db, {job_id}),
     )
 
@@ -190,6 +193,7 @@ def comparison(packets: list[EvaluationPacket]) -> dict[str, object]:
                 ),
                 "billing_uncertain": any(bool(r.get("uncertain")) for r in candidate.usage),
                 "structural_issues": candidate.structural_issues,
+                "editorial_issues": candidate.editorial_issues,
                 "human_review_complete": complete,
                 "ratings": ratings.model_dump(),
                 "quality_result": "generation_failed"

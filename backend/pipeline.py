@@ -19,6 +19,7 @@ from .assets import Assets
 from .author_transport import author_schema, expand_author
 from .contracts import AuthorLessonSpec, LessonSpec, ReviewDecision, ReviewSpec, TeachingReviewSpec
 from .domain import Domain
+from .editorial import EditorialReviewError, author_feedback
 from .prompts import lesson_prompt, review_prompt
 from .provider import UsageReceipt, model_speech, model_text, receipt_context
 from .quality import LearningQualityError, require_learning_quality
@@ -210,11 +211,18 @@ class Pipeline:
                 )
             elif phase == "author" or (phase == "queued" and saved_author):
                 compact = job.get("author_protocol") == "compact-1"
+                critique = author_feedback(job.get("editorial_feedback"), evidence)
                 raw = await self._paid(
                     job,
                     "author",
                     lambda: model_text(
-                        lesson_prompt(str(job["question"]), str(job["canonical"]), evidence, compact=compact),
+                        lesson_prompt(
+                            str(job["question"]),
+                            str(job["canonical"]),
+                            evidence,
+                            compact=compact,
+                            feedback=critique,
+                        ),
                         self.settings,
                         schema=author_schema() if compact else AuthorLessonSpec.model_json_schema(),
                     ),
@@ -258,7 +266,7 @@ class Pipeline:
                 if isinstance(review, ReviewDecision) and review.spec_sha256 != digest_spec(spec):
                     raise ValueError("Review verdict refers to another draft")
                 if not review.accepted:
-                    raise ValueError("Automated editorial check rejected this lesson")
+                    raise EditorialReviewError(review.notes)
                 reviewed = spec if isinstance(review, ReviewDecision) else review.lesson
                 if job.get("research"):
                     require_evidence_sources(reviewed, ResearchSpec.model_validate(job["research"]))
@@ -289,6 +297,7 @@ class Pipeline:
             logger.error("Lesson phase failed", job_id=job_id, phase=phase, error_type=type(exc).__name__)
 
             failure_type = type(exc).__name__
+            editorial_findings = exc.notes if isinstance(exc, EditorialReviewError) else []
             quality_findings = list(exc.issues) if isinstance(exc, LearningQualityError) else []
             validation_findings = (
                 [
@@ -304,6 +313,8 @@ class Pipeline:
                 if current["lease_token"] == job["lease_token"]:
                     current["failure_type"] = failure_type
                     current["failed_phase"] = phase
+                    if editorial_findings:
+                        current["editorial_issues"] = editorial_findings
                     if validation_findings:
                         current["validation_issues"] = validation_findings
                     if quality_findings:
