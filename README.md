@@ -6,6 +6,13 @@ lesson contract for future iOS and Android clients.
 
 ## Current state
 
+**October 20 framework audit:** the live catalog has four active CE-1/v2 drafts
+using the shared TeachingStudio; five older revisions are archived. The newer
+GPU/refrigerator D1 experiences are local studies, not hosted catalog entries.
+Production generation still uses OpenAI. Pushing source does not deploy those
+studies or enable Claude/D1 arbitrary-topic generation. See the
+[framework status and proposed rollout](docs/FRAMEWORK-STATUS.md).
+
 The React interface and FastAPI backend are connected locally. Three authored starter lessons
 cover a front-load washer, electric pressure cooker and split-system air conditioner. Each has
 selectable parts, stage playback, included questions, sources, assumptions and a narrated MP4.

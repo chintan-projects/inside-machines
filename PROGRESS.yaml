@@ -8,6 +8,7 @@ current:
 - GPU-S3 adds a complete core plus insight/data/matrix paths in a shared versioned navigator
 - GPU narration embedded; shared audio clock, captions and sound controls verified locally
 - Refrigerator R1 reuses D1 with complete core, energy/phase depth and physical sections
+- Live audit confirms four active v2 lessons share TeachingStudio; D1/Claude adoption remains local
 - Artifact-bound review workbench; AC agent engineering passed; human gates pending
 - Gmail owns the live app, Neon and private Blob; GitHub login connection pending
 - All 17 assets copied and verified; nine hosted videos retain their byte hashes
@@ -33,10 +34,12 @@ verification:
 - Seven audio/caption regressions pass; offline, seek, mute, interruption and reduced-motion audio observed
 - Refrigerator R1 passes 199 backend tests (87.79%), 25 studio tests and frontend build; human gates pending
 - Migration preserves specs, private history and ledger; protected runtime and media checks pass
+- Gmail ownership reverified for app/Neon/Blob; Git project link remains absent; no deployment implied by push
+- Fresh Linux packaging verifier passes; private source branch is ready for push; quality release remains held
 sessions:
-- date: '2026-10-19'
-  result: Claude local trial and explicit Codex teaching window built; no universal system selected
 - date: '2026-10-20'
   result: Shared interface D1, production direction and design brief implemented; no API cost; Vercel unchanged
 - date: '2026-10-20'
   result: Refrigerator R1 local core/depth built; about 0.29 USD API cost; source/human quality gates pending; Vercel unchanged
+- date: '2026-10-20'
+  result: Live framework and Gmail ownership audited; all four active lessons use v2; D1/Claude hosted integration pending
