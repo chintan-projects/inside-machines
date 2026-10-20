@@ -105,6 +105,14 @@ do not force logical computations into physical cutaways or fork the player per
 topic. New guides, schema coverage and passing engineering tests do not establish
 domain quality or release a new lesson. Preserve old public schemas/artifact hashes.
 
+Curated requests and library publication follow
+[ADR 0006](docs/architecture-decisions/0006-curated-library-and-interest.md).
+Member requests never dispatch paid authoring. Owner builds, artifact-bound review,
+path composition and release notifications are explicit separate operations.
+An attached path must retain its graph and exact node hashes; previous core approval
+cannot approve a changed bundle. Never label locally authored seeds as measured AI
+generation costs or pass a source-led schematic off as accepted Anatomy craft.
+
 Before changing lesson content, authoring/review prompts, mechanism state,
 renderers or assessments, read and follow
 [ADR 0001](docs/architecture-decisions/0001-concept-explanation.md) and the

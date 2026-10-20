@@ -1,19 +1,19 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactElement } from 'react';
 import { Pause, Play, RotateCcw } from 'lucide-react';
 import type { Answer, Lesson, Member } from './contracts';
 import { offlineMember } from './offline';
 import { ChatPanel, FeedbackPanel } from './LessonDiscussion';
 import { AcStudio } from './ac/Studio';
-import { TeachingStudio } from './teaching/Studio';
 import { LessonSaveButton, useLessonAssets } from './useLessonAssets';
 import { duration, Scene, stageAt } from './Scene';
 import { progressKey, readProgress } from './progress';
 import { WasherExperiment } from './WasherExperiment';
 
 interface Props { readonly lesson: Lesson; readonly member: Member; readonly online: boolean }
+const SharedStudio = lazy(async () => ({default: (await import('./studio/SharedStudio')).SharedStudio}));
 export function LessonView(props: Props): ReactElement {
-  if(props.lesson.spec.version===2) return <TeachingStudio {...props}/>;
+  if(props.lesson.spec.version===2) return <Suspense fallback={<p role="status">Opening the visual explanation…</p>}><SharedStudio {...props}/></Suspense>;
   return props.lesson.id === 'air-conditioner-craft' ? <AcStudio {...props} /> : <StandardLessonView {...props} />;
 }
 function StandardLessonView({ lesson, member, online }: Props): ReactElement {

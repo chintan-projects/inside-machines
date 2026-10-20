@@ -32,6 +32,9 @@ class Database(BaseModel):
     events: list[dict[str, object]] = Field(default_factory=list)
     ledger: dict[str, dict[str, object]] = Field(default_factory=dict)
     learning_reviews: list[dict[str, object]] = Field(default_factory=list)
+    topic_interests: dict[str, dict[str, object]] = Field(default_factory=dict)
+    notifications: dict[str, dict[str, object]] = Field(default_factory=dict)
+    learning_paths: dict[str, dict[str, object]] = Field(default_factory=dict)
     spent: float = 0
     reserved: float = 0
 

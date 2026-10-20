@@ -9,6 +9,15 @@ from .learning_paths import EXPLANATION_CONTRACT, NODE_CONTEXT_POLICY, LearningP
 from .research import ResearchSpec
 from .starters import digest_spec
 
+DEPTH_AUTHORING_POLICY = """
+This is a scoped owner-authored follow-up, not a replacement for the core lesson.
+The supplied parent example establishes stable names, values and relationships to
+reconnect; it is contextual draft data, not independent factual evidence. Use only
+the completed research source table for new claims. Explain any changed example.
+The core must remain a complete answer on its own. Do not invent other depth nodes,
+claim that this draft is released, or promise automatically available branches.
+"""
+
 
 def lesson_prompt(
     question: str,
@@ -214,17 +223,19 @@ separate source checkpoint is authoritative. A fresh editorial check will review
     )
 
 
-def path_node_prompt(path: LearningPath, node_id: str, canonical: str, evidence: ResearchSpec) -> str:
+def path_node_prompt(path: LearningPath, node_id: str, canonical: str, evidence: ResearchSpec,
+                     *, compact: bool = False, parent_example: dict[str, object] | None = None) -> str:
     """Reuse the existing lesson author/schema/evidence route with explicit depth context."""
     node = next((node for node in path.nodes if node.id == node_id), None)
     if node is None:
         raise ValueError("Unknown learning-path node")
     return lesson_prompt(
-        node.question, canonical, evidence, guide=guide_for(path.title + " " + node.question)
-    ) + NODE_CONTEXT_POLICY + "\nLEARNING_PATH_CONTEXT: " + json.dumps({
-        "path_id": path.id, "root_question": path.title, "shared_example": path.example,
+        node.question, canonical, evidence, compact=compact, guide=guide_for(path.title + " " + node.question)
+    ) + NODE_CONTEXT_POLICY + DEPTH_AUTHORING_POLICY + "\nLEARNING_PATH_CONTEXT: " + json.dumps({
+        "path_id": path.id, "root_question": path.nodes[0].question, "shared_example": path.example,
         "node": node.model_dump(mode="json"),
         "prerequisites": [n.model_dump(mode="json") for n in path.nodes if n.id in node.prerequisites],
+        "parent_example": parent_example,
     })
 
 
@@ -233,7 +244,7 @@ def author_policy_fingerprint() -> str:
     return hashlib.sha256(
         (
             lesson_prompt("", "policy", compact=True) + revision_prompt("", "policy", {})
-            + guide_policy() + NODE_CONTEXT_POLICY
+            + guide_policy() + NODE_CONTEXT_POLICY + DEPTH_AUTHORING_POLICY
         ).encode()
     ).hexdigest()
 

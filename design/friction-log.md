@@ -1,5 +1,35 @@
 # Inside design friction log
 
+## 2026-10-20 — curated integration review
+
+Observed: customer requests previously shared the paid generation path; the
+selected D1 studio and path navigation remained local. Member requests now only
+collect interest. Owners explicitly build, compose and review exact artifacts.
+
+Round 1, agent mechanism review: shrinking sealed-water pump, sink trap reused for
+a toilet, wrong rotation pivots and repeated GPU diagrams were consequential
+failures. Corrections add delivery/check-valve flow, a filled rising/descending
+toilet trapway, true-centred pivots and distinct work/memory/dependency views.
+A relationship map reconnects the jobs without claiming physical layout or timing.
+These findings are not independent human technical approval.
+
+Round 2, browser reliability: an idle second tab erased newer progress. Only
+changed clocks now persist. Keyboard seek, return, cold offline reload and reconnect
+retained the paused checkpoint. 375/768/1440 emulation had no horizontal overflow;
+crowded navigation became two rows on phones.
+
+Round 3, actual media: decoded non-silent AAC and advancing online/offline browser
+audio replace silent development fixtures. Fractional duration labels and ambiguous
+muted/paused state were corrected. Core car labels are about 15.2px at 375px;
+supplemental map disclaimer/legend are smaller (about 11.4/10.7px), a remaining
+craft limitation. New scenes are labeled schematic mechanisms, not high-detail
+Anatomy artwork. Request/inbox/owner, offline hashing and media evidence are in
+the session journal. No release acceptance or learner result is inferred.
+
+The most consequential remaining gap is physical craft and observed beginner
+understanding across the added topics. Twenty entries and engineering passes
+do not satisfy owner taste, actual-phone, independent technical or learner gates.
+
 October 19, 2026. Agent assessment of the existing local prototype, based on saved desktop/390-pixel screenshots and source behavior. Real-device and assistive-technology walks remain for the product owner. These observations do not claim human user feelings or completed usability research.
 
 Person: an adult with a concrete question about a machine. Journeys: enter a lesson, watch/inspect, ask about an owned machine, return offline, and ask a new question.

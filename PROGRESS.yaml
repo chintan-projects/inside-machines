@@ -1,45 +1,25 @@
-goal: Build the growing visual concept library and validate learning quality
-status: quality_revision
+goal: Build the curated visual concept library and validate learning quality
+status: curated_integration_verification
 current:
-- CE-1 contracts, causal player and shared video/static rendering implemented
-- Trusted guides extend the deployed shared engine to physical, GPU and LLM explanations
-- Vacuum CE-5 rebuilt with trusted section artwork; shared detail-first player in review
-- Four engine candidates rejected; local Claude/Anatomy trial adds a shared-state bag-wall view
-- GPU-S3 adds a complete core plus insight/data/matrix paths in a shared versioned navigator
-- GPU narration embedded; shared audio clock, captions and sound controls verified locally
-- Refrigerator R1 reuses D1 with complete core, energy/phase depth and physical sections
-- Live audit confirms four active v2 lessons share TeachingStudio; D1/Claude adoption remains local
-- Artifact-bound review workbench; AC agent engineering passed; human gates pending
-- Gmail owns the live app, Neon and private Blob; GitHub login connection pending
-- All 17 assets copied and verified; nine hosted videos retain their byte hashes
+- Member requests collect interest without paid dispatch; owner triage/build/release/inbox wired
+- Shared D1 CE player adopted by hosted app; per-node chat, audio, lifecycle and offline hash verification
+- Owner path composition preserves graph/artifact history and requires bundle-bound quality evidence
+- Twenty source-led cores authored; prior4 detailed artworks retained;16 new schematic sections and reunion maps
+- Claude structured authoring implemented behind shared gateway; OpenAI tasks separately routed
+- Personal Gmail account and app/Neon/Blob ownership reverified; CLI profile isolated
+- 20 narration/video artifacts rendering locally; protected deployment and runtime checks in progress
 needs_input:
-- Connect personal GitHub login to Gmail Vercel account to restore automatic deployments
-- Independent technical review of consequential claims and qualitative models
-- Owner actual-phone craft/accessibility walkthrough
-- Five initially unfamiliar beginners for causal and transfer evaluation
+- Connect personal GitHub login to Gmail Vercel to restore automatic deployments
+- Independent technical review, actual-phone craft and five initially unfamiliar beginner learning checks
+- Owner taste/release approval for exact artifacts; BUG-004 remains open
 verification:
-- 169 backend tests including three disposable Postgres tests pass; coverage 87.66 percent
-- Ruff and strict mypy pass; TypeScript, ESLint, ten JS tests and production build pass
-- Real MP4 revision test preserves parent content and private conversations
-- JS and Python sample the same piecewise path through the actual drain pump
-- Authored narration/video uses local computer speech and no paid model calls
-- Evidence, typed repairs and SHA-bound review completed one live CE-1 media revision
-- App-AI ceiling remains 50 USD; BUG-004 remains open; family release held
-- Computing guide routing and zero-cost alias reuse tested; production GPU/LLM lessons unreleased
-- Local study has four state tests, decoded boundary checks and browser/offline review; learning unmeasured
-- Claude trial passes 184 backend tests (87.20%); 451-frame scan and three inset tests; human gates pending
-- GPU-S3 passes 197 backend tests (87.77%), 20 studio tests and 10 frontend tests/build; human gates pending
-- GPU-S4 depth lookup/button and end-of-path recovery verified at 390/768/1280; 21 studio tests pass
-- Claude + Anatomy selected; shared D1 interface reviewed at 375/768/1440; owner design review pending
-- Seven audio/caption regressions pass; offline, seek, mute, interruption and reduced-motion audio observed
-- Refrigerator R1 passes 199 backend tests (87.79%), 25 studio tests and frontend build; human gates pending
-- Migration preserves specs, private history and ledger; protected runtime and media checks pass
-- Gmail ownership reverified for app/Neon/Blob; Git project link remains absent; no deployment implied by push
-- Fresh Linux packaging verifier passes; private source branch is ready for push; quality release remains held
+- 21 frontend and28 studio tests passed; types/lint/build pass; no bundle-size warning
+- 'Disposable Postgres5/5: concurrent interests/notices/path attachment, rollback and CAS'
+- Provider, accounting, path and mechanism regressions pass; full suite rerun in progress
+- 375/768/1440/offline/keyboard and multi-tab progress observed in Chrome; real-device gates pending
+- Local seed media uses computer speech and0 new paid model calls; cost table distinguishes allowances/receipts
+- Personal production+preview Claude key configured securely; no paid production experiment yet
 sessions:
 - date: '2026-10-20'
-  result: Shared interface D1, production direction and design brief implemented; no API cost; Vercel unchanged
-- date: '2026-10-20'
-  result: Refrigerator R1 local core/depth built; about 0.29 USD API cost; source/human quality gates pending; Vercel unchanged
-- date: '2026-10-20'
-  result: Live framework and Gmail ownership audited; all four active lessons use v2; D1/Claude hosted integration pending
+  result: Curated request/release pipeline, shared hosted studio and20 review candidates implemented; render/runtime verification
+    ongoing

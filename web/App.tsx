@@ -5,8 +5,10 @@ import { api, ApiError, errorMessage } from './api';
 import type { CatalogEntry, Job, Lesson, Member, RequestResult } from './contracts';
 import { clearOffline, offlineCatalog, offlineMember, rememberMember, savedLesson } from './offline';
 import { Scene } from './Scene';
+import { Graphic } from './teaching/Graphic';
 import { LessonView } from './LessonView';
 import { OwnerView } from './OwnerView';
+import { Requests } from './Requests';
 
 interface InstallEvent extends Event { prompt: () => Promise<void> }
 const route = (): string => decodeURIComponent(location.hash.replace(/^#\/?/, ''));
@@ -115,7 +117,7 @@ export function App(): ReactElement {
       try {
         const entries = online ? await api<CatalogEntry[]>('/lessons') : await offlineCatalog(member!.id);
         const saved = online ? await offlineCatalog(member!.id) : entries;
-        if (!cancelled) { setCatalog(entries); setSavedIds(saved.map(e => e.id)); }
+        if (!cancelled) { setCatalog(entries.filter(entry => !entry.depth_parent)); setSavedIds(saved.map(e => e.id)); }
       } catch (error) { if (!cancelled) setError(errorMessage(error)); }
     }
     void load(); return () => { cancelled = true; };
@@ -157,7 +159,7 @@ export function App(): ReactElement {
   const categories = ['All', 'Saved', ...new Set(catalog.map(e => e.category))];
   const entries = catalog.filter(e => filter === 'All' || (filter === 'Saved' ? savedIds.includes(e.id) : filter === e.category));
   return <><a className="skip-link" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a><header className={lesson?.id === "air-conditioner-craft" && path.startsWith("lesson/") ? "topbar studio-nav" : "topbar"}><a href="#/" className="brand" aria-label="Inside home"><Box size={25} strokeWidth={1.6} />inside<span>family alpha</span></a>
-    <nav aria-label="Main navigation">{member && <><a href="#/" aria-current={!path ? 'page' : undefined}>Library</a>{member.owner && online && <a href="#/owner" aria-current={path === 'owner' ? 'page' : undefined}>Alpha insights</a>}</>}
+    <nav aria-label="Main navigation">{member && <><a href="#/" aria-current={!path ? 'page' : undefined}>Library</a><a href="#/requests" aria-current={path==='requests'?'page':undefined}>Your updates</a>{member.owner && online && <a href="#/owner" aria-current={path === 'owner' ? 'page' : undefined}>Owner workspace</a>}</>}
       <button aria-label="Install Inside" onClick={() => { if (install) void install.prompt(); else setHelp(!help); }}><Download size={18} /><span className="install-label">Install</span></button>
       {member && <button onClick={() => void logout()} disabled={busy} aria-label={`Sign out ${member.name}`}><LogOut size={17} /></button>}</nav>
     </header>
@@ -165,21 +167,21 @@ export function App(): ReactElement {
     {!online && <div className="offline-banner" role="status"><WifiOff size={16} />Offline · Saved explanations work. New lessons, feedback and live chat need a connection.</div>}
     {loading ? <main id="main" tabIndex={-1} className="loading" aria-live="polite">Opening Inside…</main> : !member ? <>{error && <p role="alert" className="error shell-error">{error}</p>}<Login onLogin={setMember} /></> : <main id="main" tabIndex={-1} className={lesson?.id === "air-conditioner-craft" && path.startsWith("lesson/") ? "app-shell studio-shell" : "app-shell"}>
       {error && <div role="alert" className="error">{error}<button onClick={() => setError('')} aria-label="Dismiss error">Dismiss</button></div>}
-      {path.startsWith('job/') ? <JobProgress id={path.slice(4)} onReady={ready} /> : path === 'owner' ? <OwnerView /> : path.startsWith('lesson/') ? <>
+      {path.startsWith('job/') ? <JobProgress id={path.slice(4)} onReady={ready} /> : path === 'owner' ? <OwnerView /> : path==='requests'? <Requests online={online}/> : path.startsWith('lesson/') ? <>
         <button className="back" onClick={() => navigate()}><ArrowLeft size={16} />All explanations</button>
         {lesson && lesson.id === path.slice(7) ? <LessonView key={lesson.id} lesson={lesson} member={member} online={online} /> : !error && <p role="status">Opening the explanation…</p>}
       </> : <>
         <section className="library-intro"><div><p className="eyebrow">Curiosity, made visible</p><h1>How does it work?</h1><p>Look inside the things around you.<br className="desktop-only" /> Follow the parts. Understand the principle.</p></div><div className="library-count"><strong>{catalog.length}</strong><span>{online ? 'shared explanations' : 'saved on this device'}</span></div></section>
         <form className="ask-machine" onSubmit={event => void request(event)}><label htmlFor="machine-question">What would you like to understand?</label>
-          <div className="search-row"><Search size={21} /><input id="machine-question" required minLength={3} maxLength={180} value={question} onChange={e => setQuestion(e.target.value)} placeholder="An air conditioner, a GPU, a language model…" /><button className="primary" disabled={busy || !online}>{busy ? 'Looking…' : 'Explain it'}<ArrowUpRight size={18} /></button></div>
+          <div className="search-row"><Search size={21} /><input id="machine-question" required minLength={3} maxLength={180} value={question} onChange={e => setQuestion(e.target.value)} placeholder="A car, a refrigerator, a microwave…" /><button className="primary" disabled={busy || !online}>{busy ? 'Checking…' : 'Find or request'}<ArrowUpRight size={18} /></button></div>
           <div className="scope-row"><label><input type="radio" name="scope" checked={scope === 'general'} onChange={() => setScope('general')} />Understand the principles</label><label><input type="radio" name="scope" checked={scope === 'specific'} onChange={() => setScope('specific')} />A specific model</label></div>
           {scope === 'specific' && <label className="model-field">Model, if you know it<input value={model} onChange={e => setModel(e.target.value)} maxLength={120} placeholder="Model name or version" /><small>Exact-model documentation is planned. Choose Understand the principles to explore the general concept and its limits.</small></label>}
-          <p className="search-note">We look in the library first. A missing topic becomes a new teaching draft using the family’s AI budget.</p>
+          <p className="search-note">We look in the library first. If it’s missing, we save your request and post an update when it’s ready. Requesting a topic never starts paid AI generation.</p>
           {notice && <p role="status" className="notice">{notice}</p>}
         </form>
         <section aria-label="Explanation library" className="library"><div className="section-heading"><h2>{online ? 'Inside the library' : 'Your saved explanations'}</h2><div className="filters" aria-label="Filter by category">{categories.map(category => <button key={category} aria-pressed={filter === category} onClick={() => setFilter(category)}>{category}</button>)}</div></div>
-          {!entries.length && <div className="empty"><Box size={28} /><h3>{online && filter !== 'Saved' ? 'The library starts with a question.' : 'Nothing saved here yet.'}</h3><p>{online && filter !== 'Saved' ? 'Ask about a concept above. New teaching drafts appear here when generation succeeds.' : 'Open an explanation while connected and choose Save offline.'}</p></div>}
-          <div className="catalog">{entries.map((entry, i) => <a className="catalog-row" key={entry.id} href={`#/lesson/${entry.id}`}><div className="catalog-art"><Scene spec={entry.preview} preview /></div><div className="catalog-copy"><div className="catalog-meta"><span>{entry.category}</span><span>{Math.round(entry.duration)} sec · {entry.preview.stages.length} steps</span></div><h3>{entry.title}</h3><p>{entry.question}</p><small>{entry.family}{entry.review_needed && <span className="draft-marker"> · Learning draft</span>}</small></div><span className="open-lesson">Explore<ChevronRight size={18} /></span><span className="catalog-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span></a>)}</div>
+          {!entries.length && <div className="empty"><Box size={28} /><h3>{online && filter !== 'Saved' ? 'What would you like to understand?' : 'Nothing saved here yet.'}</h3><p>{online && filter !== 'Saved' ? 'Send a request above. We curate new explanations and let requesters know when they are ready.' : 'Open an explanation while connected and choose Save offline.'}</p></div>}
+          <div className="catalog">{entries.map((entry, i) => <a className="catalog-row" key={entry.id} href={`#/lesson/${entry.id}`}><div className="catalog-art" aria-hidden="true">{entry.preview.canonical.endsWith('-studio-1') ? <Graphic spec={entry.preview} seconds={entry.preview.stages[0].duration*.45}/> : <Scene spec={entry.preview} preview />}</div><div className="catalog-copy"><div className="catalog-meta"><span>{entry.category}</span><span>{Math.round(entry.duration)} sec · {entry.preview.stages.length} steps</span></div><h3>{entry.title}</h3><p>{entry.question}</p><small>{entry.family}{entry.review_needed && <span className="draft-marker"> · Learning draft</span>}</small></div><span className="open-lesson">Explore<ChevronRight size={18} /></span><span className="catalog-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span></a>)}</div>
         </section><footer className="library-footer">Built for curious people. Schematic explanations, clear assumptions, room for questions.</footer>
       </>}
     </main>}</>;

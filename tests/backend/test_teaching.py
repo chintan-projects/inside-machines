@@ -3,6 +3,7 @@
 import hashlib
 import json
 import subprocess
+from html import escape
 from typing import cast
 
 import pytest
@@ -64,12 +65,13 @@ def test_authored_paths_have_real_changes_and_transfer() -> None:
             assert teaching_at(spec, at + stage.duration * 0.9)[1] == 1
             assert graphic_scene(spec, at) != graphic_scene(spec, at + stage.duration * 0.9)
             svg = teaching_svg(spec, at + stage.duration * 0.9)
-            assert stage.title in svg
+            assert escape(stage.title) in svg
             if spec.teaching.renderer == "authored-sections-v1" and i == len(spec.stages) - 1:
                 assert section_asset(spec, -1)[0] in svg
             else:
                 assert "data-graphic=" in svg
-        end = sum(s.duration for s in spec.stages) - 1
+        compared = next(b.stage for b in spec.teaching.beats if b.id == spec.teaching.scenarios[0].beat)
+        end = sum(s.duration for s in spec.stages[:compared]) + spec.stages[compared].duration * .9
         assert teaching_svg(spec, end, spec.teaching.scenarios[0].id) != teaching_svg(
             spec, end, spec.teaching.scenarios[1].id
         )

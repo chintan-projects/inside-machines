@@ -4,9 +4,9 @@ export class ApiError extends Error {
   constructor(message: string, readonly status: number) { super(message); }
 }
 
-export async function api<T>(path: string, body?: unknown): Promise<T> {
+export async function api<T>(path: string, body?: unknown, method?: 'POST'|'PATCH'): Promise<T> {
   const response = await fetch(`/api/v1${path}`, {
-    method: body === undefined ? 'GET' : 'POST', credentials: 'same-origin',
+    method: method ?? (body === undefined ? 'GET' : 'POST'), credentials: 'same-origin',
     headers: body === undefined ? {} : { 'Content-Type': 'application/json' },
     body: body === undefined ? undefined : JSON.stringify(body),
   });

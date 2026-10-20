@@ -1,0 +1,267 @@
+/** Shared local playback/assessment controls. No concept rules or provider code. */
+import type { Action, Controls, FrameState, Lesson, Question, StudioAPI } from './contracts.ts';
+import { cueAt, NarrationTransport, validateNarration } from './narration.ts';
+
+const NS = 'http://www.w3.org/2000/svg';
+const element = <K extends keyof HTMLElementTagNameMap>(tag: K, text = ''): HTMLElementTagNameMap[K] => {
+  const e = document.createElement(tag); e.textContent = text; return e;
+};
+const button = (text: string, action: () => void): HTMLButtonElement => {
+  const b = element('button', text); b.type = 'button'; b.addEventListener('click', action); return b;
+};
+
+/** Mount a trusted lesson adapter into an empty shell; rendering is always derived. */
+export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Lesson<T>, options: { readonly embedded?: boolean; readonly predictionFirst?: boolean; readonly mediaUrl?: string } = {}): StudioAPI {
+  let time = 0, controls: Controls = { ...lesson.defaultControls }, playing = false;
+  let stopAt = lesson.duration, last = 0, raf = 0, hasStarted = false;
+  let narrated = false, disposed = false;
+  let activeAction: Action = { id: 'tour', label: '', start: 0, end: lesson.duration, controls: lesson.defaultControls };
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const renderMode = new URLSearchParams(location.search).has('render');
+  const header = element('header');
+  header.className = 'lesson-heading';
+  if (!options.embedded) header.append(element('p', 'Inside / a small curiosity'));
+  if (!options.embedded) header.append(element('h1', lesson.title));
+  header.append(element('p', lesson.summary));
+  const main = element(options.embedded ? 'div' : 'main'); main.className = 'lesson-body';
+  const workspace = element('div'); workspace.className = 'lesson-workspace';
+  const viewer = element('section'); viewer.className = 'viewer'; viewer.setAttribute('aria-label', 'Interactive visual explanation');
+  const tools = element('aside'); tools.className = 'lesson-tools'; tools.setAttribute('aria-label', 'Try it yourself');
+  const actions = element('div'); actions.className = 'actions'; actions.setAttribute('role', 'group');
+  actions.setAttribute('aria-label', 'Explore the explanation');
+  const hint = element('p'); hint.className = 'hint'; hint.setAttribute('aria-live', 'polite');
+  hint.tabIndex = -1;
+  const revealScene = (): void => {
+    hint.focus({ preventScroll: true });
+    viewer.scrollIntoView({ block: 'start', behavior: 'auto' });
+  };
+  const stage = element('div'); stage.className = 'stage';
+  const svg = document.createElementNS(NS, 'svg'); svg.classList.add('iso');
+  svg.setAttribute('data-theme', 'light'); svg.setAttribute('viewBox', '0 0 720 620');
+  svg.setAttribute('role', 'img'); stage.append(svg);
+  const labels = element('div'); labels.className = 'labels'; stage.append(labels);
+  const caption = element('p'); caption.className = 'caption';
+  const controlArea = element('div'); controlArea.className = 'controls';
+  const advanced = element('details'); advanced.className = 'advanced';
+  advanced.append(element('summary', 'More ways to explore'));
+  const controlButtons: { key: string; value: string; button: HTMLButtonElement }[] = [];
+  const media = lesson.narration ? element('audio') : undefined;
+  if (media && lesson.narration) {
+    validateNarration(lesson.narration);
+    const source = lesson.narration.src;
+    const protectedMedia = options.mediaUrl === source &&
+      (/^\/api\/v1\/lessons\/[a-z0-9-]+\/video$/.test(source) || source.startsWith('blob:'));
+    if (lesson.narration.duration !== lesson.duration || (!source.startsWith('data:audio/mpeg;base64,') && !protectedMedia)) {
+      throw new Error('Narration does not match the trusted embedded story');
+    }
+    media.src = lesson.narration.src; media.preload = 'auto'; media.setAttribute('playsinline', '');
+  }
+  const audio = media ? new NarrationTransport(media, lesson.duration, () => {
+    if (!narrated) return;
+    time = audio?.time ?? time; stop(); playing = audio?.status === 'playing';
+    draw(); if (playing) raf = requestAnimationFrame(tick);
+  }) : undefined;
+  const audioBusy = (): boolean => narrated && (audio?.status === 'starting' || audio?.status === 'waiting');
+  const pause = button('Pause', () => playing || audioBusy() ? api.pause() : api.play());
+  pause.id = options.embedded ? `${lesson.id}-pause` : 'pause'; pause.hidden = true;
+  const mute = button('Mute narration', () => { audio?.toggleMute(); draw(); }); mute.hidden = !audio;
+  const soundStatus = element('p');
+  soundStatus.className = 'sound-status'; soundStatus.setAttribute('role', 'status');
+  const scrub = element('input'); scrub.type = 'range'; scrub.min = '0'; scrub.max = String(lesson.duration);
+  scrub.step = '0.1'; scrub.value = '0'; scrub.setAttribute('aria-label', 'Explore the explanation timeline');
+  const timeline = element('div'); timeline.className = 'timeline';
+  const elapsed = element('span'); elapsed.className = 'elapsed';
+  const displaySeconds = Math.round(lesson.duration);
+  const duration = element('span', `${Math.floor(displaySeconds / 60)} min ${displaySeconds % 60} sec`);
+  duration.className = 'duration';
+  const timecode = (seconds: number): string => {
+    const whole = Math.round(seconds);
+    return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, '0')}`;
+  };
+  const tour: Action = { id: 'tour', label: '', start: 0, end: lesson.duration, controls: lesson.defaultControls };
+  const watch = button(audio ? 'Watch & listen' : `Play the ${displaySeconds}-second story`, () => {
+    if (audio && !renderMode) {
+      stop(); narrated = true; controls = { ...lesson.defaultControls }; activeAction = tour;
+      stopAt = lesson.duration; hasStarted = true; audio.seek(0); void audio.play();
+    } else run(tour);
+    revealScene();
+  });
+  watch.id = options.embedded ? `${lesson.id}-watch-listen` : 'watch-listen'; watch.className = 'primary watch-button';
+  const viewerTop = element('div'); viewerTop.className = 'viewer-top'; viewerTop.append(watch, pause, duration);
+  timeline.append(scrub, elapsed, button('Reset', () => api.reset()), mute);
+  const questionResets: (() => void)[] = [];
+  let lastDescription = '', lastView = '', labelsKey = '', lastContent = '';
+  const stop = (): void => { playing = false; cancelAnimationFrame(raf); raf = 0; };
+  const leaveNarration = (): void => { narrated = false; audio?.pause(); };
+  const pose = (): T => lesson.stateAt(narrated && reduced.matches && lesson.narration
+    ? cueAt(lesson.narration, time).still : time, controls);
+  const draw = (): void => {
+    const state = pose(), scene = lesson.render(state);
+    const vp = scene.viewport ?? { x: 0, y: 0, width: 720, height: 620 };
+    svg.setAttribute('viewBox', `${vp.x} ${vp.y} ${vp.width} ${vp.height}`);
+    stage.style.aspectRatio = `${vp.width}/${vp.height}`;
+    stage.style.width = `min(100%,calc(var(--stage-height,72vh) * ${vp.width} / ${vp.height}))`;
+    const content = scene.contentKey ?? scene.svg;
+    if (content !== lastContent) { svg.innerHTML = scene.svg; lastContent = content; }
+    scene.attributes?.forEach(update => svg.querySelectorAll(update.selector).forEach(node => {
+      node.setAttribute(update.name, update.value);
+    }));
+    svg.setAttribute('aria-label', scene.alt);
+    const description = narrated && lesson.narration ? cueAt(lesson.narration, time).text : state.description;
+    hint.setAttribute('aria-live', narrated ? 'off' : 'polite');
+    if (description !== lastDescription) { hint.textContent = description; lastDescription = description; }
+    const key = JSON.stringify([scene.labels, vp]);
+    if (key !== labelsKey) {
+      labels.replaceChildren(...scene.labels.map(label => {
+        const tag = element('span', label.text); tag.className = 'tag';
+        tag.style.left = `${(label.x - vp.x) / vp.width * 100}%`;
+        tag.style.top = `${(label.y - vp.y) / vp.height * 100}%`; return tag;
+      })); labelsKey = key;
+    }
+    caption.textContent = scene.caption; scrub.value = String(time);
+    elapsed.textContent = `${timecode(time)} / ${timecode(lesson.duration)}`;
+    scrub.setAttribute('aria-valuetext', `${timecode(time)} of ${timecode(lesson.duration)}`);
+    mute.textContent = audio?.muted ? 'Unmute narration' : 'Mute narration';
+    mute.setAttribute('aria-pressed', String(audio?.muted ?? false));
+    const status = narrated ? audio?.status === 'error'
+      ? 'Sound could not start. Tap Resume to try again, or explore silently.'
+      : audioBusy() ? 'Loading narration…'
+      : audio?.status === 'ended' ? 'Story finished. Replay it, or try an experiment.'
+      : `${playing ? 'Narration playing' : 'Narration paused'}${audio?.muted ? ' · muted' : ''} · captions stay visible${reduced.matches ? ' · reduced-motion stills' : ''}.`
+      : `${audio ? `Computer narration · ${displaySeconds} seconds.` : 'This study is silent.'} Try-it-yourself experiments are silent.`;
+    if (soundStatus.textContent !== status) soundStatus.textContent = status;
+    const visible = lesson.controlsVisible(state);
+    controlArea.hidden = !visible; advanced.hidden = !visible || !lesson.controls.some(c => c.advanced);
+    const values = lesson.controlValues(state);
+    controlButtons.forEach(item => item.button.setAttribute('aria-pressed', String(values[item.key] === item.value)));
+    pause.hidden = !hasStarted;
+    watch.hidden = narrated && hasStarted;
+    pause.classList.toggle('primary', narrated);
+    pause.textContent = playing || audioBusy() ? 'Pause' : time >= stopAt ? 'Replay' :
+      reduced.matches && !narrated ? 'Finish this step' : 'Resume';
+    take.hidden = !lesson.takeawayVisible(state);
+    if (state.beatId !== lastView) { stage.dataset.beat = state.beatId; lastView = state.beatId; }
+  };
+  const tick = (now: number): void => {
+    raf = 0;
+    if (!playing) return;
+    time = narrated && audio ? audio.time : Math.min(stopAt, time + Math.min(0.1, (now - last) / 1000)); last = now;
+    if (time >= stopAt) { stop(); if (narrated) audio?.pause(); }
+    draw(); if (playing) raf = requestAnimationFrame(tick);
+  };
+  const run = (action: Action): void => {
+    activeAction = action;
+    stop(); leaveNarration(); controls = { ...controls, ...action.controls }; time = action.start; stopAt = action.end; hasStarted = true;
+    if (renderMode || reduced.matches) time = action.still ?? stopAt;
+    else { playing = true; last = performance.now(); raf = requestAnimationFrame(tick); }
+    draw();
+  };
+  const api: StudioAPI = {
+    dispose(): void {
+      if (disposed) return;
+      disposed = true;
+      stop(); narrated = false; audio?.dispose();
+      document.removeEventListener('visibilitychange', visibility);
+      reduced.removeEventListener('change', motionPreference);
+      media?.removeAttribute('src'); media?.load(); root.replaceChildren();
+      if (window.lessonStudio === api) {
+        Reflect.deleteProperty(window, 'lessonStudio'); Reflect.deleteProperty(window, 'seek');
+      }
+    },
+    seek(t: number): void { if (disposed) return; stop(); time = Number.isFinite(t) ? Math.max(0, Math.min(lesson.duration, t)) : 0;
+      if (narrated) audio?.seek(time);
+      stopAt = lesson.duration; hasStarted = narrated || time > 0; draw(); },
+    play(): void {
+      if (disposed) return;
+      if (narrated && audio) {
+        if (time >= stopAt) audio.seek(0);
+        hasStarted = true; void audio.play(); return;
+      }
+      if (time >= stopAt) { run(activeAction); return; }
+      hasStarted = true;
+      if (renderMode || reduced.matches) time = stopAt;
+      else if (!playing) { playing = true; last = performance.now(); raf = requestAnimationFrame(tick); }
+      draw();
+    },
+    pause(): void { if (disposed) return; stop(); if (narrated && audio) { time = audio.time; audio.pause(); } draw(); },
+    reset(): void { if (disposed) return; stop(); leaveNarration(); audio?.reset(); time = 0; controls = { ...lesson.defaultControls }; hasStarted = false; stopAt = lesson.duration;
+      advanced.open = false; questionResets.forEach(reset => reset()); draw(); },
+    setControl(key: string, value: string): void {
+      if (disposed) return;
+      const definition = lesson.controls.find(c => c.key === key);
+      if (!definition?.options.some(o => o.value === value)) throw new Error('Unsupported lesson control');
+      run(lesson.controlRestart({ ...controls, ...lesson.controlValues(pose()), [key]: value }));
+    },
+    setMuted(muted: boolean): void {
+      if (disposed) return;
+      if (typeof muted !== 'boolean') throw new Error('Unsupported audio preference');
+      audio?.setMuted(muted); draw();
+    },
+    getState(): ReturnType<StudioAPI['getState']> { return { ...pose(), time, playing, controls: { ...controls },
+      narrated, audioStatus: audio?.status ?? 'unavailable', muted: audio?.muted ?? false }; },
+  };
+  lesson.actions.forEach(action => {
+    const b = button(action.label, () => { run(action); revealScene(); }); b.id = options.embedded ? `${lesson.id}-${action.id}` : action.id; actions.append(b);
+  });
+  lesson.controls.forEach(control => {
+    const group = element('fieldset'); group.append(element('legend', control.label));
+    control.options.forEach(option => {
+      const b = button(option.label, () => { api.setControl(control.key, option.value); revealScene(); });
+      b.dataset.control = control.key; b.dataset.value = option.value;
+      controlButtons.push({ key: control.key, value: option.value, button: b }); group.append(b);
+    }); (control.advanced ? advanced : controlArea).append(group);
+  });
+  const assessment = (q: Question, title: string): HTMLElement => {
+    const section = element('section'); section.className = 'question';
+    const choices = element('div'); choices.className = 'choices';
+    const answer = element('p'); answer.className = 'answer'; answer.hidden = true; answer.setAttribute('aria-live', 'polite');
+    let selected = '';
+    const choicesButtons = q.choices.map(choice => {
+      const b = button(choice, () => { selected = choice; choicesButtons.forEach(x => x.setAttribute('aria-pressed', String(x === b))); });
+      choices.append(b); return b;
+    });
+    const reveal = button('Show me', () => {
+      answer.textContent = q.answer; answer.hidden = false;
+      reveal.textContent = selected ? 'See it again' : 'Replay the explanation';
+      if (q.revealAction) {
+        run(q.revealAction); revealScene();
+      }
+    });
+    choices.append(reveal); section.append(element('h2', title), element('p', q.prompt), choices, answer);
+    questionResets.push(() => { selected = ''; answer.hidden = true; answer.textContent = ''; reveal.textContent = 'Show me';
+      choicesButtons.forEach(x => x.setAttribute('aria-pressed', 'false')); });
+    return section;
+  };
+  const footer = element('footer'); footer.className = 'lesson-sources'; const sources = element('details');
+  sources.append(element('summary', 'Sources, scope and this model’s limits'), element('p', lesson.scope));
+  lesson.sources.forEach(source => {
+    const p = element('p'); const a = element('a', source.title); a.href = source.url; a.target = '_blank'; a.rel = 'noreferrer';
+    p.append(a, document.createTextNode(` — ${source.locator}`)); sources.append(p);
+  }); footer.append(sources);
+  const take = element('p', lesson.takeaway); take.className = 'takeaway';
+  const narrative = element('div'); narrative.className = 'scene-explanation';
+  const sceneLabel = element('p', 'In this scene'); sceneLabel.className = 'scene-label'; narrative.append(sceneLabel, hint);
+  viewer.append(viewerTop, stage, narrative, timeline, soundStatus);
+  const illustration = element('details'); illustration.className = 'illustration-note';
+  illustration.open = true;
+  illustration.append(element('summary', 'About this illustration'), caption);
+  tools.append(element('h2', 'Try it yourself'), element('p', 'Change one thing. See what follows.'), actions,
+    controlArea, advanced, illustration);
+  workspace.append(viewer, tools);
+  const checks = element('div'); checks.className = 'learning-checks';
+  const prediction = assessment(lesson.prediction, 'Make a prediction');
+  if (options.predictionFirst) {
+    const before = element('details'); before.className = 'prediction-preview';
+    before.append(element('summary', 'Before you watch: make a prediction'), prediction); main.append(before);
+  } else checks.append(prediction);
+  checks.append(assessment(lesson.transfer, 'Put the idea to work'), take);
+  main.append(workspace, checks);
+  root.append(header, main, footer);
+  if (media) root.append(media);
+  scrub.addEventListener('input', () => api.seek(Number(scrub.value)));
+  const visibility = (): void => { if (document.hidden) api.pause(); };
+  const motionPreference = (): void => { if (reduced.matches) api.pause(); };
+  document.addEventListener('visibilitychange', visibility);
+  reduced.addEventListener('change', motionPreference);
+  window.lessonStudio = api; window.seek = api.seek; draw(); return api;
+}

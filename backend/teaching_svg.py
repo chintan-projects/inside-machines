@@ -75,6 +75,10 @@ def teaching_svg(spec: LessonSpec, seconds: float, scenario_id: str | None = Non
         raise ValueError("CE export requires teaching data")
     if teaching.renderer == "authored-sections-v1":
         return focused_svg(spec, seconds, scenario_id)
+    if spec.canonical.endswith("-studio-1"):
+        # New revision family adopts a full-size working mechanism. Historical
+        # paired exports retain their bytes and original layout.
+        return focused_svg(spec, seconds, scenario_id, declarative=True)
     beat, progress = teaching_at(spec, seconds)
     scenario = scenario_for(spec, beat, scenario_id)
     stage = spec.stages[beat.stage]
@@ -115,7 +119,7 @@ def teaching_svg(spec: LessonSpec, seconds: float, scenario_id: str | None = Non
     )
 
 
-def focused_svg(spec: LessonSpec, seconds: float, scenario_id: str | None = None) -> str:
+def focused_svg(spec: LessonSpec, seconds: float, scenario_id: str | None = None, *, declarative: bool = False) -> str:
     """Versioned detail-first composition; historical paired exports stay unchanged."""
     teaching = spec.teaching
     if teaching is None:
@@ -126,13 +130,12 @@ def focused_svg(spec: LessonSpec, seconds: float, scenario_id: str | None = None
     body += wrapped_lines(beat.bridge, 40, 93, 100, 16)
     body += '<rect x="40" y="119" width="880" height="405" rx="14" fill="#f6f9fc"/>'
     body += '<svg x="135" y="119" width="690" height="414" viewBox="0 0 900 540">'
-    whole = beat.stage == len(teaching.beats) - 1 and progress > 0.5 and scenario_id is None
+    whole = not declarative and beat.stage == len(teaching.beats) - 1 and progress > 0.5 and scenario_id is None
     art = section_asset(spec, -1)[0] if whole else graphic_scene(spec, seconds, scenario_id)
     body += art + "</svg>"
     body += wrapped_lines(teaching.operation_note if whole else beat.static_explanation, 40, 557, 92, 17)
-    body += wrapped_lines(
-        f"Step {beat.stage + 1} of {len(teaching.beats)} · Qualitative cutaway", 40, 625, 100, 13
-    )
+    kind = "Qualitative teaching model" if declarative else "Qualitative cutaway"
+    body += wrapped_lines(f"Step {beat.stage + 1} of {len(teaching.beats)} · {kind}", 40, 625, 100, 13)
     if scenario:
         body += wrapped_lines(scenario.outcome, 470, 625, 55, 13)
     if scenario_id is None and (

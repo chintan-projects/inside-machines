@@ -177,7 +177,7 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
 
     @app.get("/api/v1/lessons")
     def catalog(user: Member) -> list[dict[str, object]]:
-        return domain.catalog()
+        return domain.catalog(include_depth=user.owner)
 
     @app.get("/api/v1/lessons/{lesson_id}")
     def lesson(lesson_id: str, user: Member) -> dict[str, object]:
@@ -209,11 +209,8 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
                 "message": "This alpha explains general concepts. Choose Understand the principles for a clearly labelled general lesson. Exact-model documentation is planned; we won't invent specifications or internals for a particular model.",
                 "model": body.model,
             }
-        result = domain.request(body.question, user)
-        if result["kind"] == "job":
-            job = domain.job(str(result["job_id"]))
-            await dispatch(str(job["id"]), str(job["phase"]))
-        return result
+        from .interests import Interests
+        return Interests(store, config).request(body.question, user)
 
     @app.get("/api/v1/jobs/{job_id}")
     def job(job_id: str, user: Member) -> dict[str, object]:
@@ -342,5 +339,7 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
             "members": [{"id": u["id"], "name": u["name"]} for u in db.users.values()],
         }
 
-    register_teaching_routes(app, store, member)
+    register_teaching_routes(app, store, member, config, dispatch)
+    from .interest_routes import register_interest_routes
+    register_interest_routes(app, store, config, member, dispatch)
     return app

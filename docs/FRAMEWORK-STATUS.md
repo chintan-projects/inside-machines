@@ -1,5 +1,15 @@
 # Shared framework and catalog rollout
 
+**Implementation update, 2026-10-20:** the curated request pipeline, shared D1
+production adapter, structured Claude authoring route, owner path editor,
+artifact-bound notifications and 20 source-led core candidates are implemented.
+See [current integration and limits](CURATED-LIBRARY.md). Render/deployment and
+acceptance evidence are recorded separately; the historical audit below does not
+describe the updated source. Native GPU/fridge experimental depth content has
+not been silently certified or converted by this integration.
+
+## Historical deployment baseline
+
 Audit: 2026-10-20. The owner asks to push all work, keep every catalog topic on
 one framework, and evaluate open-ended generation from the Vercel frontend.
 This records observed state and a proposed rollout; it does not enable a new

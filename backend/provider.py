@@ -79,6 +79,15 @@ class UsageReceipt:
     speech_characters: int = 0
     cost_usd: float = 0
     models: list[str] = field(default_factory=list)
+    uncached_input_tokens: int = 0
+    cache_write_tokens: int = 0
+    cache_read_tokens: int = 0
+    provider_request_id: str = ""
+    observed_text_characters: int = 0
+    first_text_seconds: float | None = None
+    # None preserves the older non-streaming receipt contract. A streaming
+    # adapter explicitly keeps False until the terminal usage event arrives.
+    billing_complete: bool | None = None
 
 
 receipt_context: ContextVar[UsageReceipt | None] = ContextVar("inside_usage", default=None)
@@ -209,16 +218,27 @@ def configure_gateway(settings: Settings, registry: ProviderRegistry | None = No
     """Install explicit task routes using the shared gateway's public extension point.
 
     Custom registries are trusted startup dependencies, never HTTP request data.
-    OpenAI is currently the only production adapter implemented and evaluated by
-    contract tests. Adding a plugin does not establish its quality or pricing.
+    Claude authoring is opt-in; research, review, chat and speech retain their
+    own OpenAI routes. Adapter contract tests do not establish lesson quality.
     """
-    selected = registry or ProviderRegistry(
-        {"openai": ProviderPlugin(lambda model: HostedBackend(model, settings), frozenset(TASKS))},
-        {
+    if registry is None:
+        from .anthropic_authoring import ClaudeAuthoringBackend
+
+        plugins = {
+            "openai": ProviderPlugin(lambda model: HostedBackend(model, settings), frozenset(TASKS)),
+            "anthropic": ProviderPlugin(
+                lambda model: ClaudeAuthoringBackend(model, settings), frozenset({"authoring"})
+            ),
+        }
+        routes = {
             task: TaskRoute("openai", settings.speech_model if task == "speech" else settings.model)
             for task in TASKS
-        },
-    )
+        }
+        if settings.authoring_provider == "anthropic":
+            routes["authoring"] = TaskRoute("anthropic", settings.anthropic_model)
+        selected = ProviderRegistry(plugins, routes)
+    else:
+        selected = registry
     set_backend_factory(selected.backend)
 
 

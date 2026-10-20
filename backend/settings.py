@@ -47,6 +47,14 @@ class Settings:
     video_height: int
     video_fps: int
     production: bool
+    authoring_provider: str = "openai"
+    anthropic_key: str = ""
+    anthropic_model: str = "claude-sonnet-5-5"
+    anthropic_input_rate: float = 2.0
+    anthropic_output_rate: float = 10.0
+    anthropic_cache_write_rate: float = 4.0
+    anthropic_cache_read_rate: float = 0.10
+    anthropic_max_input_bytes: int = 100000
 
     def __post_init__(self) -> None:
         """Reject unsafe limits rather than silently accepting an unbounded budget."""
@@ -102,11 +110,36 @@ class Settings:
             raise ValueError(
                 "Token limits must be positive and job leases must cover a bounded provider call"
             )
+        if self.authoring_provider not in ("openai", "anthropic"):
+            raise ValueError("Unsupported trusted authoring provider")
+        if self.authoring_provider == "anthropic":
+            rates = (
+                self.anthropic_input_rate,
+                self.anthropic_output_rate,
+                self.anthropic_cache_write_rate,
+                self.anthropic_cache_read_rate,
+            )
+            if self.anthropic_model != "claude-sonnet-5-5":
+                raise ValueError("Claude authoring model requires a verified pricing/contract revision")
+            if any(not math.isfinite(rate) or rate < minimum for rate, minimum in zip(rates, (2, 10, 4, .1), strict=True)):
+                raise ValueError("Claude authoring rates must cover the verified model prices")
+            if not 1024 <= self.anthropic_max_input_bytes <= 100000 or self.max_output_tokens > 32000:
+                raise ValueError("Claude authoring token/context bounds exceed the tested route")
+            ceiling = (
+                (self.anthropic_max_input_bytes + 4096) * max(rates[0], rates[2], rates[3])
+                + self.max_output_tokens * rates[1]
+            ) / 1e6 + 0.03
+            if self.text_phase_reserve < ceiling:
+                raise ValueError("Text allowance cannot cover the configured Claude authoring route")
 
     @property
     def generation_enabled(self) -> bool:
         """Require both credentials and an explicitly configured spending ceiling."""
-        return bool(self.openai_key and self.budget_usd > 0)
+        return bool(
+            self.openai_key
+            and self.budget_usd > 0
+            and (self.authoring_provider != "anthropic" or self.anthropic_key)
+        )
 
 
 def load_settings() -> Settings:
@@ -154,4 +187,12 @@ def load_settings() -> Settings:
         video_height=int(number("video_height")),
         video_fps=int(number("video_fps")),
         production=production,
+        authoring_provider=text("authoring_provider"),
+        anthropic_key=get_env("ANTHROPIC_API_KEY", "") or "",
+        anthropic_model=text("anthropic_model"),
+        anthropic_input_rate=number("anthropic_input_usd_per_million"),
+        anthropic_output_rate=number("anthropic_output_usd_per_million"),
+        anthropic_cache_write_rate=number("anthropic_cache_write_usd_per_million"),
+        anthropic_cache_read_rate=number("anthropic_cache_read_usd_per_million"),
+        anthropic_max_input_bytes=int(number("anthropic_max_input_bytes")),
     )

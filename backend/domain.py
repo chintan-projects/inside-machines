@@ -1,6 +1,7 @@
 """Catalog lookup, transactional job admission, and private-session accounting."""
 
 import hashlib
+import re
 import secrets
 import time
 from typing import Literal
@@ -11,6 +12,7 @@ from pydantic import BaseModel
 from .accounting import receipt_origin
 from .concept_guides import guide_for
 from .contracts import LessonSpec, canonicalize
+from .depth_authoring import DepthRole, depth_context
 from .editorial import latest_feedback
 from .prompts import AUTHOR_POLICY
 from .quality import learning_issues
@@ -41,7 +43,7 @@ class Domain:
         """Store bounded alpha telemetry without private chat text."""
         db.events.append({"kind": kind, "user_id": user.id, "at": time.time(), **fields})
 
-    def catalog(self) -> list[dict[str, object]]:
+    def catalog(self, *, include_depth: bool = False) -> list[dict[str, object]]:
         """Project public metadata only; never return owner job data or private chat."""
 
         def read(db: Database) -> list[dict[str, object]]:
@@ -50,6 +52,8 @@ class Domain:
             result = []
             for lesson in db.lessons.values():
                 if lesson.get("archived"):
+                    continue
+                if lesson.get("depth_parent") and not include_depth:
                     continue
                 spec = LessonSpec.model_validate(lesson["spec"])
                 result.append(
@@ -60,6 +64,8 @@ class Domain:
                         "question": spec.question,
                         "summary": spec.summary,
                         "family": spec.family,
+                        "depth_parent": lesson.get("depth_parent"),
+                        "depth_role": lesson.get("depth_role"),
                         "category": spec.category,
                         "accent": spec.accent,
                         "duration": sum(s.duration for s in spec.stages),
@@ -78,12 +84,23 @@ class Domain:
         return self.store.transaction(read, write=False)
 
     def request(
-        self, question: str, user: User, *, revision_of: str | None = None, operation: str = ""
+        self, question: str, user: User, *, revision_of: str | None = None, operation: str = "",
+        node_parent: str | None = None, node_role: DepthRole | None = None,
     ) -> dict[str, object]:
         """Return a cached lesson, attach to a pending job, or atomically admit new work."""
         canonical = canonicalize(question)
         if not canonical:
             raise HTTPException(422, "Tell us which concept you want to understand.")
+        if node_parent is not None or node_role is not None:
+            if not user.owner:
+                raise HTTPException(403, "Owner access is required")
+            if revision_of or not node_parent or node_role not in ("insight", "model"):
+                raise HTTPException(422, "Choose one core and a valid independent depth role")
+            if not re.fullmatch(r"[a-zA-Z0-9-]{8,80}", operation) or not 8 <= len(question.strip()) <= 180:
+                raise HTTPException(422, "A bounded depth question and operation ID are required")
+            canonical = node_parent[:55].rstrip("-") + "-depth-" + hashlib.sha256(
+                (node_parent + ":" + operation).encode()
+            ).hexdigest()[:12]
         if revision_of:
             if not user.owner:
                 raise HTTPException(403, "Owner access is required")
@@ -97,6 +114,32 @@ class Domain:
 
         def admit(db: Database) -> dict[str, object]:
             parent = db.lessons.get(revision_of) if revision_of else None
+            context = None
+            if node_parent:
+                core = db.lessons.get(node_parent)
+                if core is None:
+                    raise HTTPException(404, "Core lesson not found")
+                if core.get("archived") or core.get("superseded_by"):
+                    raise HTTPException(409, "Open the active core revision before authoring depth")
+                assert node_role is not None
+                try:
+                    context = depth_context(node_parent, LessonSpec.model_validate(core["spec"]),
+                                            question, node_role, canonical)
+                except ValueError as exc:
+                    raise HTTPException(422, "Depth authoring requires a compatible CE core lesson") from exc
+                for depth_job in db.jobs.values():
+                    if depth_job.get("node_parent") != node_parent or depth_job.get("node_operation") != operation:
+                        continue
+                    if depth_job.get("node_role") != node_role or depth_job.get("question") != question:
+                        raise HTTPException(409, "This operation already belongs to another depth-draft intent")
+                    if depth_job["status"] == "failed":
+                        raise HTTPException(409, "That depth-draft attempt failed. Start a new operation explicitly to try again.")
+                    if depth_job["status"] == "complete":
+                        lesson_id = depth_job.get("lesson_id")
+                        if lesson_id and lesson_id in db.lessons:
+                            return {"kind": "lesson", "lesson_id": lesson_id, "reused": True}
+                        raise HTTPException(409, "That depth draft needs owner recovery; no new work was admitted")
+                    return {"kind": "job", "job_id": depth_job["id"], "reused": True}
             if revision_of:
                 if parent is None:
                     raise HTTPException(404, "Lesson not found")
@@ -116,9 +159,11 @@ class Domain:
                             409, "That revision attempt failed. Explicitly start a new operation to try again"
                         )
             for lesson in db.lessons.values():
+                if lesson.get("depth_parent") and not node_parent:
+                    continue
                 spec = LessonSpec.model_validate(lesson["spec"])
                 names = {spec.canonical, *(canonicalize(a) for a in spec.aliases)}
-                if canonical in names and (not revision_of or spec.canonical == canonical):
+                if canonical in names and (not (revision_of or node_parent) or spec.canonical == canonical):
                     # Keep every old query reusable even if a revised model omits its aliases.
                     latest, visited = lesson, set[str]()
                     while latest.get("superseded_by"):
@@ -162,7 +207,7 @@ class Domain:
             parent_sha = digest_spec(LessonSpec.model_validate(parent["spec"])) if parent else ""
             draft = reusable_draft(db, parent_sha, question, user.id) if parent else None
             recovered = reusable_research(db, parent_sha, question, user.id) if parent else None
-            feedback = latest_feedback(db, parent_sha, question, user.id)
+            feedback = latest_feedback(db, parent_sha, question, user.id) if not context else None
             job_id = secrets.token_urlsafe(18)
             db.jobs[job_id] = {
                 "id": job_id,
@@ -175,7 +220,7 @@ class Domain:
                 "review_protocol": "verdict-1",
                 "author_protocol": "compact-1",
                 "revision_protocol": "patch-1",
-                "concept_guide": guide_for(question).id,
+                "concept_guide": guide_for(context.path.title + " " + question if context else question).id,
                 "author_policy_sha256": AUTHOR_POLICY,
                 "editorial_feedback": feedback,
                 "message": "Reviewing the saved visual explanation"
@@ -199,6 +244,10 @@ class Domain:
                 "reservation": reserve,
                 "revision_of": revision_of,
                 "revision_parent_sha256": parent_sha or None,
+                "node_parent": node_parent,
+                "node_role": node_role,
+                "node_operation": operation if context else None,
+                "path_context": context.model_dump(mode="json") if context else None,
                 "research": draft[1].model_dump(mode="json")
                 if draft
                 else recovered[0].model_dump(mode="json")

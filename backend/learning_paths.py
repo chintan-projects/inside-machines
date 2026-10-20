@@ -52,7 +52,7 @@ class LearningPath(BaseModel):
     title: str = Field(min_length=3, max_length=120)
     example: str = Field(min_length=10, max_length=400)
     entry: str = Field(min_length=1, max_length=64)
-    nodes: list[PathNode] = Field(min_length=2, max_length=8)
+    nodes: list[PathNode] = Field(min_length=1, max_length=8)
 
     @model_validator(mode="after")
     def valid_graph(self) -> "LearningPath":

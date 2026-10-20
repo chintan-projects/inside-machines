@@ -20,10 +20,11 @@ from .assets import Assets
 from .author_transport import author_schema, expand_author
 from .concept_guides import guide_for
 from .contracts import AuthorLessonSpec, LessonSpec, ReviewDecision, ReviewSpec, TeachingReviewSpec
+from .depth_authoring import depth_research_question, job_depth_context
 from .domain import Domain
 from .editorial import EditorialReviewError, author_feedback
 from .lesson_patch import apply_revision, patch_schema
-from .prompts import lesson_prompt, review_prompt, revision_prompt
+from .prompts import lesson_prompt, path_node_prompt, review_prompt, revision_prompt
 from .provider import UsageReceipt, model_speech, model_text, receipt_context
 from .quality import LearningQualityError, require_learning_quality
 from .render import audio_duration, render_video
@@ -123,7 +124,10 @@ class Pipeline:
             if job["lease_token"] != lease:
                 raise RuntimeError("Job lease was lost")
             allowance = float(str(job["allowance"]))
-            cost = charge(db, key, receipt, allowance, uncertain=failed and not receipt.models)
+            cost = charge(
+                db, key, receipt, allowance,
+                uncertain=failed and (receipt.billing_complete is False or not receipt.models),
+            )
             job.update(
                 inflight="",
                 allowance=0,
@@ -192,6 +196,7 @@ class Pipeline:
             return
         phase = str(job["phase"])
         try:
+            depth = self.store.transaction(lambda db: job_depth_context(job, db), write=False)
             guide = guide_for(str(job["question"]), str(job.get("concept_guide") or ""))
             evidence = ResearchSpec.model_validate(job["research"]) if job.get("research") else None
             if job.get("pipeline_version") == "evidence-first-1" and phase != "queued" and evidence is None:
@@ -199,12 +204,14 @@ class Pipeline:
             if evidence and job.get("spec"):
                 require_evidence_sources(LessonSpec.model_validate(job["spec"]), evidence)
             saved_author = f"lesson:{job_id}:author" in cast(dict[str, object], job.get("call_outputs", {}))
+            if depth is not None and saved_author and evidence is None:
+                raise ValueError("A scoped depth draft requires its completed evidence checkpoint")
             if phase == "queued" and not saved_author:
                 raw = await self._paid(
                     job,
                     "research",
                     lambda: model_text(
-                        research_prompt(str(job["question"]), guide=guide),
+                        research_prompt(depth_research_question(depth) if depth else str(job["question"]), guide=guide),
                         self.settings,
                         schema=ResearchSpec.model_json_schema(),
                         task="research",
@@ -222,23 +229,29 @@ class Pipeline:
                 critique = author_feedback(job.get("editorial_feedback"), evidence)
                 base = (
                     expand_author(json.dumps(critique["previous_draft"]))
-                    if critique and "previous_draft" in critique and job.get("revision_protocol") == "patch-1"
+                    if depth is None and critique and "previous_draft" in critique and job.get("revision_protocol") == "patch-1"
                     else None
                 )
-                prompt = (
-                    revision_prompt(
-                        str(job["question"]), str(job["canonical"]), critique or {}, evidence, guide=guide
+                if depth is not None:
+                    if evidence is None:
+                        raise ValueError("Depth authoring requires its evidence checkpoint")
+                    prompt = path_node_prompt(depth.path, depth.node_id, str(job["canonical"]), evidence,
+                                              compact=compact, parent_example=depth.parent_example)
+                else:
+                    prompt = (
+                        revision_prompt(
+                            str(job["question"]), str(job["canonical"]), critique or {}, evidence, guide=guide
+                        )
+                        if base
+                        else lesson_prompt(
+                            str(job["question"]),
+                            str(job["canonical"]),
+                            evidence,
+                            compact=compact,
+                            feedback=critique,
+                            guide=guide,
+                        )
                     )
-                    if base
-                    else lesson_prompt(
-                        str(job["question"]),
-                        str(job["canonical"]),
-                        evidence,
-                        compact=compact,
-                        feedback=critique,
-                        guide=guide,
-                    )
-                )
                 schema = (
                     patch_schema(base)
                     if base
@@ -421,6 +434,7 @@ class Pipeline:
                 raise RuntimeError("Job lease was lost")
             if spec.canonical in db.lessons:
                 raise ValueError("Published lesson identities are immutable")
+            depth = job_depth_context(current, db)
             previous = db.lessons.get(str(current.get("revision_of"))) if current.get("revision_of") else None
             if current.get("revision_of") and (
                 previous is None
@@ -441,8 +455,14 @@ class Pipeline:
                 "spec_sha256": digest_spec(spec),
                 "video_sha256": video_digest,
                 "storyboard_version": "ce-1" if spec.version == 2 else "legacy-v1",
+                "depth_parent": depth.parent_lesson_id if depth else previous.get("depth_parent") if previous else None,
+                "depth_parent_sha256": depth.parent_spec_sha256 if depth else previous.get("depth_parent_sha256") if previous else None,
+                "depth_role": depth.role if depth else previous.get("depth_role") if previous else None,
             }
-            current.update(lesson_id=spec.canonical, message="Your explanation is ready", phase="complete")
+            current.update(lesson_id=spec.canonical, message="Draft ready for review", phase="complete")
+            for interest in db.topic_interests.values():
+                if interest.get("job_id") == job_id:
+                    interest.update(lesson_id=spec.canonical, status="working", updated_at=time.time())
             if previous is not None:
                 previous.update(archived=True, superseded_by=spec.canonical)
             self.domain.settle(db, current, "complete")

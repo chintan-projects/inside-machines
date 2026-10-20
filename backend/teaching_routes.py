@@ -1,6 +1,6 @@
 """Private review and bounded checkpoint routes; transport delegates to domain modules."""
 
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 from typing import Annotated, Literal
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Response
@@ -9,6 +9,8 @@ from pydantic import BaseModel, ConfigDict, Field
 from .contracts import LessonSpec
 from .domain import Domain, User
 from .learning_reviews import LearningReviews, ReviewSubmission, review_state
+from .path_publication import PathPublication, PathSubmission
+from .settings import Settings
 from .store import Database, Store
 from .teaching_svg import teaching_svg
 
@@ -24,9 +26,46 @@ class LearningEvent(BaseModel):
     beat: str = Field(pattern=r"^[a-z][a-z0-9-]{0,39}$")
 
 
-def register_teaching_routes(app: FastAPI, store: Store, member: Callable[..., User]) -> None:
+class DepthDraftBody(BaseModel):
+    """An explicit owner operation admits one independently reviewed follow-up."""
+
+    model_config = ConfigDict(extra="forbid")
+    question: str = Field(min_length=8, max_length=180)
+    role: Literal["insight", "model"]
+    operation: str = Field(pattern=r"^[a-zA-Z0-9-]{8,80}$")
+
+
+def register_teaching_routes(app: FastAPI, store: Store, member: Callable[..., User],
+                             settings: Settings, dispatch: Callable[[str, str], Awaitable[None]]) -> None:
     """Attach authenticated teaching endpoints without a duplicate auth system."""
     reviews = LearningReviews(store)
+    paths = PathPublication(store)
+
+    @app.post("/api/v1/owner/lessons/{root_id}/depth-drafts")
+    async def depth_draft(root_id: str, body: DepthDraftBody,
+                          user: Annotated[User, Depends(member)]) -> dict[str, object]:
+        if not user.owner:
+            raise HTTPException(403, "Owner access is required")
+        domain = Domain(store, settings)
+        result = domain.request(body.question, user, node_parent=root_id, node_role=body.role,
+                                operation=body.operation)
+        if result["kind"] == "job":
+            job = domain.job(str(result["job_id"]))
+            await dispatch(str(job["id"]), str(job["phase"]))
+        return result
+
+    @app.get("/api/v1/owner/lessons/{lesson_id}/learning-paths")
+    def path_history(lesson_id: str, user: Annotated[User, Depends(member)]) -> dict[str, object]:
+        return paths.history(lesson_id, user)
+
+    @app.post("/api/v1/owner/lessons/{lesson_id}/learning-paths")
+    def compose_path(lesson_id: str, body: PathSubmission, user: Annotated[User, Depends(member)]) -> dict[str, object]:
+        return paths.attach(lesson_id, body, user)
+
+    @app.get("/api/v1/learning-paths/{lesson_id}")
+    def path_bundle(lesson_id: str, user: Annotated[User, Depends(member)]) -> dict[str, object]:
+        from .learning_bundle import learning_bundle
+        return store.transaction(lambda db: learning_bundle(db, lesson_id, user), write=False)
 
     @app.get("/api/v1/lessons/{lesson_id}/checkpoint")
     def checkpoint(

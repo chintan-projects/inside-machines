@@ -31,7 +31,7 @@ const [original,art,repairs,css,license]=await Promise.all([
   readFile(path.join(privateDir,operation+'.txt'),'utf8'),
   readFile(path.join(privateDir,operation+'-reviewed.js'),'utf8'),
   readFile(path.join(privateDir,operation+'-repairs.json'),'utf8').then(JSON.parse),
-  readFile(path.join(root,'experiments/visual-studio/theme.css'),'utf8'),
+  readFile(path.join(root,'web/studio/theme.css'),'utf8'),
   readFile(path.join(root,'vendor/anatomy/LICENSE'),'utf8'),
 ]);
 const sha=s=>createHash('sha256').update(s).digest('hex');

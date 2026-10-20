@@ -21,12 +21,14 @@ export interface Member { id: string; name: string; owner: boolean }
 export interface Feedback { value: 'up' | 'down'; reason: string }
 export interface Lesson { id: string; spec: LessonSpec; quality: string; review_needed?: boolean; superseded_by?: string | null; video_ready: boolean; feedback: Feedback | null }
 export interface CatalogEntry {
+  depth_parent?: string | null;
+  depth_role?: 'insight' | 'model' | null;
   id: string; title: string; canonical: string; family: string; question: string;
   summary: string; category: string; accent: string; duration: number; parts: number;
   quality: string; review_needed?: boolean; created_at: number; views: number; video_ready: boolean; preview: LessonSpec;
 }
 export interface Job { pipeline_version?: 'evidence-first-1' | null; id: string; canonical: string; status: string; phase: string; message: string; error: string | null; lesson_id?: string }
-export interface RequestResult { kind: 'lesson' | 'job' | 'unavailable' | 'budget' | 'specific'; lesson_id?: string; job_id?: string; message?: string; reused?: boolean }
+export interface RequestResult { kind: 'lesson' | 'job' | 'unavailable' | 'budget' | 'specific' | 'interest'; lesson_id?: string; job_id?: string; message?: string; reused?: boolean; interest_id?:string;status?:string }
 export interface Answer { answer: string; stage: number | null; part: string | null; source_indices: number[]; uncertain: boolean }
 export interface Conversation { id: string; lesson_id: string; messages: { role: string; text: string; answer?: Answer | null; at: number }[]; pending: string }
 export interface OwnerJob extends Job {failure_type?:string|null;failed_phase?:string|null;quality_issues?:string[];validation_issues?:string[];editorial_issues?:string[]}

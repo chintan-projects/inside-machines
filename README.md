@@ -57,6 +57,23 @@ Production refuses to start without durable Postgres, private Blob storage and s
 Hosted model calls go through the actual workspace model gateway, using a hosted adapter.
 Vendored workspace config, logging and checkpoint services remain unmodified.
 
+## Curated library workflow
+
+Members find an existing explanation or save a free topic request. The owner
+triages demand, explicitly builds/reviews a draft, and releases an exact artifact;
+requesters receive private in-app updates. Customers cannot start paid generation.
+The D1 player, offline artifacts, active-revision chat and path navigator are shared.
+Twenty generic source-led cores are prepared for review. Quality acceptance remains
+held; a catalog count is not evidence of factual or craft approval.
+See [integration, scopes and costs](docs/CURATED-LIBRARY.md).
+
+Local authored media can render with four isolated processes without changing
+resolution or frame rate:
+
+```sh
+.venv/bin/python -m backend.concept_publication render --workers 4
+```
+
 ## Verification
 
 ```sh
