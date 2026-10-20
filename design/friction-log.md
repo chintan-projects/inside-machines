@@ -481,3 +481,12 @@ depth/revision builds already had one. The API now requires the same bounded tok
 the shared client attempt manager retains it after a lost response and offers a
 separate funded action only after409. Concurrency and lost-response regressions
 are required before deployment; no real extra build was triggered by this audit.
+
+Hosted editorial iteration, high, remains: two actual Claude drafts passed schema/
+structural checks but failed the SHA-bound editorial gate. Agent checkpoint render
+inspection also sees an arrived operand under unchanged “Lane waits”/“Empty slot”
+labels and no visible calculation, plus detached local context in beat3. No draft
+was promoted. More engineering checks or a lower editorial threshold would not
+resolve these causal/craft failures. Beginner transfer and owner taste are unmeasured.
+Observed, low: some source question articles and GPU casing need editorial cleanup
+in new immutable revisions before release. Existing published hashes stay preserved.

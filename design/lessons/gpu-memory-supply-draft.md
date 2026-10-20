@@ -97,3 +97,31 @@ stream hit its10k output limit. Neither yielded a publishable artifact. The new
 20k bound preserves the same phase reservation and teaching requirements. Results,
 actual artifact identities and observed versus inferred findings belong in
 [journal](../../journal/2026-10-20-curated-integration.md); this plan is not acceptance.
+
+## GPU-MEM-S2: deliberate editorial iteration
+
+Observed: the first completed20k draft failed permanent core/inset labels. The
+next explicit owner operation reused evidence and passed structural quality, then
+received a SHA-bound editorial rejection. Its ready-work block started outside
+its pool; the idle/executing comparison changed opacity without demonstrating
+operand arrival or independent-work selection. Dependency labels, waiting-work
+context, bounded prediction, prerequisite language and transfer also needed work.
+
+Keep GMS-01–03 and the same scoped root. Restrict the extra-lanes prediction to
+all candidate work waiting with no independent ready work or extra requests. Show
+the original unsatisfied dependency alongside alternative work; label every local
+entity and move the ready work from inside its pool into the execution lane.
+Use mutually exclusive waiting/executing states with a visible causal trigger.
+Explain any new resource terms before use, or omit that branch.
+
+Learning hypothesis: after seeing actual input arrival contrasted with selection
+of independent work, four of five unfamiliar beginners can explain both why one
+task still waits and why another can execute. Both causal and transfer scores
+must reach2 under the existing rubric; unmeasured. Transfer must change the task
+or dependency situation, rather than repeat the same all-work-waiting prediction.
+
+CE-04/05/07 trace label/geometry/state repair; CE-01/02/09 trace prerequisites,
+bounded prediction and transfer. The saved editorial findings and exact rejected
+draft enter a new explicit operation; no prompt-route change, automatic retry,
+receipt rewrite or release bypass is allowed. Technical, craft, learning and owner
+release remain held even if another model verdict passes.

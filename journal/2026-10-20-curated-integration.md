@@ -151,7 +151,8 @@ with13,986 input/9,078 output tokens ($0.118752), totaling$0.175760. It stopped 
 the author quality gate: `other-work` had no permanent on-scene label, and all four
 detail views lacked their own text labels. No review, voice, rendering, lesson
 publication or availability notice followed. App spend after the real probes is
-$5.60409954, including$1.95 of retained unknown-billing allowances, with$0 reserved.
+$5.60409954, including$1.95 in new retained unknown-billing allowances in addition
+to earlier unresolved charges, with$0 reserved.
 This is a failed production attempt, not the price of an accepted lesson.
 
 The owner comparison also exposed a live layout failure: secondary cost labels
@@ -193,3 +194,64 @@ private audit, environment and CLI-auth files are excluded. The sanitized build
 snapshot was byte-compared with current production sources. Primary Gmail,
 destination Owner role, project/Neon/private Blob ownership and unchanged Vercel
 protection were reverified before push/deploy. Git automation remains disconnected.
+
+## Final hosted revision and release result
+
+Commit `6c78275` was pushed to the private repository and manually deployed as
+`dpl_4WP1CFfogW16q6WUjLrvfCxXCgTs`, Ready in the verified Gmail workspace. Both
+stable aliases point there. Anonymous landing/health return200, while the lesson
+API requires family access (401). Protection and managed configuration remain
+preserved; a successful manual deployment does not restore Git automation.
+
+Explicit operation `Rw6sebT3FFOTZ2bPEvtYKvRN` reused research from the completed
+quality failure, carrying its exact draft/findings. No new research call occurred.
+Claude used22,221 input/12,061 output tokens ($0.165052), passed original schema,
+evidence and structural quality, then received a SHA-bound editorial rejection.
+Review used7,589 input/359 output tokens ($0.018768): total$0.183820. Findings
+covered local labels, ready-work geometry, idle/busy state, prediction scope,
+unintroduced resource terms and repetitive transfer. No speech/render/publication
+or availability update followed. Original jobs/receipts/specs/chats were unchanged.
+
+The documented GPU-MEM-S2 iteration explicitly targeted those findings.
+`A7U4P8nUjT-ziY8nsrrFPmrb` reused the same research and the latest rejection. Its
+Claude draft used25,011 input/13,113 output tokens ($0.181152); review used8,428
+input/267 output ($0.019526), total$0.200678. It passed structural checks but failed
+editorial review again: local dependency labels/context, narration versus visible
+calculation, occupancy prerequisites and transfer remained deficient. No silent
+retry, provider fallback or release bypass followed. Reliable creation of an
+acceptable new AI lesson is still unproven; these are failed attempts, not
+finished-lesson price estimates.
+
+Agent render inspection of the rejected draft independently observed an arrived
+operand beside unchanged “Lane waits”/“Empty slot” text and no visible calculation
+in beat1; beat3 labels did not clearly attach to the ready pool, busy marker and
+waiting dependency. Four local checkpoint images were rendered without paid
+calls and kept private. This supports the rejection; it is not a human learning
+study or technical certification. Sixteen seed cores also remain below the
+selected Anatomy physical-craft standard. The library contains20 review candidates,
+not20 approved products. Source question copy/casing also needs editorial cleanup
+in new immutable revisions before release.
+
+Final authenticated audit observes20 CE root paths, all media ready, all review
+holds intact,20 matching source/video artifact identities and all9 preexisting
+specs preserved. A free car lookup creates no job/ledger charge; members get403
+from owner costs/build and cannot read another member's private chat. Ledger
+totals reconcile. Before/after hashes preserve all26 prior specs,16 prior jobs,
+39 prior receipts and5 conversations across the two new explicit attempts.
+No new lesson or acceptance/availability record was created by those attempts.
+
+The final app ledger is$5.98859754, including$3.90 of old/new unresolved billing
+allowances;$0 remains reserved and the ceiling is still$50. This is an app ledger,
+not a provider invoice or Vercel-wide cost cap. The20 source-led seed videos used
+zero new paid app API calls; local work and hosting remain separate. A publishable
+per-system AI price remains unmeasured. The owner comparison exposes each scope's
+actual receipts, tokens, estimates, unknown billing and complete-script voice quote.
+
+Deployed browser checks show20 table rows, separated14.45px secondary labels,
+375px page/343px scroll region without page overflow, and correct settled budget
+values. Private screenshots: `library-live-production-final.png`,
+`owner-costs-live-production-final.png` and `owner-costs-phone-production.png` in
+`.vercel/studio-integration-review/`. Temporary API/browser owner sessions were
+revoked; API owner-report access then returned401. The app is left in a family
+preview. Physical-phone, independent technical, beginner learning and owner taste/
+release gates remain unmeasured and held. BUG-004 and BUG-008 remain open.

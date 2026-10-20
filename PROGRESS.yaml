@@ -1,11 +1,11 @@
 goal: Build the curated visual concept library and validate learning quality
-status: explicit_owner_iteration_verification
+status: integration_deployed_quality_open
 current:
 - Curated member requests, owner triage/build, review-gated availability and private inbox wired
 - Shared D1 player serves all20 narrated review cores; offline path and artifact verification wired
 - Personal Gmail production Ready;26 immutable revisions preserve all9 earlier lesson specs
 - Owner costs expose20 scopes, actual receipts, estimates and uncertain billing
-- Claude20k draft completes but label/inset quality fails; explicit feedback/evidence reuse under verification
+- Explicit owner iteration reuses evidence/findings; two hosted revisions stop at editorial quality gates
 needs_input:
 - Connect personal GitHub login to Gmail Vercel for automatic deployments (BUG-008)
 - Independent technical review, real-phone craft and five unfamiliar beginner learning checks
@@ -16,8 +16,9 @@ verification:
 - Linux packaging verifier passes; protected live20paths/media/captions and free request flow pass
 - Historical lesson/chat/ledger preservation and member owner-API denial observed live
 - 'Paid probe: research0.067506 USD; author0.65 uncertain; two diagnostic allowances0.65 each'
-- Completed20k draft cost0.175760 USD and stopped at quality; no rejected draft published
+- App ledger5.988598 USD includes3.90 unresolved allowances;0 reserved under unchanged50 USD ceiling
+- Two explicit feedback attempts cost0.183820 and0.200678 USD; neither passed editorial or published
 - No automatic paid retries or fallback; no real human acceptance evidence fabricated
 sessions:
 - date: '2026-10-20'
-  result: Shared curated integration deployed; Claude grammar compatibility blocker found through real runtime audit
+  result: Personal production Ready at6c78275; curated integration wired, craft and learning quality remain open
