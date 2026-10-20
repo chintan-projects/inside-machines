@@ -95,6 +95,10 @@ complete the core causal spine before optional branches. Share the versioned pat
 navigator, node-authoring context and player; keep truthful domain rules/adapters
 specific. Local query lookup is not arbitrary AI generation. Never claim a new
 production endpoint or automatic quality from a portable schema alone.
+Visual production and interface work follow [ADR 0005](docs/architecture-decisions/0005-visual-production-and-interface.md):
+Claude + Anatomy is the owner-selected visual direction. Keep ordinary interface
+iterations focused on the shared design brief, tokens and rendered user journeys;
+do not reopen engine comparisons or silently change task/provider routes.
 Keep the lesson/player/media/provider/budget engine shared across appliances, GPUs,
 LLMs and later domains. Specialize trusted concept guidance and pure domain rules;
 do not force logical computations into physical cutaways or fork the player per

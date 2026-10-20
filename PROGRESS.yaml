@@ -28,6 +28,7 @@ verification:
 - Claude trial passes 184 backend tests (87.20%); 451-frame scan and three inset tests; human gates pending
 - GPU-S3 passes 197 backend tests (87.77%), 20 studio tests and 10 frontend tests/build; human gates pending
 - GPU-S4 depth lookup/button and end-of-path recovery verified at 390/768/1280; 21 studio tests pass
+- Claude + Anatomy selected; shared D1 interface reviewed at 375/768/1440; owner design review pending
 - Seven audio/caption regressions pass; offline, seek, mute, interruption and reduced-motion audio observed
 - Migration preserves specs, private history and ledger; protected runtime and media checks pass
 sessions:
@@ -35,5 +36,5 @@ sessions:
   result: Vacuum craft rebuilt for isolated Gmail preview; production quality release held
 - date: '2026-10-19'
   result: Claude local trial and explicit Codex teaching window built; no universal system selected
-- date: '2026-10-19'
-  result: GPU core/depth paths and provider-neutral authoring contexts built; zero API cost; Vercel unchanged
+- date: '2026-10-20'
+  result: Shared interface D1, production direction and design brief implemented; no API cost; Vercel unchanged

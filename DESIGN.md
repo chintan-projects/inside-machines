@@ -22,6 +22,21 @@ rounded:
 
 # Inside design direction
 
+## Active local studio interface · 2026-10-20
+
+The owner has selected Claude + Anatomy for visual production; see ADR 0005.
+The next review targets the interface, following `design/lessons/studio-interface.md`.
+Use the system type direction above, a white page (#FFFFFF), cool stage (#F4F6F8),
+ink (#182431), muted text (#596675), line (#DDE3E8), and blue action (#225BDF).
+White leaves the artwork dominant; the cool stage establishes its boundary;
+ink/muted separate explanation from context; blue identifies action/selection,
+never factual certification. Minimum body 16px; headings 24–34px with tighter
+tracking. Controls use 8px radius; the visual stage 14px; no universal pills or
+button shadows. Every control has a 44px minimum target and visible keyboard focus.
+The distinctive composition is a large stage, attached explanation and adjacent
+experiments, with a quiet desktop path rail and compact phone selector. Real
+device/taste/learning decisions remain pending; this does not restyle production.
+
 ## Concept explanation contract
 
 [ADR 0001](docs/architecture-decisions/0001-concept-explanation.md) and the

@@ -400,3 +400,16 @@ Observed, low: phone placeholder truncated beside submit. Fixed with full-width
 phone input. Final browser renders at 390/768/1280 have no horizontal overflow.
 Private evidence: `gpu-s4-phone.jpg`, `gpu-s4-tablet.jpg`, `gpu-s4-desktop.jpg`.
 Real-phone/owner walkthrough pending; this is agent observation, not release approval.
+# Studio D1 · 2026-10-20
+
+Seen, high: owner rejects the interface's taste. Shared D1 candidate replaces the
+competing titles/pill stack with a question, visual stage, stable playback,
+desktop rail/phone selector and adjacent tools. Owner decision pending.
+Seen, medium: final-node action squeezed the phone selector; fixed with Questions
+and an explicit accessible name. Seen, medium: manual transport could grow beyond
+phone width; wrapping and differentiated primary/secondary controls prevent it.
+Seen, medium, remains for owner review: long matrix question plus return context
+makes that branch denser than fresh core entry. Seen: illustration assumptions
+are expanded initially; they were not traded away for a quieter layout.
+Evidence: ignored `studio-d1-*.jpg`, browser record, D1 journal/hash. Agent render
+review covers 375/768/1440; real-phone, taste and beginner acceptance remain pending.

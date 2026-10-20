@@ -19,16 +19,21 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const renderMode = new URLSearchParams(location.search).has('render');
   const header = element('header');
+  header.className = 'lesson-heading';
   if (!options.embedded) header.append(element('p', 'Inside / a small curiosity'));
-  header.append(element(options.embedded ? 'h2' : 'h1', lesson.title), element('p', lesson.summary));
-  const main = element('main');
+  if (!options.embedded) header.append(element('h1', lesson.title));
+  header.append(element('p', lesson.summary));
+  const main = element('main'); main.className = 'lesson-body';
+  const workspace = element('div'); workspace.className = 'lesson-workspace';
+  const viewer = element('section'); viewer.className = 'viewer'; viewer.setAttribute('aria-label', 'Interactive visual explanation');
+  const tools = element('aside'); tools.className = 'lesson-tools'; tools.setAttribute('aria-label', 'Try it yourself');
   const actions = element('div'); actions.className = 'actions'; actions.setAttribute('role', 'group');
   actions.setAttribute('aria-label', 'Explore the explanation');
   const hint = element('p'); hint.className = 'hint'; hint.setAttribute('aria-live', 'polite');
   hint.tabIndex = -1;
   const revealScene = (): void => {
     hint.focus({ preventScroll: true });
-    hint.scrollIntoView({ block: 'start', behavior: reduced.matches ? 'auto' : 'smooth' });
+    viewer.scrollIntoView({ block: 'start', behavior: 'auto' });
   };
   const stage = element('div'); stage.className = 'stage';
   const svg = document.createElementNS(NS, 'svg'); svg.classList.add('iso');
@@ -62,6 +67,10 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
   const scrub = element('input'); scrub.type = 'range'; scrub.min = '0'; scrub.max = String(lesson.duration);
   scrub.step = '0.1'; scrub.value = '0'; scrub.setAttribute('aria-label', 'Explore the explanation timeline');
   const timeline = element('div'); timeline.className = 'timeline';
+  const elapsed = element('span'); elapsed.className = 'elapsed';
+  const duration = element('span', `${Math.floor(lesson.duration / 60)} min ${lesson.duration % 60} sec`);
+  duration.className = 'duration';
+  const timecode = (seconds: number): string => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
   const tour: Action = { id: 'tour', label: '', start: 0, end: lesson.duration, controls: lesson.defaultControls };
   const watch = button(audio ? 'Watch & listen' : `Play the ${lesson.duration}-second story`, () => {
     if (audio && !renderMode) {
@@ -70,8 +79,9 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
     } else run(tour);
     revealScene();
   });
-  watch.id = options.embedded ? `${lesson.id}-watch-listen` : 'watch-listen'; watch.className = 'primary'; actions.append(watch);
-  timeline.append(pause, button('Reset', () => api.reset()), mute, scrub);
+  watch.id = options.embedded ? `${lesson.id}-watch-listen` : 'watch-listen'; watch.className = 'primary watch-button';
+  const viewerTop = element('div'); viewerTop.className = 'viewer-top'; viewerTop.append(watch, pause, duration);
+  timeline.append(scrub, elapsed, button('Reset', () => api.reset()), mute);
   const questionResets: (() => void)[] = [];
   let lastDescription = '', lastView = '', labelsKey = '', lastContent = '';
   const stop = (): void => { playing = false; cancelAnimationFrame(raf); raf = 0; };
@@ -102,6 +112,8 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
       })); labelsKey = key;
     }
     caption.textContent = scene.caption; scrub.value = String(time);
+    elapsed.textContent = `${timecode(time)} / ${timecode(lesson.duration)}`;
+    scrub.setAttribute('aria-valuetext', `${timecode(time)} of ${timecode(lesson.duration)}`);
     mute.textContent = audio?.muted ? 'Unmute narration' : 'Mute narration';
     mute.setAttribute('aria-pressed', String(audio?.muted ?? false));
     const status = narrated ? audio?.status === 'error'
@@ -116,6 +128,8 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
     const values = lesson.controlValues(state);
     controlButtons.forEach(item => item.button.setAttribute('aria-pressed', String(values[item.key] === item.value)));
     pause.hidden = !hasStarted;
+    watch.hidden = narrated && hasStarted;
+    pause.classList.toggle('primary', narrated);
     pause.textContent = playing || audioBusy() ? 'Pause' : time >= stopAt ? 'Replay' :
       reduced.matches && !narrated ? 'Finish this step' : 'Resume';
     take.hidden = !lesson.takeawayVisible(state);
@@ -197,15 +211,26 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
       choicesButtons.forEach(x => x.setAttribute('aria-pressed', 'false')); });
     return section;
   };
-  const footer = element('footer'); const sources = element('details');
+  const footer = element('footer'); footer.className = 'lesson-sources'; const sources = element('details');
   sources.append(element('summary', 'Sources, scope and this model’s limits'), element('p', lesson.scope));
   lesson.sources.forEach(source => {
     const p = element('p'); const a = element('a', source.title); a.href = source.url; a.target = '_blank'; a.rel = 'noreferrer';
     p.append(a, document.createTextNode(` — ${source.locator}`)); sources.append(p);
   }); footer.append(sources);
   const take = element('p', lesson.takeaway); take.className = 'takeaway';
-  main.append(actions, soundStatus, hint, stage, caption, controlArea, advanced, timeline,
-    assessment(lesson.prediction, 'A small prediction'), take, assessment(lesson.transfer, 'Try the idea somewhere new'));
+  const narrative = element('div'); narrative.className = 'scene-explanation';
+  const sceneLabel = element('p', 'In this scene'); sceneLabel.className = 'scene-label'; narrative.append(sceneLabel, hint);
+  viewer.append(viewerTop, stage, narrative, timeline, soundStatus);
+  const illustration = element('details'); illustration.className = 'illustration-note';
+  illustration.open = true;
+  illustration.append(element('summary', 'About this illustration'), caption);
+  tools.append(element('h2', 'Try it yourself'), element('p', 'Change one thing. See what follows.'), actions,
+    controlArea, advanced, illustration);
+  workspace.append(viewer, tools);
+  const checks = element('div'); checks.className = 'learning-checks';
+  checks.append(assessment(lesson.prediction, 'Make a prediction'),
+    assessment(lesson.transfer, 'Put the idea to work'), take);
+  main.append(workspace, checks);
   root.append(header, main, footer);
   if (media) root.append(media);
   scrub.addEventListener('input', () => api.seek(Number(scrub.value)));

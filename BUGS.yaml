@@ -24,8 +24,8 @@ bugs:
     title: Appliance explanations lack visible component labels and beginner causal staging
     severity: high
     status: open
-    evidence: Owner accepts the teardown that GPU/vacuum explanations omit important connections; new GPU-S3 depth candidate awaits feedback
-    fix: Complete GPU causal spine and optional insight/data/matrix paths implemented locally; original vacuum preserved; independent truth, actual-phone and beginner acceptance remain pending
+    evidence: Owner rejects the studio interface as poor and distasteful after GPU-S4; teaching and interface quality acceptance remain open
+    fix: Complete core/depth paths and a shared D1 interface implemented locally with Claude + Anatomy selected; owner design, independent truth, actual-phone and beginner acceptance remain pending
     regression: tests/backend/test_learning_quality.py; docs/QUALITY-BAR.md
   - id: BUG-005
     title: SVG rasterizer frame dimensions corrupt raw MP4 timing

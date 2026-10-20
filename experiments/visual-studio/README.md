@@ -1,5 +1,13 @@
 # Local visual studio
 
+The owner selected Claude + Anatomy as the visual production direction (ADR 0005).
+The D1 interface uses shared system typography, a desktop question rail/phone
+selector, a large stage with attached explanation, one narrated playback action,
+adjacent experiment tools, elapsed time and initially expanded illustration limits.
+Navigation preserves the same lesson state; narration and domain rules are unchanged.
+The design brief is `design/lessons/studio-interface.md`. This is a local UI review,
+not a provider-route switch, production release or owner design acceptance.
+
 Reusable standalone player for carefully authored concept studies. It shares a
 typed lesson/scene contract, manual playback, pause/replay/reset/seek, responsive
 labels, qualitative controls, optional predictions/transfer, source disclosure and

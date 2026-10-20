@@ -1,5 +1,7 @@
 sessions:
 - date: 2026-10-19
+  result: GPU core/depth paths and provider-neutral authoring contexts built; zero API cost; Vercel unchanged
+- date: 2026-10-19
   result: Implemented CE-1 vertical slice and separate review gates; acceptance pending
 - date: 2026-10-19
   result: Protected personal alpha live generation and immutable AC studio deployed

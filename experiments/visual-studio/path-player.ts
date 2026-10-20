@@ -20,12 +20,25 @@ export function mountPath(root: HTMLElement, value: unknown,
   lessons: Readonly<Record<string, (host: HTMLElement) => StudioAPI>>): LearningPathAPI {
   const path: LearningPath = parsePath(value, Object.keys(lessons));
   const header = el('header'); header.className = 'path-heading';
-  header.append(el('p', 'Inside / follow your curiosity'), el('h1', path.title),
-    el('p', 'Start with the complete story. Explore the questions that interest you.'));
+  const brand = el('div'); brand.className = 'brand-bar';
+  const wordmark = el('span', 'Inside'); wordmark.className = 'wordmark';
+  brand.append(wordmark, el('span', 'Visual explanations'));
+  const heading = el('h1', path.title); heading.tabIndex = -1;
+  header.append(brand, heading);
+  const layout = el('div'); layout.className = 'path-layout';
+  const sidebar = el('aside'); sidebar.className = 'path-sidebar';
+  const content = el('div'); content.className = 'path-content';
   const nav = el('nav'); nav.className = 'path-nav'; nav.setAttribute('aria-label', 'Explanation depth');
+  const navTitle = el('p', 'In this explanation'); navTitle.className = 'nav-title';
+  const mobile = el('div'); mobile.className = 'path-mobile';
+  const chapter = el('select'); chapter.id = 'path-choice';
+  const chapterLabel = el('label', 'In this explanation'); chapterLabel.htmlFor = chapter.id;
+  mobile.append(chapterLabel, chapter);
   const context = el('div'); context.className = 'path-context';
   const back = btn('', () => api.back()); back.hidden = true;
+  back.className = 'path-back';
   const depth = btn('Dive deeper', () => findQuestion('dive deeper'));
+  depth.className = 'depth-button';
   const contextActions = el('div'); contextActions.className = 'path-context-actions'; contextActions.append(back, depth);
   const prerequisite = el('p'); context.append(contextActions, prerequisite);
   const notice = el('p'); notice.className = 'path-notice'; notice.setAttribute('role', 'status');
@@ -41,7 +54,8 @@ export function mountPath(root: HTMLElement, value: unknown,
   help.id = 'question-help'; help.className = 'path-help'; input.setAttribute('aria-describedby', help.id);
   const deeperHeading = el('h2', 'Follow your curiosity'); deeperHeading.tabIndex = -1;
   deeper.append(deeperHeading, next, form, help, notice);
-  root.append(header, nav, context, viewport, deeper);
+  sidebar.append(navTitle, nav, mobile, context); content.append(viewport, deeper);
+  layout.append(sidebar, content); root.append(header, layout);
   const mounted = new Map<string, { host: HTMLElement; api: StudioAPI }>();
   const buttons = new Map<string, HTMLButtonElement>();
   const history: string[] = []; let current = '';
@@ -65,13 +79,17 @@ export function mountPath(root: HTMLElement, value: unknown,
     if (push && current) history.push(current);
     if (previous) previous.host.hidden = true;
     current = id; target.host.hidden = false;
+    heading.textContent = node.question;
     // No hidden lesson or asynchronous media event can replace the active inspection API.
     window.lessonStudio = target.api; window.seek = target.api.seek;
     buttons.forEach((button, key) => button.setAttribute('aria-current', key === id ? 'page' : 'false'));
+    chapter.value = id;
     const parent = path.nodes.find(n => n.id === history[history.length - 1]);
     back.hidden = !parent; back.textContent = parent ? `Back to ${parent.label.toLowerCase()}` : '';
-    depth.textContent = node.next.length ? 'Dive deeper' : 'Explore other questions';
-    prerequisite.textContent = node.prerequisites.length ? `Builds on: ${node.prerequisites.map(id => path.nodes.find(n => n.id === id)!.label.toLowerCase()).join(', ')}. You can return at any time.` : '';
+    depth.textContent = node.next.length ? 'Dive deeper' : 'Questions';
+    depth.setAttribute('aria-label', node.next.length ? 'Dive deeper' : 'Browse available questions');
+    const missing = node.prerequisites.filter(id => !mounted.has(id));
+    prerequisite.textContent = missing.length ? `Builds on: ${missing.map(id => path.nodes.find(n => n.id === id)!.label.toLowerCase()).join(', ')}. You can return at any time.` : '';
     next.replaceChildren(...node.next.map(id => {
       const child = path.nodes.find(n => n.id === id)!;
       return btn(child.question, () => api.select(id));
@@ -81,9 +99,8 @@ export function mountPath(root: HTMLElement, value: unknown,
     notice.textContent = ''; input.value = '';
     historyReplace(id);
     if (focus) {
-      const heading = target.host.querySelector('h2');
-      if (heading instanceof HTMLElement) { heading.tabIndex = -1; heading.focus({ preventScroll: true });
-        (back.hidden ? heading : context).scrollIntoView({ block: 'start', behavior: 'auto' }); }
+      heading.focus({ preventScroll: true });
+      heading.scrollIntoView({ block: 'start', behavior: 'auto' });
     }
   };
   const historyReplace = (id: string): void => { window.history.replaceState(null, '', `#${id}`); };
@@ -94,7 +111,9 @@ export function mountPath(root: HTMLElement, value: unknown,
   };
   path.nodes.forEach(node => {
     const b = btn(node.label, () => api.select(node.id)); buttons.set(node.id, b); nav.append(b);
+    const option = el('option', node.label); option.value = node.id; chapter.append(option);
   });
+  chapter.addEventListener('change', () => api.select(chapter.value));
   const findQuestion = (question: string): void => {
     const target = resolveQuestion(path, current, question);
     if (target) {
