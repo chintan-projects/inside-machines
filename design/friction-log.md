@@ -461,3 +461,23 @@ Final sampled 375/768/1440 views have no overflow, clipped SVG text, label colli
 or targets below 44px. Evidence: ignored `fridge-r1-final-*.jpg`, browser review,
 R1 journal/hash. Independent source review, owner physical-phone craft and the
 4/5 beginner-transfer hypothesis remain pending. No catalog/Vercel promotion.
+
+# Curated owner costs · 2026-10-20
+
+Observed, medium: the live owner comparison ran category, billing status and
+voice assumptions into adjacent text. Scoped table styles now separate secondary
+lines, preserve readable numbers and keep the wide comparison in a labeled,
+keyboard-focusable scroll region. Render verification recorded in the integration
+journal; owner taste and actual-phone accessibility remain unmeasured.
+
+Observed, high: real Claude authoring completed a GPU memory-supply draft but
+omitted one permanent core label and all self-contained inset text labels. The
+structural gate rejected it before review, voice, rendering or publication.
+An explicit next owner operation must carry the saved findings and evidence;
+automatic paid retries or a relaxed label gate would not resolve the failure.
+
+Code audit, high: the request-queue owner build lacked an operation token although
+depth/revision builds already had one. The API now requires the same bounded token;
+the shared client attempt manager retains it after a lost response and offers a
+separate funded action only after409. Concurrency and lost-response regressions
+are required before deployment; no real extra build was triggered by this audit.

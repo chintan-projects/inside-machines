@@ -1,5 +1,6 @@
 """Bounded editorial findings guide a fresh, explicit authoring iteration."""
 
+import hashlib
 import time
 from typing import cast
 
@@ -22,7 +23,8 @@ class EditorialReviewError(ValueError):
         self.notes = [note[:400] for note in notes[:10]]
 
 
-def _rejection(id: str, job: dict[str, object]) -> tuple[AuthorLessonSpec, ReviewDecision] | None:
+def rejected_draft(id: str, job: dict[str, object]) -> tuple[AuthorLessonSpec, ReviewDecision] | None:
+    """Read the actual SHA-bound verdict and draft without trusting diagnostic text."""
     if (
         job.get("status") != "failed"
         or job.get("failed_phase") != "review"
@@ -32,6 +34,8 @@ def _rejection(id: str, job: dict[str, object]) -> tuple[AuthorLessonSpec, Revie
     outputs = cast(dict[str, dict[str, object]], job.get("call_outputs", {}))
     saved = outputs.get(f"lesson:{id}:review")
     if not saved or saved.get("bytes"):
+        return None
+    if saved.get("sha256") not in (None, hashlib.sha256(str(saved.get("value")).encode()).hexdigest()):
         return None
     try:
         verdict = ReviewDecision.model_validate_json(str(saved["value"]))
@@ -50,7 +54,7 @@ def _rejection(id: str, job: dict[str, object]) -> tuple[AuthorLessonSpec, Revie
 
 def editorial_notes(id: str, job: dict[str, object]) -> list[str]:
     """Project bounded critique for owners without mutating historical failures."""
-    rejected = _rejection(id, job)
+    rejected = rejected_draft(id, job)
     return [n[:400] for n in rejected[1].notes[:10]] if rejected else []
 
 
@@ -70,7 +74,7 @@ def latest_feedback(db: Database, parent_sha: str, question: str, user_id: str) 
         receipt = db.ledger.get(f"lesson:{id}:review", {})
         if not receipt.get("models") or receipt.get("uncertain") or receipt_origin(db, id, "author") is None:
             continue
-        rejected = _rejection(id, job)
+        rejected = rejected_draft(id, job)
         if rejected is None:
             continue
         spec, verdict = rejected

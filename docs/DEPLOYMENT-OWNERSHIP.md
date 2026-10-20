@@ -4,6 +4,11 @@ Updated: 2026-10-19 (Pacific time). **Live application, Neon database and active
 private Blob storage are owned by the verified personal Gmail account. GitHub
 login authorization remains pending for automatic Git deployments.**
 
+The deployment and spend values below describe the migration snapshot. Later
+curated-library releases and paid verification attempts are recorded in the
+[integration journal](../journal/2026-10-20-curated-integration.md); use the owner
+workspace for current spending.
+
 ## Verified ownership
 
 | Item | Verified destination |
@@ -14,7 +19,7 @@ login authorization remains pending for automatic Git deployments.**
 | Project | `inside-machines-alpha`, `prj_ok8CKAxGVlADIiJyECM6wukxrUnn` |
 | Neon | Existing `inside-machines-db`, `store_ZqexGu717dNkmfMV`, Free |
 | Active private Blob | `inside-machines-assets`, `store_3LF9qetVQ3IptgHA`, `iad1` |
-| Production runtime | `dpl_HY4oCMJcg2wpWXxZVa2dH1WAa1Zk`, Ready, Gmail workspace |
+| Migration runtime | `dpl_HY4oCMJcg2wpWXxZVa2dH1WAa1Zk`, Ready, Gmail workspace |
 
 Use [Inside Machines](https://inside-machines-alpha.vercel.app) or the
 [Gmail workspace alias](https://inside-machines-alpha-cdt9s-projects.vercel.app).

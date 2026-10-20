@@ -20,6 +20,13 @@ class InterestUpdate(BaseModel):
     note: str = Field(default="", max_length=600)
 
 
+class InterestBuild(BaseModel):
+    """An owner click names an attempt; a lost HTTP response cannot authorize another."""
+
+    model_config = ConfigDict(extra="forbid")
+    operation: str = Field(pattern=r"^[a-zA-Z0-9-]{8,80}$")
+
+
 def register_interest_routes(app: FastAPI, store: Store, settings: Settings,
                              member: Callable[..., User], dispatch: Callable[[str, str], Awaitable[None]]) -> None:
     """One domain service; only the explicit owner build endpoint can spend money."""
@@ -51,13 +58,14 @@ def register_interest_routes(app: FastAPI, store: Store, settings: Settings,
         return interests.update(key, body.status, body.lesson_id, body.note, user)
 
     @app.post("/api/v1/owner/requests/{key}/build")
-    async def build(key: str, user: Annotated[User, Depends(member)]) -> dict[str, object]:
+    async def build(key: str, body: InterestBuild, user: Annotated[User, Depends(member)]) -> dict[str, object]:
         interests.owner(user)
         from fastapi import HTTPException
         record = store.snapshot().topic_interests.get(key)
         if not record:
             raise HTTPException(404, "Topic request not found")
-        result = Domain(store, settings).request(str(record["question"]), user)
+        result = Domain(store, settings).request(str(record["question"]), user,
+                                                owner_build=True, operation=body.operation)
         if result["kind"] == "job":
             job = Domain(store, settings).job(str(result["job_id"]))
             def remember(db: Database) -> None:

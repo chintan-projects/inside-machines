@@ -1,0 +1,38 @@
+.owner .cost-table {
+  min-width: 880px;
+  table-layout: fixed;
+  font-variant-numeric: tabular-nums;
+}
+
+.owner .cost-table caption {
+  text-align: left;
+  padding-bottom: 12px;
+}
+
+.owner .cost-table th,
+.owner .cost-table td {
+  padding: 16px;
+  vertical-align: top;
+  font-size: .85rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.owner .cost-table small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: .85rem;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.owner .cost-table td > strong {
+  display: block;
+}
+
+.owner .cost-table th:nth-child(1) { width: 16%; }
+.owner .cost-table th:nth-child(2) { width: 22%; }
+.owner .cost-table th:nth-child(3) { width: 16%; }
+.owner .cost-table th:nth-child(4) { width: 18%; }
+.owner .cost-table th:nth-child(5) { width: 28%; }

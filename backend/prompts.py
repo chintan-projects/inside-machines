@@ -224,13 +224,15 @@ separate source checkpoint is authoritative. A fresh editorial check will review
 
 
 def path_node_prompt(path: LearningPath, node_id: str, canonical: str, evidence: ResearchSpec,
-                     *, compact: bool = False, parent_example: dict[str, object] | None = None) -> str:
+                     *, compact: bool = False, parent_example: dict[str, object] | None = None,
+                     feedback: dict[str, object] | None = None) -> str:
     """Reuse the existing lesson author/schema/evidence route with explicit depth context."""
     node = next((node for node in path.nodes if node.id == node_id), None)
     if node is None:
         raise ValueError("Unknown learning-path node")
     return lesson_prompt(
-        node.question, canonical, evidence, compact=compact, guide=guide_for(path.title + " " + node.question)
+        node.question, canonical, evidence, compact=compact, feedback=feedback,
+        guide=guide_for(path.title + " " + node.question)
     ) + NODE_CONTEXT_POLICY + DEPTH_AUTHORING_POLICY + "\nLEARNING_PATH_CONTEXT: " + json.dumps({
         "path_id": path.id, "root_question": path.nodes[0].question, "shared_example": path.example,
         "node": node.model_dump(mode="json"),

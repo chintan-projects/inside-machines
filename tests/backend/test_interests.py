@@ -42,7 +42,8 @@ def test_requests_never_dispatch_even_with_funded_provider(settings: Settings, t
         assert response.status_code == 200 and response.json()["kind"] == "interest"
         assert len(client.get("/api/v1/requests").json()) == 1
         assert client.get("/api/v1/owner/requests").status_code == 403
-        assert client.post(f"/api/v1/owner/requests/{response.json()['interest_id']}/build", json={}).status_code == 403
+        assert client.post(f"/api/v1/owner/requests/{response.json()['interest_id']}/build",
+                           json={"operation": "family-forbidden-attempt"}).status_code == 403
     assert not calls
     state = Store("", tmp_path).snapshot()
     assert state.spent == state.reserved == 0 and not state.jobs

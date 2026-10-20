@@ -10,6 +10,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel
 
 from .accounting import receipt_origin
+from .author_iteration import iteration_digest, reusable_iteration
 from .concept_guides import guide_for
 from .contracts import LessonSpec, canonicalize
 from .depth_authoring import DepthRole, depth_context
@@ -86,9 +87,15 @@ class Domain:
     def request(
         self, question: str, user: User, *, revision_of: str | None = None, operation: str = "",
         node_parent: str | None = None, node_role: DepthRole | None = None,
+        owner_build: bool = False,
     ) -> dict[str, object]:
         """Return a cached lesson, attach to a pending job, or atomically admit new work."""
         canonical = canonicalize(question)
+        if owner_build and not user.owner:
+            raise HTTPException(403, "Owner access is required")
+        if owner_build and (revision_of or node_parent or node_role
+                            or not re.fullmatch(r"[a-zA-Z0-9-]{8,80}", operation)):
+            raise HTTPException(422, "A bounded, independent owner-build operation ID is required")
         if not canonical:
             raise HTTPException(422, "Tell us which concept you want to understand.")
         if node_parent is not None or node_role is not None:
@@ -115,6 +122,21 @@ class Domain:
         def admit(db: Database) -> dict[str, object]:
             parent = db.lessons.get(revision_of) if revision_of else None
             context = None
+            if owner_build:
+                for previous in db.jobs.values():
+                    if (not previous.get("owner_build") or previous.get("user_id") != user.id
+                            or previous.get("owner_operation") != operation):
+                        continue
+                    if previous.get("question") != question:
+                        raise HTTPException(409, "This operation already belongs to another owner-build intent")
+                    if previous["status"] == "failed":
+                        raise HTTPException(409, "That build attempt failed. Start a new operation explicitly to try again.")
+                    if previous["status"] == "complete":
+                        lesson_id = previous.get("lesson_id")
+                        if lesson_id and lesson_id in db.lessons:
+                            return {"kind": "lesson", "lesson_id": lesson_id, "reused": True}
+                        raise HTTPException(409, "That build needs owner recovery; no new work was admitted")
+                    return {"kind": "job", "job_id": previous["id"], "reused": True}
             if node_parent:
                 core = db.lessons.get(node_parent)
                 if core is None:
@@ -178,6 +200,8 @@ class Domain:
                     return {"kind": "lesson", "lesson_id": latest["id"], "reused": True}
             for job in db.jobs.values():
                 if job["canonical"] == canonical and job["status"] not in ("failed", "complete"):
+                    if owner_build:
+                        raise HTTPException(409, "A build of this topic is already in progress. Follow the existing attempt.")
                     self.event(db, "joined_job", user, question=question, job_id=job["id"])
                     return {"kind": "job", "job_id": job["id"], "reused": True}
             if not self.settings.generation_enabled:
@@ -207,7 +231,13 @@ class Domain:
             parent_sha = digest_spec(LessonSpec.model_validate(parent["spec"])) if parent else ""
             draft = reusable_draft(db, parent_sha, question, user.id) if parent else None
             recovered = reusable_research(db, parent_sha, question, user.id) if parent else None
-            feedback = latest_feedback(db, parent_sha, question, user.id) if not context else None
+            feedback = latest_feedback(db, parent_sha, question, user.id) if parent else None
+            concept_guide = guide_for(context.path.title + " " + question if context else question).id
+            iteration = (reusable_iteration(db, question, user.id, concept_guide, context)
+                         if user.owner and not parent and (context or owner_build) else None)
+            if iteration:
+                recovered = iteration.evidence, iteration.evidence_origin
+                feedback = iteration.feedback
             job_id = secrets.token_urlsafe(18)
             db.jobs[job_id] = {
                 "id": job_id,
@@ -220,9 +250,13 @@ class Domain:
                 "review_protocol": "verdict-1",
                 "author_protocol": "compact-1",
                 "revision_protocol": "patch-1",
-                "concept_guide": guide_for(context.path.title + " " + question if context else question).id,
+                "concept_guide": concept_guide,
                 "author_policy_sha256": AUTHOR_POLICY,
                 "editorial_feedback": feedback,
+                "iteration_from": iteration.feedback["job_id"] if iteration else None,
+                "iteration_sha256": iteration_digest(iteration) if iteration else None,
+                "owner_build": owner_build,
+                "owner_operation": operation if owner_build else None,
                 "message": "Reviewing the saved visual explanation"
                 if draft
                 else "Using saved evidence; building the visual explanation"

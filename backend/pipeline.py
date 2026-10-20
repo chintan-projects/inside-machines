@@ -17,6 +17,7 @@ from pydantic import ValidationError
 
 from .accounting import charge
 from .assets import Assets
+from .author_iteration import validate_iteration
 from .author_transport import author_schema, expand_author
 from .concept_guides import guide_for
 from .contracts import AuthorLessonSpec, LessonSpec, ReviewDecision, ReviewSpec, TeachingReviewSpec
@@ -139,6 +140,7 @@ class Pipeline:
                 outputs[key] = {
                     "bytes": isinstance(result, bytes),
                     "value": base64.b64encode(result).decode() if isinstance(result, bytes) else result,
+                    "sha256": hashlib.sha256(result if isinstance(result, bytes) else result.encode()).hexdigest(),
                 }
 
         self.store.transaction(settle)
@@ -195,8 +197,11 @@ class Pipeline:
         if job is None:
             return
         phase = str(job["phase"])
+        rejected_spec: LessonSpec | None = None
         try:
             depth = self.store.transaction(lambda db: job_depth_context(job, db), write=False)
+            if phase in ("queued", "author"):
+                self.store.transaction(lambda db: validate_iteration(job, db, depth), write=False)
             guide = guide_for(str(job["question"]), str(job.get("concept_guide") or ""))
             evidence = ResearchSpec.model_validate(job["research"]) if job.get("research") else None
             if job.get("pipeline_version") == "evidence-first-1" and phase != "queued" and evidence is None:
@@ -236,7 +241,8 @@ class Pipeline:
                     if evidence is None:
                         raise ValueError("Depth authoring requires its evidence checkpoint")
                     prompt = path_node_prompt(depth.path, depth.node_id, str(job["canonical"]), evidence,
-                                              compact=compact, parent_example=depth.parent_example)
+                                              compact=compact, parent_example=depth.parent_example,
+                                              feedback=critique)
                 else:
                     prompt = (
                         revision_prompt(
@@ -280,6 +286,7 @@ class Pipeline:
                     raise ValueError("Generated lesson changed its requested identity")
                 if evidence:
                     require_evidence_sources(spec, evidence)
+                rejected_spec = spec
                 require_learning_quality(spec)
                 self._advance(
                     job,
@@ -365,6 +372,8 @@ class Pipeline:
                         current["validation_issues"] = validation_findings
                     if quality_findings:
                         current["quality_issues"] = quality_findings
+                        if phase == "author" and rejected_spec is not None:
+                            current["rejected_spec_sha256"] = digest_spec(rejected_spec)
                     self.domain.settle(
                         db,
                         current,

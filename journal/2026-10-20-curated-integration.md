@@ -145,3 +145,51 @@ Boundary regressions confirm20,361 still fits and20,362 fails closed. Full sourc
 verification now has291 passing backend tests and90.71% coverage. A fresh explicit
 owner operation will test the revised bound after deployment; prior failures and
 allowances remain in the same ledger.
+
+The 20k operation completed research ($0.057008) and a schema-valid Claude draft
+with13,986 input/9,078 output tokens ($0.118752), totaling$0.175760. It stopped at
+the author quality gate: `other-work` had no permanent on-scene label, and all four
+detail views lacked their own text labels. No review, voice, rendering, lesson
+publication or availability notice followed. App spend after the real probes is
+$5.60409954, including$1.95 of retained unknown-billing allowances, with$0 reserved.
+This is a failed production attempt, not the price of an accepted lesson.
+
+The owner comparison also exposed a live layout failure: secondary cost labels
+were inline with amounts and system names. A shared scoped stylesheet separates
+category, unknown billing, reservation and voice assumptions, with a keyboard
+scroll region for the full comparison. Render results follow after verification.
+
+Local browser review observed separated cost lines at desktop width and a375px
+viewport with no page overflow. The880px comparison stays inside its343px scroll
+region; secondary labels measure14.45px. Keyboard focus reaches the named region
+and Right Arrow advances its horizontal offset. This is emulation and an agent
+observation, not actual-phone or screen-reader acceptance.
+
+Explicit next-operation feedback is now shared by unpublished core and depth
+authoring. It accepts only completed known-billed author-quality failures or
+SHA-bound editorial rejections, recomputes quality findings, checks owner/question/
+guide/root scope and binds evidence plus draft at admission and dispatch. A core
+patch can inform another explicit iteration. Original failures and receipts stay
+immutable. The actual GPU request with saved feedback is59,720 of100,000 allowed
+bytes in local adapter preflight; no provider call was used for that check.
+
+The owner request-build API now requires a bounded operation token. A repeated
+submission joins the same admitted operation; failed operations return409, and
+changed intent or a different operation colliding with a running core build is
+held. The UI shares the attempt manager with depth, preserving transport recovery
+and offering a distinct new funded action. Tests cover actual API response loss,
+failure, new intent and concurrent Postgres admissions without paid access.
+
+Final source verification for this repair: Ruff; strict mypy113files;325 backend
+tests with90.93% coverage (six PG-only skips in the default suite); all six actual
+disposable Postgres regressions separately passed. Frontend types/lint/24tests/build
+and32studio/domain tests pass. Source secret-literal and600-line checks pass.
+Fresh Linux packaging, hosted revision feedback and final deployment follow.
+
+Fresh selected-provider Linux packaging passes with the20k output configuration.
+Both API and durable queue functions include `author_iteration.py` and the bounded
+document adapter, shared services, Linux encoder and versioned CDN/PWA shell;
+private audit, environment and CLI-auth files are excluded. The sanitized build
+snapshot was byte-compared with current production sources. Primary Gmail,
+destination Owner role, project/Neon/private Blob ownership and unchanged Vercel
+protection were reverified before push/deploy. Git automation remains disconnected.

@@ -13,6 +13,8 @@ This implements the integration boundary; it does not certify lesson quality.
 3. The owner sees aggregated demand, plans/declines the request, binds an existing
    lesson or explicitly starts a budgeted draft. Customers cannot dispatch that
    build. There is no automatic paid retry or provider fallback.
+   Continuing after a lost response retains the operation token. A failed token
+   returns409; funding another attempt is a separate owner action.
 4. Evidence retrieval, authoring, SHA-bound editorial review, speech and rendering
    retain separate checkpoints and receipts. Completion produces a **review draft**.
 5. The owner records engineering, independent technical, actual-phone craft and
@@ -25,6 +27,14 @@ Cross-device account recovery, email delivery, browser push, subscription billin
 automatic arbitrary-topic publication are not implemented or implied.
 The family alpha can inspect clearly labeled drafts; a draft is never a release.
 Specific-model documentation remains outside this generic-system seed library.
+
+For a completed, accounted author-quality or SHA-bound editorial rejection, a
+new owner operation can reuse its exact evidence checkpoint and carry the rejected
+draft with current findings into authoring. The scope, owner, root revision and
+draft/evidence binding are checked again before spending. Incomplete or uncertain
+calls are excluded; an existing rejection is never published through recovery.
+Prior jobs and receipts stay unchanged, and every new draft still needs fresh
+quality, editorial and release checks.
 
 ## Twenty source-led core scopes
 

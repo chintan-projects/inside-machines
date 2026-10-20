@@ -1,22 +1,22 @@
 goal: Build the curated visual concept library and validate learning quality
-status: hosted_output_limit_verification
+status: explicit_owner_iteration_verification
 current:
 - Curated member requests, owner triage/build, review-gated availability and private inbox wired
 - Shared D1 player serves all20 narrated review cores; offline path and artifact verification wired
 - Personal Gmail production Ready;26 immutable revisions preserve all9 earlier lesson specs
 - Owner costs expose20 scopes, actual receipts, estimates and uncertain billing
-- Claude transport accepted; full10k attempt stopped incomplete;20k bounded production override under verification
+- Claude20k draft completes but label/inset quality fails; explicit feedback/evidence reuse under verification
 needs_input:
 - Connect personal GitHub login to Gmail Vercel for automatic deployments (BUG-008)
 - Independent technical review, real-phone craft and five unfamiliar beginner learning checks
 - Owner taste/release approval; sixteen new schematic cores do not establish selected Anatomy craft
 verification:
-- 291 backend tests pass;6 real Postgres regressions separately pass;90.71 percent coverage
-- Ruff and strict mypy111files pass; frontend types/lint/23tests/build and32studio checks pass
+- 325 backend tests pass;6 real Postgres regressions separately pass;90.93 percent coverage
+- Ruff and strict mypy113files pass; frontend types/lint/24tests/build and32studio checks pass
 - Linux packaging verifier passes; protected live20paths/media/captions and free request flow pass
 - Historical lesson/chat/ledger preservation and member owner-API denial observed live
 - 'Paid probe: research0.067506 USD; author0.65 uncertain; two diagnostic allowances0.65 each'
-- Full envelope attempt recorded0.185406 USD but hit10k output limit; no incomplete draft published
+- Completed20k draft cost0.175760 USD and stopped at quality; no rejected draft published
 - No automatic paid retries or fallback; no real human acceptance evidence fabricated
 sessions:
 - date: '2026-10-20'

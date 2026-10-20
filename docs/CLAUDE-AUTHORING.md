@@ -69,3 +69,26 @@ one-output-token probe using the actual compact authoring schema successfully
 reached provider identity and terminal usage: 6,284 input tokens, one output token,
 $0.012578 recorded cost, no uncertain billing. Its intentional token limit produced
 no lesson. This proves envelope acceptance, not complete authoring or teaching quality.
+
+A fresh, explicit owner build or depth operation can iterate on a completed draft
+that failed learning-quality checks or received a SHA-bound editorial rejection.
+The server matches the owner, exact question, trusted guide and current authoring
+policy within seven days; depth also matches the same active root revision and
+role. It requires completed, known-billed research and author receipts and an
+intact schema-valid draft with exactly the saved evidence source table. Refused,
+truncated, schema-invalid and uncertain-billing attempts do not qualify. Published
+revision recovery keeps its separate existing rules.
+
+Admission records `research_reused_from`, `iteration_from` and a SHA-bound
+`editorial_feedback` checkpoint; it reserves the normal job allowance without a
+new charge. Before authoring, the pipeline revalidates the original checkpoint,
+evidence, scope and recomputed findings. Depth receives that feedback through the
+shared path prompt; unpublished core lessons use the existing typed patch route.
+Completed partial repairs can inform a later explicit operation. Original jobs,
+receipts, published lessons and private chats remain unchanged. No attempt is
+retried automatically, and fresh authoring, review, media and human release gates
+still apply. A failed depth operation ID continues to return 409.
+The owner request-build endpoint also requires a bounded `operation` ID. HTTP
+replays join that same attempt, failed IDs return 409, and only a new explicit ID
+can admit another funded build. A different operation cannot join an in-progress
+core build and later accidentally authorize a second call after it fails.

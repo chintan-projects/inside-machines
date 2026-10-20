@@ -10,6 +10,7 @@ import pytest
 
 from backend.contracts import LessonSpec
 from backend.domain import Domain, User
+from backend.research import ResearchSpec
 from backend.settings import Settings
 from backend.store import Database, Store
 
@@ -324,7 +325,7 @@ def test_postgres_path_attachment_rolls_back_and_serializes_edits(
 
 
 def test_postgres_depth_draft_concurrency_keeps_root_and_one_reservation(
-    settings: Settings, ce_spec: LessonSpec,
+    settings: Settings, ce_spec: LessonSpec, evidence: ResearchSpec,
 ) -> None:
     """A new branch atomically reserves once without changing its core/private history."""
     from fastapi import HTTPException
@@ -365,3 +366,52 @@ def test_postgres_depth_draft_concurrency_keeps_root_and_one_reservation(
     with pytest.raises(HTTPException) as failed:
         domain.request(question, owner, node_parent=ce_spec.canonical, node_role="model", operation="pg-depth-operation")
     assert failed.value.status_code == 409 and store.snapshot().reserved == 0
+    # A completed, accounted rejection can inform one new explicit operation.
+    from backend.author_transport import compact_author
+
+    rejected = ce_spec.model_copy(deep=True)
+    rejected.canonical = str(job["canonical"])
+    assert rejected.teaching is not None
+    missing = "label-" + rejected.teaching.core[0]
+    rejected.parts = [p for p in rejected.parts if p.id != missing]
+
+    def completed_failure(state: Database) -> None:
+        import json
+
+        state.jobs[str(job["id"])].update(
+            failed_phase="author", failure_type="LearningQualityError", author_mode="compact",
+            research=evidence.model_dump(mode="json"),
+            call_outputs={f"lesson:{job['id']}:author": {"bytes": False, "value": json.dumps(compact_author(rejected))}},
+        )
+        for phase in ("research", "author"):
+            state.ledger[f"lesson:{job['id']}:{phase}"] = {
+                "models": ["synthetic-completed"], "uncertain": False, "response_status": "completed",
+                "billing_complete": True, "charged_usd": 0.01,
+            }
+        state.spent = 0.02
+
+    store.transaction(completed_failure)
+    failed_state = store.snapshot()
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        iterations = list(pool.map(lambda _: domain.request(question, owner, node_parent=ce_spec.canonical,
+                                                            node_role="model", operation="pg-depth-next-operation"), range(16)))
+    final = store.snapshot()
+    assert len({r["job_id"] for r in iterations}) == 1 and len(final.jobs) == 2
+    current = final.jobs[str(iterations[0]["job_id"])]
+    assert current["phase"] == "author" and current["iteration_from"] == current["research_reused_from"] == job["id"]
+    assert final.reserved == settings.generation_reserve and final.spent == failed_state.spent
+    assert final.ledger == failed_state.ledger and final.jobs[str(job["id"])] == failed_state.jobs[str(job["id"])]
+    assert final.lessons == before.lessons and final.chats == before.chats and final.feedback == before.feedback
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        core_attempts = list(pool.map(lambda _: domain.request(
+            "How does a synthetic standalone core work?", owner,
+            owner_build=True, operation="pg-core-http-operation"), range(16)))
+    assert len({r["job_id"] for r in core_attempts}) == 1
+    core_id = str(core_attempts[0]["job_id"])
+    assert store.snapshot().reserved == 2 * settings.generation_reserve
+    store.transaction(lambda state: domain.settle(state, state.jobs[core_id], "failed", "Synthetic core failure"))
+    stable = store.snapshot()
+    with pytest.raises(HTTPException) as failed_core:
+        domain.request("How does a synthetic standalone core work?", owner,
+                       owner_build=True, operation="pg-core-http-operation")
+    assert failed_core.value.status_code == 409 and store.snapshot() == stable

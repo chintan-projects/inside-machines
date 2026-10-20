@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { ReactElement } from 'react';
 import { api, errorMessage } from './api';
+import './owner-costs.css';
 
 interface CostTotals {
   recorded_usd:number; receipt_based_usd:number; estimated_usd:number; uncertain_usd:number;
@@ -49,7 +50,8 @@ export function OwnerCosts():ReactElement {
         That is an allowance, not a price estimate. Revisions and live chat use additional allowances.</p>
       <p className="muted">These {report.systems.length} scopes share the same production framework. Missing receipts mean unmeasured cost.
         Local authoring and computer speech can have no paid API calls; design, hosting, storage and human review still take resources.</p>
-      <div className="table-scroll"><table><caption>Build receipts include failed jobs and preserved revisions. Chat is shown separately.</caption>
+      <p className="muted">Scroll across the comparison to see tokens, revisions and voice estimates.</p>
+      <div className="table-scroll" tabIndex={0} role="region" aria-label="Scrollable system cost comparison"><table className="cost-table"><caption>Build receipts include failed jobs and preserved revisions. Chat is shown separately.</caption>
         <thead><tr><th scope="col">System</th><th scope="col">Build ledger</th><th scope="col">Input / output tokens</th><th scope="col">Prepared revisions</th><th scope="col">Optional hosted voice</th></tr></thead>
         <tbody>{report.systems.map(row=><tr key={row.system_id}>
           <th scope="row">{row.title}<small>{row.category}</small></th>
