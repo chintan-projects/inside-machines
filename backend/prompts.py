@@ -46,12 +46,11 @@ energy. The scene must still explain the machine without color. Paths end on act
 For isometric solidity, use matching top/side polygons and front faces. Never draw faces over the
 mechanism. A front view is preferable when it makes the cutaway more legible.
 
-Create 4–6 causal stages. Each references actual part IDs, has a concise title, explanation,
+Create 3–5 causal stages. Each references actual part IDs, has a concise title, explanation,
 one causal idea, and narration (roughly 25–35 words). TOTAL narration must be <=260 words.
-Set stage durations to 10–18 seconds. Animate only meaningful parts: rotate, translate, pulse,
-or flow. Motion amounts are total displacement per stage (degrees or pixels), accumulated over
-earlier stages. axis x/y applies to translate. Rotation center is x+w/2,y+h/2. Avoid disconnected
-flying parts. Pulse/flow are qualitative emphasis, never proof of a physical number.
+Set stage durations to 10–18 seconds. The full-machine context is a static locator.
+Set EVERY part.motion=[] and every graphic.motion=[]. Express all meaningful causal motion
+only through teaching.beats[].changes so browser, static and video outputs share one state.
 Include >=3 useful follow-up questions with answers and existing stage/part references, a transfer
 prediction, and its answer. State simplifications explicitly. Do not claim exact physical
 simulation or factual verification. Make geometry schematic, keep cause/effect and units correct.

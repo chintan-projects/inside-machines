@@ -8,7 +8,7 @@ from .teaching_state import sampled_pose
 
 
 def _bounds(part: Part, change: Change | None, progress: float) -> tuple[float, float, float, float]:
-    pose = sampled_pose(change, progress)
+    pose = sampled_pose(change, progress, part.color)
     points = (
         part.points
         if part.shape in ("path", "polygon")
@@ -44,6 +44,8 @@ def teaching_issues(spec: LessonSpec) -> list[str]:
     if teaching is None:
         return ["CE lessons require a teaching contract"]
     issues: list[str] = []
+    if teaching.renderer == "declarative" and any(p.motion for p in spec.parts):
+        issues.append("CE context parts must be static; causal motion belongs to teaching graphic changes")
     if teaching.renderer == "ac-cutaway-v2":
         from .renderer_assets import ac_renderer_fingerprint
 

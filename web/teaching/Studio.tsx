@@ -38,7 +38,7 @@ function Studio({lesson,member,online,teaching}:{readonly teaching:TeachingSpec}
   const [consent,setConsent]=useState(false),[countError,setCountError]=useState(''),[prediction,setPrediction]=useState<number|null>(null);
   const {spec}=lesson, {beat,progress}=player, stage=spec.stages[beat.stage],last=beat.stage===spec.stages.length-1;
   const scenario=scenarioFor(spec,beat,scenarioId), options=teaching.scenarios.filter(s=>s.beat===beat.id);
-  const showContext=(context:'outside'|'inside'|'none'='outside'):ReactElement=>teaching.renderer==='ac-cutaway-v2'?<Cutaway context={context} focus={begun&&compact&&!whole&&!last&&beat.stage!==0?stage.focus:undefined} onSelect={begun?inspect:undefined}/>:<Scene spec={spec} seconds={player.seconds}/>;
+  const showContext=(context:'outside'|'inside'|'none'='outside'):ReactElement=>teaching.renderer==='ac-cutaway-v2'?<Cutaway context={context} focus={begun&&compact&&!whole&&!last&&beat.stage!==0?stage.focus:undefined} onSelect={begun?inspect:undefined}/>:<Scene spec={spec} seconds={player.seconds} selected={stage.focus} zoom={begun&&compact&&!whole&&!last}/>;
   function jump(index:number):void {
     video.current?.pause();setScenario(undefined);setWhole(false);player.jump(index);
     if(matchMedia('(max-width:760px)').matches) requestAnimationFrame(()=>document.querySelector('.ce-instruction')?.scrollIntoView({behavior:reduced?'instant':'smooth',block:'start'}));
@@ -74,7 +74,7 @@ function Studio({lesson,member,online,teaching}:{readonly teaching:TeachingSpec}
         <div className="ce-main">
           <div className="ce-instruction"><span className="ce-overline">{beat.stage+1} / {spec.stages.length}</span><h2>{stage.title}</h2><p>{beat.bridge}</p></div>
           <div className="ce-visuals">
-            <figure className="ce-machine">{showContext(scenario?.context)}<figcaption>Find it in the machine</figcaption>{compact&&teaching.renderer==='ac-cutaway-v2'&&beat.stage!==0&&!last&&<button className="ce-whole" onClick={()=>setWhole(!whole)}>{whole?'Focus on this component':'See both units'}</button>}<div className="ce-components" aria-label="Locate a working component">{teaching.core.map(id=><button key={id} aria-pressed={stage.focus===id} onClick={()=>inspect(id)}>{spec.parts.find(p=>p.id===id)?.name||id}</button>)}</div></figure>
+            <figure className="ce-machine">{showContext(scenario?.context)}<figcaption>Find it in the machine</figcaption>{compact&&(teaching.renderer==='declarative'||beat.stage!==0)&&!last&&<button className="ce-whole" onClick={()=>setWhole(!whole)}>{whole?'Focus on this component':teaching.renderer==='ac-cutaway-v2'?'See both units':'See the whole machine'}</button>}<div className="ce-components" aria-label="Locate a working component">{teaching.core.map(id=><button key={id} aria-pressed={stage.focus===id} onClick={()=>inspect(id)}>{spec.parts.find(p=>p.id===id)?.name||id}</button>)}</div></figure>
             <Detail spec={spec} seconds={player.seconds} scenario={scenarioId} still={reduced} progress={progress}/>
           </div>
           <div className="ce-state-strip" aria-label="Qualitative state">{beat.properties.map(p=><div key={p.name}><span>{p.name}</span><strong>{progress<.01?p.before:progress>.99?p.after:`${p.before} → ${p.after}`}</strong></div>)}</div>

@@ -33,7 +33,7 @@ def scenario_for(spec: LessonSpec, beat: Beat, scenario_id: str | None) -> Scena
     return scenario
 
 
-def sampled_pose(change: Change | None, progress: float) -> Pose:
+def sampled_pose(change: Change | None, progress: float, base_fill: str = "") -> Pose:
     """Apply only the bounded interpolation semantics of the safe drawing contract."""
     if not math.isfinite(progress):
         raise ValueError("Scene progress must be finite")
@@ -44,10 +44,11 @@ def sampled_pose(change: Change | None, progress: float) -> Pose:
     segment = min(len(poses) - 2, math.floor(p * (len(poses) - 1)))
     p = p * (len(poses) - 1) - segment
     a, b = poses[segment], poses[segment + 1]
-    fill = a.fill or b.fill
-    if a.fill and b.fill:
+    a_fill, b_fill = a.fill or base_fill, b.fill or base_fill
+    fill = a_fill or b_fill
+    if a_fill and b_fill:
         colors = [
-            math.floor(int(a.fill[i : i + 2], 16) * (1 - p) + int(b.fill[i : i + 2], 16) * p + 0.5)
+            math.floor(int(a_fill[i : i + 2], 16) * (1 - p) + int(b_fill[i : i + 2], 16) * p + 0.5)
             for i in (1, 3, 5)
         ]
         fill = "#" + "".join(f"{c:02x}" for c in colors)

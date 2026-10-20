@@ -180,7 +180,7 @@ def ce_spec() -> LessonSpec:
     for question in candidate.questions:
         question.stage = min(2, question.stage)
     for part in candidate.parts:
-        part.motion = [m for m in part.motion if m.stage < 3]
+        part.motion = []
     for scenario in candidate.teaching.scenarios:
         scenario.beat = candidate.teaching.beats[-1].id
         scenario.context = "none"

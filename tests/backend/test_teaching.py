@@ -208,3 +208,20 @@ def test_evaluation_keeps_missing_judgments_unmeasured(store: Store, ce_spec: Le
     with pytest.raises(ValueError):
         comparison([])
     assert {"scope", "ambiguous"} <= {c.id for c in cases()}
+
+
+def test_context_motion_cannot_diverge_from_static_video(ce_spec: LessonSpec) -> None:
+    """Legacy motion in a new locator scene cannot bypass the shared causal storyboard."""
+    from backend.contracts import Motion
+
+    ce_spec.parts[0].motion = [Motion(stage=0, kind="translate", amount=100, axis="x")]
+    assert any("context parts must be static" in issue for issue in learning_issues(ce_spec))
+
+
+def test_identity_fill_resolves_to_the_original_graphic_color() -> None:
+    """An empty before/after fill retains the graphic rather than revealing its result early."""
+    change = Change(target="sample", before=Pose(), after=Pose(fill="#ffffff"))
+    assert sampled_pose(change, 0, "#000000").fill == "#000000"
+    assert sampled_pose(change, 0.5, "#000000").fill == "#808080"
+    change = Change(target="sample", before=Pose(fill="#ffffff"), after=Pose())
+    assert sampled_pose(change, 1, "#000000").fill == "#000000"

@@ -4,7 +4,7 @@ import type { Change } from './contracts';
 import { sampledPose, scenarioFor, teachingAt } from './state';
 
 function Mark({part,change,progress}:{readonly part:Part;readonly change?:Change;readonly progress:number}):ReactElement {
-  const pose=sampledPose(change,progress), {x,y,w,h}=part, cx=x+w/2,cy=y+h/2;
+  const pose=sampledPose(change,progress,part.color), {x,y,w,h}=part, cx=x+w/2,cy=y+h/2;
   const attrs={fill:pose.fill||part.color,stroke:part.stroke,strokeWidth:2};
   let shape:ReactElement;
   if(part.shape==='box') shape=<rect x={x} y={y} width={w} height={h} rx={7} {...attrs}/>;

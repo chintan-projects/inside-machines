@@ -21,12 +21,13 @@ export function scenarioFor(spec:LessonSpec, beat:Beat, id?:string):Scenario|und
   if(!scenario || scenario.beat!==beat.id) throw new Error('Scenario is unavailable for this step.');
   return scenario;
 }
-export function sampledPose(change:Change|undefined, progress:number):Pose {
+export function sampledPose(change:Change|undefined, progress:number, baseFill=''):Pose {
   if(!Number.isFinite(progress)) throw new Error('Scene progress must be finite.');
   if(!change) return {x:0,y:0,sx:1,sy:1,angle:0,fill:'',opacity:1};
   const poses=[change.before,...(change.via||[]),change.after], overall=Math.max(0,Math.min(1,progress));
   const segment=Math.min(poses.length-2,Math.floor(overall*(poses.length-1))),p=overall*(poses.length-1)-segment,a=poses[segment],b=poses[segment+1];
-  let fill=a.fill || b.fill;
-  if(a.fill && b.fill) fill='#'+[1,3,5].map(i=>Math.round(parseInt(a.fill.slice(i,i+2),16)*(1-p)+parseInt(b.fill.slice(i,i+2),16)*p).toString(16).padStart(2,'0')).join('');
+  const aFill=a.fill||baseFill,bFill=b.fill||baseFill;
+  let fill=aFill || bFill;
+  if(aFill && bFill) fill='#'+[1,3,5].map(i=>Math.round(parseInt(aFill.slice(i,i+2),16)*(1-p)+parseInt(bFill.slice(i,i+2),16)*p).toString(16).padStart(2,'0')).join('');
   return { x:a.x+(b.x-a.x)*p,y:a.y+(b.y-a.y)*p,sx:a.sx+(b.sx-a.sx)*p,sy:a.sy+(b.sy-a.sy)*p,angle:a.angle+(b.angle-a.angle)*p,fill,opacity:a.opacity+(b.opacity-a.opacity)*p };
 }

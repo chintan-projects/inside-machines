@@ -20,3 +20,11 @@ test('seek boundaries preserve stable beat identities and reject cross-beat scen
   assert.throws(()=>scenarioFor(spec,spec.teaching.beats[0],'inside'));
   assert.throws(()=>teachingAt(spec,Infinity));
 });
+
+test('empty fill uses the original graphic color before revealing a new state', () => {
+  const before={x:0,y:0,sx:1,sy:1,angle:0,fill:'',opacity:1};
+  const change={target:'sample',before,after:{...before,fill:'#ffffff'},via:[]};
+  assert.equal(sampledPose(change,0,'#000000').fill,'#000000');
+  assert.equal(sampledPose(change,.5,'#000000').fill,'#808080');
+  assert.equal(sampledPose({...change,before:change.after,after:before},1,'#000000').fill,'#000000');
+});

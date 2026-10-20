@@ -15,7 +15,7 @@ from .teaching_state import sampled_pose, scenario_for, teaching_at
 
 def graphic_svg(part: Part, change: Change | None, progress: float) -> str:
     """Draw a validated primitive; external resources/markup are never accepted."""
-    pose = sampled_pose(change, progress)
+    pose = sampled_pose(change, progress, part.color)
     x, y, w, h = part.x, part.y, part.w, part.h
     fill = pose.fill or part.color
     style = f'fill="{fill}" stroke="{part.stroke}" stroke-width="2"'

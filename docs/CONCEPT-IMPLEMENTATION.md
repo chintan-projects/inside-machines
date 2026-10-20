@@ -28,8 +28,8 @@ This is an implementation record, not the owner's lesson acceptance. BUG-004 rem
 
 ## Verification in this iteration
 
-Observed: Ruff, strict mypy, 116 backend tests including three disposable Postgres tests,
-85.81% backend coverage; TypeScript, ESLint, nine JavaScript tests and production build pass.
+Observed: Ruff, strict mypy, 118 backend tests including three disposable Postgres tests,
+85.82% backend coverage; TypeScript, ESLint, ten JavaScript tests and production build pass.
 The provider in pipeline tests is synthetic; transactions, media encoding and artifacts are real.
 Linux packaging, browser, hosted runtime and paid generation observations are recorded below
 when completed. Their earlier-revision evidence does not automatically transfer here.
@@ -75,3 +75,10 @@ successful v1 cost benchmark does not establish CE-1 generation success.
 Catalog lookup follows immutable supersession chains, so older aliases resolve to
 the latest artifact even if a revised author omits them. A regression checks two
 revisions, zero new paid work and a corrupt-chain error instead of regeneration.
+
+New declarative context parts cannot carry legacy motion; all causal motion uses
+the shared teaching graph. Phone component focus reuses the bounded scene viewport
+and includes its anchored label; the washer pump focus was inspected at 375 pixels.
+Empty pose fills now resolve against the original graphic colour in both languages,
+so a new colour does not appear before the causal change. Existing three authored
+artifacts have no one-sided colour endpoints; their stored media meaning is unchanged.
