@@ -61,6 +61,8 @@ class EvaluationPacket(BaseModel):
     usage: list[dict[str, object]]
     reused_research_usage: list[dict[str, object]] = Field(default_factory=list)
     reused_draft_usage: list[dict[str, object]] = Field(default_factory=list)
+    authoring_mode: str = ""
+    revision_input_usage: list[dict[str, object]] = Field(default_factory=list)
     ratings: HumanRatings = Field(default_factory=HumanRatings)
     limitation: str = "Structural validation is not a factual, visual or learning evaluation. Empty ratings are unmeasured. Receipts may be absent for authored lessons."
 
@@ -83,8 +85,8 @@ def packet(store: Store, lesson_id: str, case_id: str) -> EvaluationPacket:
     spec = LessonSpec.model_validate(lesson["spec"])
     jobs = {id for id, j in db.jobs.items() if j.get("lesson_id") == lesson_id}
     usage = _usage(db, jobs)
-    reused = {str(db.jobs[j]["research_reused_from"]) for j in jobs if db.jobs[j].get("research_reused_from")}
-    drafts = {str(db.jobs[j]["draft_reused_from"]) for j in jobs if db.jobs[j].get("draft_reused_from")}
+    research_usage, draft_usage = _reused_usage(db, jobs)
+    excluded = {str(r["operation"]) for r in [*usage, *research_usage, *draft_usage]}
     return EvaluationPacket(
         case=case,
         lesson_id=lesson_id,
@@ -93,10 +95,19 @@ def packet(store: Store, lesson_id: str, case_id: str) -> EvaluationPacket:
         spec=spec,
         structural_issues=learning_issues(spec),
         usage=usage,
-        reused_research_usage=[
-            r for r in _usage(db, reused) if str(r.get("operation", "")).endswith(":research")
-        ],
-        reused_draft_usage=[r for r in _usage(db, drafts) if str(r.get("operation", "")).endswith(":author")],
+        reused_research_usage=research_usage,
+        reused_draft_usage=draft_usage,
+        authoring_mode=",".join(
+            sorted(
+                {
+                    str(db.jobs[j].get("author_mode") or db.jobs[j].get("author_protocol") or "legacy")
+                    for j in jobs
+                }
+            )
+        )
+        if jobs
+        else "authored",
+        revision_input_usage=_revision_inputs(db, jobs, excluded),
     )
 
 
@@ -119,10 +130,37 @@ def _usage(db: Database, jobs: set[str]) -> list[dict[str, object]]:
         "uncertain",
     )
     return [
-        {key: row[key] for key in keys if key in row}
+        {**{key: row[key] for key in keys if key in row}, "operation": operation}
         for operation, row in db.ledger.items()
         if any(operation.startswith(f"lesson:{job}:") for job in jobs)
     ]
+
+
+def _reused_usage(
+    db: Database, jobs: set[str]
+) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+    """Expose reused prerequisites separately for both successful and failed runs."""
+    reused = {str(db.jobs[j]["research_reused_from"]) for j in jobs if db.jobs[j].get("research_reused_from")}
+    drafts = {str(db.jobs[j]["draft_reused_from"]) for j in jobs if db.jobs[j].get("draft_reused_from")}
+    return (
+        [r for r in _usage(db, reused) if str(r["operation"]).endswith(":research")],
+        [r for r in _usage(db, drafts) if str(r["operation"]).endswith(":author")],
+    )
+
+
+def _revision_inputs(db: Database, jobs: set[str], excluded: set[str]) -> list[dict[str, object]]:
+    """Keep paid critique ancestors visible once, separately from incremental cost."""
+    pending = list(jobs)
+    inputs: set[str] = set()
+    while pending:
+        feedback = db.jobs.get(pending.pop(), {}).get("editorial_feedback")
+        if not isinstance(feedback, dict):
+            continue
+        source = str(feedback.get("job_id") or "")
+        if source and source not in jobs and source not in inputs:
+            inputs.add(source)
+            pending.append(source)
+    return [r for r in _usage(db, inputs) if str(r["operation"]) not in excluded]
 
 
 def failed_packet(store: Store, job_id: str, case_id: str) -> EvaluationPacket:
@@ -132,6 +170,9 @@ def failed_packet(store: Store, job_id: str, case_id: str) -> EvaluationPacket:
     job = db.jobs.get(job_id)
     if case is None or job is None or job.get("status") != "failed":
         raise ValueError("A failed packet needs a known case and terminal failed job")
+    usage = _usage(db, {job_id})
+    research_usage, draft_usage = _reused_usage(db, {job_id})
+    excluded = {str(r["operation"]) for r in [*usage, *research_usage, *draft_usage]}
     return EvaluationPacket(
         case=case,
         lesson_id="",
@@ -144,7 +185,11 @@ def failed_packet(store: Store, job_id: str, case_id: str) -> EvaluationPacket:
         failed_phase=str(job.get("failed_phase", "")),
         structural_issues=cast(list[str], job.get("quality_issues", [])),
         editorial_issues=editorial_notes(job_id, job),
-        usage=_usage(db, {job_id}),
+        usage=usage,
+        reused_research_usage=research_usage,
+        reused_draft_usage=draft_usage,
+        authoring_mode=str(job.get("author_mode") or job.get("author_protocol") or ""),
+        revision_input_usage=_revision_inputs(db, {job_id}, excluded),
     )
 
 
@@ -172,6 +217,12 @@ def comparison(packets: list[EvaluationPacket]) -> dict[str, object]:
                 "failed_phase": candidate.failed_phase,
                 "spec_sha256": candidate.spec_sha256,
                 "models": models,
+                "authoring_mode": candidate.authoring_mode,
+                "revision_input_recorded_usd": sum(
+                    float(str(r.get("charged_usd", 0))) for r in candidate.revision_input_usage
+                )
+                if candidate.revision_input_usage
+                else None,
                 "model_identity_estimated": any(
                     bool(r.get("model_identity_estimated", True)) for r in candidate.usage
                 ),

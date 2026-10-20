@@ -167,3 +167,18 @@ A new explicit revision can now use that critique and the rejected scene as inpu
 to fresh authoring, with the same source/quality/editorial gates and all previous
 failures retained. Owner diagnostics expose bounded critique. Private chats and
 learner reasoning are excluded. Runtime acceptance of this loop is pending.
+
+
+The critique-guided full revision resolved those four findings. Authoring used
+14,152 input / 9,700 output tokens ($0.125304); fresh review used 8,864 / 420
+($0.021928). Both completed with returned model `gpt-6.1-sol`, and the verdict
+hash matched. Review identified one remaining solid/air collision: a horizontal
+air marker crosses the drawn motor/shaft in two insets. Total $0.147232; no
+publication. Ledger $3.088855846, $0 reserved, unchanged $50 ceiling.
+
+Explicit revisions now support typed, source-hash-bound scene patches. Untouched
+geometry and narration remain intact; the complete resulting lesson receives all
+source/quality gates and a fresh full editorial review. No automatic paid retry.
+Evaluation separates incremental cost, reused evidence/draft receipts and prior
+critique inputs; failed attempts remain in the denominator. Runtime success of
+the patch loop is pending, and no human ratings have been entered.

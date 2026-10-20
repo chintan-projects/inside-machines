@@ -6,10 +6,10 @@ import pytest
 from pydantic import HttpUrl
 
 from backend.assets import Assets
-from backend.author_transport import compact_author
 from backend.contracts import LessonSpec, ReviewDecision
 from backend.domain import Domain, User
 from backend.editorial import author_feedback, editorial_notes, latest_feedback
+from backend.lesson_patch import LessonPatch
 from backend.pipeline import Pipeline
 from backend.provider import receipt_context
 from backend.research import ResearchSpec
@@ -82,8 +82,15 @@ async def test_critique_guides_fresh_authoring_without_private_data(
         assert receipt is not None
         receipt.models.append("synthetic-author")
         receipt.cost_usd = 0.01
-        draft = ce_spec.model_copy(update={"canonical": str(job["canonical"])})
-        return json.dumps(compact_author(draft))
+        changed = ce_spec.graphics[0].model_copy(update={"x": ce_spec.graphics[0].x + 1})
+        return LessonPatch(
+            base_sha256=digest_spec(ce_spec),
+            parts=[],
+            graphics=[changed],
+            stages=[],
+            teaching=None,
+            notes=["Synthetic patch for routing only."],
+        ).model_dump_json()
 
     async def enqueue(job_id: str, phase: str) -> None:
         assert phase == "review"

@@ -152,3 +152,22 @@ Owner reports project bounded editorial findings, including historical verified
 verdicts, without rewriting failed jobs. A new typed rejection preserves the
 notes separately from logs. The next operation must demonstrate improvement;
 unit tests and a useful critique are not a successful lesson or learner result.
+
+
+## Typed repair of a rejected scene
+
+Full reauthoring resolved four editorial findings but introduced/revealed a
+motor/air-path overlap. New explicit jobs may use `patch-1` when a validated
+same-evidence rejected draft exists. A typed patch binds its exact source hash,
+updates named parts/graphics or stable beat stages, and optionally replaces
+teaching data. Sources and identity cannot be supplied by the patch. Unknown
+beats, duplicate edits, wrong hashes, no-op edits and invalid resulting contracts
+fail closed. Server assigns the immutable new identity; all source, structural
+and fresh editorial gates still apply to the complete artifact.
+
+Actual author mode is atomically persisted with paid admission. Historic jobs
+retain their reader. Patch validation failures are conservatively excluded from
+author-output recovery; review recovery still uses a full validated checkpoint.
+Private evaluation packets distinguish current receipts, reused prerequisite
+receipts and ancestor critique receipts without double counting or private text.
+A cheap patch is not reported as the entire cost of creating a machine.

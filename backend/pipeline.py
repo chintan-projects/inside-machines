@@ -3,6 +3,7 @@
 import asyncio
 import base64
 import hashlib
+import json
 import secrets
 import time
 from collections.abc import Awaitable, Callable
@@ -20,7 +21,8 @@ from .author_transport import author_schema, expand_author
 from .contracts import AuthorLessonSpec, LessonSpec, ReviewDecision, ReviewSpec, TeachingReviewSpec
 from .domain import Domain
 from .editorial import EditorialReviewError, author_feedback
-from .prompts import lesson_prompt, review_prompt
+from .lesson_patch import apply_revision, patch_schema
+from .prompts import lesson_prompt, review_prompt, revision_prompt
 from .provider import UsageReceipt, model_speech, model_text, receipt_context
 from .quality import LearningQualityError, require_learning_quality
 from .render import audio_duration, render_video
@@ -87,7 +89,9 @@ class Pipeline:
 
         self.store.transaction(update)
 
-    def _begin_call(self, job_id: str, lease: str, phase: str, allowance: float) -> str:
+    def _begin_call(
+        self, job_id: str, lease: str, phase: str, allowance: float, *, author_mode: str = ""
+    ) -> str:
         key = f"lesson:{job_id}:{phase}"
 
         def update(db: Database) -> None:
@@ -97,6 +101,8 @@ class Pipeline:
             if float(str(job["reservation"])) < allowance:
                 raise RuntimeError("This job has insufficient reserved budget")
             job.update(inflight=key, allowance=allowance)
+            if phase == "author":
+                job["author_mode"] = author_mode
 
         self.store.transaction(update)
         return key
@@ -148,7 +154,7 @@ class Pipeline:
         if key in outputs:
             saved = outputs[key]
             return base64.b64decode(str(saved["value"])) if saved["bytes"] else str(saved["value"])
-        key = self._begin_call(job_id, lease, phase, allowance)
+        key = self._begin_call(job_id, lease, phase, allowance, author_mode=str(job.get("author_mode", "")))
         receipt = UsageReceipt()
         token = receipt_context.set(receipt)
         failed = True
@@ -212,23 +218,45 @@ class Pipeline:
             elif phase == "author" or (phase == "queued" and saved_author):
                 compact = job.get("author_protocol") == "compact-1"
                 critique = author_feedback(job.get("editorial_feedback"), evidence)
+                base = (
+                    expand_author(json.dumps(critique["previous_draft"]))
+                    if critique and "previous_draft" in critique and job.get("revision_protocol") == "patch-1"
+                    else None
+                )
+                prompt = (
+                    revision_prompt(str(job["question"]), str(job["canonical"]), critique or {}, evidence)
+                    if base
+                    else lesson_prompt(
+                        str(job["question"]),
+                        str(job["canonical"]),
+                        evidence,
+                        compact=compact,
+                        feedback=critique,
+                    )
+                )
+                schema = (
+                    patch_schema(base)
+                    if base
+                    else author_schema()
+                    if compact
+                    else AuthorLessonSpec.model_json_schema()
+                )
+                job["author_mode"] = "patch" if base else "compact" if compact else "full"
                 raw = await self._paid(
                     job,
                     "author",
                     lambda: model_text(
-                        lesson_prompt(
-                            str(job["question"]),
-                            str(job["canonical"]),
-                            evidence,
-                            compact=compact,
-                            feedback=critique,
-                        ),
+                        prompt,
                         self.settings,
-                        schema=author_schema() if compact else AuthorLessonSpec.model_json_schema(),
+                        schema=schema,
                     ),
                 )
                 spec: LessonSpec = (
-                    expand_author(raw) if compact else AuthorLessonSpec.model_validate_json(raw)
+                    apply_revision(raw, base, str(job["canonical"]))
+                    if base
+                    else expand_author(raw)
+                    if compact
+                    else AuthorLessonSpec.model_validate_json(raw)
                 )
                 if spec.canonical != job["canonical"]:
                     raise ValueError("Generated lesson changed its requested identity")

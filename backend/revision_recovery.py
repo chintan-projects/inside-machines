@@ -46,6 +46,8 @@ def reusable_draft(
                 continue
         try:
             if job.get("failed_phase") == "author":
+                if job.get("author_mode") == "patch":
+                    continue
                 outputs = cast(dict[str, dict[str, object]], job.get("call_outputs", {}))
                 saved = outputs.get(f"lesson:{id}:author")
                 if not saved or saved.get("bytes"):

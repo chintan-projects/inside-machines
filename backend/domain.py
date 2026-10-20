@@ -173,6 +173,7 @@ class Domain:
                 "pipeline_version": "evidence-first-1",
                 "review_protocol": "verdict-1",
                 "author_protocol": "compact-1",
+                "revision_protocol": "patch-1",
                 "author_policy_sha256": AUTHOR_POLICY,
                 "editorial_feedback": feedback,
                 "message": "Reviewing the saved visual explanation"

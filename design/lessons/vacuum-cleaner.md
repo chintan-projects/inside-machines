@@ -107,3 +107,15 @@ motor and exhaust; explain enlarged bag material and the shown bypass in narrati
 The rejected draft and critique are input data to fresh authoring, not approval.
 Current evidence stays authoritative; all gates and the transfer rubric remain
 required. No human learning result exists for this iteration.
+
+
+### Narrow airflow repair
+
+The critique-guided revision resolved the four prior findings; review now finds
+one remaining collision: air markers at y=280–300 intersect the motor/shaft
+x=510–655, y=283–297 in drive-air and collect-return. Keep the learning hypothesis,
+claim ledger and transfer rubric unchanged. The next explicit iteration must
+move the solid geometry or route the labeled marker through a visibly open
+passage, preserving physical continuity in both insets. Use a typed patch bound
+to the exact rejected source; review the entire expanded artifact again. CE-04,
+CE-05, CE-07, CE-08 and CE-18 remain requirements. Human gates are unmeasured.
