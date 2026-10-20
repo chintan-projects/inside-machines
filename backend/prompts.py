@@ -83,6 +83,10 @@ unlabeled particles or fan symbols at their full-machine coordinates fail. Each 
 must include readable text identifying the working part and what moves through/changes in it.
 Every graphic text label is >=28 px and fits within 900x540. No graphic can leave the canvas
 in any before/after/intermediate pose. Use 3–5 causal stages where that suffices; max 7.
+TEXT LAYOUT: keep each on-scene label to at most 24 characters, one short concept. Use h=32,
+x<=400 and y<=460 for text so it has real room at phone/video scale. Never align columns
+with padding spaces, put a whole arrow-chain sentence in one label, or truncate a word.
+Use separate short labels anchored to the relevant inlet, outlet, wall or working part.
 teaching.core lists 3–6 REAL working component IDs, each with a permanent label-<id> in parts.
 Every stage.focus must be one of these core IDs. No decoration belongs in core.
 teaching.claims has stable IDs, source indexes, precise section/page locators, scope

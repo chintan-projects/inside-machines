@@ -166,3 +166,9 @@ keyboard alternatives remain available. Temporary offline/reduced-motion overrid
 were restored. Browser simulations are not an actual-phone or screen-reader pass.
 No human or beginner quality score is inferred. A new human rejection starts a new
 bounded iteration focused on the most consequential observed failure.
+
+A fresh vacuum drawing added large self-contained physical surroundings but two
+long labels crossed the canvas. The quality gate rejected both before paid review
+or media. One label also used padding spaces and a truncated phrase. The next
+author request explicitly limits on-scene labels to short concepts and bounded
+placement. No clipping threshold or minimum type size is relaxed.

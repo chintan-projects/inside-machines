@@ -120,3 +120,11 @@ without raw provider bodies. Browser inspection separately rejected the saved
 draft's unlabeled, context-free insets; that drawing cannot be recovered under
 the tightened CE-04/05/07 floor. A fresh explicit operation may reuse its validated
 evidence while authoring the detail views again. See the vacuum worksheet.
+
+The next explicit operation reused validated evidence and completed a new drawing
+(4,686 input / 7,307 output tokens, $0.082442; provider status completed). The
+structural gate rejected two overlong labels outside the inset canvas before
+review/speech/video. The application ledger became $2.659739846, $0 reserved.
+Nothing was published. Authoring now specifies short separate labels and bounded
+text placement, without padding spaces or sentence-length flow chains. The
+clipping gate remains unchanged; this failed run is exported for evaluation.
