@@ -140,7 +140,7 @@ class HostedBackend:
                             "schema": openai_schema(json.loads(request.grammar)),
                         }
                     }
-                # Research is used for new lesson authoring only, never ordinary chat.
+                # Research is an explicit evidence phase; authoring/review/chat do not search.
                 if request.prompt and request.prompt.startswith("RESEARCH_MACHINE\n"):
                     body["tools"] = [{"type": "web_search"}]
                     body["max_tool_calls"] = 3
@@ -225,14 +225,18 @@ async def model_text(
     *,
     schema: dict[str, object] | None = None,
     chat: bool = False,
-    task: Literal["authoring", "review"] = "authoring",
+    task: Literal["research", "authoring", "review"] = "authoring",
 ) -> str:
     """Call the selected task through the shared gateway with explicit bounds."""
     return await _invoke_task(
         "chat" if chat else task,
         prompt,
         schema=schema,
-        max_tokens=settings.max_chat_tokens if chat else settings.max_output_tokens,
+        max_tokens=settings.max_chat_tokens
+        if chat
+        else settings.max_research_tokens
+        if task == "research"
+        else settings.max_output_tokens,
         timeout_ms=(settings.provider_timeout_seconds + 10) * 1000,
     )
 

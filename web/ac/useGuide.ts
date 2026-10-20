@@ -102,7 +102,7 @@ export function useGuide(
     const at = lesson.spec.stages.slice(0, index).reduce((n, s) => n + s.duration, 0);
     time(at);
     const player = audioRef.current;
-    if (player) player.currentTime = at;
+    if (player && player.readyState >= 1) player.currentTime = at;
     setMotion(index !== 0);
     setError("");
   }

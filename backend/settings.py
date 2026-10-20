@@ -32,6 +32,8 @@ class Settings:
     output_rate: float
     speech_rate: float
     generation_reserve: float
+    research_phase_reserve: float
+    max_research_tokens: int
     text_phase_reserve: float
     speech_phase_reserve: float
     chat_reserve: float
@@ -56,19 +58,29 @@ class Settings:
             self.generation_reserve,
             self.chat_reserve,
             self.text_phase_reserve,
+            self.research_phase_reserve,
             self.speech_phase_reserve,
         )
         if any(not math.isfinite(n) or n < 0 for n in amounts):
             raise ValueError("Budgets and provider rates must be finite and nonnegative")
-        if self.generation_reserve < 2 * self.text_phase_reserve + 7 * self.speech_phase_reserve:
+        if (
+            self.generation_reserve
+            < self.research_phase_reserve + 2 * self.text_phase_reserve + 7 * self.speech_phase_reserve
+        ):
             raise ValueError(
-                "Generation reserve must cover authoring, review, and up to seven narrated stages"
+                "Generation reserve must cover research, authoring, review, and up to seven narrated stages"
             )
         if (
             self.text_phase_reserve
             < (100000 * self.input_rate + self.max_output_tokens * self.output_rate) / 1e6 + 0.03
         ):
             raise ValueError("Text allowance is too small for configured model token limits and rates")
+        if (
+            self.research_phase_reserve
+            < (100000 * self.input_rate + self.max_research_tokens * self.output_rate) / 1e6 + 0.03
+            or not 1 <= self.max_research_tokens <= 4000
+        ):
+            raise ValueError("Research allowance/token limit cannot cover its bounded evidence request")
         if self.chat_reserve < (24000 * self.input_rate + self.max_chat_tokens * self.output_rate) / 1e6:
             raise ValueError("Chat reserve is too small for configured model token limits and rates")
         if (
@@ -128,6 +140,8 @@ def load_settings() -> Settings:
         speech_rate=number("speech_usd_per_minute"),
         generation_reserve=number("generation_reserve_usd"),
         chat_reserve=number("chat_reserve_usd"),
+        research_phase_reserve=number("research_phase_reserve_usd"),
+        max_research_tokens=int(number("max_research_output_tokens")),
         text_phase_reserve=number("text_phase_reserve_usd"),
         speech_phase_reserve=number("speech_phase_reserve_usd"),
         max_output_tokens=int(number("max_output_tokens")),

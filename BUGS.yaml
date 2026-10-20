@@ -25,5 +25,19 @@ bugs:
     severity: high
     status: open
     evidence: Human review of AC screenshots finds unlabeled narrated parts and confusing four-stage cycle
-    fix: Owner rejected the labeled revision as ordinary; action-led isometric studio and enclosure experiment implemented for a new protected review
+    fix: CE-1 causal insets, shared media, prediction/transfer and evidence gates deployed for protected review; independent technical, actual-phone and beginner acceptance pending
     regression: tests/backend/test_learning_quality.py; docs/QUALITY-BAR.md
+  - id: BUG-005
+    title: SVG rasterizer frame dimensions corrupt raw MP4 timing
+    severity: high
+    status: fixed
+    evidence: Real encoder regression shortened a 15 second storyboard when resvg returned fewer rows
+    fix: Fit and pad every rasterized frame to the exact configured byte dimensions
+    regression: tests/backend/test_pipeline.py; tests/backend/test_teaching.py
+  - id: BUG-006
+    title: Combined CE-1 evidence and scene authoring exceeds bounded deadline
+    severity: high
+    status: open
+    evidence: Live revision failed after 211 seconds; 0.65 USD retained for uncertain billing
+    fix: Separate research and author task routes, budgets and checkpoints; new live evaluation pending
+    regression: tests/backend/test_research.py; tests/backend/test_pipeline.py; ADR 0002

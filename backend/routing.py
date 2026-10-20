@@ -9,8 +9,8 @@ from _shared.services.model_gateway import ModelBackend, ModelBackendError
 
 logger = get_logger(__name__)
 
-ModelTask = Literal["authoring", "review", "chat", "speech"]
-TASKS: tuple[ModelTask, ...] = ("authoring", "review", "chat", "speech")
+ModelTask = Literal["research", "authoring", "review", "chat", "speech"]
+TASKS: tuple[ModelTask, ...] = ("research", "authoring", "review", "chat", "speech")
 BackendFactory = Callable[[str], ModelBackend]
 
 
@@ -43,7 +43,7 @@ class ProviderRegistry:
         self._plugins = dict(plugins)
         self._routes = dict(routes)
         if set(routes) != set(TASKS):
-            raise ValueError("Configure exactly authoring, review, chat and speech routes")
+            raise ValueError("Configure exactly research, authoring, review, chat and speech routes")
         for task, route in self._routes.items():
             plugin = self._plugins.get(route.provider)
             if plugin is None or task not in plugin.tasks or not route.model.strip():

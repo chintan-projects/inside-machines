@@ -37,12 +37,14 @@ async def test_tasks_use_separate_plugins_models_and_limits(settings: Settings) 
     )
     configure_gateway(settings, registry)
     try:
+        assert await model_text("research", settings, task="research") == "test-answer"
         assert await model_text("author", settings) == "test-answer"
         assert await model_text("review", settings, task="review") == "test-answer"
         assert await model_text("chat", settings, chat=True) == "test-answer"
         assert await model_speech("voice", settings) == b"test-audio"
         assert [model for model, _ in calls] == ["test-" + task for task in TASKS]
         assert [request.max_tokens for _, request in calls] == [
+            settings.max_research_tokens,
             settings.max_output_tokens,
             settings.max_output_tokens,
             settings.max_chat_tokens,

@@ -12,6 +12,7 @@ from backend.domain import Domain, User
 from backend.pipeline import Pipeline
 from backend.provider import UsageReceipt, receipt_context
 from backend.render import audio_duration, draw_scene, part_pose, stage_at
+from backend.research import ResearchSpec
 from backend.settings import Settings
 from backend.store import Database, Store
 
@@ -44,6 +45,7 @@ async def test_full_phase_pipeline_real_mp4(
     settings: Settings,
     user: User,
     ce_spec: LessonSpec,
+    evidence: ResearchSpec,
     sound: bytes,
     monkeypatch: pytest.MonkeyPatch,
     revision: bool,
@@ -60,12 +62,23 @@ async def test_full_phase_pipeline_real_mp4(
         prompt: str, config: Settings, *, schema: dict[str, object], task: str = "authoring"
     ) -> str:
         assert config == settings and schema
-        assert task == ("review" if prompt.startswith("Review") else "authoring")
+        assert task == (
+            "research"
+            if prompt.startswith("RESEARCH_MACHINE")
+            else "review"
+            if prompt.startswith("Review")
+            else "authoring"
+        )
         receipt = receipt_context.get()
         assert receipt is not None
         receipt.models.append("synthetic-test-provider")
         receipt.cost_usd = 0.01
-        calls.append("review" if prompt.startswith("Review") else "author")
+        calls.append("research" if task == "research" else "review" if task == "review" else "author")
+        if task == "research":
+            assert str(Domain(store, settings).job(job_id)["message"]).startswith("Researching")
+            return evidence.model_dump_json()
+        if task == "authoring":
+            assert str(Domain(store, settings).job(job_id)["message"]).startswith("Building")
         return (
             ReviewSpec(accepted=True, notes=[], lesson=spec).model_dump_json()
             if prompt.startswith("Review")
@@ -110,8 +123,8 @@ async def test_full_phase_pipeline_real_mp4(
         await pipeline.run(delivered_id)
     state = store.snapshot()
     assert state.jobs[job_id]["status"] == "complete"
-    assert calls == ["author", "review", "voice", "voice", "voice"]
-    assert state.spent == pytest.approx(0.023) and state.reserved == pytest.approx(0)
+    assert calls == ["research", "author", "review", "voice", "voice", "voice"]
+    assert state.spent == pytest.approx(0.033) and state.reserved == pytest.approx(0)
     lesson = state.lessons[spec.canonical]
     if revision:
         assert state.lessons[old.canonical]["spec"] == old.model_dump(mode="json")
@@ -122,7 +135,7 @@ async def test_full_phase_pipeline_real_mp4(
     assert audio_duration(video) == pytest.approx(15, abs=0.3)
     assert domain.request("washing machine", user)["kind"] == "lesson"
     await pipeline.run(job_id)
-    assert len(calls) == 5 and store.snapshot().spent == pytest.approx(0.023)
+    assert len(calls) == 6 and store.snapshot().spent == pytest.approx(0.033)
     assert list((settings.data_dir / "checkpoints").glob("*.json"))
 
 

@@ -21,6 +21,7 @@ from .prompts import lesson_prompt, review_prompt
 from .provider import UsageReceipt, model_speech, model_text, receipt_context
 from .quality import LearningQualityError, require_learning_quality
 from .render import audio_duration, render_video
+from .research import ResearchSpec, require_evidence_sources, research_prompt
 from .settings import Settings
 from .starters import digest_spec
 from .store import Database, Store
@@ -64,6 +65,12 @@ class Pipeline:
                 lease_until=time.time() + self.settings.lease_seconds,
                 updated_at=time.time(),
             )
+            if job["phase"] == "queued":
+                if f"lesson:{job_id}:author" in cast(dict[str, object], job.get("call_outputs", {})):
+                    job["message"] = "Resuming the completed scene authoring"
+                else:
+                    job["pipeline_version"] = "evidence-first-1"
+                    job["message"] = "Researching the machine and its supporting evidence"
             return dict(job)
 
         return self.store.transaction(claim)
@@ -126,7 +133,9 @@ class Pipeline:
         self, job: dict[str, object], phase: str, call: Callable[[], Awaitable[str | bytes]]
     ) -> str | bytes:
         allowance = (
-            self.settings.text_phase_reserve
+            self.settings.research_phase_reserve
+            if phase == "research"
+            else self.settings.text_phase_reserve
             if phase in ("author", "review")
             else self.settings.speech_phase_reserve
         )
@@ -173,12 +182,32 @@ class Pipeline:
             return
         phase = str(job["phase"])
         try:
-            if phase == "queued":
+            saved_author = f"lesson:{job_id}:author" in cast(dict[str, object], job.get("call_outputs", {}))
+            if phase == "queued" and not saved_author:
+                raw = await self._paid(
+                    job,
+                    "research",
+                    lambda: model_text(
+                        research_prompt(str(job["question"])),
+                        self.settings,
+                        schema=ResearchSpec.model_json_schema(),
+                        task="research",
+                    ),
+                )
+                researched = ResearchSpec.model_validate_json(raw)
+                self._advance(
+                    job,
+                    "author",
+                    "Building the visual explanation from the evidence",
+                    research=researched.model_dump(mode="json"),
+                )
+            elif phase == "author" or (phase == "queued" and saved_author):
+                evidence = ResearchSpec.model_validate(job["research"]) if job.get("research") else None
                 raw = await self._paid(
                     job,
                     "author",
                     lambda: model_text(
-                        lesson_prompt(str(job["question"]), str(job["canonical"])),
+                        lesson_prompt(str(job["question"]), str(job["canonical"]), evidence),
                         self.settings,
                         schema=AuthorLessonSpec.model_json_schema(),
                     ),
@@ -186,6 +215,8 @@ class Pipeline:
                 spec: LessonSpec = AuthorLessonSpec.model_validate_json(raw)
                 if spec.canonical != job["canonical"]:
                     raise ValueError("Generated lesson changed its requested identity")
+                if evidence:
+                    require_evidence_sources(spec, evidence)
                 require_learning_quality(spec)
                 self._advance(
                     job,
@@ -210,6 +241,8 @@ class Pipeline:
                 if not review.accepted:
                     raise ValueError("Automated editorial check rejected this lesson")
                 reviewed = review.lesson
+                if job.get("research"):
+                    require_evidence_sources(reviewed, ResearchSpec.model_validate(job["research"]))
                 require_learning_quality(reviewed)
                 if reviewed.canonical != job["canonical"]:
                     raise ValueError("Review changed the lesson identity")

@@ -36,3 +36,13 @@ or next-day retention check. Record those in the owner workbench for the exact
 lesson/video hashes. The workbench requires independent human technical evidence,
 actual-phone craft evidence and eligible beginner scores before a release decision.
 It records owner assertions and cannot authenticate reviewer expertise itself.
+
+Keep terminal failed attempts in the evaluation denominator:
+
+```sh
+.venv/bin/python -m backend.evaluation packet --job FAILED_JOB_ID --case vacuum --output .data/evals/failed.json
+```
+
+The failure packet has no fabricated lesson/video/spec. It includes only bounded
+failure metadata and actual ledger receipts, retaining unknown billing explicitly.
+Research, authoring and review now use separate task routes/checkpoints (ADR 0002).

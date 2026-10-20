@@ -49,8 +49,9 @@ function JobProgress({ id, onReady }: { readonly id: string; readonly onReady: (
     source.onerror = () => setError('Reconnecting to your explanation. You can leave this page; the request is saved.');
     return () => source.close();
   }, [id, onReady]);
-  const phases = ['Research & build', 'Check the explanation', 'Add narration', 'Render video'];
-  const current = job?.phase === 'review' ? 1 : job?.phase.startsWith('voice') ? 2 : job?.phase === 'video' ? 3 : 0;
+  const split = job?.pipeline_version === 'evidence-first-1';
+  const phases = split ? ['Gather evidence', 'Build the scene', 'Check the explanation', 'Add narration', 'Render video'] : ['Research & build', 'Check the explanation', 'Add narration', 'Render video'];
+  const current = job?.phase === 'author' ? 1 : job?.phase === 'review' ? (split?2:1) : job?.phase.startsWith('voice') ? (split?3:2) : job?.phase === 'video' ? (split?4:3) : 0;
   return <section className="job-panel" aria-live="polite"><Box size={28} /><h2>{job?.status === 'failed' ? 'This explanation needs another look' : 'Making the invisible visible'}</h2>
     <p>{job?.error || job?.message || 'Opening your saved request…'}</p><ol>{phases.map((phase, i) => <li key={phase} className={i === current ? 'current' : ''}>{i < current ? <Check size={16} /> : <span>{i + 1}</span>}{phase}</li>)}</ol>
     <p className="muted">A new lesson can take a few minutes. Once ready, everyone can reuse it.</p>

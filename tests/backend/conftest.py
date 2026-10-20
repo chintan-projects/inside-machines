@@ -7,6 +7,7 @@ import pytest
 
 from backend.contracts import LessonSpec
 from backend.domain import User
+from backend.research import ResearchSpec
 from backend.settings import Settings, load_settings
 from backend.store import Store
 
@@ -188,3 +189,23 @@ def ce_spec() -> LessonSpec:
         Change(target="compress-piston", before=Pose(), after=Pose(x=-120))
     ]
     return LessonSpec.model_validate(candidate.model_dump())
+
+
+@pytest.fixture
+def evidence(ce_spec: LessonSpec) -> "ResearchSpec":
+    """Explicitly synthetic evidence for phase tests, never presented as sourced research."""
+    from backend.research import ResearchFact
+
+    return ResearchSpec(
+        family="Synthetic mechanism fixture",
+        sources=[source.model_copy(deep=True) for source in ce_spec.sources],
+        facts=[
+            ResearchFact(
+                statement="Synthetic evidence for a controlled test only.",
+                source=i % len(ce_spec.sources),
+                locator="Synthetic fixture section",
+            )
+            for i in range(3)
+        ],
+        limits=["Synthetic evidence is not a technical review."],
+    )

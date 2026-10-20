@@ -129,6 +129,7 @@ async def test_missing_labels_stop_before_review_and_speech(
 
     monkeypatch.setattr("backend.pipeline.model_text", text)
     job_id = str(Domain(store, settings).request("washer", user)["job_id"])
+    store.transaction(lambda db: db.jobs[job_id].update(phase="author"))
     await Pipeline(store, settings, Assets(settings), enqueue).run(job_id)
     state = store.snapshot()
     assert calls == ["author"]

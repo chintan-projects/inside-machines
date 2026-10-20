@@ -4,18 +4,18 @@ current:
   - CE-1 contracts, causal player and shared video/static rendering implemented
   - AC, washer and cooker have distinct prediction-to-transfer draft storyboards
   - Artifact-bound review workbench and budgeted immutable owner revisions implemented
-  - Browser and protected personal Vercel verification in progress
+  - Personal Vercel CE-1 deployment Ready; hosted offline/media/import checks pass
 needs_input:
   - Independent technical review of consequential claims and qualitative models
   - Owner actual-phone craft/accessibility walkthrough
   - Five initially unfamiliar beginners for causal and transfer evaluation
 verification:
-  - 107 backend tests including three disposable Postgres tests pass; coverage 85.60 percent
+  - 113 backend tests including three disposable Postgres tests pass; coverage 85.72 percent
   - Ruff and strict mypy pass; TypeScript, ESLint, nine JS tests and production build pass
   - Real MP4 revision test preserves parent content and private conversations
   - JS and Python sample the same piecewise path through the actual drain pump
   - Authored narration/video uses local computer speech and no paid model calls
-  - Linux packaging and new hosted generation evidence pending
+  - Linux API/queue packaging passes; combined CE-1 authoring timed out; split evidence phases under verification
   - App-AI ceiling remains 50 USD; BUG-004 remains open; family release held
 sessions:
   - date: 2026-10-19

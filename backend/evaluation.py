@@ -3,7 +3,7 @@
 import argparse
 import json
 from pathlib import Path
-from typing import cast
+from typing import Literal, cast
 
 from _shared.services.logger import get_logger
 from pydantic import BaseModel, ConfigDict, Field
@@ -12,7 +12,7 @@ from .contracts import LessonSpec
 from .quality import learning_issues
 from .settings import ROOT, load_settings
 from .starters import digest_spec
-from .store import Store
+from .store import Database, Store
 
 logger = get_logger(__name__)
 
@@ -50,7 +50,11 @@ class EvaluationPacket(BaseModel):
     lesson_id: str
     spec_sha256: str
     video_sha256: str
-    spec: LessonSpec
+    spec: LessonSpec | None
+    outcome: Literal["artifact", "generation_failed"] = "artifact"
+    job_id: str = ""
+    failure_type: str = ""
+    failed_phase: str = ""
     structural_issues: list[str]
     usage: list[dict[str, object]]
     ratings: HumanRatings = Field(default_factory=HumanRatings)
@@ -74,6 +78,20 @@ def packet(store: Store, lesson_id: str, case_id: str) -> EvaluationPacket:
         raise ValueError("Lesson not found")
     spec = LessonSpec.model_validate(lesson["spec"])
     jobs = {id for id, j in db.jobs.items() if j.get("lesson_id") == lesson_id}
+    usage = _usage(db, jobs)
+    return EvaluationPacket(
+        case=case,
+        lesson_id=lesson_id,
+        spec_sha256=digest_spec(spec),
+        video_sha256=str(lesson.get("video_sha256", "")),
+        spec=spec,
+        structural_issues=learning_issues(spec),
+        usage=usage,
+    )
+
+
+def _usage(db: Database, jobs: set[str]) -> list[dict[str, object]]:
+    """Export only accounting metadata, never prompts, outputs or requester identity."""
     keys = (
         "operation",
         "models",
@@ -85,19 +103,32 @@ def packet(store: Store, lesson_id: str, case_id: str) -> EvaluationPacket:
         "speech_estimated",
         "uncertain",
     )
-    usage = [
+    return [
         {key: row[key] for key in keys if key in row}
         for operation, row in db.ledger.items()
         if any(operation.startswith(f"lesson:{job}:") for job in jobs)
     ]
+
+
+def failed_packet(store: Store, job_id: str, case_id: str) -> EvaluationPacket:
+    """Keep failed/uncertain runs in the denominator without exporting unpublished output."""
+    case = next((c for c in cases() if c.id == case_id), None)
+    db = store.snapshot()
+    job = db.jobs.get(job_id)
+    if case is None or job is None or job.get("status") != "failed":
+        raise ValueError("A failed packet needs a known case and terminal failed job")
     return EvaluationPacket(
         case=case,
-        lesson_id=lesson_id,
-        spec_sha256=digest_spec(spec),
-        video_sha256=str(lesson.get("video_sha256", "")),
-        spec=spec,
-        structural_issues=learning_issues(spec),
-        usage=usage,
+        lesson_id="",
+        job_id=job_id,
+        spec_sha256="",
+        video_sha256="",
+        spec=None,
+        outcome="generation_failed",
+        failure_type=str(job.get("failure_type", "unknown")),
+        failed_phase=str(job.get("failed_phase", "")),
+        structural_issues=cast(list[str], job.get("quality_issues", [])),
+        usage=_usage(db, {job_id}),
     )
 
 
@@ -110,7 +141,8 @@ def comparison(packets: list[EvaluationPacket]) -> dict[str, object]:
         ratings = candidate.ratings
         values = [ratings.factual, ratings.causal, ratings.visual, ratings.simplicity, ratings.transfer]
         complete = bool(
-            ratings.reviewer.strip()
+            candidate.outcome == "artifact"
+            and ratings.reviewer.strip()
             and all(v is not None for v in values)
             and ratings.critical_error is not None
         )
@@ -118,6 +150,10 @@ def comparison(packets: list[EvaluationPacket]) -> dict[str, object]:
         rows.append(
             {
                 "lesson_id": candidate.lesson_id,
+                "job_id": candidate.job_id,
+                "outcome": candidate.outcome,
+                "failure_type": candidate.failure_type,
+                "failed_phase": candidate.failed_phase,
                 "spec_sha256": candidate.spec_sha256,
                 "models": models,
                 "cost_recorded_usd": sum(float(str(r.get("charged_usd", 0))) for r in candidate.usage)
@@ -128,7 +164,9 @@ def comparison(packets: list[EvaluationPacket]) -> dict[str, object]:
                 "structural_issues": candidate.structural_issues,
                 "human_review_complete": complete,
                 "ratings": ratings.model_dump(),
-                "quality_result": "unmeasured"
+                "quality_result": "generation_failed"
+                if candidate.outcome == "generation_failed"
+                else "unmeasured"
                 if not complete
                 else "needs-work"
                 if ratings.critical_error or candidate.structural_issues or any(v == 0 for v in values)
@@ -147,7 +185,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="action", required=True)
     export = sub.add_parser("packet")
-    export.add_argument("--lesson", required=True)
+    target = export.add_mutually_exclusive_group(required=True)
+    target.add_argument("--lesson")
+    target.add_argument("--job")
     export.add_argument("--case", required=True, choices=[c.id for c in cases()])
     export.add_argument("--output", type=Path, required=True)
     compare = sub.add_parser("compare")
@@ -156,9 +196,11 @@ def main() -> None:
     args = parser.parse_args()
     if args.action == "packet":
         config = load_settings()
-        result = packet(Store(config.database_url, config.data_dir), args.lesson, args.case).model_dump(
-            mode="json"
+        store = Store(config.database_url, config.data_dir)
+        candidate = (
+            failed_packet(store, args.job, args.case) if args.job else packet(store, args.lesson, args.case)
         )
+        result = candidate.model_dump(mode="json")
     else:
         result = comparison([EvaluationPacket.model_validate_json(p.read_text()) for p in args.packets])
     # Results deliberately stay outside the shared artifact and ordinary logs.

@@ -7,6 +7,8 @@ input_usd_per_million: 2.0
 output_usd_per_million: 10.0
 speech_usd_per_minute: 0.02
 generation_reserve_usd: 2.0
+research_phase_reserve_usd: 0.30
+max_research_output_tokens: 2500
 text_phase_reserve_usd: 0.65
 speech_phase_reserve_usd: 0.05
 chat_reserve_usd: 0.10

@@ -51,12 +51,15 @@ async def test_gateway_structured_research_and_speech(
     receipt = UsageReceipt()
     token = receipt_context.set(receipt)
     try:
-        result = await model_text("RESEARCH_MACHINE\nTest only", settings, schema={"type": "object"})
+        result = await model_text(
+            "RESEARCH_MACHINE\nTest only", settings, schema={"type": "object"}, task="research"
+        )
         assert result == '{"value":"test"}'
         assert await model_speech("A synthetic test sentence.", settings) == b"synthetic-test-audio"
     finally:
         receipt_context.reset(token)
     assert observed[0]["max_tool_calls"] == 3
+    assert observed[0]["max_output_tokens"] == settings.max_research_tokens
     assert observed[0]["store"] is False
     assert observed[0]["reasoning"] == {"effort": settings.reasoning_effort}
     assert observed[0]["text"] == {

@@ -49,6 +49,8 @@ async def test_local_dispatch_is_explicitly_local(
         ("budget_usd", -1),
         ("generation_reserve", 0.1),
         ("text_phase_reserve", 0.01),
+        ("research_phase_reserve", 0.01),
+        ("max_research_tokens", 0),
         ("chat_reserve", 0.0001),
         ("video_fps", 60),
         ("video_width", 321),

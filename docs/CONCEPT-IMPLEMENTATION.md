@@ -28,8 +28,8 @@ This is an implementation record, not the owner's lesson acceptance. BUG-004 rem
 
 ## Verification in this iteration
 
-Observed: Ruff, strict mypy, 107 backend tests including three disposable Postgres tests,
-85.60% backend coverage; TypeScript, ESLint, nine JavaScript tests and production build pass.
+Observed: Ruff, strict mypy, 113 backend tests including three disposable Postgres tests,
+85.72% backend coverage; TypeScript, ESLint, nine JavaScript tests and production build pass.
 The provider in pipeline tests is synthetic; transactions, media encoding and artifacts are real.
 Linux packaging, browser, hosted runtime and paid generation observations are recorded below
 when completed. Their earlier-revision evidence does not automatically transfer here.
@@ -59,3 +59,15 @@ that software can truthfully mark passed on its own.
 
 See the friction log for findings and fixes. These are observed implementation
 checks, not independent scientific review, actual-device approval or learning gain.
+
+
+### CE-1 generation latency finding
+
+The first combined research/author call timed out at 210 seconds. It published
+nothing and retained $0.65 of unknown billing; that failure is included in a private
+evaluation packet. [ADR 0002](architecture-decisions/0002-checkpointed-evidence.md)
+separates the small evidence retrieval and larger scene authoring into explicit,
+checkpointed task routes. Source boundaries, invalid research, budget limits,
+legacy paid-output migration and failure export are tested. New split-path runtime
+evaluation remains required before claiming generation is reliable. The previous
+successful v1 cost benchmark does not establish CE-1 generation success.

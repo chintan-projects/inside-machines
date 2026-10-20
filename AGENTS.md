@@ -13,7 +13,7 @@ model gateway, configuration loader, logger or state manager.
    out of domain, chat and pipeline modules. Keep files below 600 lines.
 3. **Extensibility:** register trusted provider adapters at startup through
    `ProviderRegistry` and the shared gateway's `ModelBackend` protocol. Route
-   authoring, review, chat and speech explicitly. Declare supported tasks and reject
+   research, authoring, review, chat and speech explicitly. Declare supported tasks and reject
    incompatible routes before serving. Do not load arbitrary plugin code or accept
    provider endpoints/credentials from clients. A registry is sufficient for now;
    do not introduce a plugin framework without a concrete need.
@@ -41,9 +41,11 @@ model gateway, configuration loader, logger or state manager.
   reservations before enabling a different model. Current default rates and the
   `OPENAI_API_KEY` readiness gate describe only the OpenAI deployment. A new
   registry entry alone does not make another provider production-ready.
-- Research is currently an OpenAI adapter capability. Another authoring adapter
-  must explicitly implement equivalent evidence retrieval or reject that task;
-  never quietly omit source gathering. Speech is a separate capability.
+- Research is a separately routed OpenAI adapter capability with a persisted evidence
+  checkpoint. Configure a retrieval-capable research route before authoring; another
+  adapter must implement equivalent retrieval or reject that task. Authoring and review
+  consume that checkpoint and cannot add unseen source URLs. Never quietly omit evidence.
+  Speech is also a separate capability.
 - Add adapter contract tests for success, malformed/refused/incomplete output,
   timeout, quota failure and usage accounting. Add routing tests for task isolation.
 - Run the same product evaluation cases before claiming comparable quality or

@@ -61,3 +61,29 @@ multi-minute generation time remains a significant experience constraint. Reuse
 avoids another AI generation charge; serving artifacts still consumes hosting and
 storage. Measure more machines, failures and latency before extrapolating cost or
 choosing a cheaper model. Claude and open-model comparisons have not been run.
+
+## CE-1 protected review deployment — October 19, 2026
+
+Implementation commit `c7c031e` is Ready in the personal
+`chintan-4466s-projects/inside-machines-alpha` project. The protected stable URL
+serves the new AC/washer/cooker teaching drafts. Private Blob media bytes verified
+against SHA-256 before atomic import. A repeat import reports zero inserted,
+three existing. Old lesson specs, chats, feedback, users, sessions, jobs, ledger,
+spending and reservations compare unchanged across publication; only discovery
+moves to the three new immutable IDs. No human review records were inserted.
+
+Observed on deployed Chrome: the new causal AC player, keyboard slider to the
+compressed state, native private MP4 playback at readyState 4 with 100.51-second
+duration and one captions track; saved lesson survives full offline reload and
+plays narration from a local Blob at the selected checkpoint. 375-pixel phone
+capture is `shots/ce-1-hosted-phone.jpg` (ignored). Network/viewport overrides
+were restored. This is browser evidence, not actual-phone or human craft acceptance.
+
+A single owner-initiated, $2-reserved revision of the existing vacuum lesson tests
+the new production CE-1 generation pipeline. Baseline ledger before that request:
+$1.545924 spent/retained, $0 reserved, $50 ceiling. It failed after 211 seconds with ModelUnavailableError and no usable provider
+receipt. The ledger retained $0.65 for uncertain billing and released the rest;
+nothing was published and no paid call was retried automatically. A private failure
+packet preserves this run in the evaluation denominator. ADR 0002 splits evidence
+retrieval from authoring before the next explicit evaluation. No provider-comparison or learning result is
+inferred from successful infrastructure or a model editorial pass.
