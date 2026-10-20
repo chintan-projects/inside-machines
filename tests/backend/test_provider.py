@@ -33,6 +33,7 @@ async def test_gateway_structured_research_and_speech(
             200,
             json={
                 "status": "completed",
+                "model": "synthetic-resolved-model-2026-10-19",
                 "usage": {"input_tokens": 100, "output_tokens": 50},
                 "output": [
                     {"type": "web_search_call"},
@@ -72,7 +73,8 @@ async def test_gateway_structured_research_and_speech(
     }
     assert receipt.input_tokens == 100 and receipt.output_tokens == 50 and receipt.search_calls == 1
     assert receipt.cost_usd > 0.01 and receipt.speech_characters > 0
-    assert receipt.models == [settings.model, settings.speech_model]
+    assert receipt.models == ["synthetic-resolved-model-2026-10-19", settings.speech_model]
+    assert receipt.model_identity_estimated  # Speech exposes only the requested identity.
     assert receipt.web_tool_calls == 1 and receipt.search_estimated
 
 
@@ -111,6 +113,7 @@ def test_search_accounting_distinguishes_page_actions(
         receipt_context.reset(token)
     assert receipt.web_tool_calls == 4 and receipt.search_calls == 2
     assert receipt.search_estimated
+    assert receipt.models == [settings.model] and receipt.model_identity_estimated
     expected = (100 * settings.input_rate + 20 * settings.output_rate) / 1e6 + 0.02
     assert receipt.cost_usd == pytest.approx(expected)
 

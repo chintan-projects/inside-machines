@@ -58,6 +58,7 @@ class ProviderResponse(BaseModel):
     """Ignore provider metadata not needed by the product."""
 
     status: str = ""
+    model: str = Field(default="", max_length=160)
     output: list[OutputItem] = Field(default_factory=list)
     usage: ProviderUsage = Field(default_factory=ProviderUsage)
     incomplete_details: dict[str, str] | None = None
@@ -74,6 +75,7 @@ class UsageReceipt:
     search_estimated: bool = False
     response_status: str = ""
     incomplete_reason: str = ""
+    model_identity_estimated: bool = False
     speech_characters: int = 0
     cost_usd: float = 0
     models: list[str] = field(default_factory=list)
@@ -132,6 +134,7 @@ class HostedBackend:
                     # Speech endpoint does not return the text usage contract. Label as estimate.
                     receipt.cost_usd += len(text.split()) / 130 * self.settings.speech_rate
                     receipt.models.append(self._model_id)
+                    receipt.model_identity_estimated = True
                     return BackendOutput(text=base64.b64encode(response.content).decode())
                 messages = list(request.messages or ({"role": "user", "content": request.prompt or ""},))
                 if len(json.dumps(messages).encode()) > 100000:
@@ -185,7 +188,8 @@ class HostedBackend:
                     parsed.usage.input_tokens * self.settings.input_rate
                     + parsed.usage.output_tokens * self.settings.output_rate
                 ) / 1e6 + searches * 0.01
-                receipt.models.append(self._model_id)
+                receipt.models.append(parsed.model or self._model_id)
+                receipt.model_identity_estimated |= not bool(parsed.model)
                 texts = [
                     block.text
                     for item in parsed.output

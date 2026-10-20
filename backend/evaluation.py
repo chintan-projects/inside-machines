@@ -110,6 +110,7 @@ def _usage(db: Database, jobs: set[str]) -> list[dict[str, object]]:
         "search_estimated",
         "response_status",
         "incomplete_reason",
+        "model_identity_estimated",
         "cost_usd",
         "charged_usd",
         "speech_estimated",
@@ -168,6 +169,9 @@ def comparison(packets: list[EvaluationPacket]) -> dict[str, object]:
                 "failed_phase": candidate.failed_phase,
                 "spec_sha256": candidate.spec_sha256,
                 "models": models,
+                "model_identity_estimated": any(
+                    bool(r.get("model_identity_estimated", True)) for r in candidate.usage
+                ),
                 "cost_recorded_usd": sum(float(str(r.get("charged_usd", 0))) for r in candidate.usage)
                 if candidate.usage
                 else None,

@@ -4,6 +4,12 @@ One observed OpenAI run, not a provider comparison or a representative average.
 All requests ran on the personal, protected Vercel deployment using the configured
 $50 app-AI ceiling. No API credential appears in this report.
 
+Historical identity correction: earlier receipt `models` fields retained the
+configured/requested alias, not the API's resolved identity. Read those names below
+as requested models. Reported token counts remain intact. New receipts retain the
+API-returned identity and explicitly flag missing identities (including speech).
+No historical row has been edited to pretend that information was observed.
+
 ## Successful new-machine run
 
 - Question: How does a household vacuum cleaner work?
