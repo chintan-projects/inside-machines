@@ -35,9 +35,9 @@ bugs:
     fix: Fit and pad every rasterized frame to the exact configured byte dimensions
     regression: tests/backend/test_pipeline.py; tests/backend/test_teaching.py
   - id: BUG-006
-    title: Combined CE-1 evidence and scene authoring exceeds bounded deadline
+    title: CE-1 production generation lacks a completed end-to-end benchmark
     severity: high
     status: open
-    evidence: Combined author timed out; split author succeeds but full-copy review hits 10000-token cap
-    fix: Evidence checkpoint plus SHA-bound concise review verdict; hosted end-to-end evaluation pending
+    evidence: Combined author timeout, full-copy review cap, clipped labels and author output cap observed
+    fix: Evidence checkpoint, compact author transport and SHA-bound review; hosted end-to-end evaluation pending
     regression: tests/backend/test_research.py; tests/backend/test_pipeline.py; ADR 0002

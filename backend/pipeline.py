@@ -16,6 +16,7 @@ from pydantic import ValidationError
 
 from .accounting import charge
 from .assets import Assets
+from .author_transport import author_schema, expand_author
 from .contracts import AuthorLessonSpec, LessonSpec, ReviewDecision, ReviewSpec, TeachingReviewSpec
 from .domain import Domain
 from .prompts import lesson_prompt, review_prompt
@@ -208,16 +209,19 @@ class Pipeline:
                     research=researched.model_dump(mode="json"),
                 )
             elif phase == "author" or (phase == "queued" and saved_author):
+                compact = job.get("author_protocol") == "compact-1"
                 raw = await self._paid(
                     job,
                     "author",
                     lambda: model_text(
-                        lesson_prompt(str(job["question"]), str(job["canonical"]), evidence),
+                        lesson_prompt(str(job["question"]), str(job["canonical"]), evidence, compact=compact),
                         self.settings,
-                        schema=AuthorLessonSpec.model_json_schema(),
+                        schema=author_schema() if compact else AuthorLessonSpec.model_json_schema(),
                     ),
                 )
-                spec: LessonSpec = AuthorLessonSpec.model_validate_json(raw)
+                spec: LessonSpec = (
+                    expand_author(raw) if compact else AuthorLessonSpec.model_validate_json(raw)
+                )
                 if spec.canonical != job["canonical"]:
                     raise ValueError("Generated lesson changed its requested identity")
                 if evidence:

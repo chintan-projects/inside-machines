@@ -1,8 +1,11 @@
 """Reject the teaching failures observed in human review, before publication."""
 
+import json
+
 import pytest
 
 from backend.ac_craft import CORE, aircon_craft
+from backend.author_transport import compact_author
 from backend.contracts import LessonSpec
 from backend.domain import User
 from backend.quality import learning_issues, require_learning_quality
@@ -131,7 +134,7 @@ async def test_missing_labels_stop_before_review_and_speech(
         receipt.cost_usd = 0.01
         draft = ce_spec.model_copy(deep=True)
         draft.parts = [p for p in draft.parts if not p.id.startswith("label-")]
-        return draft.model_dump_json()
+        return json.dumps(compact_author(draft))
 
     monkeypatch.setattr("backend.pipeline.model_text", text)
     job_id = str(Domain(store, settings).request("washer", user)["job_id"])

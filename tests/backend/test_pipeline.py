@@ -1,5 +1,6 @@
 """Exercise checkpoint/replay safety and real video encoding without paid models."""
 
+import json
 import subprocess
 from pathlib import Path
 
@@ -7,6 +8,7 @@ import imageio_ffmpeg  # type: ignore[import-untyped]  # Upstream package has no
 import pytest
 
 from backend.assets import Assets
+from backend.author_transport import compact_author
 from backend.contracts import LessonSpec, ReviewDecision
 from backend.domain import Domain, User
 from backend.pipeline import Pipeline
@@ -83,7 +85,7 @@ async def test_full_phase_pipeline_real_mp4(
         return (
             ReviewDecision(accepted=True, notes=[], spec_sha256=digest_spec(spec)).model_dump_json()
             if prompt.startswith("Review")
-            else spec.model_dump_json()
+            else json.dumps(compact_author(spec))
         )
 
     async def speech(narration: str, config: Settings) -> bytes:

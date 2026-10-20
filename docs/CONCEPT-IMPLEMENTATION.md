@@ -28,8 +28,8 @@ This is an implementation record, not the owner's lesson acceptance. BUG-004 rem
 
 ## Verification in this iteration
 
-Observed: Ruff, strict mypy, 122 backend tests including three disposable Postgres tests,
-86.06% backend coverage; TypeScript, ESLint, ten JavaScript tests and production build pass.
+Observed: Ruff, strict mypy, 129 backend tests including three disposable Postgres tests,
+86.25% backend coverage; TypeScript, ESLint, ten JavaScript tests and production build pass.
 The provider in pipeline tests is synthetic; transactions, media encoding and artifacts are real.
 Linux packaging, browser, hosted runtime and paid generation observations are recorded below
 when completed. Their earlier-revision evidence does not automatically transfer here.
@@ -90,3 +90,9 @@ and includes its anchored label; the washer pump focus was inspected at 375 pixe
 Empty pose fills now resolve against the original graphic colour in both languages,
 so a new colour does not appear before the causal change. Existing three authored
 artifacts have no one-sided colour endpoints; their stored media meaning is unchanged.
+
+Compact author transport (`backend/author_transport.py`) expands into the unchanged
+full lesson and pose schemas. Hash-preserving round trips and full real-MP4 pipeline
+tests cover the new protocol; old paid-output migration keeps its original reader.
+Confirmed output-limit failures remain in private evaluation packets and the ledger.
+No automatic paid retry or reduction in the quality floor is introduced.

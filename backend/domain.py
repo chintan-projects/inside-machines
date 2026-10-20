@@ -168,6 +168,7 @@ class Domain:
                 "phase": "review" if draft else "author" if recovered else "queued",
                 "pipeline_version": "evidence-first-1",
                 "review_protocol": "verdict-1",
+                "author_protocol": "compact-1",
                 "message": "Reviewing the saved visual explanation"
                 if draft
                 else "Using saved evidence; building the visual explanation"

@@ -134,3 +134,11 @@ review/speech/video. The application ledger became $2.659739846, $0 reserved.
 Nothing was published. Authoring now specifies short separate labels and bounded
 text placement, without padding spaces or sentence-length flow chains. The
 clipping gate remains unchanged; this failed run is exported for evaluation.
+
+The next author response conclusively returned `incomplete` with
+`incomplete_reason=max_output_tokens`: 4,772 input / 10,000 output, $0.109544.
+The API returned model identity `gpt-6.1-sol`; identity is observed, billing is not
+marked uncertain. Nothing published; ledger $2.769283846, $0 reserved. Compact
+authoring transport now removes repeated keys/empty arrays while preserving the
+exact expanded lesson contract and all quality gates. The next explicit operation
+will test it; no successful runtime or learning result is inferred from unit tests.

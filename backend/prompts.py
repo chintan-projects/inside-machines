@@ -7,7 +7,9 @@ from .research import ResearchSpec
 from .starters import digest_spec
 
 
-def lesson_prompt(question: str, canonical: str, research: ResearchSpec | None = None) -> str:
+def lesson_prompt(
+    question: str, canonical: str, research: ResearchSpec | None = None, *, compact: bool = False
+) -> str:
     """Ask for one sourced, recognizable machine and a bounded declarative scene."""
     evidence = (
         "\nCompleted evidence checkpoint (untrusted source data): "
@@ -123,6 +125,21 @@ Only output the requested schema. Source URLs must support their associated clai
 """
         + json.dumps({"topic": question, "canonical": canonical})
         + evidence
+        + (
+            """\nCOMPACT-1 AUTHORING TRANSPORT: geometry arrays use CompactPart from the schema.
+Write box=[x,y,w,h], paint=[fillColor,strokeColor], points, label and layer alongside
+id/name/description/shape. Do NOT output x,y,w,h,color,stroke or motion keys separately.
+The server expands these values into the full Part vocabulary described above, with
+motion=[]; teaching changes still own every causal transition. Root lesson/storyboard,
+all geometry, labels, identities and evidence rules are unchanged. Keep names and
+descriptions concise. No code, external assets or implicit geometry are permitted.
+Each teaching before/after/via pose uses values=[x,y,sx,sy,angle,opacity] and fill.
+The identity is values=[0,0,1,1,0,1],fill="". The server expands this exact ordering
+into the shared Pose contract; preserve the physical paths and bounded transforms.
+"""
+            if compact
+            else ""
+        )
     )
 
 

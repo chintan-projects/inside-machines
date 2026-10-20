@@ -32,13 +32,16 @@ class Motion(StrictModel):
     axis: Literal["x", "y"]
 
 
+PartShape = Literal["box", "ellipse", "ring", "path", "polygon", "text"]
+
+
 class Part(StrictModel):
     """A recognizable part assembled from a small safe geometric vocabulary."""
 
     id: str = Field(pattern=r"^[a-z][a-z0-9-]{0,39}$")
     name: str = Field(min_length=2, max_length=70)
     description: str = Field(min_length=10, max_length=500)
-    shape: Literal["box", "ellipse", "ring", "path", "polygon", "text"]
+    shape: PartShape
     x: float = Field(ge=0, le=900)
     y: float = Field(ge=0, le=540)
     w: float = Field(ge=0, le=900)

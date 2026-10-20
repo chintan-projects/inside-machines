@@ -95,3 +95,22 @@ author/editor instructions require a large working mechanism and physical
 surroundings. Current gates are reapplied before every recovery. Valid evidence
 from a known billed review failure may be reused separately; its drawing is not
 automatically accepted. Engineering success remains distinct from craft review.
+
+## Compact authoring transport
+
+The subsequent full-format author response returned `incomplete/max_output_tokens`
+at 10,000 tokens ($0.109544; provider-returned identity `gpt-6.1-sol`). New jobs
+carry `author_protocol=compact-1`. A provider-neutral DTO groups coordinates and
+paint, omits mandatory empty static-motion arrays and groups pose numbers with an
+explicit fixed ordering. The server expands the data into the unchanged full
+AuthorLessonSpec before all source, geometry and learning gates. No geometry,
+labels, layers, paths, evidence, limits or causal state are inferred or removed.
+Existing paid full-format checkpoints retain their parser. The public lesson/API,
+version, renderer and media meanings are unchanged.
+
+A round-trip regression preserves the exact draft hash and validates schema refs.
+Malformed coordinates/paint, unsupported fields and invalid expanded pose bounds
+remain errors. The serializer refuses to discard legacy motion. The failed
+vacuum checkpoint serializes to 24,469 compact bytes versus 26,080 full bytes at
+equal minification; token/latency improvement needs the next live run and must not
+be inferred from byte savings. The $2 reservation and $50 ceiling are unchanged.

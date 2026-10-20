@@ -57,7 +57,9 @@ async def test_completed_pre_split_author_checkpoint_does_not_pay_for_research(
         failed=False,
         result=ce_spec.model_dump_json(),
     )
-    store.transaction(lambda db: db.jobs[id].update(lease_until=0, pipeline_version=None))
+    store.transaction(
+        lambda db: db.jobs[id].update(lease_until=0, pipeline_version=None, author_protocol=None)
+    )
     await pipeline.run(id)
     state = store.snapshot()
     assert deliveries == ["review"] and state.jobs[id]["phase"] == "review"
