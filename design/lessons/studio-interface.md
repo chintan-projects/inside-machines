@@ -60,3 +60,19 @@ phone selector and desktop rail use the same path state. Playback occupies one
 stable control position; illustration limits remain expanded initially.
 Three bounded review rounds and results are in the D1 journal. Engineering and
 browser journeys pass; owner taste, actual-device and beginner evidence are pending.
+
+## Hosted native entry · 2026-10-22
+
+Observed in the integrated app: navigation, an offline-save action and duplicate
+setup text pushed the phone illustration to y=615. The shared hosted entry now
+uses one compact navigation row, one question and one path selector. Offline
+saving follows the explanation; an optional “Predict first” action sits beside
+playback and expands only on request. The causal caption remains attached to the
+stage. No learning steps or assumptions were removed.
+
+Final agent browser observation at 375×844: the drawing begins at y=359.8;
+document and scroll widths both equal375, and all six on-scene component labels
+fit the viewport. At1440×1000, the illustration begins at y=325.4 and labels fit.
+Prediction expands/collapses and ArrowRight advances the timeline by0.1seconds.
+These geometry/interaction checks support CE-05/08/14/16, not human taste,
+screen-reader usability or the five-beginner learning hypothesis.

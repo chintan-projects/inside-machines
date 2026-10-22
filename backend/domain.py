@@ -22,6 +22,7 @@ from .revision_recovery import reusable_draft
 from .settings import Settings
 from .starters import digest_spec
 from .store import Database, Store
+from .stored_lessons import components_for, current_lesson, parse_stored_spec
 
 
 class User(BaseModel):
@@ -44,7 +45,7 @@ class Domain:
         """Store bounded alpha telemetry without private chat text."""
         db.events.append({"kind": kind, "user_id": user.id, "at": time.time(), **fields})
 
-    def catalog(self, *, include_depth: bool = False) -> list[dict[str, object]]:
+    def catalog(self, *, include_depth: bool = False, include_native_drafts: bool = False) -> list[dict[str, object]]:
         """Project public metadata only; never return owner job data or private chat."""
 
         def read(db: Database) -> list[dict[str, object]]:
@@ -56,7 +57,11 @@ class Domain:
                     continue
                 if lesson.get("depth_parent") and not include_depth:
                     continue
-                spec = LessonSpec.model_validate(lesson["spec"])
+                spec = parse_stored_spec(lesson["spec"])
+                if spec.version == 3 and not include_native_drafts:
+                    from .stored_lessons import native_visible
+                    if not native_visible(db, str(lesson["id"]), False):
+                        continue
                 result.append(
                     {
                         "id": lesson["id"],
@@ -70,7 +75,7 @@ class Domain:
                         "category": spec.category,
                         "accent": spec.accent,
                         "duration": sum(s.duration for s in spec.stages),
-                        "parts": len(spec.parts),
+                        "parts": len(components_for(spec)),
                         "quality": lesson.get("quality", "generated"),
                         "review_needed": bool(learning_issues(spec))
                         or not review_state(db, str(lesson["id"]))["ready"],
@@ -121,6 +126,8 @@ class Domain:
 
         def admit(db: Database) -> dict[str, object]:
             parent = db.lessons.get(revision_of) if revision_of else None
+            if parent and parse_stored_spec(parent["spec"]).version == 3:
+                raise HTTPException(422, "Native artwork revisions are prepared through the trusted local production workflow; request an owner-authored native revision.")
             context = None
             if owner_build:
                 for previous in db.jobs.values():
@@ -143,6 +150,8 @@ class Domain:
                     raise HTTPException(404, "Core lesson not found")
                 if core.get("archived") or core.get("superseded_by"):
                     raise HTTPException(409, "Open the active core revision before authoring depth")
+                if parse_stored_spec(core["spec"]).version == 3:
+                    raise HTTPException(422, "Native depth is prepared through the trusted local production workflow; collect the follow-up request for owner curation.")
                 assert node_role is not None
                 try:
                     context = depth_context(node_parent, LessonSpec.model_validate(core["spec"]),
@@ -183,18 +192,12 @@ class Domain:
             for lesson in db.lessons.values():
                 if lesson.get("depth_parent") and not node_parent:
                     continue
-                spec = LessonSpec.model_validate(lesson["spec"])
+                spec = parse_stored_spec(lesson["spec"])
                 names = {spec.canonical, *(canonicalize(a) for a in spec.aliases)}
                 if canonical in names and (not (revision_of or node_parent) or spec.canonical == canonical):
                     # Keep every old query reusable even if a revised model omits its aliases.
-                    latest, visited = lesson, set[str]()
-                    while latest.get("superseded_by"):
-                        target = str(latest["superseded_by"])
-                        if target in visited or target not in db.lessons:
-                            raise HTTPException(409, "This lesson's revision chain needs owner attention")
-                        visited.add(target)
-                        latest = db.lessons[target]
-                    if latest.get("archived"):
+                    latest = current_lesson(db, str(lesson["id"]), user.owner)
+                    if latest is None:
                         continue
                     self.event(db, "catalog_hit", user, question=question, lesson_id=latest["id"])
                     return {"kind": "lesson", "lesson_id": latest["id"], "reused": True}
@@ -343,7 +346,10 @@ class Domain:
         def update(db: Database) -> None:
             if lesson_id not in db.lessons:
                 raise HTTPException(404, "Lesson not found")
-            spec = LessonSpec.model_validate(db.lessons[lesson_id]["spec"])
+            from .stored_lessons import native_visible
+            if not native_visible(db, lesson_id, user.owner):
+                raise HTTPException(404, "Lesson not found")
+            spec = parse_stored_spec(db.lessons[lesson_id]["spec"])
             if stage is not None and not 0 <= stage < len(spec.stages):
                 raise HTTPException(422, "Feedback refers to an unknown lesson step")
             db.feedback[f"{user.id}:{lesson_id}"] = {

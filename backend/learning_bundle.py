@@ -2,14 +2,14 @@
 
 from fastapi import HTTPException
 
-from .contracts import LessonSpec
 from .domain import User
 from .learning_paths import LearningPath, PathNode
-from .learning_reviews import review_state
+from .learning_reviews import native_release_identity, review_state
 from .path_publication import bundle_binding
 from .quality import learning_issues
 from .starters import digest_spec
 from .store import Database
+from .stored_lessons import has_teaching, parse_stored_spec
 
 
 def learning_bundle(db: Database, lesson_id: str, user: User) -> dict[str, object]:
@@ -17,10 +17,12 @@ def learning_bundle(db: Database, lesson_id: str, user: User) -> dict[str, objec
     root = db.lessons.get(lesson_id)
     if root is None:
         raise HTTPException(404, "Explanation not found")
-    spec = LessonSpec.model_validate(root["spec"])
-    if spec.version != 2 or not spec.teaching:
+    spec = parse_stored_spec(root["spec"])
+    if not has_teaching(spec) or not spec.teaching:
         raise HTTPException(422, "Earlier revisions use their preserved reader")
     binding = bundle_binding(db, lesson_id)
+    if spec.version == 3 and not user.owner and not native_release_identity(db, lesson_id, binding.sha256):
+        raise HTTPException(404, "Explanation not found")
     if binding.issues and (not binding.path or root.get("learning_bundle_sha256")):
         raise HTTPException(409, "The learning path needs owner attention before it can be opened")
     path = binding.path
@@ -38,9 +40,11 @@ def learning_bundle(db: Database, lesson_id: str, user: User) -> dict[str, objec
     lessons = []
     for node in path.nodes:
         record = db.lessons[node.lesson_id]
-        node_spec = LessonSpec.model_validate(record["spec"])
-        if node_spec.version != 2 or not node_spec.teaching:
+        node_spec = parse_stored_spec(record["spec"])
+        if not has_teaching(node_spec):
             raise HTTPException(409, "A path node has incompatible teaching data")
+        if node.lesson_id != lesson_id and node_spec.version == 3 and not user.owner and not native_release_identity(db, node.lesson_id):
+            raise HTTPException(404, "A path explanation is being reviewed again")
         lessons.append({
             "id": node.lesson_id, "spec": node_spec.model_dump(mode="json"),
             "spec_sha256": digest_spec(node_spec), "video_sha256": str(record.get("video_sha256", "")),

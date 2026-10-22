@@ -8,12 +8,13 @@ from typing import Literal
 from fastapi import HTTPException
 from pydantic import BaseModel, Field
 
-from .contracts import LessonSpec, canonicalize
+from .contracts import canonicalize
 from .curated.catalog import SYSTEMS
 from .domain import User
 from .learning_reviews import review_state
 from .settings import Settings
 from .store import Database
+from .stored_lessons import parse_stored_spec
 
 
 class CostTotals(BaseModel):
@@ -97,7 +98,7 @@ def _system_id(record: Mapping[str, object], names: Mapping[str, str]) -> str | 
         return explicit
     spec_data = record.get("spec")
     if spec_data:
-        spec = LessonSpec.model_validate(spec_data)
+        spec = parse_stored_spec(spec_data)
         candidates = {canonicalize(spec.question), canonicalize(spec.title), spec.canonical,
                       *(canonicalize(alias) for alias in spec.aliases)}
     else:
@@ -188,7 +189,7 @@ def curated_cost_report(db: Database, settings: Settings, user: User) -> Curated
         rows[system_id].revisions.append(revision)
         revisions[lesson_id] = revision
         if not record.get("archived") and not record.get("superseded_by") and not record.get("depth_parent"):
-            spec = LessonSpec.model_validate(record["spec"])
+            spec = parse_stored_spec(record["spec"])
             candidate = (float(str(record.get("created_at", 0))), lesson_id,
                          _SpeechScript(system_id, lesson_id, sum(len(stage.narration.split()) for stage in spec.stages)))
             current = current_scripts.get(system_id)

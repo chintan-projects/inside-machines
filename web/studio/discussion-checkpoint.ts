@@ -1,7 +1,8 @@
-import type { Answer, LessonSpec } from '../contracts';
+import type { Answer } from '../contracts';
+import type { StoredSpec } from './native-contracts';
 
 /** Answers remain scoped to their exact lesson revision and valid stored checkpoints. */
-export function discussionCheckpoint(spec: LessonSpec, answer: Answer): number | undefined {
+export function discussionCheckpoint(spec: StoredSpec, answer: Answer): number | undefined {
   if (answer.stage !== null && Number.isInteger(answer.stage) && answer.stage >= 0 && answer.stage < spec.stages.length)
     return answer.stage;
   if (answer.part) {

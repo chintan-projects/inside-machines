@@ -9,7 +9,9 @@ dist-lab/
 shots/
 tests/
 research/
-vendor/anatomy/
+vendor/anatomy/*
+!vendor/anatomy/kit/
+!vendor/anatomy/LICENSE
 **/__pycache__/
 .mypy_cache/
 .ruff_cache/

@@ -490,3 +490,28 @@ was promoted. More engineering checks or a lower editorial threshold would not
 resolve these causal/craft failures. Beginner transfer and owner taste are unmeasured.
 Observed, low: some source question articles and GPU casing need editorial cleanup
 in new immutable revisions before release. Existing published hashes stay preserved.
+
+# Native hosted integration · 2026-10-22
+
+Observed, high: the hosted primitive format could not retain source-authored
+Anatomy artwork. The additive native artifact bridge preserves actual factory
+source, semantic cues and synchronized media; held imports do not replace the
+library or certify craft. The older twenty review cores remain intact.
+
+Observed, medium, fixed: the phone entry placed its drawing at y=615. Compact
+shared navigation, one title and optional adjacent prediction move it to y=359.8
+at375×844. All six labels fit and horizontal overflow is absent. Independent
+phone/accessibility and owner taste remain unmeasured. Evidence: ignored
+`native-production-20261022-final/browser/phone-entry-final.jpg` and desktop pair.
+
+Observed, medium, fixed: a component-focus action ended exactly at the next
+chapter and changed a compressor close-up to the warm coil. Its bounded end now
+retains the selected mechanism; a real player check ends at48.999seconds.
+Observed, medium, fixed: a narrow phone label extended beyond the stage; measured
+viewport fit now repositions its anchored label without changing domain state.
+
+Observed: native drafts and their media/path are owner-only. Adoption remains
+disabled until artifact-bound human release gates pass. This is a publication
+control, not evidence that those gates have been satisfied. Sixteen newer
+schematic cores and the current native candidates still lack accepted craft and
+beginner-learning evidence; the whole product quality goal remains open.

@@ -7,11 +7,12 @@ from typing import Literal, cast
 from _shared.services.logger import get_logger
 from fastapi import HTTPException
 
-from .contracts import LessonSpec, canonicalize
+from .contracts import canonicalize
 from .domain import Domain, User
 from .learning_reviews import review_state
 from .settings import Settings
 from .store import Database, Store
+from .stored_lessons import current_lesson, parse_stored_spec
 
 InterestStatus = Literal["requested", "planned", "working", "available", "declined"]
 logger = get_logger(__name__)
@@ -37,7 +38,7 @@ def notify_available(db: Database, lesson_id: str) -> None:
         return
     identity = review_state(db, lesson_id)
     lesson = db.lessons[lesson_id]
-    spec = LessonSpec.model_validate(lesson["spec"])
+    spec = parse_stored_spec(lesson["spec"])
     names = {spec.canonical, *(canonicalize(alias) for alias in spec.aliases)}
     for interest in db.topic_interests.values():
         # Imported or independently authored cores must also satisfy earlier
@@ -77,12 +78,15 @@ class Interests:
 
         def write(db: Database) -> dict[str, object]:
             for lesson in db.lessons.values():
-                if lesson.get("archived") or lesson.get("depth_parent"):
+                if lesson.get("depth_parent"):
                     continue
-                spec = LessonSpec.model_validate(lesson["spec"])
+                spec = parse_stored_spec(lesson["spec"])
                 if canonical in {spec.canonical, *(canonicalize(a) for a in spec.aliases)}:
-                    Domain.event(db, "catalog_hit", user, question=question, lesson_id=lesson["id"])
-                    return {"kind": "lesson", "lesson_id": lesson["id"], "reused": True}
+                    latest = current_lesson(db, str(lesson["id"]), user.owner)
+                    if latest is None:
+                        continue
+                    Domain.event(db, "catalog_hit", user, question=question, lesson_id=latest["id"])
+                    return {"kind": "lesson", "lesson_id": latest["id"], "reused": True}
             interest = db.topic_interests.get(key)
             if not interest:
                 recent = sum(

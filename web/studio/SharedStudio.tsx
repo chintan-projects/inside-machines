@@ -6,11 +6,12 @@ import { FeedbackPanel, ChatPanel } from '../LessonDiscussion';
 import { LessonSaveButton } from '../useLessonAssets';
 import { offlineMember, savedLearningPath, saveLearningPath } from '../offline';
 import { progressKey, readProgress } from '../progress';
-import { teachingAt } from '../teaching/state';
 import { mountLesson } from './player';
 import { mountPath, type LearningPathAPI } from './path-player';
 import type { StudioAPI } from './contracts';
-import { adaptLesson, chapterStarts, rendererAvailable } from './lesson-adapter';
+import { adaptLesson, rendererAvailable } from './lesson-adapter';
+import { chapterStarts, chapterIndex, componentIds, lessonDuration } from './native-contracts';
+import { nativeLesson } from './native-registry';
 import { checkedBundle, matchesSavedBundle, type LearningBundle } from './learning-bundle';
 import { mountPreservedLesson } from './preserved-player';
 import { discussionCheckpoint } from './discussion-checkpoint';
@@ -34,7 +35,7 @@ export function SharedStudio({lesson, member, online}: Props): ReactElement {
     if (!node) return;
     const shadow = node.shadowRoot ?? node.attachShadow({mode: 'open'});
     const style = document.createElement('style'); style.textContent = theme.replace(':root', ':host');
-    const root = document.createElement('div'); shadow.replaceChildren(style, root);
+    const root = document.createElement('div'); root.className='hosted-studio'; shadow.replaceChildren(style, root);
     let cancelled = false, interval = 0, lastSave = 0, mounted: LearningPathAPI | undefined;
     const urls: string[] = [];
     const progressStore = progressWriter((id, value) => localStorage.setItem(progressKey(member.id, id), JSON.stringify(value)));
@@ -48,7 +49,7 @@ export function SharedStudio({lesson, member, online}: Props): ReactElement {
           const player = mounted?.getPlayer(pathNode.id);
           if (!player) return;
           const record = currentBundle.current!.lessons.find(item => item.id === pathNode.lesson_id)!;
-          const state = player.getState(), stage = teachingAt(record.spec, state.time)[0].stage;
+          const state = player.getState(), stage = chapterIndex(record.spec, state.time);
           progressStore.save(record.id, {seconds: state.time,
             selected: record.spec.stages[stage].focus || record.spec.stages[stage].parts[0], mode: 'explore', speed: 1});
         });
@@ -91,11 +92,12 @@ export function SharedStudio({lesson, member, online}: Props): ReactElement {
         currentBundle.current = bundle;
         const factories = Object.fromEntries(bundle.lessons.map(record => [record.id, (target: HTMLElement): StudioAPI => {
           const source = media.get(record.id) ?? '';
-          const player = rendererAvailable(record.spec)
-            ? mountLesson(target, adaptLesson(record, source), {embedded: true, predictionFirst: true, mediaUrl: source})
-            : mountPreservedLesson(target, record, source, captions.get(record.id));
-          const total = record.spec.stages.reduce((sum, stage) => sum + stage.duration, 0);
-          const progress = readProgress(progressKey(member.id, record.id), total, record.spec.parts.map(part => part.id));
+          const spec=record.spec;
+          const adapted=spec.version===3 ? nativeLesson(spec,source,record.video_ready) :
+            rendererAvailable(spec) ? adaptLesson({...record,spec},source) : undefined;
+          const player = adapted ? mountLesson(target,adapted,{embedded:true,predictionFirst:true,mediaUrl:source}) :
+            mountPreservedLesson(target,record,source,captions.get(record.id));
+          const progress = readProgress(progressKey(member.id, record.id), lessonDuration(spec), componentIds(spec));
           progressStore.restored(record.id, progress.seconds);
           player.seek(progress.seconds); // Restore a paused scene. Never start narration on navigation.
           return player;
@@ -103,7 +105,7 @@ export function SharedStudio({lesson, member, online}: Props): ReactElement {
         mounted = mountPath(root, bundle.path, factories, {hashNavigation: false, brand: false,
           onSelect(pathNode, player) {
             const active = bundle.lessons.find(item => item.id === pathNode.lesson_id)!;
-            setDiscussion({lesson: active, stage: teachingAt(active.spec, player.getState().time)[0].stage});
+            setDiscussion({lesson: active, stage: chapterIndex(active.spec, player.getState().time)});
             persist();
           }});
         pathApi.current = mounted; setLoading(false);
@@ -114,7 +116,7 @@ export function SharedStudio({lesson, member, online}: Props): ReactElement {
           const active = bundle.lessons.find(item => item.id === pathNode.lesson_id)!;
           const player = mounted.getPlayer(pathNode.id);
           if (!player) return;
-          const stage = teachingAt(active.spec, player.getState().time)[0].stage;
+          const stage = chapterIndex(active.spec, player.getState().time);
           setDiscussion(previous => previous.lesson.id === active.id && previous.stage === stage ? previous : {lesson: active, stage});
         }, 250);
       } catch (failure) {
@@ -151,7 +153,6 @@ export function SharedStudio({lesson, member, online}: Props): ReactElement {
   const active = discussion.lesson;
   return <article className="shared-learning"><div className="shared-meta">
     {active.review_needed && <p className="draft-marker" title="Independent technical review, craft review and beginner testing are still pending.">Teaching draft · review pending</p>}
-    <LessonSaveButton online={online && !loading && !error} saved={saved} saving={saving} save={save}/>
   </div>
     {lesson.superseded_by && <p>This earlier revision keeps your original conversation. <a href={`#/lesson/${lesson.superseded_by}`}>Open the revised explanation</a></p>}
     {loading && <p role="status">Opening the explanation…</p>}
@@ -160,6 +161,7 @@ export function SharedStudio({lesson, member, online}: Props): ReactElement {
     {cacheNote && <p role="status">{cacheNote}</p>}
     {!online && !loading && !error && <p role="status">Saved on this device · live chat and feedback are available when you reconnect.</p>}
     <div ref={host} className="learning-studio" aria-busy={loading}/>
+    {!loading&&!error&&<div className="shared-save"><LessonSaveButton online={online} saved={saved} saving={saving} save={save}/></div>}
     {!loading && !error && <div className="lesson-bottom" aria-label={`Questions and feedback for ${active.spec.title}`}>
       <FeedbackPanel key={`feedback-${active.id}`} lesson={active} online={online} stage={discussion.stage}/>
       <ChatPanel key={`chat-${active.id}`} lesson={active} member={member} online={online} onShow={show}/>

@@ -37,6 +37,8 @@
 .request-fields label{display:grid;gap:6px}
 .shared-meta{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:12px 0}
 .learning-studio{display:block;min-width:0}
+.learning-shell{padding-top:18px}.learning-shell>.back{margin-bottom:6px}.learning-shell .shared-meta{margin:0 0 10px}.learning-shell .shared-meta p{margin:0}.shared-meta:empty{display:none}.shared-save{margin-top:20px}
 .request-inbox h2{margin-top:24px}
 @media(max-width:620px){.topbar nav{flex-wrap:wrap;gap:10px}.topbar{align-items:flex-start}.shared-meta{align-items:flex-start}.request-fields{grid-template-columns:1fr}}
 @media(max-width:620px){.topbar{height:auto;min-height:68px;flex-wrap:wrap;gap:8px;padding-block:12px;align-items:center}.topbar>.brand{flex-basis:100%}.topbar nav{width:100%;flex-wrap:nowrap;gap:8px;justify-content:space-between}.topbar nav>a{font-size:12px}.topbar nav>button{flex-shrink:0;min-width:36px;padding:6px}}
+@media(max-width:620px){.topbar.learning-nav{height:60px;min-height:60px;flex-wrap:nowrap;padding-block:0;gap:10px}.learning-nav>.brand{flex-basis:auto;font-size:21px;gap:7px}.learning-nav .brand span{display:none}.learning-nav nav{width:auto;gap:4px}.learning-nav nav>a{font-size:12px}.learning-nav nav>button{min-width:36px}.app-shell.learning-shell{padding-top:10px}.learning-shell>.back{margin-bottom:4px}}

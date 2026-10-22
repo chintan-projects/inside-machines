@@ -2,8 +2,14 @@
   "name": "inside-machines-local-lab",
   "private": true,
   "type": "module",
+  "imports": {
+    "#anatomy-tube": {
+      "types": "./native/anatomy-tube.d.mts",
+      "default": "./vendor/anatomy/kit/tube.mjs"
+    }
+  },
   "scripts": {
-    "build": "tsc --noEmit && vite build && node scripts/pwa-build.mjs",
+    "build": "tsc --noEmit && node native/verify.mjs && vite build && node scripts/pwa-build.mjs",
     "start": ".venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000",
     "test": "node --test tests/*.test.mjs",
     "build:lab": "node scripts/build.mjs",

@@ -10,6 +10,7 @@ import pytest
 
 from backend.contracts import LessonSpec
 from backend.domain import Domain, User
+from backend.native_publication import PreparedNative
 from backend.research import ResearchSpec
 from backend.settings import Settings
 from backend.store import Database, Store
@@ -99,6 +100,56 @@ def test_postgres_craft_import_preserves_private_history(settings: Settings, use
         "reused": True,
     }
     assert "air-conditioner" not in {item["id"] for item in Domain(store, settings).catalog()}
+
+
+def test_postgres_native_activation_concurrency_preserves_exact_artifacts(
+    settings: Settings, native_prepared: PreparedNative, spec: LessonSpec, user: User,
+) -> None:
+    """An explicit adoption commits once under contention; stale proof cannot partially archive."""
+    from fastapi import HTTPException
+
+    from backend.interests import Interests
+    from backend.learning_reviews import LearningReviews, ReviewSubmission
+    from backend.native_activation import NativeActivation, NativeActivationBody
+    from backend.native_publication import import_native
+    from backend.starters import digest_spec
+
+    target = urlparse(URL)
+    if target.hostname != "127.0.0.1" or target.port != 55432 or target.path != "/inside_test":
+        pytest.fail("Native activation tests require disposable loopback Postgres")
+    with psycopg.connect(URL) as connection:
+        connection.execute("DROP TABLE IF EXISTS inside_state")
+    store = Store(URL, settings.data_dir)
+    store.transaction(lambda db: (db.lessons.update({spec.canonical: {"id": spec.canonical, "spec": spec.model_dump(mode="json")}}),
+                                 db.chats.update({"private-old": {"lesson_id": spec.canonical, "messages": ["PRIVATE FIXTURE"]}})))
+    import_native(store, [native_prepared])
+    owner = User(id="synthetic-native-activation-owner", name="Synthetic owner", owner=True)
+    body = NativeActivationBody(spec_sha256=digest_spec(native_prepared.spec), video_sha256=native_prepared.proof.video_sha256,
+                                bundle_sha256="", expected_old_ids=[spec.canonical])
+    for gate in ("engineering", "technical", "craft", "learning", "release"):
+        data: dict[str, object] = {
+            "spec_sha256": body.spec_sha256, "video_sha256": body.video_sha256, "gate": gate,
+            "reviewer": "Synthetic protocol fixture", "method": "human", "decision": "pass",
+            "evidence": "Entirely synthetic test evidence; no actual review, learners or device inspection.",
+            "independent": True, "real_device": True, "device": "Synthetic fixture phone",
+        }
+        if gate == "learning":
+            data["scores"] = [{"participant": f"anon-{i}", "baseline": 0, "causal": 2, "transfer": 2} for i in range(5)]
+        LearningReviews(store).record(native_prepared.spec.canonical, ReviewSubmission.model_validate(data), owner)
+    before = store.snapshot()
+    with pytest.raises(HTTPException):
+        NativeActivation(store).activate(native_prepared.spec.canonical, body.model_copy(
+            update={"expected_old_ids": [spec.canonical, "missing-head"]}), owner)
+    assert store.snapshot() == before
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        results = list(pool.map(lambda _: NativeActivation(store).activate(native_prepared.spec.canonical, body, owner), range(16)))
+    assert sum(result["reused"] is False for result in results) == 1
+    after = store.snapshot()
+    assert after.lessons[spec.canonical] == {**before.lessons[spec.canonical], "archived": True,
+                                            "superseded_by": native_prepared.spec.canonical}
+    assert after.chats == before.chats and after.learning_reviews == before.learning_reviews
+    assert after.ledger == before.ledger and after.spent == after.reserved == 0 and not after.jobs
+    assert Interests(store, settings).request("How does a washer work?", user)["lesson_id"] == native_prepared.spec.canonical
 
 
 def test_postgres_concept_and_review_transactions_preserve_history(settings: Settings) -> None:
@@ -415,3 +466,68 @@ def test_postgres_depth_draft_concurrency_keeps_root_and_one_reservation(
         domain.request("How does a synthetic standalone core work?", owner,
                        owner_build=True, operation="pg-core-http-operation")
     assert failed_core.value.status_code == 409 and store.snapshot() == stable
+
+
+def test_postgres_native_import_path_and_immutable_rollback(
+    settings: Settings, native_prepared: PreparedNative,
+) -> None:
+    """Native drafts use the same locked document without altering old media/private state."""
+    import json
+
+    import backend.native_registry as registry
+    from backend.learning_bundle import learning_bundle
+    from backend.learning_paths import LearningPath, PathNode
+    from backend.native_publication import import_native
+    from backend.native_registry import canonical_digest
+    from backend.path_publication import PathPublication, PathSubmission
+    from backend.starters import digest_spec
+
+    target = urlparse(URL)
+    if target.hostname != "127.0.0.1" or target.port != 55432 or target.path != "/inside_test":
+        pytest.fail("Native publication tests require disposable loopback Postgres")
+    with psycopg.connect(URL) as connection:
+        connection.execute("DROP TABLE IF EXISTS inside_state")
+    store = Store(URL, settings.data_dir)
+    store.transaction(lambda db: (db.chats.update({"retained-native-private": {"messages": ["PRIVATE FIXTURE"]}}),
+                                 db.ledger.update({"retained-native-ledger": {"charged_usd": .25}})))
+    assert import_native(store, [native_prepared]) == (1, 0)
+    assert import_native(store, [native_prepared]) == (0, 1)
+    before = store.snapshot()
+    manifest = json.loads(registry.REGISTRY_FILE.read_text())
+    next_artifact = native_prepared.model_copy(deep=True)
+    next_artifact.spec.canonical = "synthetic-native-insight"
+    identity = {"id": "synthetic-native-2", "lessons": [next_artifact.spec.canonical],
+                "sources": manifest["renderers"][0]["sources"]}
+    next_artifact.spec.renderer.id = str(identity["id"])
+    next_artifact.spec.renderer.fingerprint = canonical_digest(identity)
+    next_artifact.proof.renderer_id = next_artifact.spec.renderer.id
+    next_artifact.proof.renderer_fingerprint = next_artifact.spec.renderer.fingerprint
+    next_artifact.proof.spec_sha256 = digest_spec(next_artifact.spec)
+    manifest["renderers"].append({**identity, "fingerprint": next_artifact.spec.renderer.fingerprint,
+                                  "spec_sha256": {next_artifact.spec.canonical: digest_spec(next_artifact.spec)}})
+    registry.REGISTRY_FILE.write_text(json.dumps(manifest))
+    conflicting = native_prepared.model_copy(deep=True)
+    conflicting.proof.video_sha256 = "0" * 64
+    with pytest.raises(ValueError, match="immutable"):
+        import_native(store, [next_artifact, conflicting])
+    assert store.snapshot() == before  # The first new record was rolled back with the conflict.
+    path = LearningPath(schema_version="learning-path-1", id="synthetic-native-path",
+                        title="Synthetic native graph fixture", example="Synthetic source-bound native components.",
+                        entry="core", nodes=[
+                            PathNode(id="core", role="core", label="Synthetic core", question=native_prepared.spec.question,
+                                     outcome=native_prepared.spec.teaching.goal, lesson_id=native_prepared.spec.canonical,
+                                     prerequisites=[], next=["insight"], queries=["core"]),
+                            PathNode(id="insight", role="insight", label="Synthetic insight", question=next_artifact.spec.question,
+                                     outcome=next_artifact.spec.teaching.goal, lesson_id=next_artifact.spec.canonical,
+                                     prerequisites=["core"], next=[], queries=["insight"]),
+                        ])
+    assert import_native(store, [native_prepared, next_artifact], path) == (1, 1)
+    owner = User(id="synthetic-native-owner", name="Synthetic owner", owner=True)
+    attached = PathPublication(store).attach(native_prepared.spec.canonical,
+                                             PathSubmission(path=path, allow_review_drafts=True), owner)
+    after = store.snapshot()
+    assert attached["bundle_sha256"] and attached["review_required"]
+    assert learning_bundle(after, native_prepared.spec.canonical, owner)["path"] == path.model_dump(mode="json")
+    assert after.lessons[next_artifact.spec.canonical]["depth_parent"] == native_prepared.spec.canonical
+    assert after.chats == before.chats and after.ledger == before.ledger
+    assert after.spent == before.spent and after.reserved == before.reserved

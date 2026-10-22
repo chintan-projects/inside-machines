@@ -1,24 +1,25 @@
 goal: Build the curated visual concept library and validate learning quality
-status: integration_deployed_quality_open
+status: native_integration_verified_deployment_pending_quality_open
 current:
 - Curated member requests, owner triage/build, review-gated availability and private inbox wired
-- Shared D1 player serves all20 narrated review cores; offline path and artifact verification wired
-- Personal Gmail production Ready;26 immutable revisions preserve all9 earlier lesson specs
-- Owner costs expose20 scopes, actual receipts, estimates and uncertain billing
-- Explicit owner iteration reuses evidence/findings; two hosted revisions stop at editorial quality gates
+- Native artwork bridge shares player, paths, audio, offline media, discussion and reviews
+- Four verified local native drafts; refrigerator3node path and GPU memory insight
+- Explicit owner adoption preserves earlier media/chats and requires current human release gates
+- Personal Claude Code anatomy and explain-visually skills installed and locally exercised
+- Existing20 review cores and26 production revisions remain unchanged; new deployment pending
 needs_input:
 - Connect personal GitHub login to Gmail Vercel for automatic deployments (BUG-008)
 - Independent technical review, real-phone craft and five unfamiliar beginner learning checks
 - Owner taste/release approval; sixteen new schematic cores do not establish selected Anatomy craft
 verification:
-- 325 backend tests pass;6 real Postgres regressions separately pass;90.93 percent coverage
-- Ruff and strict mypy113files pass; frontend types/lint/24tests/build and32studio checks pass
-- Linux packaging verifier passes; protected live20paths/media/captions and free request flow pass
-- Historical lesson/chat/ledger preservation and member owner-API denial observed live
-- 'Paid probe: research0.067506 USD; author0.65 uncertain; two diagnostic allowances0.65 each'
+- 367 backend tests pass;8 real Postgres regressions separately pass;89.19 percent coverage
+- Ruff and strict mypy122files pass; frontend types/lint/29tests/build and69combined checks pass
+- Four exact native source/spec/media exports verify; synchronized H264/AAC with computer narration
+- Actual local phone/desktop, keyboard, typed depth, offline graph and held visibility checks pass
+- Final Linux packaging passes; personal production deployment pending
 - App ledger5.988598 USD includes3.90 unresolved allowances;0 reserved under unchanged50 USD ceiling
-- Two explicit feedback attempts cost0.183820 and0.200678 USD; neither passed editorial or published
+- No paid model calls in native integration; older failed editorial attempts remain held
 - No automatic paid retries or fallback; no real human acceptance evidence fabricated
 sessions:
-- date: '2026-10-20'
-  result: Personal production Ready at6c78275; curated integration wired, craft and learning quality remain open
+- date: '2026-10-22'
+  result: Native integration locally verified; final packaging and deployment in progress; human quality open

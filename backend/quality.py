@@ -1,6 +1,7 @@
 """Deterministic publication gates; these do not certify scientific correctness."""
 
 from .contracts import LessonSpec
+from .native_contracts import NativeLessonSpec
 
 
 class LearningQualityError(ValueError):
@@ -12,8 +13,11 @@ class LearningQualityError(ValueError):
         super().__init__("Lesson failed learning-quality checks: " + "; ".join(issues))
 
 
-def learning_issues(spec: LessonSpec) -> list[str]:
+def learning_issues(spec: LessonSpec | NativeLessonSpec) -> list[str]:
     """Reject missing component identification, causal staging or usable evidence."""
+    if isinstance(spec, NativeLessonSpec):
+        from .native_proof import native_spec_issues
+        return native_spec_issues(spec)
     issues: list[str] = []
     parts = {p.id: p for p in spec.parts}
     labels = [p for p in spec.parts if p.shape == "text" and p.id.startswith("label-")]
@@ -51,7 +55,7 @@ def learning_issues(spec: LessonSpec) -> list[str]:
     return issues
 
 
-def require_learning_quality(spec: LessonSpec) -> None:
+def require_learning_quality(spec: LessonSpec | NativeLessonSpec) -> None:
     """Fail before narration or publication when basic teaching structure is absent."""
     issues = learning_issues(spec)
     if issues:

@@ -40,6 +40,17 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
   svg.setAttribute('data-theme', 'light'); svg.setAttribute('viewBox', '0 0 720 620');
   svg.setAttribute('role', 'img'); stage.append(svg);
   const labels = element('div'); labels.className = 'labels'; stage.append(labels);
+  let anchors: {node:HTMLElement;x:number;y:number}[]=[];
+  const fitLabels=():void=>{
+    const width=stage.clientWidth,height=stage.clientHeight;
+    if(!width||!height)return;
+    anchors.forEach(({node,x,y})=>{
+      const halfWidth=node.offsetWidth/2+5,halfHeight=node.offsetHeight/2+4;
+      node.style.left=`${Math.max(halfWidth,Math.min(width-halfWidth,x*width))}px`;
+      node.style.top=`${Math.max(halfHeight,Math.min(height-halfHeight,y*height))}px`;
+    });
+  };
+  const labelLayout=new ResizeObserver(fitLabels);labelLayout.observe(stage);
   const caption = element('p'); caption.className = 'caption';
   const controlArea = element('div'); controlArea.className = 'controls';
   const advanced = element('details'); advanced.className = 'advanced';
@@ -112,11 +123,13 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
     if (description !== lastDescription) { hint.textContent = description; lastDescription = description; }
     const key = JSON.stringify([scene.labels, vp]);
     if (key !== labelsKey) {
+      anchors=[];
       labels.replaceChildren(...scene.labels.map(label => {
         const tag = element('span', label.text); tag.className = 'tag';
+        anchors.push({node:tag,x:(label.x-vp.x)/vp.width,y:(label.y-vp.y)/vp.height});
         tag.style.left = `${(label.x - vp.x) / vp.width * 100}%`;
         tag.style.top = `${(label.y - vp.y) / vp.height * 100}%`; return tag;
-      })); labelsKey = key;
+      })); labelsKey = key;fitLabels();
     }
     caption.textContent = scene.caption; scrub.value = String(time);
     elapsed.textContent = `${timecode(time)} / ${timecode(lesson.duration)}`;
@@ -151,7 +164,9 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
   };
   const run = (action: Action): void => {
     activeAction = action;
-    stop(); leaveNarration(); controls = { ...controls, ...action.controls }; time = action.start; stopAt = action.end; hasStarted = true;
+    stop(); leaveNarration(); controls = { ...controls, ...action.controls }; time = action.start;
+    // A chapter boundary belongs to the next scene. A focused replay holds its own final pose.
+    stopAt = action.end < lesson.duration ? Math.max(action.start,action.end-.001) : action.end; hasStarted = true;
     if (renderMode || reduced.matches) time = action.still ?? stopAt;
     else { playing = true; last = performance.now(); raf = requestAnimationFrame(tick); }
     draw();
@@ -163,6 +178,7 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
       stop(); narrated = false; audio?.dispose();
       document.removeEventListener('visibilitychange', visibility);
       reduced.removeEventListener('change', motionPreference);
+      labelLayout.disconnect();
       media?.removeAttribute('src'); media?.load(); root.replaceChildren();
       if (window.lessonStudio === api) {
         Reflect.deleteProperty(window, 'lessonStudio'); Reflect.deleteProperty(window, 'seek');
@@ -252,7 +268,7 @@ export function mountLesson<T extends FrameState>(root: HTMLElement, lesson: Les
   const prediction = assessment(lesson.prediction, 'Make a prediction');
   if (options.predictionFirst) {
     const before = element('details'); before.className = 'prediction-preview';
-    before.append(element('summary', 'Before you watch: make a prediction'), prediction); main.append(before);
+    before.append(element('summary', 'Predict first'), prediction); viewerTop.append(before);
   } else checks.append(prediction);
   checks.append(assessment(lesson.transfer, 'Put the idea to work'), take);
   main.append(workspace, checks);

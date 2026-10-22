@@ -2,6 +2,7 @@ import type { CatalogEntry, Lesson, Member } from './contracts';
 import type { LearningPath } from './studio/path-contract';
 import { checkedBundle, coreBundle, type LearningBundle } from './studio/learning-bundle.ts';
 import { verifyVideo } from './studio/artifact-integrity.ts';
+import { componentIds } from './studio/native-contracts.ts';
 
 export interface SavedLesson { key: string; user: string; lesson: Lesson; video?: Blob; captions?: string; saved: number; learningPath?:LearningPath; bundleSha256?: string; pathChild?: boolean }
 const DB = 'inside-saved-lessons-v1';
@@ -115,7 +116,7 @@ export async function offlineCatalog(user: string): Promise<CatalogEntry[]> {
     id: lesson.id, title: lesson.spec.title, canonical: lesson.spec.canonical, family: lesson.spec.family,
     question: lesson.spec.question, summary: lesson.spec.summary, category: lesson.spec.category,
     accent: lesson.spec.accent, duration: lesson.spec.stages.reduce((n, s) => n + s.duration, 0),
-    parts: lesson.spec.parts.length, quality: lesson.quality, created_at: saved / 1000,
+    parts: componentIds(lesson.spec).length, quality: lesson.quality, created_at: saved / 1000,
     views: 0, video_ready: lesson.video_ready, preview: lesson.spec,
   }));
 }

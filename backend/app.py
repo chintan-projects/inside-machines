@@ -15,7 +15,6 @@ from vercel.headers import set_headers
 from .assets import Assets
 from .auth import COOKIE, Auth
 from .chat import Chats, Conversation
-from .contracts import LessonSpec
 from .domain import Domain, User
 from .editorial import editorial_notes
 from .learning_reviews import review_state
@@ -24,6 +23,7 @@ from .provider import configure_gateway
 from .quality import learning_issues
 from .settings import Settings, load_settings
 from .store import Database, Store
+from .stored_lessons import native_visible, parse_stored_spec
 from .teaching_routes import register_teaching_routes
 
 
@@ -177,13 +177,13 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
 
     @app.get("/api/v1/lessons")
     def catalog(user: Member) -> list[dict[str, object]]:
-        return domain.catalog(include_depth=user.owner)
+        return domain.catalog(include_depth=user.owner, include_native_drafts=user.owner)
 
     @app.get("/api/v1/lessons/{lesson_id}")
     def lesson(lesson_id: str, user: Member) -> dict[str, object]:
         def read(db: Database) -> dict[str, object]:
             record = db.lessons.get(lesson_id)
-            if not record:
+            if not record or not native_visible(db, lesson_id, user.owner):
                 raise HTTPException(404, "Explanation not found")
             record["views"] = int(str(record.get("views", 0))) + 1
             domain.event(db, "lesson_opened", user, lesson_id=lesson_id)
@@ -192,7 +192,7 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
                 "spec": record["spec"],
                 "quality": record.get("quality", "generated"),
                 "superseded_by": record.get("superseded_by"),
-                "review_needed": bool(learning_issues(LessonSpec.model_validate(record["spec"])))
+                "review_needed": bool(learning_issues(parse_stored_spec(record["spec"])))
                 or not review_state(db, lesson_id)["ready"],
                 "video_ready": bool(record.get("video")),
                 "feedback": db.feedback.get(f"{user.id}:{lesson_id}"),
@@ -223,7 +223,7 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
         parent = store.snapshot().lessons.get(lesson_id)
         if not parent:
             raise HTTPException(404, "Lesson not found")
-        spec = LessonSpec.model_validate(parent["spec"])
+        spec = parse_stored_spec(parent["spec"])
         result = domain.request(spec.question, user, revision_of=lesson_id, operation=body.operation)
         if result["kind"] == "job":
             current = domain.job(str(result["job_id"]))
@@ -261,18 +261,20 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
 
     @app.get("/api/v1/lessons/{lesson_id}/video")
     async def video(lesson_id: str, request: Request, user: Member) -> Response:
-        record = store.snapshot().lessons.get(lesson_id)
-        if not record or not record.get("video"):
+        state = store.snapshot()
+        record = state.lessons.get(lesson_id)
+        if not record or not record.get("video") or not native_visible(state, lesson_id, user.owner):
             raise HTTPException(404, "Narrated video isn't available yet")
         data = await assets.read(str(record["video"]))
         return video_response(data, request.headers.get("range"))
 
     @app.get("/api/v1/lessons/{lesson_id}/captions")
     def captions(lesson_id: str, user: Member) -> Response:
-        record = store.snapshot().lessons.get(lesson_id)
-        if not record:
+        state = store.snapshot()
+        record = state.lessons.get(lesson_id)
+        if not record or not native_visible(state, lesson_id, user.owner):
             raise HTTPException(404, "Explanation not found")
-        spec = LessonSpec.model_validate(record["spec"])
+        spec = parse_stored_spec(record["spec"])
 
         def timestamp(seconds: float) -> str:
             milliseconds = round(seconds * 1000)

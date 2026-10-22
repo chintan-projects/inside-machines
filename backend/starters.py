@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field, model_validator
 
 from .assets import Assets
 from .contracts import LessonSpec
+from .native_contracts import NativeLessonSpec
 from .settings import ROOT, load_settings
 from .store import Database, Store
 
@@ -60,14 +61,14 @@ class PreparedStarter(BaseModel):
         return self
 
 
-def digest_spec(spec: LessonSpec) -> str:
+def digest_spec(spec: "LessonSpec | NativeLessonSpec") -> str:
     """Fingerprint canonical JSON so key ordering does not change a revision."""
     data = spec.model_dump(mode="json")
     if spec.version == 1:
         # Preserve fingerprints of previously published v1 artifacts byte-for-byte.
         data.pop("teaching", None)
         data.pop("graphics", None)
-    elif spec.teaching:
+    elif spec.version == 2 and spec.teaching:
         if not data["teaching"].get("renderer_fingerprint"):
             data["teaching"].pop("renderer_fingerprint", None)
         # Empty trajectories preserve the original CE-1 pose semantics/fingerprint.

@@ -5,6 +5,7 @@ import type { CatalogEntry } from './contracts';
 import type { LearningPath } from './studio/path-contract';
 import { parsePath } from './studio/path-contract';
 import { OwnerDepthDraft } from './OwnerDepthDraft';
+import { OwnerNativeActivation } from './OwnerNativeActivation';
 
 interface PathRecord {bundle_sha256:string;path_sha256:string;path:LearningPath;created_at:number}
 interface History {root_lesson_id:string;current_bundle_sha256:string;records:PathRecord[]}
@@ -18,7 +19,7 @@ export function OwnerPaths({reserve}:{readonly reserve:number}):ReactElement {
   const [depthBusy,setDepthBusy]=useState(false);
   useEffect(()=>{
     let active=true;
-    void api<CatalogEntry[]>('/lessons').then(rows=>{if(active)setLessons(rows.filter(row=>row.preview.version===2));})
+    void api<CatalogEntry[]>('/lessons').then(rows=>{if(active)setLessons(rows.filter(row=>row.preview.version===2||row.preview.version===3));})
       .catch(reason=>{if(active)setError(errorMessage(reason));});
     return()=>{active=false;};
   },[]);
@@ -70,7 +71,10 @@ export function OwnerPaths({reserve}:{readonly reserve:number}):ReactElement {
           <small>{record.bundle_sha256===history.current_bundle_sha256?'Current path · ':''}{record.bundle_sha256.slice(0,12)} · loading a record does not attach it</small>
         </p>)}</details>
       </>}
-      <OwnerDepthDraft rootId={selected} rootTitle={lessons.find(lesson=>lesson.id===selected)?.title??selected} reserve={reserve} onBusy={setDepthBusy}/>
+      {lessons.find(lesson=>lesson.id===selected)?.preview.version===3 ? <>
+        <OwnerNativeActivation key={selected} lesson={lessons.find(lesson=>lesson.id===selected)!} candidates={lessons}/>
+        <p>Additional native artwork and depth use the local production workflow. Import the new held revision, then compose it above.</p>
+      </> : <OwnerDepthDraft rootId={selected} rootTitle={lessons.find(lesson=>lesson.id===selected)?.title??selected} reserve={reserve} onBusy={setDepthBusy}/>}
     </details>
   </section>;
 }

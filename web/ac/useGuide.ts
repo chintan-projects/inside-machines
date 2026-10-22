@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { RefObject } from "react";
-import type { Lesson, Member } from "../contracts";
+import type { LegacyLesson as Lesson, Member } from "../contracts";
 import { offlineMember } from "../offline";
 import { duration, stageAt } from "../lessonTimeline";
 import { progressKey, readProgress } from "../progress";

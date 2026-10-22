@@ -1,7 +1,7 @@
 /** The hosted app adapts validated CE-1 data to the same D1 player as local studies. */
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import type { Lesson as StoredLesson, LessonSpec } from '../contracts';
+import type { LegacyLesson as StoredLesson, LessonSpec } from '../contracts';
 import { Graphic } from '../teaching/Graphic';
 import { scenarioFor, teachingAt } from '../teaching/state';
 import { acSceneHash } from '../teaching/Context';

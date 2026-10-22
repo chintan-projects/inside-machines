@@ -10,11 +10,12 @@ from fastapi import HTTPException
 from pydantic import BaseModel, Field, ValidationError
 
 from .accounting import charge, reserve
-from .contracts import AnswerSpec, LessonSpec
+from .contracts import AnswerSpec
 from .domain import Domain, User
 from .provider import UsageReceipt, model_text, receipt_context
 from .settings import Settings
 from .store import Database, Store
+from .stored_lessons import StoredSpec, component_ids, components_for, native_visible, parse_stored_spec
 
 
 class ChatMessage(BaseModel):
@@ -66,7 +67,7 @@ class Chats:
         """Open a conversation tied to an immutable shared lesson version."""
 
         def write(db: Database) -> Conversation:
-            if lesson_id not in db.lessons:
+            if lesson_id not in db.lessons or not native_visible(db, lesson_id, user.owner):
                 raise HTTPException(404, "Lesson not found")
             chat = Conversation(
                 id=secrets.token_urlsafe(18), lesson_id=lesson_id, user_id=user.id, messages=[]
@@ -85,9 +86,11 @@ class Chats:
         """Reserve, answer outside the transaction, and commit the private turn."""
         key = f"chat:{chat_id}:{operation}"
 
-        def admit(db: Database) -> tuple[Conversation, LessonSpec, bool]:
+        def admit(db: Database) -> tuple[Conversation, StoredSpec, bool]:
             chat = self.owned(db, chat_id, user)
-            spec = LessonSpec.model_validate(db.lessons[chat.lesson_id]["spec"])
+            if not native_visible(db, chat.lesson_id, user.owner):
+                raise HTTPException(404, "Explanation not found")
+            spec = parse_stored_spec(db.lessons[chat.lesson_id]["spec"])
             if key in db.ledger:
                 if db.ledger[key].get("outcome") == "failed":
                     raise HTTPException(409, "That reply failed. Send a new question to try again.")
@@ -131,7 +134,7 @@ class Chats:
             "stages": [s.model_dump() for s in spec.stages],
             "parts": [
                 {"id": p.id, "name": p.name, "description": p.description}
-                for p in spec.parts
+                for p in components_for(spec)
                 if spec.teaching is None or p.id in spec.teaching.core
             ],
             "sources": [s.model_dump(mode="json") for s in spec.sources],
@@ -173,7 +176,7 @@ class Chats:
             answer = AnswerSpec.model_validate_json(await self.generate(prompt, self.settings))
             if answer.stage is not None and not 0 <= answer.stage < len(spec.stages):
                 raise ValueError("Answer selected an unknown stage")
-            if answer.part is not None and answer.part not in {p.id for p in spec.parts}:
+            if answer.part is not None and answer.part not in component_ids(spec):
                 raise ValueError("Answer selected an unknown part")
             if any(not 0 <= index < len(spec.sources) for index in answer.source_indices):
                 raise ValueError("Answer selected an unknown source")

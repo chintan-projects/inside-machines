@@ -6,11 +6,12 @@ from typing import Literal
 from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from .contracts import LessonSpec
 from .domain import User
+from .native_contracts import NativeLessonSpec
 from .quality import learning_issues
 from .starters import digest_spec
 from .store import Database, Store
+from .stored_lessons import parse_stored_spec
 
 Gate = Literal["engineering", "technical", "craft", "learning", "release"]
 
@@ -73,7 +74,7 @@ def _review_state(db: Database, lesson_id: str, bundle_sha256: str,
     lesson = db.lessons.get(lesson_id)
     if lesson is None:
         raise HTTPException(404, "Lesson not found")
-    spec = LessonSpec.model_validate(lesson["spec"])
+    spec = parse_stored_spec(lesson["spec"])
     digest, video = digest_spec(spec), str(lesson.get("video_sha256", ""))
     records = [
         r
@@ -90,6 +91,9 @@ def _review_state(db: Database, lesson_id: str, bundle_sha256: str,
     for gate, record in latest.items():
         gates[gate] = record.get("decision") == "pass"
     structural = learning_issues(spec)
+    if isinstance(spec, NativeLessonSpec):
+        from .native_publication import native_record_issues
+        structural.extend(native_record_issues(lesson, spec))
     prerequisites = not structural and not bundle_issues and branches_ready and all(
         gates[k] for k in ("engineering", "technical", "craft", "learning")
     )
@@ -98,7 +102,7 @@ def _review_state(db: Database, lesson_id: str, bundle_sha256: str,
         float(str(r["at"])) > float(str(release["at"])) for k, r in latest.items() if k != "release"
     ):
         gates["release"] = False
-    ready = bool(spec.version == 2 and video and prerequisites and gates["release"])
+    ready = bool(spec.version in (2, 3) and video and prerequisites and gates["release"])
     return {
         "lesson_id": lesson_id,
         "spec_sha256": digest,
@@ -109,7 +113,7 @@ def _review_state(db: Database, lesson_id: str, bundle_sha256: str,
         "spec_version": spec.version,
         "structural_issues": structural,
         "gates": gates,
-        "can_release": bool(prerequisites and spec.version == 2 and video),
+        "can_release": bool(prerequisites and spec.version in (2, 3) and video),
         "ready": ready,
         "records": records,
         "recording_note": "Evidence is recorded by the owner. The app verifies binding and rubric rules, not reviewer identity or scientific certification.",
@@ -119,6 +123,44 @@ def _review_state(db: Database, lesson_id: str, bundle_sha256: str,
 def standalone_review_state(db: Database, lesson_id: str) -> dict[str, object]:
     """Retain a core's prior artifact approval while its new graph is being reviewed."""
     return _review_state(db, lesson_id, "", [], True)
+
+
+def native_release_identity(db: Database, lesson_id: str, bundle_sha256: str | None = None) -> bool:
+    """Historical exact approval preserves access even when current renderer code retires.
+
+    This is an access decision, never a new release approval. Changed spec/media/proof,
+    an unapproved graph or a later blocking review cannot inherit an earlier verdict.
+    """
+    from .native_publication import native_integrity_issues
+
+    record = db.lessons.get(lesson_id)
+    if record is None:
+        return False
+    spec = parse_stored_spec(record["spec"])
+    if not isinstance(spec, NativeLessonSpec) or native_integrity_issues(record, spec):
+        return False
+    rows = [r for r in db.learning_reviews if r.get("lesson_id") == lesson_id
+            and r.get("spec_sha256") == digest_spec(spec)
+            and r.get("video_sha256") == record.get("video_sha256")]
+    bundles = {str(r.get("bundle_sha256", "")) for r in rows}
+    for bundle in bundles:
+        if bundle_sha256 is not None and bundle != bundle_sha256:
+            continue
+        latest = {str(r["gate"]): r for r in rows if r.get("bundle_sha256", "") == bundle}
+        if set(latest) != {"engineering", "technical", "craft", "learning", "release"}:
+            continue
+        if any(r.get("decision") != "pass" for r in latest.values()):
+            continue
+        try:
+            for row in latest.values():
+                ReviewSubmission.model_validate({key: row[key] for key in ReviewSubmission.model_fields if key in row})
+            released = float(str(latest["release"]["at"]))
+            if any(float(str(row["at"])) > released for row in latest.values()):
+                continue
+        except (ValueError, KeyError):
+            continue
+        return True
+    return False
 
 
 def review_state(db: Database, lesson_id: str) -> dict[str, object]:

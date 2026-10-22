@@ -9,12 +9,12 @@ from _shared.services.logger import get_logger
 from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-from .contracts import LessonSpec
 from .domain import User
 from .learning_paths import LearningPath, validate_path
 from .quality import learning_issues
 from .starters import digest_spec
 from .store import Database, Store
+from .stored_lessons import has_teaching, parse_stored_spec
 
 logger = get_logger(__name__)
 SHA = r"^[a-f0-9]{64}$"
@@ -75,8 +75,8 @@ def bundle_binding(db: Database, root_id: str) -> BundleBinding:
                 if legacy.nodes[0].lesson_id != root_id:
                     raise ValueError("Wrong core")
                 for node in legacy.nodes:
-                    spec = LessonSpec.model_validate(db.lessons[node.lesson_id]["spec"])
-                    if spec.version != 2 or not spec.teaching:
+                    spec = parse_stored_spec(db.lessons[node.lesson_id]["spec"])
+                    if not has_teaching(spec):
                         raise ValueError("Incompatible node")
             except (ValueError, ValidationError):
                 return BundleBinding(_digest(root["learning_path"]), None, ["The earlier path needs owner attention before it can be opened."])
@@ -102,8 +102,8 @@ def bundle_binding(db: Database, root_id: str) -> BundleBinding:
         if lesson is None:
             issues.append("A referenced lesson revision is missing.")
             continue
-        spec = LessonSpec.model_validate(lesson["spec"])
-        if spec.version != 2 or not spec.teaching or digest_spec(spec) != bound.spec_sha256 or lesson.get("video_sha256") != bound.video_sha256:
+        spec = parse_stored_spec(lesson["spec"])
+        if not has_teaching(spec) or digest_spec(spec) != bound.spec_sha256 or lesson.get("video_sha256") != bound.video_sha256:
             issues.append("A referenced lesson or video no longer matches its bound artifact.")
         if bound.lesson_id != root_id and (lesson.get("learning_bundle_sha256") or lesson.get("learning_path") or lesson.get("archived")):
             issues.append("Branches must remain active leaf lesson revisions; nested compositions are unsupported.")
@@ -168,11 +168,15 @@ class PathPublication:
                 lesson = db.lessons.get(node.lesson_id)
                 if lesson is None:
                     raise HTTPException(422, "A referenced lesson revision does not exist")
-                spec = LessonSpec.model_validate(lesson["spec"])
-                if spec.version != 2 or not spec.teaching or lesson.get("archived") or not lesson.get("video"):
+                spec = parse_stored_spec(lesson["spec"])
+                if not has_teaching(spec) or lesson.get("archived") or not lesson.get("video"):
                     raise HTTPException(409, "Every node must be an active CE lesson with completed media")
                 if learning_issues(spec):
                     raise HTTPException(409, "Every node must pass current learning-quality checks before composition")
+                if spec.version == 3:
+                    from .native_publication import native_record_issues
+                    if native_record_issues(lesson, spec):
+                        raise HTTPException(409, "Native nodes need their intact rendered source/media proof before composition")
                 if node.lesson_id != root_id and (lesson.get("learning_bundle_sha256") or lesson.get("learning_path")):
                     raise HTTPException(422, "Use leaf lesson revisions; nested learning paths are unsupported")
                 state = review_state(db, node.lesson_id)

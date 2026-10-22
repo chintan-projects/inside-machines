@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { RefObject } from 'react';
-import type { Lesson, Member } from '../contracts';
+import type { LegacyLesson as Lesson, Member } from '../contracts';
 import { useGuide } from '../ac/useGuide';
 import { teachingAt } from './state';
 

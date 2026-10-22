@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import type { ReactElement } from 'react';
 import { Headphones, Pause, RotateCcw, ArrowLeft, Play } from 'lucide-react';
-import type { Answer, Lesson, Member } from '../contracts';
+import type { Answer, LegacyLesson as Lesson, Member } from '../contracts';
 import type { TeachingSpec } from './contracts';
 import { ChatPanel, FeedbackPanel } from '../LessonDiscussion';
 import { LessonSaveButton, useLessonAssets } from '../useLessonAssets';

@@ -15,7 +15,8 @@ export function checkedBundle(bundle: LearningBundle, rootId: string, requireBin
   if (path.nodes[0].lesson_id !== rootId) throw new Error('This path belongs to a different explanation.');
   const referenced = new Set(path.nodes.map(node => node.lesson_id));
   const lessons = bundle.lessons.filter(lesson => referenced.has(lesson.id));
-  if (lessons.some(lesson => lesson.spec.version !== 2 || !lesson.spec.teaching || !lesson.spec.graphics?.length))
+  if (lessons.some(({spec}) => spec.version===3 ? spec.spec_version!=='native-studio-1' || !spec.components?.length || !spec.stages?.length :
+    spec.version !== 2 || !spec.teaching || !spec.graphics?.length))
     throw new Error('A saved explanation is missing its teaching data. Reconnect and save it again.');
   if (requireBindings && lessons.some(lesson => !sha.test(lesson.spec_sha256 ?? '') ||
       typeof lesson.video_sha256 !== 'string' || (lesson.video_sha256 !== '' && !sha.test(lesson.video_sha256)) ||

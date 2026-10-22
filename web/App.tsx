@@ -4,8 +4,7 @@ import { ArrowLeft, ArrowUpRight, Box, Check, ChevronRight, Download, LogOut, Se
 import { api, ApiError, errorMessage } from './api';
 import type { CatalogEntry, Job, Lesson, Member, RequestResult } from './contracts';
 import { clearOffline, offlineCatalog, offlineMember, rememberMember, savedLesson } from './offline';
-import { Scene } from './Scene';
-import { Graphic } from './teaching/Graphic';
+import { CatalogArtwork } from './studio/CatalogArtwork';
 import { LessonView } from './LessonView';
 import { OwnerView } from './OwnerView';
 import { Requests } from './Requests';
@@ -156,16 +155,17 @@ export function App(): ReactElement {
     } catch (error) { setError(errorMessage(error)); } finally { setBusy(false); }
   }
 
+  const learningPage=path.startsWith('lesson/')&&lesson?.spec.version!==1;
   const categories = ['All', 'Saved', ...new Set(catalog.map(e => e.category))];
   const entries = catalog.filter(e => filter === 'All' || (filter === 'Saved' ? savedIds.includes(e.id) : filter === e.category));
-  return <><a className="skip-link" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a><header className={lesson?.id === "air-conditioner-craft" && path.startsWith("lesson/") ? "topbar studio-nav" : "topbar"}><a href="#/" className="brand" aria-label="Inside home"><Box size={25} strokeWidth={1.6} />inside<span>family alpha</span></a>
-    <nav aria-label="Main navigation">{member && <><a href="#/" aria-current={!path ? 'page' : undefined}>Library</a><a href="#/requests" aria-current={path==='requests'?'page':undefined}>Your updates</a>{member.owner && online && <a href="#/owner" aria-current={path === 'owner' ? 'page' : undefined}>Owner workspace</a>}</>}
+  return <><a className="skip-link" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a><header className={learningPage?'topbar learning-nav':lesson?.id === "air-conditioner-craft" && path.startsWith("lesson/") ? "topbar studio-nav" : "topbar"}><a href="#/" className="brand" aria-label="Inside home"><Box size={25} strokeWidth={1.6} />inside<span>family alpha</span></a>
+    <nav aria-label="Main navigation">{member && <><a href="#/" aria-current={!path ? 'page' : undefined}>Library</a><a href="#/requests" aria-current={path==='requests'?'page':undefined}>{learningPage?'Updates':'Your updates'}</a>{member.owner && online && <a href="#/owner" aria-current={path === 'owner' ? 'page' : undefined}>{learningPage?'Owner':'Owner workspace'}</a>}</>}
       <button aria-label="Install Inside" onClick={() => { if (install) void install.prompt(); else setHelp(!help); }}><Download size={18} /><span className="install-label">Install</span></button>
       {member && <button onClick={() => void logout()} disabled={busy} aria-label={`Sign out ${member.name}`}><LogOut size={17} /></button>}</nav>
     </header>
     {help && <aside className="install-help"><strong>Keep Inside close.</strong><p>On iPhone or iPad, open in Safari, tap Share, then Add to Home Screen. On Android or desktop, choose Install app from your browser menu.</p><button onClick={() => setHelp(false)}>Got it</button></aside>}
     {!online && <div className="offline-banner" role="status"><WifiOff size={16} />Offline · Saved explanations work. New lessons, feedback and live chat need a connection.</div>}
-    {loading ? <main id="main" tabIndex={-1} className="loading" aria-live="polite">Opening Inside…</main> : !member ? <>{error && <p role="alert" className="error shell-error">{error}</p>}<Login onLogin={setMember} /></> : <main id="main" tabIndex={-1} className={lesson?.id === "air-conditioner-craft" && path.startsWith("lesson/") ? "app-shell studio-shell" : "app-shell"}>
+    {loading ? <main id="main" tabIndex={-1} className="loading" aria-live="polite">Opening Inside…</main> : !member ? <>{error && <p role="alert" className="error shell-error">{error}</p>}<Login onLogin={setMember} /></> : <main id="main" tabIndex={-1} className={learningPage?'app-shell learning-shell':lesson?.id === "air-conditioner-craft" && path.startsWith("lesson/") ? "app-shell studio-shell" : "app-shell"}>
       {error && <div role="alert" className="error">{error}<button onClick={() => setError('')} aria-label="Dismiss error">Dismiss</button></div>}
       {path.startsWith('job/') ? <JobProgress id={path.slice(4)} onReady={ready} /> : path === 'owner' ? <OwnerView /> : path==='requests'? <Requests online={online}/> : path.startsWith('lesson/') ? <>
         <button className="back" onClick={() => navigate()}><ArrowLeft size={16} />All explanations</button>
@@ -181,8 +181,8 @@ export function App(): ReactElement {
         </form>
         <section aria-label="Explanation library" className="library"><div className="section-heading"><h2>{online ? 'Inside the library' : 'Your saved explanations'}</h2><div className="filters" aria-label="Filter by category">{categories.map(category => <button key={category} aria-pressed={filter === category} onClick={() => setFilter(category)}>{category}</button>)}</div></div>
           {!entries.length && <div className="empty"><Box size={28} /><h3>{online && filter !== 'Saved' ? 'What would you like to understand?' : 'Nothing saved here yet.'}</h3><p>{online && filter !== 'Saved' ? 'Send a request above. We curate new explanations and let requesters know when they are ready.' : 'Open an explanation while connected and choose Save offline.'}</p></div>}
-          <div className="catalog">{entries.map((entry, i) => <a className="catalog-row" key={entry.id} href={`#/lesson/${entry.id}`}><div className="catalog-art" aria-hidden="true">{entry.preview.canonical.endsWith('-studio-1') ? <Graphic spec={entry.preview} seconds={entry.preview.stages[0].duration*.45}/> : <Scene spec={entry.preview} preview />}</div><div className="catalog-copy"><div className="catalog-meta"><span>{entry.category}</span><span>{Math.round(entry.duration)} sec · {entry.preview.stages.length} steps</span></div><h3>{entry.title}</h3><p>{entry.question}</p><small>{entry.family}{entry.review_needed && <span className="draft-marker"> · Learning draft</span>}</small></div><span className="open-lesson">Explore<ChevronRight size={18} /></span><span className="catalog-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span></a>)}</div>
-        </section><footer className="library-footer">Built for curious people. Schematic explanations, clear assumptions, room for questions.</footer>
+          <div className="catalog">{entries.map((entry, i) => <a className="catalog-row" key={entry.id} href={`#/lesson/${entry.id}`}><div className="catalog-art" aria-hidden="true"><CatalogArtwork spec={entry.preview}/></div><div className="catalog-copy"><div className="catalog-meta"><span>{entry.category}</span><span>{Math.round(entry.duration)} sec · {entry.preview.stages.length} steps</span></div><h3>{entry.title}</h3><p>{entry.question}</p><small>{entry.family}{entry.review_needed && <span className="draft-marker"> · Learning draft</span>}</small></div><span className="open-lesson">Explore<ChevronRight size={18} /></span><span className="catalog-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span></a>)}</div>
+        </section><footer className="library-footer">Built for curious people. Visual explanations, clear assumptions, room for questions.</footer>
       </>}
     </main>}</>;
 }

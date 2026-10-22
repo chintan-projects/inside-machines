@@ -7,6 +7,7 @@ import pytest
 
 from backend.contracts import LessonSpec
 from backend.domain import User
+from backend.native_publication import PreparedNative
 from backend.research import ResearchSpec
 from backend.settings import Settings, load_settings
 from backend.store import Store
@@ -209,3 +210,83 @@ def evidence(ce_spec: LessonSpec) -> "ResearchSpec":
         ],
         limits=["Synthetic evidence is not a technical review."],
     )
+
+
+@pytest.fixture
+def native_prepared(ce_spec: LessonSpec, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> PreparedNative:
+    """Synthetic native proof exercises contracts; it certifies no real artwork or lesson."""
+    import hashlib
+    import json
+
+    from backend.native_contracts import NativeLessonSpec
+    from backend.native_proof import NativeFrame, NativeProof, NativeViewport
+    from backend.native_registry import canonical_digest
+    from backend.settings import ROOT
+    from backend.starters import digest_spec
+
+    assert ce_spec.teaching is not None
+    prediction, transfer = ce_spec.teaching.prediction, ce_spec.teaching.transfer
+    components = [{"id": name, "name": "Synthetic " + name,
+                   "description": "An explicit synthetic semantic component for native adapter tests.",
+                   "label": name.capitalize()} for name in ("input", "working", "output")]
+    claims = [claim.model_dump(mode="json") for claim in ce_spec.teaching.claims[:2]]
+    claim_id, source_index = str(claims[0]["id"]), int(str(claims[0]["source"]))
+    identity = {"id": "synthetic-native-1", "lessons": ["synthetic-native-core"], "sources": [{
+        "path": "native/gpu-memory-r1.ts", "sha256": hashlib.sha256((ROOT / "native/gpu-memory-r1.ts").read_bytes()).hexdigest()}]}
+    spec = NativeLessonSpec.model_validate({
+        "version": 3, "spec_version": "native-studio-1", "title": "Synthetic native adapter fixture",
+        "canonical": "synthetic-native-core", "aliases": ["synthetic native fixture"],
+        "family": "Synthetic native protocol fixture", "question": "How does this synthetic native fixture work?",
+        "summary": "A synthetic input changes through a labeled working component into a synthetic output.",
+        "big_idea": "This is a protocol fixture, never an actual educational artifact.", "category": "Other", "accent": "#35645b",
+        "assumptions": ["Entirely synthetic contract data; no actual technical or learner review is implied."],
+        "sources": [s.model_dump(mode="json") for s in ce_spec.sources],
+        "renderer": {"id": identity["id"], "fingerprint": canonical_digest(identity)}, "components": components,
+        "stages": [{"id": name, "kind": kind, "start": i*5, "end": (i+1)*5, "still": i*5+2,
+                    "title": "Synthetic " + name, "explanation": "An explicit synthetic causal statement for this adapter fixture.",
+                    "narration": "An explicit synthetic narration cue for this adapter fixture.", "duration": 5,
+                    "parts": ["input", "working", "output"], "cause": "The synthetic input causes the declared visible change.",
+                    "input_state": "Synthetic input is supplied", "output_state": "Synthetic output is produced",
+                    "focus": "working", "source_indices": [source_index], "claims": [claim_id]}
+                   for i, (name, kind) in enumerate((("opening", "orientation"), ("working", "causal"), ("together", "recombine")))],
+        "questions": [{"question": "What does the synthetic component do?", "answer": "This is an explicit synthetic answer used only in adapter tests.",
+                       "stage": i, "part": "working"} for i in range(3)],
+        "prediction": prediction.prompt, "prediction_answer": prediction.explanation,
+        "teaching": {"goal": "Exercise real native data boundaries without pretending to establish teaching quality.",
+                     "misconception": "A passing engineering fixture is actual scientific or learning evidence.",
+                     "core": ["input", "working", "output"], "operation": "sequential",
+                     "operation_note": "A synthetic sequence for tests, not a real machine or computation.",
+                     "invariants": ["No real quality or release approval is implied."], "claims": claims,
+                     "prediction": prediction.model_dump(mode="json"), "transfer": transfer.model_dump(mode="json"),
+                     "teach_back": "Explain the synthetic input, change and output relationship.",
+                     "teach_back_reasoning": ["Identify the input.", "Explain its output consequence."],
+                     "scenarios": [{"id": value, "label": "Synthetic " + value, "kind": "qualitative", "controls": {"power": value},
+                                    "cue_id": "working", "outcome": "Synthetic consequence " + value,
+                                    "explanation": "An explicitly synthetic counterfactual for protocol tests.", "claims": [claim_id]}
+                                   for value in ("on", "off")]},
+        "controls": [{"key": "power", "label": "Synthetic power", "options": [{"value": value, "label": value} for value in ("on", "off")]}],
+        "default_controls": {"power": "on"},
+        "actions": [{"id": "observe", "label": "Observe the fixture", "start": 5, "end": 10, "still": 7, "controls": {}}],
+    })
+    registry = tmp_path / "native-registry.json"
+    registry.write_text(json.dumps({"schema_version": "native-renderers-1", "renderers": [{
+        **identity, "fingerprint": spec.renderer.fingerprint, "spec_sha256": {spec.canonical: digest_spec(spec)}}]}))
+    monkeypatch.setattr("backend.native_registry.REGISTRY_FILE", registry)
+
+    def frame(cue_id: str, time: float, x: int, scenario: str = "") -> NativeFrame:
+        return NativeFrame(cue_id=cue_id, time=time, scenario_id=scenario,
+                           controls={"power": scenario or "on"},
+                           svg=f'<g><rect x="{x}" y="70" width="40" height="20"/><text x="20" y="30">Input</text><text x="100" y="30">Working</text><text x="200" y="30">Output</text></g>',
+                           labels=[], viewport=NativeViewport(x=0, y=0, width=720, height=620),
+                           caption="Synthetic labeled surroundings for an adapter fixture.",
+                           alt="A synthetic input, working component and output with an explicit visible change.")
+
+    proof = NativeProof(schema_version="native-proof-1", renderer_id=spec.renderer.id,
+                        renderer_fingerprint=spec.renderer.fingerprint, spec_sha256=digest_spec(spec),
+                        video_sha256=hashlib.sha256(b"Synthetic native media API bytes, not an actual video.").hexdigest(),
+                        video_duration=15, fps=24, width=1280, height=866,
+                        frames=[frame("opening", 2, 0), frame("working", 5.05, 10), frame("working", 7, 30),
+                                frame("working", 9.95, 70), frame("together", 12, 90),
+                                frame("working", 7, 30, "on"), frame("working", 7, 0, "off")])
+    return PreparedNative(spec=spec, proof=proof, video="synthetic-native-fixture.mp4",
+                          narration="Explicit synthetic narration; no provider call", replaces=[])
