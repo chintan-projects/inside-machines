@@ -88,5 +88,5 @@ bugs:
     severity: high
     status: open
     evidence: Personal Vercel build fails TS2307 for iso-kit.ts while the complete local Linux source builds
-    fix: Explicit recursive kit exception in .vercelignore; hosted verification pending
-    regression: Actual hosted source build; local packaging alone does not exercise the upload filter
+    fix: Include the unsuffixed parent directory and descendants; prebuild checks every required source ancestor; hosted verification pending
+    regression: tests/deployment-sources.test.mjs and actual hosted build; local packaging alone misses upload pruning

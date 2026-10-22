@@ -64,6 +64,11 @@ unapplied attribute updates, stale source, different metadata, changed media
 and mismatched speech plans. Proof, source, spec and video hashes are retained;
 failed encodes never replace completed output. Build verification is read-only:
 `npm run build` checks registrations and never re-registers changed artwork.
+It also checks Vercel upload traversal for every required source and parent
+directory. A child inclusion cannot recover a directory already pruned by the
+uploader; retain both the unsuffixed kit-directory exception and its descendants
+in `.vercelignore`. The Linux function verifier additionally checks the shipped
+MIT notice. Local packaging alone does not verify the CLI's source selection.
 
 Import, composition, technical review, craft/accessibility, beginner learning and
 release remain separate operations. Structural and model checks cannot certify

@@ -40,7 +40,7 @@ not an actual-device, screen-reader, owner-taste or beginner study.
 
 Final source checks: Ruff, strict mypy122files,367 backend tests,89.19%coverage;
 eight disposable Postgres regressions passed separately. Frontend strict types,
-lint,29 root tests and production build pass; the combined studio suite passed69.
+lint,31 root tests and production build pass; the combined studio suite passed71.
 Four actual media/spec/source manifests verify. The final Linux/amd64 production
 build and packaging verifier pass for both Python functions, the durable queue,
 private-input exclusions, shared services and CDN/offline shell. Production
@@ -55,7 +55,15 @@ engineering checks cannot establish those outcomes.
 The first personal Vercel deployment failed before publication: the CLI upload
 omitted the nested Anatomy kit despite the directory exception in `.vercelignore`.
 Local Linux packaging read the complete source folder and did not exercise that
-upload filter. The explicit recursive kit exception repairs that difference.
+upload filter. A recursive child exception alone also failed: the CLI's ignore
+matcher receives the parent directory without a trailing slash and prunes it
+before visiting included children. This was reproduced against the installed
+Vercel CLI's actual ignore implementation. The final rule explicitly includes
+the parent and its descendants; a new build gate checks traversal of all thirty
+required native sources/notices. Regressions cover an included file beneath a
+pruned parent and continued exclusion of secrets/local data. A clean dependency
+install also exposed implicit esbuild use; the exporter dependency is now pinned
+explicitly alongside the upload-rule parser.
 The prior live deployment and all production data stayed intact; no native draft
 was imported into the old runtime. A successful later deployment is required
 before treating this repair as verified.

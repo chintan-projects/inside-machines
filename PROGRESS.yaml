@@ -13,7 +13,7 @@ needs_input:
 - Owner taste/release approval; sixteen new schematic cores do not establish selected Anatomy craft
 verification:
 - 367 backend tests pass;8 real Postgres regressions separately pass;89.19 percent coverage
-- Ruff and strict mypy122files pass; frontend types/lint/29tests/build and69combined checks pass
+- Ruff and strict mypy122files pass; frontend types/lint/31tests/build and71combined checks pass
 - Four exact native source/spec/media exports verify; synchronized H264/AAC with computer narration
 - Actual local phone/desktop, keyboard, typed depth, offline graph and held visibility checks pass
 - Final Linux packaging passes; personal production deployment pending

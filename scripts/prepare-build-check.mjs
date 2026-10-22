@@ -14,7 +14,7 @@ for (const name of ['package.json', 'package-lock.json', 'pyproject.toml', 'uv.l
   copyFileSync(name, `${target}/${name}`);
 }
 mkdirSync(`${target}/scripts`, { recursive: true });
-for (const name of ['vercel-build.mjs', 'pwa-build.mjs', 'service-worker.js']) copyFileSync(`scripts/${name}`, `${target}/scripts/${name}`);
+for (const name of ['vercel-build.mjs', 'pwa-build.mjs', 'service-worker.js', 'check-deployment-sources.mjs']) copyFileSync(`scripts/${name}`, `${target}/scripts/${name}`);
 mkdirSync(`${target}/.vercel`, { recursive: true });
 copyFileSync('.vercel/project.json', `${target}/.vercel/project.json`);
 // An empty file prevents the CLI from trying to pull real project credentials.

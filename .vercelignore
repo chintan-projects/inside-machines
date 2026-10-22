@@ -10,7 +10,7 @@ shots/
 tests/
 research/
 vendor/anatomy/*
-!vendor/anatomy/kit/
+!vendor/anatomy/kit
 !vendor/anatomy/kit/**
 !vendor/anatomy/LICENSE
 **/__pycache__/

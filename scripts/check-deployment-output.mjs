@@ -24,6 +24,7 @@ for (const { path, config } of functions) {
   assert.ok(names.some(name => name.includes('imageio_ffmpeg/binaries/') && name.includes('linux')), `${path}: Linux video encoder must be bundled`);
 }
 assert.ok(existsSync(join(root, 'static/index.html')), 'The built app shell must be served from the CDN');
+assert.ok(existsSync(join(root, 'static/licenses/anatomy-MIT.txt')), 'The shipped Anatomy artwork must include its MIT notice');
 assert.ok(existsSync(join(root, 'static/shell-assets.json')), 'The offline asset manifest must be served');
 assert.match(readFileSync(join(root, 'static/sw.js'), 'utf8'), /inside-shell-[a-f0-9]{12}/, 'Serve the built, versioned service worker');
 console.log(`Verified ${functions.length} Python functions, durable queue trigger, private-input exclusions, shared services, Linux encoder and versioned CDN shell.`);
