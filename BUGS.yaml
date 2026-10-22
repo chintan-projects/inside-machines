@@ -86,7 +86,7 @@ bugs:
   - id: BUG-013
     title: Hosted source upload omits the native Anatomy drawing kit
     severity: high
-    status: open
-    evidence: Personal Vercel build fails TS2307 for iso-kit.ts while the complete local Linux source builds
-    fix: Include the unsuffixed parent directory and descendants; prebuild checks every required source ancestor; hosted verification pending
+    status: fixed
+    evidence: Missing-kit failure reproduced; corrected hosted upload includes429files and production f32225d reaches Ready
+    fix: Include the unsuffixed parent directory and descendants; prebuild checks every required source ancestor; clean dependencies pinned
     regression: tests/deployment-sources.test.mjs and actual hosted build; local packaging alone misses upload pruning

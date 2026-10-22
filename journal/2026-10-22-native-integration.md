@@ -67,3 +67,36 @@ explicitly alongside the upload-rule parser.
 The prior live deployment and all production data stayed intact; no native draft
 was imported into the old runtime. A successful later deployment is required
 before treating this repair as verified.
+
+Hosted verification completed: personal production `f32225d` reached Ready as
+`dpl_7AQt4GkJzDPsxbV7wpopSNu1TjGQ`. The source upload contains429files instead of412,
+including the actual kit. Both personal stable aliases point to the new runtime;
+the authenticated deployment response confirms the approved owner scope and
+project IDs. The real hosted source/spec gates and frontend build pass. BUG013
+is fixed; GitHub auto-deployment authorization remains pending as BUG008.
+
+Only after that runtime was Ready, the explicit configured-destination operation
+stored and byte-verified four private MP4s and atomically imported four held
+native revisions. An explicit owner-role operation composed the refrigerator three-node graph
+with review-draft intent. Hosted owner previews, all four video hashes,206range
+requests and WebVTT captions pass. Every family native lesson/media/path request
+returns404, member adoption returns403, and premature owner adoption returns409.
+No real release or activation operation was performed.
+
+The before/after managed-database audit preserves all26 earlier lesson records
+apart from permitted view counters, every earlier user/session, private chats,
+feedback, jobs, reviews, interests, notifications and the complete ledger. There
+are now30revisions, with the existing20 family entries unchanged. Spending stays
+5.988597538461539USD with0reserved under the unchanged50USD ceiling. New paid
+model calls are0; previous uncertain allowances remain unresolved. Temporary
+hosted verification sessions were revoked and their401behavior checked.
+
+Alias audit found that the two previously shared source-name URLs still pointed
+to the original Gmail migration runtime. Their alias records belong to the same
+approved personal project; the owner operation reassigns them to the new Ready
+deployment. Future releases must align these legacy targets before schema-specific
+imports, since ordinary production promotion advances only the two personal URLs.
+No default work identity, project ownership, protection or invite setting changed.
+The final alias API read verifies all four approved-project targets at
+`dpl_7AQt4GkJzDPsxbV7wpopSNu1TjGQ`; each serves the exact native-capable shell
+and a successful health check.

@@ -1,12 +1,13 @@
 # Deployment ownership audit and migration record
 
-Updated: 2026-10-19 (Pacific time). **Live application, Neon database and active
+Updated: 2026-10-22 (Pacific time). **Live application, Neon database and active
 private Blob storage are owned by the verified personal Gmail account. GitHub
 login authorization remains pending for automatic Git deployments.**
 
 The deployment and spend values below describe the migration snapshot. Later
 curated-library releases and paid verification attempts are recorded in the
-[integration journal](../journal/2026-10-20-curated-integration.md); use the owner
+[integration journal](../journal/2026-10-20-curated-integration.md) and
+[native production journal](../journal/2026-10-22-native-integration.md); use the owner
 workspace for current spending.
 
 ## Verified ownership
@@ -134,6 +135,15 @@ isolated personal profile (`--global-config .vercel/migration-target-auth`) and
 `--scope cdt9s-projects`, and reverify the primary email and resource ownership
 before deployments. A missing personal profile must prompt Gmail login, not
 creation of another project under the default work identity.
+
+After a new deployment is Ready, also verify the legacy
+`inside-machines-alpha-chintan-4466s-projects.vercel.app` and
+`inside-machines-alpha-git-main-chintan-4466s-projects.vercel.app` aliases. These
+cross-account migration aliases do not advance with the two ordinary personal
+production aliases automatically. Check their project/owner first, explicitly
+assign them to the verified Ready runtime using the isolated personal profile,
+and verify all four targets before importing data that requires the new schema.
+An alias containing `git-main` does not establish a Git automation connection.
 
 Keep source snapshots and the disconnected Blob copy until the owner is
 satisfied with the migrated service. A rollback must reverse only the internal

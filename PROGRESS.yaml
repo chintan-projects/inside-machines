@@ -1,12 +1,12 @@
 goal: Build the curated visual concept library and validate learning quality
-status: native_integration_verified_deployment_pending_quality_open
+status: native_integration_deployed_quality_open
 current:
 - Curated member requests, owner triage/build, review-gated availability and private inbox wired
 - Native artwork bridge shares player, paths, audio, offline media, discussion and reviews
-- Four verified local native drafts; refrigerator3node path and GPU memory insight
+- Four verified hosted owner drafts; refrigerator3node path and GPU memory insight
 - Explicit owner adoption preserves earlier media/chats and requires current human release gates
 - Personal Claude Code anatomy and explain-visually skills installed and locally exercised
-- Existing20 review cores and26 production revisions remain unchanged; new deployment pending
+- Gmail production Ready atf32225d; old26revisions preserved;30total with20family entries unchanged
 needs_input:
 - Connect personal GitHub login to Gmail Vercel for automatic deployments (BUG-008)
 - Independent technical review, real-phone craft and five unfamiliar beginner learning checks
@@ -16,10 +16,11 @@ verification:
 - Ruff and strict mypy122files pass; frontend types/lint/31tests/build and71combined checks pass
 - Four exact native source/spec/media exports verify; synchronized H264/AAC with computer narration
 - Actual local phone/desktop, keyboard, typed depth, offline graph and held visibility checks pass
-- Final Linux packaging passes; personal production deployment pending
+- Linux packaging and real hosted build pass; source-upload regression covered
+- Hosted native MP4 hashes/ranges/captions, held visibility, path and history/ledger preservation pass
 - App ledger5.988598 USD includes3.90 unresolved allowances;0 reserved under unchanged50 USD ceiling
 - No paid model calls in native integration; older failed editorial attempts remain held
 - No automatic paid retries or fallback; no real human acceptance evidence fabricated
 sessions:
 - date: '2026-10-22'
-  result: Native integration locally verified; final packaging and deployment in progress; human quality open
+  result: Native integration deployed on personal Gmail;4held drafts; human craft and learning quality open
