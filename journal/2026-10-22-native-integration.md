@@ -51,3 +51,11 @@ physical-kit audit, actual-phone/accessibility review, five unfamiliar beginners
 and owner release approval are absent. Sixteen newer schematic cores have not
 been converted into accepted Anatomy experiences. A reusable format and passing
 engineering checks cannot establish those outcomes.
+
+The first personal Vercel deployment failed before publication: the CLI upload
+omitted the nested Anatomy kit despite the directory exception in `.vercelignore`.
+Local Linux packaging read the complete source folder and did not exercise that
+upload filter. The explicit recursive kit exception repairs that difference.
+The prior live deployment and all production data stayed intact; no native draft
+was imported into the old runtime. A successful later deployment is required
+before treating this repair as verified.

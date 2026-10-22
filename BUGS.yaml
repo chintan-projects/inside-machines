@@ -83,3 +83,10 @@ bugs:
     evidence: Nested grammar returned400 even after SDK simplification; bounded envelope accepted the real compact schema and returned6284input/1output tokens with complete billing
     fix: Explicit json-document-1 encoding avoids nested provider grammar while complete domain, evidence, quality and hash checks remain; one-token acceptance is not a complete lesson benchmark
     regression: tests/backend/test_anthropic_authoring.py
+  - id: BUG-013
+    title: Hosted source upload omits the native Anatomy drawing kit
+    severity: high
+    status: open
+    evidence: Personal Vercel build fails TS2307 for iso-kit.ts while the complete local Linux source builds
+    fix: Explicit recursive kit exception in .vercelignore; hosted verification pending
+    regression: Actual hosted source build; local packaging alone does not exercise the upload filter
