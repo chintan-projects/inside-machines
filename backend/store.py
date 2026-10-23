@@ -10,11 +10,13 @@ import sqlite3
 from collections.abc import Callable
 from contextlib import closing
 from pathlib import Path
-from typing import TypeVar
+from typing import Annotated, TypeVar
 
 import psycopg
 from _shared.services.logger import get_logger
 from pydantic import BaseModel, Field
+
+from .rate_limits import MAX_BUCKETS, MAX_HITS, initialize_rates
 
 logger = get_logger(__name__)
 T = TypeVar("T")
@@ -32,6 +34,12 @@ class Database(BaseModel):
     events: list[dict[str, object]] = Field(default_factory=list)
     ledger: dict[str, dict[str, object]] = Field(default_factory=dict)
     learning_reviews: list[dict[str, object]] = Field(default_factory=list)
+    topic_interests: dict[str, dict[str, object]] = Field(default_factory=dict)
+    notifications: dict[str, dict[str, object]] = Field(default_factory=dict)
+    learning_paths: dict[str, dict[str, object]] = Field(default_factory=dict)
+    rate_limits: dict[str, Annotated[list[float], Field(max_length=MAX_HITS)]] = Field(default_factory=dict, max_length=MAX_BUCKETS)
+    rate_limits_version: int = 0
+    rate_limits_overflow_until: float = 0
     spent: float = 0
     reserved: float = 0
 
@@ -60,6 +68,8 @@ class Store:
             try:
                 row = conn.execute("SELECT payload FROM inside_state WHERE id=1").fetchone()
                 state = Database.model_validate_json(row[0]) if row else Database()
+                if write:
+                    initialize_rates(state)
                 result = action(state)
                 if write:
                     state.events = state.events[-10000:]
@@ -89,6 +99,8 @@ class Store:
             if not row:
                 raise RuntimeError("Domain state row was not initialized")
             state = Database.model_validate_json(str(row[0]))
+            if write:
+                initialize_rates(state)
             result = action(state)
             if write:
                 state.events = state.events[-10000:]

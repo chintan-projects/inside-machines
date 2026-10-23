@@ -1,8 +1,37 @@
 # Deployment ownership audit and migration record
 
-Updated: 2026-10-19 (Pacific time). **Live application, Neon database and active
+Updated: 2026-10-22 (Pacific time). **Live application, Neon database and active
 private Blob storage are owned by the verified personal Gmail account. GitHub
 login authorization remains pending for automatic Git deployments.**
+
+The deployment and spend values below describe the migration snapshot. Later
+curated-library releases and paid verification attempts are recorded in the
+[integration journal](../journal/2026-10-20-curated-integration.md) and
+[native production journal](../journal/2026-10-22-native-integration.md); use the owner
+workspace for current spending.
+
+## Public preview update — 2026-10-22
+
+The owner explicitly requested public visitor access. Production now runs
+`31a9360` at Ready deployment `dpl_5dk1png3msomcnr21wSfLuALeHjG` under the same
+verified Gmail identity and resources. Vercel Authentication now covers **preview
+deployments only** (`deploymentType=preview`); no plan upgrade was needed.
+All four production aliases were checked without cookies or bypass headers and
+return the current public shell and `public_access=true`. Owner administration
+and private conversations retain application authorization. Private Blob URLs
+still reject anonymous access; public lesson media is served through the app.
+
+The app's $50 ceiling is unchanged. The observed ledger remains $5.988597538461539
+with zero reservations, including earlier conservative uncertain-billing
+allowances. No paid call was made for public access or verification. Thirty prior
+lesson revisions and existing private histories were preserved. Exact native
+preview permissions expose the refrigerator path and GPU insight with draft
+labels; they do not activate replacements, approve quality or send release notices.
+See the [public preview journal](../journal/2026-10-22-public-preview.md).
+
+The migration snapshot below retains its historical protection/spend values.
+GitHub's login connection is still required for automatic Git deployments; the
+current production build was deployed explicitly with the isolated personal CLI.
 
 ## Verified ownership
 
@@ -14,7 +43,7 @@ login authorization remains pending for automatic Git deployments.**
 | Project | `inside-machines-alpha`, `prj_ok8CKAxGVlADIiJyECM6wukxrUnn` |
 | Neon | Existing `inside-machines-db`, `store_ZqexGu717dNkmfMV`, Free |
 | Active private Blob | `inside-machines-assets`, `store_3LF9qetVQ3IptgHA`, `iad1` |
-| Production runtime | `dpl_HY4oCMJcg2wpWXxZVa2dH1WAa1Zk`, Ready, Gmail workspace |
+| Migration runtime | `dpl_HY4oCMJcg2wpWXxZVa2dH1WAa1Zk`, Ready, Gmail workspace |
 
 Use [Inside Machines](https://inside-machines-alpha.vercel.app) or the
 [Gmail workspace alias](https://inside-machines-alpha-cdt9s-projects.vercel.app).
@@ -129,6 +158,15 @@ isolated personal profile (`--global-config .vercel/migration-target-auth`) and
 `--scope cdt9s-projects`, and reverify the primary email and resource ownership
 before deployments. A missing personal profile must prompt Gmail login, not
 creation of another project under the default work identity.
+
+After a new deployment is Ready, also verify the legacy
+`inside-machines-alpha-chintan-4466s-projects.vercel.app` and
+`inside-machines-alpha-git-main-chintan-4466s-projects.vercel.app` aliases. These
+cross-account migration aliases do not advance with the two ordinary personal
+production aliases automatically. Check their project/owner first, explicitly
+assign them to the verified Ready runtime using the isolated personal profile,
+and verify all four targets before importing data that requires the new schema.
+An alias containing `git-main` does not establish a Git automation connection.
 
 Keep source snapshots and the disconnected Blob copy until the owner is
 satisfied with the migrated service. A rollback must reverse only the internal

@@ -170,7 +170,7 @@ export function ChatPanel({ lesson, member, online, onShow }: ChatProps): ReactE
               });
             }}
           >
-            Show me in the machine
+            Show me in the explanation
           </button>
           <small>Included with this lesson · works offline</small>
         </div>

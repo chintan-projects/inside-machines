@@ -1,5 +1,35 @@
 # Inside design friction log
 
+## 2026-10-20 — curated integration review
+
+Observed: customer requests previously shared the paid generation path; the
+selected D1 studio and path navigation remained local. Member requests now only
+collect interest. Owners explicitly build, compose and review exact artifacts.
+
+Round 1, agent mechanism review: shrinking sealed-water pump, sink trap reused for
+a toilet, wrong rotation pivots and repeated GPU diagrams were consequential
+failures. Corrections add delivery/check-valve flow, a filled rising/descending
+toilet trapway, true-centred pivots and distinct work/memory/dependency views.
+A relationship map reconnects the jobs without claiming physical layout or timing.
+These findings are not independent human technical approval.
+
+Round 2, browser reliability: an idle second tab erased newer progress. Only
+changed clocks now persist. Keyboard seek, return, cold offline reload and reconnect
+retained the paused checkpoint. 375/768/1440 emulation had no horizontal overflow;
+crowded navigation became two rows on phones.
+
+Round 3, actual media: decoded non-silent AAC and advancing online/offline browser
+audio replace silent development fixtures. Fractional duration labels and ambiguous
+muted/paused state were corrected. Core car labels are about 15.2px at 375px;
+supplemental map disclaimer/legend are smaller (about 11.4/10.7px), a remaining
+craft limitation. New scenes are labeled schematic mechanisms, not high-detail
+Anatomy artwork. Request/inbox/owner, offline hashing and media evidence are in
+the session journal. No release acceptance or learner result is inferred.
+
+The most consequential remaining gap is physical craft and observed beginner
+understanding across the added topics. Twenty entries and engineering passes
+do not satisfy owner taste, actual-phone, independent technical or learner gates.
+
 October 19, 2026. Agent assessment of the existing local prototype, based on saved desktop/390-pixel screenshots and source behavior. Real-device and assistive-technology walks remain for the product owner. These observations do not claim human user feelings or completed usability research.
 
 Person: an adult with a concrete question about a machine. Journeys: enter a lesson, watch/inspect, ask about an owned machine, return offline, and ask a new question.
@@ -211,3 +241,277 @@ labels. Utility/usability are observed for this copy change; visual craft is
 otherwise unchanged, and no new surprising teaching moment is claimed. This is
 one focused copy/compatibility pass, not the three craft rounds for a new lesson.
 GPU/LLM representations and human learning remain unbuilt/unmeasured. No deployment.
+
+## 2026-10-19 — vacuum phone owner rejection
+
+Observed, high severity (CE-04/05/14): owner's iPhone screenshot puts a tiny whole
+machine and several component controls above the actual causal mechanism. Ambiguous
+fan label and crude housing undermine trust. Earlier desktop emulation missed this
+first-screen failure. Next iteration: detail first, rebuilt physical close-ups,
+secondary locator. Actual-phone approval and beginner learning remain pending.
+
+### Vacuum iteration: three agent critique rounds (owner acceptance pending)
+
+1. **390 / 768 / 1280, seen:** hierarchy put the working detail first and moved the
+   locator into disclosure. Labels became readable, but primitive surfaces still
+   looked generic. Added trusted curved/shaded housings, couplings, fins, screws,
+   shaft and bag texture. Found oversized arrows crossing the floor opening;
+   corrected marker size and passage alignment. Typography/focus/targets inspected.
+2. **390 / 768 / 1280, seen:** keyframe markers converged into one symbol. Staggered
+   the paths and added non-merging/hose-boundary regressions. The same safe poses
+   drive web and export. Replaced a repeated clogged-bag question with transfer to
+   a different blocked component: the hose. No horizontal overflow observed.
+3. **390 / 768 / 1280, seen:** comparison controls below the explanation hid the
+   changed diagram while selecting a condition. Moved the condition directly
+   above the scene and made a choice explicitly replay its modeled change. The
+   outcome sits below the drawing. Fixed narrated base/comparison mismatch,
+   returned the video to the whole system, and corrected a clipped reassembly line
+   using actual bundled-font bounds. Phone navigation text and reset target enlarged.
+
+Final local observations: labeled working detail and action fit the phone viewport;
+condition and consequence share a screen; 768/1280 content width equals viewport.
+Keyboard slider and Escape from native detail dialog work. Reduced motion reveals
+final states on request. Explicitly saved lesson reloads offline and the bag
+comparison still works. Browser overrides restored. Decoded 24 fps MP4 frames show
+matching artwork and the full-system return. These are agent/emulation observations,
+not actual-device, VoiceOver, independent technical or beginner-learning approval.
+
+Agent rubric (judgment, not release approval): the causal job is prominent — utility
+4/5; navigation/action/condition are explicit — usability 4/5; original physical
+sections carry consistent material/detail choices — desirability 4/5; the blocked
+path comparison is useful, but learner delight is unobserved — surprise 3/5 inferred.
+The owner's verdict and five-beginner transfer evidence remain missing. BUG-004 open.
+
+## Vacuum production comparison · local authored study · 2026-10-19
+
+Evidence: ignored `.vercel/vacuum-lab/review-desktop.jpg`, `review-phone.jpg` and
+encoded media; [record](../journal/2026-10-19-vacuum-production-study.md).
+
+Agent observations across 390/768/1280 widths, not an actual-device owner walk:
+
+- High: the initial Play control appeared below a tall image. Moved controls above
+  it; Play is now visible on the checked initial phone viewport.
+- High: the first Manim treatment repeated a small whole-machine schematic. Rebuilt
+  its fan/nozzle/bag as independent, larger causal views before reassembly.
+- High: exact chapter seek could show a preceding Manim shot for one frame. Fixed
+  the clock; decoded title checks now cover 12/23/34-second boundaries.
+- Medium: small Anatomy labels and framing reduced phone legibility. Enlarged both;
+  preserved the real kit output, readable core labels and the connected air path.
+- Medium: tablet split layout narrowed the picture. Tablet now uses the full width.
+- Medium: experiment copy and narration repeated the same explanation. Replaced the
+  experiment duplicate with an observation cue; narration is an optional disclosure.
+- Observed: matched-time switching, block/restore, static frames, Escape, keyboard
+  tabs/range, reduced-motion initialization and loaded-page offline playback work.
+- Inferred: Manim's closeups are clearer causally and Anatomy's physical construction
+  more tangible. No beginner preference, transfer result or owner approval is implied.
+
+Direct-file opening could not be automated because browser policy permits HTTP/HTTPS
+only. Loopback HTTP review succeeded. Real phone, VoiceOver, fresh file opening,
+independent technical review and five-beginner learning remain unmeasured. BUG-004 open.
+
+Owner observation after the four-engine study: **High, unresolved** — all four
+visual treatments were rejected as unappealing. The agent's provisional preference
+did not establish the desired craft. Next iteration changes the authoring/design
+approach through a local Claude + actual Anatomy trial, keeping one vacuum and one
+causal learning objective. No rendering engine or model is selected for release.
+
+## Claude + Anatomy · local review · 2026-10-19
+
+Record: [actual calls, repairs and gate status](../journal/2026-10-19-claude-vacuum-study.md).
+Ignored evidence: `.vercel/claude-vacuum/private/review-01.png`,
+`review-02-phone.png`, `final-contact-sheet.jpg`, `transition-review.jpg` and final
+phone/tablet/desktop screenshots. This is agent browser observation, not a person
+walking an actual phone or a learning evaluation.
+
+- Blocker, observed: missing kit fill context rendered black solids. Claude revision
+  restored real material fills. Geometry/flow inconsistencies required feedback
+  and explicit Codex repairs; source ownership is disclosed in About.
+- High, observed: SVG labels rendered at about 5.6px on phone. Final core HTML
+  labels measure 14px, with leaders and the shaft identified.
+- High, observed: chapter frames were nearly identical; highlighting the bag did
+  not show the separating mechanism. New bounded iteration adds an independent
+  labeled porous-wall passage from the same state, then returns to the whole.
+- High, observed: manual loops/dirt counters and tour switching could disagree.
+  Fixed finite segments, canonical seeks, constant symbolic retained dirt and
+  state-derived controls. Native pause/resume and a 45-second endpoint observed.
+- Observed: prediction remains unrevealed until requested; the fan can operate
+  with blocked through-flow; restoring inlet restores live description. Keyboard
+  return, reduced-motion stills and loaded-page offline interaction work.
+- Motion scan flags at 24.1/34.0 seconds were visually reviewed as deliberate
+  0.45-second scene crossfades; no unexplained pop under the declared heuristic.
+- Inferred/open: the physical design is still box-like and the controls substantial.
+  Independent claim/geometry review, owner actual-device craft and beginner transfer
+  are pending. Utility/usability 4/5 agent judgment; desirability/surprise 3/5, not
+  owner approval or a learning result. BUG-004 remains open; no release decision.
+
+## 2026-10-19: positive vacuum feedback and GPU-S1
+
+Owner: “this is quite good” on the local Claude/Anatomy vacuum. They chose GPU as
+the next extensibility example. Preserve that positive craft response separately
+from still-missing independent technical, real-device and learning evidence.
+
+GPU artifact/claim/iteration record: `journal/2026-10-19-gpu-study.md` and
+`experiments/gpu-study/BRIEF.md`. Screenshots are ignored/private
+`.vercel/claude-vacuum/private/gpu-{phone,tablet,desktop}-{board,parallel,chain}.jpg`.
+
+- High, observed/fixed: initial chip/memory labels overlapped; 14px phone HTML
+  labels now have separate anchors. The board fills a cropped viewport rather
+  than floating in an oversized frame. 375/390px had no horizontal overflow.
+- High, observed/fixed: tiny locator hid G/H outputs; removed it and retained a
+  native whole-GPU return. Input/prerequisite labels and calculations no longer
+  share a row. Native controls are at least 44px tall.
+- Medium, observed/fixed: raw numbers hid the visual job. Toy gray levels now show
+  the input and computed brighter result, with IDs and text preserving meaning.
+- High, observed/fixed: low-contrast disabled/gray/copper text. Checked pixel-text
+  pairs have a 4.756:1 minimum; waiting/unavailable text pairs exceed 5:1.
+- Observed: one/four-lane and independent/chain changes follow the same exact toy
+  scheduler; chained successors wait for actual prior results. Input hold produces
+  no jobs/results; restoring inputs works. No real GPU timing claim is made.
+- Observed: answers and takeaway are initially concealed, prediction selection
+  alone reveals nothing, skip/reveal works, and reveal moves focus to the working
+  mechanism. Transfer remains hidden until requested. Reset restores the start.
+- Observed: keyboard Enter returns to the whole GPU with focus preserved; reduced
+  motion uses useful intermediate stills. Loaded offline work and whole return,
+  ordinary pause/resume and deterministic seeking passed. The 42-second story
+  reached 42 and stopped. No browser errors observed.
+- Observed: final phone/tablet/desktop states reviewed separately; arithmetic nodes
+  remain mounted while progress updates. Rapid-resize screenshot transients were
+  recaptured after repaint. No 60fps/geometry audit or actual-device pass is claimed.
+- Inferred: utility/usability 4/5 from the complete working path; desirability 4/5
+  for the physical board, 3/5 for the logical plate; surprise 3/5. These are agent
+  judgments. Owner GPU craft, independent truth and five-beginner transfer remain
+  pending. The local trial does not promote a catalog lesson or change Vercel.
+
+## 2026-10-19: GPU-S2 missing audio (BUG-009)
+
+- High, owner observed: “audio is not coming through.” Source inspection found no
+  narration/audio track in GPU-S1 and a CSP that denied media. The earlier silence
+  was an implementation omission; it was not evidence of a device volume problem.
+- Fixed locally: explicit Watch & listen, embedded 42-second Samantha computer
+  narration, matching captions and a shared media clock. Free experiments state
+  that they are silent and stop the fixed voice before any scenario change.
+- Observed in Chrome: decoded media, advancing clock, unmuted volume 1, pause,
+  seek to 22.25 with matching chain/caption, keyboard timeline/replay/reset, mute,
+  loaded-offline playback, reduced-motion stills with continuing speech, endpoint
+  at 42, visible decode failure and successful reload recovery. Seven additional
+  transport/caption regressions cover stale play promises and failures.
+- Audio is non-silent (FFmpeg mean -17.1 dBFS, peak -2.1 dBFS). This measures signal,
+  not intelligibility or physical speaker output. 390px phone viewport is separate
+  from an actual iPhone/VoiceOver test. New media does not accept the quality bar,
+  certify GPU claims or release the lesson. Vercel/catalog/vacuum remain unchanged.
+
+## 2026-10-19–20: GPU-S3 complete core with optional depth
+
+Owner observed an incomplete causal explanation in GPU and vacuum. The new local
+GPU entry traces program → data → calculation → stored output, with optional
+insight, data-supply and matrix nodes. The worksheet and exact artifact evidence
+are in `design/lessons/gpu-depth.md` and `journal/2026-10-20-gpu-depth.md`.
+
+- High, observed/fixed: one principle was presented as the whole GPU explanation.
+  A complete worked example now precedes optional depth; human comprehension pending.
+- High, observed/fixed: control changes happened above the visible area, and waiting
+  labels persisted after completion. Scene reveal and completed/idle state corrected.
+- Medium, observed/fixed (BUG-010): pressed Unmute text became white on paper. Solid
+  green pressed background restored; actual computed colors and phone render checked.
+- Observed: stable bent-path instruction/data copies, exact matrix and pixel results,
+  paused return points, consistent mute, offline narration, reduced-motion stills,
+  saved-question navigation and honest missing coverage. No implicit AI calls.
+- Observed: 390/768/1280 logical-view samples have no horizontal overflow or text
+  beyond the canvas; smallest measured text is 14.23px. Supported brightness numeral
+  pairs exceed 4.5:1. No full WCAG/VoiceOver/actual-phone certification is implied.
+- Inferred: utility/usability 4/5, desirability/surprise 3/5, with reasons in journal.
+  Owner craft and independent beginner learning remain unmeasured; no release pass.
+# GPU-S4 depth request recovery · 2026-10-20
+
+Observed, medium: ordinary depth phrasing was rejected; matrix's exact depth
+request returned a generic error. Fixed in shared navigator/lookup with a direct
+button, submission guidance and an explicit leaf boundary plus saved alternatives.
+Observed, low: phone placeholder truncated beside submit. Fixed with full-width
+phone input. Final browser renders at 390/768/1280 have no horizontal overflow.
+Private evidence: `gpu-s4-phone.jpg`, `gpu-s4-tablet.jpg`, `gpu-s4-desktop.jpg`.
+Real-phone/owner walkthrough pending; this is agent observation, not release approval.
+# Studio D1 · 2026-10-20
+
+Seen, high: owner rejects the interface's taste. Shared D1 candidate replaces the
+competing titles/pill stack with a question, visual stage, stable playback,
+desktop rail/phone selector and adjacent tools. Owner decision pending.
+Seen, medium: final-node action squeezed the phone selector; fixed with Questions
+and an explicit accessible name. Seen, medium: manual transport could grow beyond
+phone width; wrapping and differentiated primary/secondary controls prevent it.
+Seen, medium, remains for owner review: long matrix question plus return context
+makes that branch denser than fresh core entry. Seen: illustration assumptions
+are expanded initially; they were not traded away for a quieter layout.
+Evidence: ignored `studio-d1-*.jpg`, browser record, D1 journal/hash. Agent render
+review covers 375/768/1440; real-phone, taste and beginner acceptance remain pending.
+
+# Refrigerator R1 · 2026-10-20
+
+Owner requests transfer to refrigerator/car; refrigerator is the bounded candidate.
+Observed, medium, fixed: Compressor and Narrow tube labels overlapped on phone;
+separated anchored labels. Energy arrows crossed 3/4/1 values; moved arrow ends
+and work value apart. The phase heat arrow stopped at the metal wall; it now
+reaches the fluid. Observed, low, fixed: reused interface exposed GPU-only copy;
+placeholder/disclosure now use topic-neutral wording.
+Teaching review, high, fixed before final build: pressure comparison needs an
+explicit fluid/temperature assumption, and no boiling must not mean no heat
+transfer. Optional predictions now precede playback without blocking it. The
+physical cutaway front is explicitly a drawing aid, separate from the door-open
+energy experiment; confusing those remains a beginner-review risk to test.
+Final sampled 375/768/1440 views have no overflow, clipped SVG text, label collisions
+or targets below 44px. Evidence: ignored `fridge-r1-final-*.jpg`, browser review,
+R1 journal/hash. Independent source review, owner physical-phone craft and the
+4/5 beginner-transfer hypothesis remain pending. No catalog/Vercel promotion.
+
+# Curated owner costs · 2026-10-20
+
+Observed, medium: the live owner comparison ran category, billing status and
+voice assumptions into adjacent text. Scoped table styles now separate secondary
+lines, preserve readable numbers and keep the wide comparison in a labeled,
+keyboard-focusable scroll region. Render verification recorded in the integration
+journal; owner taste and actual-phone accessibility remain unmeasured.
+
+Observed, high: real Claude authoring completed a GPU memory-supply draft but
+omitted one permanent core label and all self-contained inset text labels. The
+structural gate rejected it before review, voice, rendering or publication.
+An explicit next owner operation must carry the saved findings and evidence;
+automatic paid retries or a relaxed label gate would not resolve the failure.
+
+Code audit, high: the request-queue owner build lacked an operation token although
+depth/revision builds already had one. The API now requires the same bounded token;
+the shared client attempt manager retains it after a lost response and offers a
+separate funded action only after409. Concurrency and lost-response regressions
+are required before deployment; no real extra build was triggered by this audit.
+
+Hosted editorial iteration, high, remains: two actual Claude drafts passed schema/
+structural checks but failed the SHA-bound editorial gate. Agent checkpoint render
+inspection also sees an arrived operand under unchanged “Lane waits”/“Empty slot”
+labels and no visible calculation, plus detached local context in beat3. No draft
+was promoted. More engineering checks or a lower editorial threshold would not
+resolve these causal/craft failures. Beginner transfer and owner taste are unmeasured.
+Observed, low: some source question articles and GPU casing need editorial cleanup
+in new immutable revisions before release. Existing published hashes stay preserved.
+
+# Native hosted integration · 2026-10-22
+
+Observed, high: the hosted primitive format could not retain source-authored
+Anatomy artwork. The additive native artifact bridge preserves actual factory
+source, semantic cues and synchronized media; held imports do not replace the
+library or certify craft. The older twenty review cores remain intact.
+
+Observed, medium, fixed: the phone entry placed its drawing at y=615. Compact
+shared navigation, one title and optional adjacent prediction move it to y=359.8
+at375×844. All six labels fit and horizontal overflow is absent. Independent
+phone/accessibility and owner taste remain unmeasured. Evidence: ignored
+`native-production-20261022-final/browser/phone-entry-final.jpg` and desktop pair.
+
+Observed, medium, fixed: a component-focus action ended exactly at the next
+chapter and changed a compressor close-up to the warm coil. Its bounded end now
+retains the selected mechanism; a real player check ends at48.999seconds.
+Observed, medium, fixed: a narrow phone label extended beyond the stage; measured
+viewport fit now repositions its anchored label without changing domain state.
+
+Observed: native drafts and their media/path are owner-only. Adoption remains
+disabled until artifact-bound human release gates pass. This is a publication
+control, not evidence that those gates have been satisfied. Sixteen newer
+schematic cores and the current native candidates still lack accepted craft and
+beginner-learning evidence; the whole product quality goal remains open.

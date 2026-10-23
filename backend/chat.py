@@ -10,11 +10,13 @@ from fastapi import HTTPException
 from pydantic import BaseModel, Field, ValidationError
 
 from .accounting import charge, reserve
-from .contracts import AnswerSpec, LessonSpec
+from .contracts import AnswerSpec
 from .domain import Domain, User
 from .provider import UsageReceipt, model_text, receipt_context
+from .rate_limits import take_rate
 from .settings import Settings
 from .store import Database, Store
+from .stored_lessons import StoredSpec, component_ids, components_for, native_visible, parse_stored_spec
 
 
 class ChatMessage(BaseModel):
@@ -66,8 +68,10 @@ class Chats:
         """Open a conversation tied to an immutable shared lesson version."""
 
         def write(db: Database) -> Conversation:
-            if lesson_id not in db.lessons:
+            if lesson_id not in db.lessons or not native_visible(db, lesson_id, user.owner):
                 raise HTTPException(404, "Lesson not found")
+            if user.guest:
+                take_rate(db, "conversation", user.id, 20, "The public demo limits new conversations; continue an existing chat")
             chat = Conversation(
                 id=secrets.token_urlsafe(18), lesson_id=lesson_id, user_id=user.id, messages=[]
             )
@@ -85,9 +89,11 @@ class Chats:
         """Reserve, answer outside the transaction, and commit the private turn."""
         key = f"chat:{chat_id}:{operation}"
 
-        def admit(db: Database) -> tuple[Conversation, LessonSpec, bool]:
+        def admit(db: Database) -> tuple[Conversation, StoredSpec, bool]:
             chat = self.owned(db, chat_id, user)
-            spec = LessonSpec.model_validate(db.lessons[chat.lesson_id]["spec"])
+            if not native_visible(db, chat.lesson_id, user.owner):
+                raise HTTPException(404, "Explanation not found")
+            spec = parse_stored_spec(db.lessons[chat.lesson_id]["spec"])
             if key in db.ledger:
                 if db.ledger[key].get("outcome") == "failed":
                     raise HTTPException(409, "That reply failed. Send a new question to try again.")
@@ -106,18 +112,19 @@ class Chats:
                 raise HTTPException(
                     503, "Live chat isn't connected yet. The lesson's suggested questions work offline."
                 )
-            recent = sum(
-                e["kind"] == "chat_requested"
-                and e.get("user_id") == user.id
-                and float(str(e["at"])) > time.time() - 3600
-                for e in db.events
-            )
-            if recent >= self.settings.hourly_requests * 3:
-                raise HTTPException(429, "You've reached the hourly alpha chat limit.")
+            take_rate(db, "chat-browser", user.id, min(6, self.settings.hourly_requests * 3) if user.guest
+                      else self.settings.hourly_requests * 3, "You've reached the hourly chat limit.")
+            address_hash = ""
+            if user.guest:
+                address_hash = str(db.users.get(user.id, {}).get("address_hash", ""))
+                if not address_hash:
+                    raise HTTPException(403, "Start a public browser session before asking a question")
+                take_rate(db, "chat-network", address_hash, 12,
+                          "The public demo allows twelve questions per network each hour.")
             reserve(db, self.settings.chat_reserve, self.settings)
             chat.pending, chat.pending_at = key, time.time()
             db.chats[chat_id] = chat.model_dump(mode="json")
-            Domain.event(db, "chat_requested", user, lesson_id=chat.lesson_id)
+            Domain.event(db, "chat_requested", user, lesson_id=chat.lesson_id, **({"address": address_hash} if address_hash else {}))
             return chat, spec, True
 
         chat, spec, admitted = self.store.transaction(admit)
@@ -131,7 +138,7 @@ class Chats:
             "stages": [s.model_dump() for s in spec.stages],
             "parts": [
                 {"id": p.id, "name": p.name, "description": p.description}
-                for p in spec.parts
+                for p in components_for(spec)
                 if spec.teaching is None or p.id in spec.teaching.core
             ],
             "sources": [s.model_dump(mode="json") for s in spec.sources],
@@ -173,7 +180,7 @@ class Chats:
             answer = AnswerSpec.model_validate_json(await self.generate(prompt, self.settings))
             if answer.stage is not None and not 0 <= answer.stage < len(spec.stages):
                 raise ValueError("Answer selected an unknown stage")
-            if answer.part is not None and answer.part not in {p.id for p in spec.parts}:
+            if answer.part is not None and answer.part not in component_ids(spec):
                 raise ValueError("Answer selected an unknown part")
             if any(not 0 <= index < len(spec.sources) for index in answer.source_indices):
                 raise ValueError("Answer selected an unknown source")

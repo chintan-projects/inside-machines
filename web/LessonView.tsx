@@ -1,22 +1,23 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactElement } from 'react';
 import { Pause, Play, RotateCcw } from 'lucide-react';
-import type { Answer, Lesson, Member } from './contracts';
+import type { Answer, Lesson, LegacyLesson, Member } from './contracts';
 import { offlineMember } from './offline';
 import { ChatPanel, FeedbackPanel } from './LessonDiscussion';
 import { AcStudio } from './ac/Studio';
-import { TeachingStudio } from './teaching/Studio';
 import { LessonSaveButton, useLessonAssets } from './useLessonAssets';
 import { duration, Scene, stageAt } from './Scene';
 import { progressKey, readProgress } from './progress';
 import { WasherExperiment } from './WasherExperiment';
 
 interface Props { readonly lesson: Lesson; readonly member: Member; readonly online: boolean }
+const SharedStudio = lazy(async () => ({default: (await import('./studio/SharedStudio')).SharedStudio}));
 export function LessonView(props: Props): ReactElement {
-  if(props.lesson.spec.version===2) return <TeachingStudio {...props}/>;
-  return props.lesson.id === 'air-conditioner-craft' ? <AcStudio {...props} /> : <StandardLessonView {...props} />;
+  if(props.lesson.spec.version===2 || props.lesson.spec.version===3) return <Suspense fallback={<p role="status">Opening the visual explanation…</p>}><SharedStudio {...props}/></Suspense>;
+  const legacy = {...props, lesson: {...props.lesson, spec:props.lesson.spec}};
+  return props.lesson.id === 'air-conditioner-craft' ? <AcStudio {...legacy} /> : <StandardLessonView {...legacy} />;
 }
-function StandardLessonView({ lesson, member, online }: Props): ReactElement {
+function StandardLessonView({ lesson, member, online }: Omit<Props, 'lesson'> & {readonly lesson:LegacyLesson}): ReactElement {
   const { spec } = lesson, total = duration(spec);
   const key = progressKey(member.id, lesson.id);
   const [initial] = useState(() => readProgress(key, total, [spec.stages[0].focus || spec.stages[0].parts[0], ...spec.parts.map(p => p.id)]));

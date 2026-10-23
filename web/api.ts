@@ -1,12 +1,13 @@
 import type { Conversation } from './contracts';
 
 export class ApiError extends Error {
-  constructor(message: string, readonly status: number) { super(message); }
+  readonly status:number;
+  constructor(message:string,status:number){super(message);this.status=status;}
 }
 
-export async function api<T>(path: string, body?: unknown): Promise<T> {
+export async function api<T>(path: string, body?: unknown, method?: 'POST'|'PATCH'|'PUT'): Promise<T> {
   const response = await fetch(`/api/v1${path}`, {
-    method: body === undefined ? 'GET' : 'POST', credentials: 'same-origin',
+    method: method ?? (body === undefined ? 'GET' : 'POST'), credentials: 'same-origin',
     headers: body === undefined ? {} : { 'Content-Type': 'application/json' },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
@@ -20,7 +21,7 @@ export async function api<T>(path: string, body?: unknown): Promise<T> {
         if(messages.length)detail=messages.join(' ');
       }
     }
-    if (response.status === 401 && path !== '/auth/login') window.dispatchEvent(new Event('inside:unauthorized'));
+    if (response.status === 401 && !path.startsWith('/auth/')) window.dispatchEvent(new Event('inside:unauthorized'));
     throw new ApiError(detail, response.status);
   }
   return response.json() as Promise<T>;
@@ -35,7 +36,10 @@ export async function askChat(id: string, question: string, onStatus: (status: s
     method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ question, operation: crypto.randomUUID() }),
   });
-  if (!response.ok || !response.body) throw new ApiError('Couldn’t open this conversation. Sign in again if your session expired.', response.status);
+  if (!response.ok || !response.body) {
+    if(response.status===401)window.dispatchEvent(new Event('inside:unauthorized'));
+    throw new ApiError('Couldn’t open this conversation. Your question was not retried. Reopen it to check before sending again.',response.status);
+  }
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '', answer: Conversation | null = null;

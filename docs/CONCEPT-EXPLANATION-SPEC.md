@@ -43,6 +43,10 @@ on every click. Beats may combine orientation with a prediction or reunification
 with transfer. Chapter count follows the concept and current schema limits, rather
 than an arbitrary six-step template. A shorter overview may link into deeper
 prerequisite explanations without making them mandatory detours for every learner.
+For a whole-system question, the core must still connect its input, chosen operation,
+essential internal relationships and useful output. Optional depth cannot repair a
+missing causal spine. Follow ADR 0004 for shared, question-driven learning paths and
+explicitly bridge any changed example before introducing its new representation.
 Follow-up chat reuses the validated mechanism and relevant visual checkpoint; each
 reply need not replay the full lesson structure or repeat its assessment.
 

@@ -1,0 +1,12 @@
+{
+  "schema_version": "learning-path-1",
+  "id": "refrigerator-r1",
+  "title": "How does a refrigerator work?",
+  "example": "Follow heat from the food through a sealed cooling loop into the kitchen, then test an open door and look more closely at boiling.",
+  "entry": "core",
+  "nodes": [
+    {"id":"core","role":"core","label":"The complete picture","question":"How does a refrigerator keep food cold?","outcome":"Trace heat into a colder coil, through refrigerant and compression, then out into the room.","lesson_id":"refrigerator-r1-core","prerequisites":[],"next":["energy","phase"],"queries":["start","overview","core","how does a refrigerator work","fridge","cooling loop","compressor","cold coil"]},
+    {"id":"energy","role":"insight","label":"Why the back is warm","question":"Could an open fridge cool the kitchen?","outcome":"Use a declared energy balance to distinguish a cold cabinet from both sides exchanging heat with the same room.","lesson_id":"refrigerator-r1-energy","prerequisites":["core"],"next":["phase"],"queries":["heat","energy","door open","open door","warm back","warm coil","electricity","kitchen","room","insight"]},
+    {"id":"phase","role":"model","label":"Boiling while cold","question":"How can a cold liquid boil?","outcome":"Explain why boiling depends on fluid and pressure, without confusing no boiling with no heat transfer.","lesson_id":"refrigerator-r1-phase","prerequisites":["core"],"next":[],"queries":["boil","boiling","pressure","refrigerant","liquid","gas","vapor","phase change","model","dive into the physics"]}
+  ]
+}

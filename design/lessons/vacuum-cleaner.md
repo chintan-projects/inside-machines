@@ -144,3 +144,69 @@ receipts remain unchanged. CE-04/05/07/08/13/14/16/18 have implementation eviden
 not independent technical or actual-phone approval. No beginner scores exist.
 Keep the original hypothesis and rubric open for human evaluation; do not promote
 other families from this single artifact's result.
+
+## 2026-10-19 — owner rejection: mechanism first
+
+Observed baseline: the owner's actual iPhone screenshot fails craft. A tiny box-like
+locator, ambiguous leaders and a wall of component controls precede the causal view.
+Earlier emulated checks did not establish first-screen clarity. BUG-004 stays open.
+
+**Person/job/posture:** curious family member on a phone; see why dirt moves;
+precise, tangible, inviting. References: Anatomy's connected, shaded working parts;
+visual-learning.app/microwave's single dominant mechanism and adjacent action.
+Avoid: miniature whole-machine clip art above several panels of controls.
+
+**Hypothesis (CE-01/04/05/14):** placing a large, labeled working close-up directly
+under each short causal sentence, before context controls, lets at least 4/5
+uncoached beginners point to the fan, trace incoming air and explain why clogging
+the bag reduces pickup. Baseline is rejected; target remains unmeasured.
+
+**Decisions:** detail before locator; no sticky control covering the drawing;
+minimum 40-unit scene labels in the new 900-unit figure; use purposefully shaded
+solids, real passage walls, shaft/cuffs/seams and explicit directional air markers.
+Keep the general player and declarative geometry shared. No new paid model call.
+
+**Claim ledger:** fan supplies work to the moving air (Kinia vacuum activity guide,
+existing source, direct retrieval still pending); the porous bag retains some dust
+while air passes through it, and loading restricts airflow (Dyson, Filtration at
+Dyson, “It started with a cyclone”, verified page text 2026-10-19). This is a generic
+bagged canister model; no HEPA claim, exact geometry, flow rate or particle count.
+Pressure-driven entry and sealed-nozzle/no sustained path are qualitative mechanics
+inferences. A turning motor alone does not establish useful airflow.
+
+**Storyboard:** powered fan → open floor inlet → porous bag and reunified path.
+The motor/fan work and throughflow coexist in normal operation. Changed condition:
+clean versus clogged bag; transfer asks whether a turning motor guarantees pickup.
+Rubric: 0 = motor alone guarantees pickup; 1 = predicts weaker pickup without cause;
+2 = clogged passage restricts air, so less moving air carries dirt despite rotation.
+
+**Verification plan (CE-08/15/16/18):** immutable new authored revision, preserved
+old artifact/history; inspect before/mid/after and clogged state at 390/768/1280;
+check keyboard, reduced motion and media/static parity. Record three critique rounds
+in the friction log. Engineering, factual review, craft and learner evidence stay
+separate. Owner release and five-beginner trial remain pending.
+
+The new candidate uses verified primary page text from Dyson's vacuum FAQ (How do
+vacuums work?), Dyson's filtration history (It started with a cyclone), and Miele's
+motor/floorhead/airflow explanation. The old Kinia retrieval gap is retained as
+history; the candidate does not depend on the inaccessible PDF. The final transfer
+now changes a different part: a clear bag plus a kinked-shut hose. Score 2 requires
+connecting the restricted hose to loss of throughflow and dirt transport despite
+motor rotation. Blockage consequences remain qualitative mechanics inferences.
+
+### Candidate and evidence, end of this iteration
+
+`bagged-vacuum-ce-5` is the final review candidate. Intermediate CE-2/3/4 records
+and media remain immutable in isolated staging; production lessons/private chats
+are untouched. The artwork set and safe poses remain shared across the interactive,
+static and video paths. Base narration describes the clear path; clogging is a
+separately sourced qualitative scenario. Video returns to the full machine before
+transfer. Native computer speech and deterministic rendering used no paid model.
+
+Observed engineering: 169 backend tests including three real disposable Postgres
+checks; 87.66% coverage; strict Python/TypeScript, lint, ten JS checks and web build.
+An actual-font text-fit regression prevents the observed video clipping. See the
+friction log for three critique rounds and explicitly limited browser evidence.
+Technical source inspection used the cited primary pages, not an independent
+technical reviewer. Owner actual-phone review, VoiceOver and uncoached learner
+results remain pending. This candidate does not release other generated concepts.

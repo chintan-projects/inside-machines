@@ -22,6 +22,21 @@ rounded:
 
 # Inside design direction
 
+## Active local studio interface · 2026-10-20
+
+The owner has selected Claude + Anatomy for visual production; see ADR 0005.
+The next review targets the interface, following `design/lessons/studio-interface.md`.
+Use the system type direction above, a white page (#FFFFFF), cool stage (#F4F6F8),
+ink (#182431), muted text (#596675), line (#DDE3E8), and blue action (#225BDF).
+White leaves the artwork dominant; the cool stage establishes its boundary;
+ink/muted separate explanation from context; blue identifies action/selection,
+never factual certification. Minimum body 16px; headings 24–34px with tighter
+tracking. Controls use 8px radius; the visual stage 14px; no universal pills or
+button shadows. Every control has a 44px minimum target and visible keyboard focus.
+The distinctive composition is a large stage, attached explanation and adjacent
+experiments, with a quiet desktop path rail and compact phone selector. Real
+device/taste/learning decisions remain pending; this does not restyle production.
+
 ## Concept explanation contract
 
 [ADR 0001](docs/architecture-decisions/0001-concept-explanation.md) and the
@@ -92,3 +107,23 @@ roughly 4:3; mobile uses a separate stacked arrangement with its next action clo
 Genericness check: a neutral dashboard with a larger SVG would repeat the rejected
 solution. The distinctive move is the room experiment changing the same physical
 scene and its energy outcome, with a six-action story supplying the orientation.
+
+### 2026-10-19 vacuum rejection: a focused workbench
+
+The owner's phone screenshot rejected the small box-like locator and oversized
+control stack. The causal detail now comes first, with one adjacent action and a
+secondary expandable whole-system locator. The last step opens the whole-system
+locator to reconnect the parts. This shared structure applies to other domains.
+
+White (#FFFFFF) keeps attention on the object. A cool inspection surface (#F6F9FC)
+distinguishes the cut face from the page. Graphite (#202D3B) carries explanation;
+blue (#2676DF) marks directional airflow and brown (#C5823C) marks retained dirt,
+with arrow versus particle shape so color is never the only signal. Blue controls
+(#225BDF) identify the single next action. This replaces the rejected cream/sage
+stack; changing color alone is not the craft improvement.
+
+Trusted, original section artwork supplies curved shells, recesses, material
+shading, couplings, fins, screws and texture on real surfaces. The lesson still
+owns the same safe poses, paths, labels and qualitative outcomes. The asset set is
+SHA-bound to the new revision; historical drawings/videos retain their identity.
+The generic player does not gain vacuum-specific interaction rules.

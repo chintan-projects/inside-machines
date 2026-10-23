@@ -65,3 +65,14 @@ def test_unsafe_settings_rejected(settings: Settings, field: str, value: float) 
     values = settings.__dict__ | {field: value}
     with pytest.raises(ValueError):
         Settings(**values)
+
+
+def test_claude_output_allowance_covers_twenty_thousand_but_rejects_overrun(settings: Settings) -> None:
+    """More output must fit the existing reservation, including worst-case input/cache cost."""
+    for tokens in (20000, 20361):
+        configured = replace(settings, authoring_provider="anthropic", max_output_tokens=tokens)
+        assert configured.text_phase_reserve == .65 and configured.generation_reserve == 2
+    # The next integer token crosses .65 with the documented conservative input
+    # and protocol headroom. A larger configured cap must fail before dispatch.
+    with pytest.raises(ValueError, match="Text allowance cannot cover"):
+        replace(settings, authoring_provider="anthropic", max_output_tokens=20362)

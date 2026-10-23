@@ -3,6 +3,7 @@
 import hashlib
 import json
 import subprocess
+from html import escape
 from typing import cast
 
 import pytest
@@ -14,6 +15,7 @@ from backend.contracts import AuthorLessonSpec, LessonSpec
 from backend.evaluation import HumanRatings, cases, comparison, packet
 from backend.quality import learning_issues, require_learning_quality
 from backend.renderer_assets import authored_context
+from backend.section_assets import section_asset
 from backend.starters import digest_spec
 from backend.store import Database, Store
 from backend.teaching_contracts import Change, Pose
@@ -63,8 +65,13 @@ def test_authored_paths_have_real_changes_and_transfer() -> None:
             assert teaching_at(spec, at + stage.duration * 0.9)[1] == 1
             assert graphic_scene(spec, at) != graphic_scene(spec, at + stage.duration * 0.9)
             svg = teaching_svg(spec, at + stage.duration * 0.9)
-            assert stage.title in svg and "data-graphic=" in svg
-        end = sum(s.duration for s in spec.stages) - 1
+            assert escape(stage.title) in svg
+            if spec.teaching.renderer == "authored-sections-v1" and i == len(spec.stages) - 1:
+                assert section_asset(spec, -1)[0] in svg
+            else:
+                assert "data-graphic=" in svg
+        compared = next(b.stage for b in spec.teaching.beats if b.id == spec.teaching.scenarios[0].beat)
+        end = sum(s.duration for s in spec.stages[:compared]) + spec.stages[compared].duration * .9
         assert teaching_svg(spec, end, spec.teaching.scenarios[0].id) != teaching_svg(
             spec, end, spec.teaching.scenarios[1].id
         )

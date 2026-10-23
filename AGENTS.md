@@ -67,7 +67,10 @@ suite when modifying transactions. Run `npm run build` for frontend changes and
 the Linux deployment packaging verifier for deployment changes. Record skipped
 external checks honestly. Keep `PROGRESS.yaml` below 50 lines.
 
-Secrets, local data, screenshots and generated artifacts stay ignored. Git pushes
+Secrets, local data, raw screenshots and generated artifacts stay ignored. The
+owner explicitly authorizes sanitized public README screenshots under
+`docs/images/readme/`; exclude conversations, credentials and private owner data.
+Git pushes
 on the linked main branch may trigger Vercel builds; verify readiness first and
 report deployment failures rather than implying a successful release.
 
@@ -87,14 +90,45 @@ pending GitHub login connection. A CLI deployment does not prove Git automation
 is connected. Preserve data, environment configuration and protection; granting
 viewer access or changing the work account's email does not transfer ownership.
 
+The owner's 2026-10-22 public-app request overrides the earlier production
+Vercel-login restriction. Production links must open without Vercel sign-in,
+invite codes or bypass headers. Preview deployment protection may remain when
+it does not gate production. Preserve application owner authorization, private
+storage and server credentials; public browsing does not make administration public.
+
 ## Learning publication contract
 
+The owner explicitly requested a public, no-login app on 2026-10-22. Public
+browsing and per-browser anonymous sessions must preserve private conversations
+and authenticated owner operations. Native review drafts may be exposed only by
+an explicit artifact-bound public-preview operation under ADR 0008; exposure does
+not pass human quality gates, activate replacements or send release notifications.
+Keep review labels and reject stale or revoked preview bindings. Do not restore
+visitor invite requirements when public access is configured.
+
 Concept reuse follows [ADR 0003](docs/architecture-decisions/0003-extensible-concept-lessons.md).
+Progressive depth follows [ADR 0004](docs/architecture-decisions/0004-progressive-learning-paths.md):
+complete the core causal spine before optional branches. Share the versioned path,
+navigator, node-authoring context and player; keep truthful domain rules/adapters
+specific. Local query lookup is not arbitrary AI generation. Never claim a new
+production endpoint or automatic quality from a portable schema alone.
+Visual production and interface work follow [ADR 0005](docs/architecture-decisions/0005-visual-production-and-interface.md):
+Claude + Anatomy is the owner-selected visual direction. Keep ordinary interface
+iterations focused on the shared design brief, tokens and rendered user journeys;
+do not reopen engine comparisons or silently change task/provider routes.
 Keep the lesson/player/media/provider/budget engine shared across appliances, GPUs,
 LLMs and later domains. Specialize trusted concept guidance and pure domain rules;
 do not force logical computations into physical cutaways or fork the player per
 topic. New guides, schema coverage and passing engineering tests do not establish
 domain quality or release a new lesson. Preserve old public schemas/artifact hashes.
+
+Curated requests and library publication follow
+[ADR 0006](docs/architecture-decisions/0006-curated-library-and-interest.md).
+Member requests never dispatch paid authoring. Owner builds, artifact-bound review,
+path composition and release notifications are explicit separate operations.
+An attached path must retain its graph and exact node hashes; previous core approval
+cannot approve a changed bundle. Never label locally authored seeds as measured AI
+generation costs or pass a source-led schematic off as accepted Anatomy craft.
 
 Before changing lesson content, authoring/review prompts, mechanism state,
 renderers or assessments, read and follow

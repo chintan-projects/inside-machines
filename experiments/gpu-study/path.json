@@ -1,0 +1,13 @@
+{
+  "schema_version": "learning-path-1",
+  "id": "gpu-foundations-s3",
+  "title": "How does a GPU work?",
+  "example": "Follow eight pixel values from a program's instruction to a changed picture, then explore why work waits and how matrix outputs are computed.",
+  "entry": "core",
+  "nodes": [
+    {"id":"core","role":"core","label":"The complete picture","question":"What does a GPU actually do?","outcome":"Trace a program's instruction and input data through calculations to a useful output.","lesson_id":"gpu-core-s3","prerequisites":[],"next":["parallel","memory","matrix"],"queries":["start","core explanation","what does a GPU do","how does a GPU work","big picture","overview"]},
+    {"id":"parallel","role":"insight","label":"Working in parallel","question":"How can many calculations happen together?","outcome":"Explain why independent jobs can proceed together, while a dependent job must wait.","lesson_id":"gpu-study-1","prerequisites":["core"],"next":["memory","matrix"],"queries":["insight","parallel","many calculations","independent jobs","dependencies","more lanes","why not always faster"]},
+    {"id":"memory","role":"insight","label":"When data has to wait","question":"What if the chip has room, but the data is not ready?","outcome":"Distinguish available calculation slots from the rate at which useful inputs become ready.","lesson_id":"gpu-memory-s3","prerequisites":["core"],"next":["matrix"],"queries":["memory","bottleneck","data movement","data supply","inputs ready","why does work wait","bandwidth"]},
+    {"id":"matrix","role":"model","label":"Matrix multiplication","question":"How do small calculations become a matrix multiplication?","outcome":"Compute an output from a row and a column, then predict which outputs change with one changed weight.","lesson_id":"gpu-matrix-s3","prerequisites":["core"],"next":[],"queries":["model","math","matrix","matrices","multiply","AI","neural network","weights","why useful for AI"]}
+  ]
+}

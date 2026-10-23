@@ -1,7 +1,9 @@
 # GPU concept iteration worksheet
 
-Status: planned lesson; shared-engine authoring support implemented locally for
-review. No GPU scene, narration, paid provider evaluation or release is claimed.
+Status: production catalog lesson planned; local standalone GPU-S1 implemented
+for review on 2026-10-19. The original planning iteration below is retained as
+history; see the new local-study record at the end. No narrated catalog release
+or controlled provider evaluation is claimed.
 Follow ADRs 0001/0003 and CE-01–18. Candidate generic topic ID: `gpu`.
 
 ## Identity, hypothesis and scope
@@ -80,3 +82,62 @@ new GPU artifact/runtime evidence missing. CE-15–17: existing privacy/review/b
 controls reused; no new human pass or paid evaluation. Current Vercel migration
 hold remains. Next consequential test: does a real GPU scene show dependencies
 clearly without making its illustrative lanes look like measured hardware?
+
+## Local GPU-S1: a second crafted concept
+
+The owner chose GPU after positive craft feedback on the local vacuum trial.
+[The study brief](../../experiments/gpu-study/BRIEF.md) fills the new worksheet,
+claim ledger, falsifiable hypothesis and transfer rubric. The pure toy scheduler
+has eight equal add-one jobs with independent or chained inputs, one/four lanes,
+and an input hold. Arithmetic/readiness/rounds are computed; there are no invented
+GPU core counts, clocks or benchmark claims. Nine gray levels illustrate toy
+brightness, not calibrated luminance. Sources were checked in the current NVIDIA
+programming guide §§1.2.1–1.2.3; its CUDA scope remains explicit.
+
+The shared local studio owns playback/seek/reset, controls, anchored HTML labels,
+optional assessments, source disclosure, responsive viewports and restricted
+single-HTML packaging. GPU owns its rules, storyboard and reviewed drawing adapter.
+Claude Sonnet authored base board/logical art; Codex authored the scheduler/player,
+teaching data and disclosed art repairs. This is one reviewed local code-authoring
+spike, not executable model output accepted by the production lesson runtime.
+The earlier vacuum HTML is unchanged and has not been ported into this new shell.
+
+CE-01–13/15–17 have planning/domain/browser evidence for GPU-S1. CE-14 has desktop
+viewport, keyboard, reduced-motion and loaded-offline evidence, not real-device
+or VoiceOver acceptance. CE-18 remains incomplete: there is no narrated MP4 for
+this trial. No `backend.quality`/publication result is claimed for a non-LessonSpec
+artifact. Engineering tests, source inspection and craft feedback do not certify
+GPU hardware accuracy or learning. Exact results and limitations live in the
+[journal](../../journal/2026-10-19-gpu-study.md).
+
+## Local GPU-S2: missing sound correction
+
+Owner reported missing audio. GPU-S1 was silent; the omission was in the artifact,
+not a diagnosed device problem. The brief adds a bounded CE-08/11/14/18 iteration
+before writing the script. One eight-cue plan now drives embedded local computer
+speech, captions and reviewed reduced-motion stills. The media clock drives the
+tour; changing any experiment stops the voice before its fixed script can disagree
+with the scenario. Watch/listen, pause/resume, seek, replay, reset and mute are
+explicit. Browser playback, loaded-offline use, failure UI and interruption are
+observed; audio content is non-silent and hash-bound. Actual phone/speaker and
+beginner learning checks remain pending. This supplies narrated HTML, not MP4
+parity or production publication. Preserve GPU-S1's silent artifact and evidence.
+
+## Local GPU-S3: complete core and optional depth
+
+The owner accepted the product teardown and requested implementation. The new
+[depth worksheet](gpu-depth.md) defines the causal spine, G5–G8 claims, hypothesis,
+transfer rubric, representation and separate review gates before code. The core
+now traces a program request through memory, calculation and stored pixel results.
+Optional insight, data-supply and matrix paths retain their own honest scope.
+The matrix reuses the original add-one picture's first four results, rearranged
+into two rows; its example weights are not a real model. Data-supply comparison
+explicitly resets the same inputs between runs.
+
+A portable `learning-path-1` envelope, shared navigator/player, planner and node
+prompt context replace a hand-wired sequence. Actual rules and trusted scene
+adapters remain concept-specific. Unknown questions do not fabricate an AI answer.
+Returning restores a paused scene; narration, captions and static poses share each
+node's cue plan. This is authored local HTML, not automatic API generation or
+catalog release. Results and artifact identities are in the S3 journal; independent
+truth, owner actual-device, beginner learning and release decisions remain pending.

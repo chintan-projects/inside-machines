@@ -1,150 +1,147 @@
-# Inside — how everyday machines work
+# Inside Machines
 
-A family-alpha web app with a growing shared library, interactive cutaways, narrated videos,
-feedback and private follow-up chat. Web first, installable PWA next, with a versioned API and
-lesson contract for future iOS and Android clients.
+Interactive explanations for curious people: see the parts, follow the mechanism,
+change one thing and discover why the result changes.
 
-## Current state
+**[Open the live app →](https://inside-machines-alpha.vercel.app)**
 
-The React interface and FastAPI backend are connected locally. Three authored starter lessons
-cover a front-load washer, electric pressure cooker and split-system air conditioner. Each has
-selectable parts, stage playback, included questions, sources, assumptions and a narrated MP4.
-The washer also includes a small force-balance experiment with an illustrative speed control.
+No account, invite code or customer API key is required. Start with an everyday
+machine or a computing concept, then follow your curiosity into a deeper explanation.
 
-Family members can save a lesson and its video offline, filter saved lessons and restore their
-playback position. Feedback records the lesson version and current stage. Private chat is stored
-separately from the shared artifact. The owner report shows demand, reuse, feedback, jobs and a
-cost ledger without conversation text.
+![A refrigerator explanation with connected Anatomy artwork, component labels and adjacent experiments](docs/images/readme/refrigerator-desktop.jpg)
 
-**Not yet a completed release:** the personal Vercel project is deployed behind Vercel
-Authentication. Neon is connected, three starter lessons are imported, private video delivery
-and a live AI chat have passed. A $50 app-AI budget is configured; hosting/storage are separate.
-A complete live generation and shared reuse passed; human/device review remains pending. No test fixture is
-presented as live AI output. Native apps and exact-model manual ingestion are later releases.
+## Explore
 
-See [BUILD-PLAN.md](docs/BUILD-PLAN.md) for the current scope and completion evidence.
-The [release audit](docs/RELEASE-AUDIT.md) distinguishes implemented behavior from unverified hosted requirements.
-The [first live benchmark](docs/LIVE-BENCHMARK.md) records a complete $0.235 generation, estimated speech, earlier failures and latency.
+- **[How does a refrigerator keep food cold?](https://inside-machines-alpha.vercel.app/#/lesson/refrigerator-r2-core)**
+  Follow the heat, inspect the working compressor, then explore why the back is
+  warm and how a cold liquid can boil.
+- **[Why can GPU work wait for its inputs?](https://inside-machines-alpha.vercel.app/#/lesson/gpu-memory-native-r1)**
+  Change data availability and watch which calculations can actually proceed.
+- **[Browse the library](https://inside-machines-alpha.vercel.app)**
+  Twenty everyday-system scopes include cars, microwaves, washers, vacuum cleaners,
+  air conditioners, pressure cookers, fans, water heaters and kitchen plumbing.
+
+Watch with narration or explore silently. Make a prediction, try a comparison,
+ask a follow-up, leave feedback or save a complete path offline. Missing-subject
+requests collect interest; they do not start paid generation.
+
+<p>
+  <img src="docs/images/readme/refrigerator-phone.jpg" width="320" alt="The public refrigerator lesson on a phone with readable labels and prominent playback">
+  <img src="docs/images/readme/gpu-insight.jpg" width="650" alt="GPU input availability and the calculations it permits">
+</p>
+
+## Status
+
+The web/PWA framework is implemented: shared playback, progressive depth,
+narration/captions, experiments, offline paths, feedback, private browser
+conversations, topic requests and owner production/review tools.
+
+This is a **public learning preview**. The source-authored refrigerator and GPU
+examples demonstrate the native production path. Sixteen older schematic cores
+still need the same level of visual craft. Independent technical review,
+actual-device accessibility and beginner teach-back/transfer studies are
+unfinished. Engineering tests do not certify these outcomes.
+
+Public preview permission is separate from quality acceptance. Draft labels remain
+visible; no human review result is invented to make an explanation accessible.
+See the [quality bar](docs/QUALITY-BAR.md) and [current progress](PROGRESS.yaml).
+
+## How it works
+
+A complete causal story comes first; optional insight and model views follow.
+Physical machines use connected parts; computation uses actual data and operations.
+Both share the same player and versioned contracts.
+
+The selected visual direction is **Claude + [Anatomy](https://github.com/wheresryan22/anatomy)**.
+Trusted source modules supply artwork, narration cues and video checkpoints.
+A finite registry binds exact source, lesson and media identities. Visitors cannot
+supply executable artwork, and earlier revisions remain readable.
+
+Playback does not call a model. Local exports can use computer narration without
+a paid API call. Optional live chat uses server-side credentials and a spending
+cap. Owner AI production has explicit reservations, checkpoints and usage receipts;
+there is no automatic paid retry or provider fallback.
+
+OpenAI and Anthropic adapters use the shared model gateway. Research, authoring,
+editorial review, chat and speech are separately routed. The native Claude/Anatomy
+workflow and older structured schematic pipeline are distinct production formats.
+
+| Location | Purpose |
+| --- | --- |
+| `web/studio/` | Shared player, depth navigation, narration clock and design tokens |
+| `backend/` | API, sessions, discussions, requests, budgets and review rules |
+| `native/` | Trusted registry, source verification and artifact export |
+| `experiments/refrigerator-study/r2/` | Physical artwork and semantic lesson metadata |
+| `docs/` and `design/lessons/` | Product decisions, claim ledgers and teaching rubrics |
 
 ## Run locally
 
-Use Node 24 and Python 3.13. Preserve existing `.env.local` entries when adding settings from
-[.env.example](.env.example). Use distinct random invite, owner and session values; keep the
-provider key on the server. A zero budget keeps paid generation disabled.
+Use Node 24 and Python 3.13. Anatomy and the shared runtime are included as pinned
+or vendored dependencies; the author's private workspace is not required.
 
 ```sh
+git clone --recurse-submodules https://github.com/chintan-projects/inside-machines.git
+cd inside-machines
 uv venv .venv --python 3.13
 uv pip install --python .venv/bin/python -r requirements.txt
 npm ci
+cp -n .env.example .env.local
+```
+
+Set `INSIDE_PUBLIC_ACCESS=true` and unique random `INSIDE_SESSION_SECRET` and
+`INSIDE_OWNER_CODE` values in `.env.local`. Keep the owner code private and
+`INSIDE_BUDGET_USD=0` to disable paid calls. Preserve an existing environment file.
+Provider keys belong on the server, never in `VITE_` variables.
+
+```sh
 npm run build
-# On macOS: render the authored starters with local computer speech, no paid AI calls.
+# macOS: prepare three local starters with computer narration.
 .venv/bin/python -m backend.seed
 npm start
 ```
 
-Open [http://127.0.0.1:8000](http://127.0.0.1:8000). For frontend development, keep the API
-running and use `npm run dev` on port 5173. It proxies `/api` to port 8000.
+Open [localhost:8000](http://127.0.0.1:8000). For frontend development,
+`npm run dev` serves port 5173 and proxies the API to port 8000. SQLite is used locally;
+production uses Postgres and private Blob storage. A fresh clone contains neither
+the production database nor generated videos or anyone's conversations.
 
-Local development uses `.data/inside.sqlite3` and explicitly non-durable in-process jobs.
-Production refuses to start without durable Postgres, private Blob storage and session settings.
-Hosted model calls go through the actual workspace model gateway, using a hosted adapter.
-Vendored workspace config, logging and checkpoint services remain unmodified.
+See [native production](docs/NATIVE-VISUAL-PRODUCTION.md) for source-authored
+exports and explicit preview/release operations. Native iOS/Android clients are
+not implemented; the versioned API and artifacts support that future work.
 
-## Verification
+## Verify changes
+
+Install the developer tools (`ruff`, `mypy`, `pytest`, `pytest-asyncio`,
+`pytest-cov`, `types-PyYAML` and `types-Pillow`) in the same Python environment.
 
 ```sh
-npm run build
+.venv/bin/ruff check backend main.py tests
+.venv/bin/mypy --strict backend main.py tests/backend
+.venv/bin/pytest --cov=backend --cov-fail-under=80
+npm run check:types
 npm run lint
 npm test
-.venv/bin/ruff check backend tests/backend main.py
-.venv/bin/mypy --strict backend tests/backend main.py
-.venv/bin/pytest --cov=backend --cov-fail-under=80
+npm run build
 ```
 
-Backend test tools: pytest, pytest-asyncio, pytest-cov, mypy, ruff, types-PyYAML and types-Pillow.
-Tests exercise real SQLite transactions and real MP4 encoding with explicitly synthetic provider
-and audio fixtures. An optional Postgres regression test is restricted to a disposable database
-on loopback port 55432; see [VERIFICATION.md](docs/VERIFICATION.md).
+The build checks native source/spec identities and Vercel upload traversal.
+Transactional changes use disposable Postgres regressions. Deployment checks
+cover Linux dependencies, private-input exclusions, the durable queue and CDN/
+offline assets. See [verification](docs/VERIFICATION.md).
 
-Vercel CLI 53 does not package the newer Python subscriber declarations. Deployment tooling is
-pinned to CLI 64.5.0 in the Linux verification image, separately from application dependencies.
-Do not upload an unchecked local prebuilt bundle. The source allowlist and bundle verifier check
-that credentials, local data and test media are excluded and a real queue consumer exists.
+## Guides and credits
 
-```sh
-node scripts/prepare-build-check.mjs
-# Run the documented Linux verification container, then:
-node scripts/check-deployment-output.mjs
-```
+- [Concept explanation spec](docs/CONCEPT-EXPLANATION-SPEC.md) and
+  [iteration worksheet](docs/templates/lesson-iteration.md): visual reasoning,
+  plain causal language, predictions and transfer checks.
+- [Native artifacts](docs/architecture-decisions/0007-native-visual-artifacts.md),
+  [curated requests](docs/architecture-decisions/0006-curated-library-and-interest.md)
+  and [progressive paths](docs/architecture-decisions/0004-progressive-learning-paths.md).
+- [PRD](docs/PRD.md), [mobile path](docs/MOBILE-PATH.md) and
+  [Claude authoring](docs/CLAUDE-AUTHORING.md).
 
-The build-time `VERCEL_FASTAPI_STATIC_CDN=1` setting is required so the built shell and its
-versioned service worker reach the CDN. The app shell is public; protected data lives under
-`/api/v1`, which the service worker never caches. Only explicit lesson downloads enter IndexedDB.
-Signing out clears downloaded lessons, progress and local conversation references.
-
-Authored starter deployment is separate from local rendering:
-
-```sh
-.venv/bin/python -m backend.starters prepare
-# Only after configuring the intended managed DATABASE_URL:
-.venv/bin/python -m backend.starters import
-```
-
-Preparation uploads and verifies only the three authored videos. Import preserves existing lessons
-and does not copy local users, chats, feedback or analytics. The manifest and production access
-material stay in the ignored `.vercel/` directory; never publish those files.
-
-## Cost and integrity
-
-Lookup and pending-job deduplication happen before generation. Admissions reserve budget
-atomically; each author/review/speech result is saved with its receipt before advancing.
-Interrupted calls with unknown billing retain their allowance rather than silently paying again.
-Publication requires validated lesson data and a completed narrated video. An automated editorial
-check is not factual verification. Scenes are bounded data, never executable generated code.
-
-Speech costs are estimates; token costs use configured rates. Provider invoices and provider-side
-limits remain the authority for actual charges. Hosting/compute charges need separate accounting.
-No measured live cost-per-machine benchmark exists yet.
-
-## Product and research
-
-- [Accepted concept-explanation ADR](docs/architecture-decisions/0001-concept-explanation.md),
-  [teaching/build spec](docs/CONCEPT-EXPLANATION-SPEC.md),
-  [lesson iteration worksheet](docs/templates/lesson-iteration.md) and
-  [next AC benchmark spec](design/lessons/air-conditioner.md). These make Grant,
-  Feynman, Veritasium and Anatomy explicit build/review anchors; implementation
-  and human learning acceptance remain incomplete.
-- [PRD](docs/PRD.md), [current build plan](docs/BUILD-PLAN.md), [verification](docs/VERIFICATION.md)
-- [Technical mobile path](docs/MOBILE-PATH.md)
-- [Market research](docs/MARKET-RESEARCH.md), [iOS/business model](docs/IOS-AND-BUSINESS-MODEL.md)
-- [Cost scenarios](docs/COST-TABLES.md), [repo/article research](RESEARCH.md)
-- [Brief](BRIEF.md), [design direction](DESIGN.md), [friction log](design/friction-log.md)
-
-The original Anatomy-based visual lab remains separate: `npm run build:lab`, then
-`npm run start:lab` on port 4173. It builds into `dist-lab/`. Upstream is unchanged, pinned to
-`1482e8469b0a9e0d8cc18ea2740a01423d29ae80`, with its MIT license retained in `vendor/anatomy/`.
-
-## Engineering and provider routing
-
-[AGENTS.md](AGENTS.md) records the project engineering contract. Shared gateway
-access remains mandatory. `backend/routing.py` provides typed provider plugins and
-explicit authoring, review, chat and speech routes. `configure_gateway` accepts a
-validated registry at trusted startup composition; the default routes use the
-existing OpenAI adapter and configured text/speech models. Neither clients nor
-lesson prompts select provider endpoints.
-
-Provider additions must supply task capabilities, protocol translation, usage
-receipts, validated rates/reservations and adapter contract tests. Default
-credential readiness and prices currently cover OpenAI only. Claude and open-model
-adapters, runtime provider selection, and comparative quality evaluations are not
-implemented. No automatic paid fallback is configured.
-
-The October 19 craft revision and current family-release hold are documented in
-[the learning quality bar](docs/QUALITY-BAR.md). The new AC benchmark does not
-certify the other catalog lessons or generic generation quality.
-
-The latest [AC studio redesign](design/visual-learning-teardown.md) replaces the
-rejected panel-heavy presentation with an isometric guide and an enclosure
-experiment. The live drawing reuses the existing media’s audio; standalone MP4
-rendering still uses the earlier schematic. Other machines retain their existing
-renderers until separately improved and reviewed.
+Anatomy is pinned to `1482e8469b0a9e0d8cc18ea2740a01423d29ae80`; its
+[MIT notice](vendor/anatomy/LICENSE) is preserved and shipped with the app.
+The bundled Inter font retains its [OFL notice](public/fonts/OFL.txt).
+Grant Sanderson, Richard Feynman and Veritasium inform the explanation practices;
+no endorsement is implied.

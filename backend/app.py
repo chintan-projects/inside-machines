@@ -1,5 +1,6 @@
 """Versioned family-alpha API shared by the web, PWA, and future native clients."""
 
+import hashlib
 import json
 import re
 import time
@@ -15,15 +16,16 @@ from vercel.headers import set_headers
 from .assets import Assets
 from .auth import COOKIE, Auth
 from .chat import Chats, Conversation
-from .contracts import LessonSpec
 from .domain import Domain, User
 from .editorial import editorial_notes
 from .learning_reviews import review_state
 from .pipeline import Enqueue
 from .provider import configure_gateway
+from .public_preview import PreviewSubmission, PublicPreviews, public_preview_identity
 from .quality import learning_issues
 from .settings import Settings, load_settings
 from .store import Database, Store
+from .stored_lessons import native_visible, parse_stored_spec
 from .teaching_routes import register_teaching_routes
 
 
@@ -94,7 +96,8 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
     """Create an isolated application; production requires durable storage and auth."""
     config = settings or load_settings()
     if config.production and not all(
-        (config.database_url, config.blob_token, config.session_secret, config.invite_code, config.owner_code)
+        (config.database_url, config.blob_token, config.session_secret, config.owner_code,
+         config.public_access or config.invite_code)
     ):
         raise RuntimeError(
             "Production requires durable database, private assets, and family/owner session configuration"
@@ -143,24 +146,42 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
 
     Member = Annotated[User, Depends(member)]
 
+    def reader(token: Annotated[str | None, Cookie(alias=COOKIE)] = None) -> User:
+        return auth.reader(token)
+
+    Reader = Annotated[User, Depends(reader)]
+
+    def client_address(request: Request) -> str:
+        address = request.headers.get("x-real-ip", "") if config.production else ""
+        return address or (request.client.host if request.client else "unknown")
+
+    def set_session(response: Response, token: str) -> None:
+        response.set_cookie(COOKIE, token, max_age=config.session_days * 86400,
+                            secure=config.production, httponly=True, samesite="strict", path="/")
+
+    def owned_job(job_id: str, user: User) -> dict[str, object]:
+        raw = store.snapshot().jobs.get(job_id)
+        if not raw or (not user.owner and raw.get("user_id") != user.id):
+            raise HTTPException(404, "Explanation request not found")
+        return domain.job(job_id)
+
     @app.get("/api/v1/health")
     def health() -> dict[str, object]:
-        return {"ok": True, "version": 1, "generation_enabled": config.generation_enabled}
+        return {"ok": True, "version": 1, "generation_enabled": config.generation_enabled,
+                "public_access": config.public_access}
 
     @app.post("/api/v1/auth/login")
     def login(body: LoginBody, request: Request, response: Response) -> User:
-        address = request.headers.get("x-real-ip", "") if config.production else ""
-        address = address or (request.client.host if request.client else "unknown")
-        user, token = auth.login(body.name, body.code, address)
-        response.set_cookie(
-            COOKIE,
-            token,
-            max_age=config.session_days * 86400,
-            secure=config.production,
-            httponly=True,
-            samesite="strict",
-            path="/",
-        )
+        user, token = auth.login(body.name, body.code, client_address(request))
+        set_session(response, token)
+        return user
+
+    @app.post("/api/v1/auth/guest")
+    def guest(request: Request, response: Response,
+              token: Annotated[str | None, Cookie(alias=COOKIE)] = None) -> User:
+        user, fresh = auth.guest(token, client_address(request))
+        if fresh:
+            set_session(response, fresh)
         return user
 
     @app.get("/api/v1/auth/me")
@@ -176,29 +197,31 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
         return {"ok": True}
 
     @app.get("/api/v1/lessons")
-    def catalog(user: Member) -> list[dict[str, object]]:
-        return domain.catalog()
+    def catalog(user: Reader) -> list[dict[str, object]]:
+        return domain.catalog(include_depth=user.owner, include_native_drafts=user.owner)
 
     @app.get("/api/v1/lessons/{lesson_id}")
-    def lesson(lesson_id: str, user: Member) -> dict[str, object]:
+    def lesson(lesson_id: str, user: Reader) -> dict[str, object]:
         def read(db: Database) -> dict[str, object]:
             record = db.lessons.get(lesson_id)
-            if not record:
+            if not record or not native_visible(db, lesson_id, user.owner):
                 raise HTTPException(404, "Explanation not found")
-            record["views"] = int(str(record.get("views", 0))) + 1
-            domain.event(db, "lesson_opened", user, lesson_id=lesson_id)
+            if user.id:
+                record["views"] = int(str(record.get("views", 0))) + 1
+                domain.event(db, "lesson_opened", user, lesson_id=lesson_id)
             return {
                 "id": lesson_id,
                 "spec": record["spec"],
                 "quality": record.get("quality", "generated"),
+                "public_preview": public_preview_identity(db, lesson_id),
                 "superseded_by": record.get("superseded_by"),
-                "review_needed": bool(learning_issues(LessonSpec.model_validate(record["spec"])))
+                "review_needed": bool(learning_issues(parse_stored_spec(record["spec"])))
                 or not review_state(db, lesson_id)["ready"],
                 "video_ready": bool(record.get("video")),
-                "feedback": db.feedback.get(f"{user.id}:{lesson_id}"),
+                "feedback": db.feedback.get(f"{user.id}:{lesson_id}") if user.id else None,
             }
 
-        return store.transaction(read)
+        return store.transaction(read, write=bool(user.id))
 
     @app.post("/api/v1/requests")
     async def request_lesson(body: RequestBody, user: Member) -> dict[str, object]:
@@ -209,15 +232,12 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
                 "message": "This alpha explains general concepts. Choose Understand the principles for a clearly labelled general lesson. Exact-model documentation is planned; we won't invent specifications or internals for a particular model.",
                 "model": body.model,
             }
-        result = domain.request(body.question, user)
-        if result["kind"] == "job":
-            job = domain.job(str(result["job_id"]))
-            await dispatch(str(job["id"]), str(job["phase"]))
-        return result
+        from .interests import Interests
+        return Interests(store, config).request(body.question, user)
 
     @app.get("/api/v1/jobs/{job_id}")
     def job(job_id: str, user: Member) -> dict[str, object]:
-        return domain.job(job_id)
+        return owned_job(job_id, user)
 
     @app.post("/api/v1/owner/lessons/{lesson_id}/revise")
     async def revise(lesson_id: str, body: RevisionBody, user: Member) -> dict[str, object]:
@@ -226,7 +246,7 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
         parent = store.snapshot().lessons.get(lesson_id)
         if not parent:
             raise HTTPException(404, "Lesson not found")
-        spec = LessonSpec.model_validate(parent["spec"])
+        spec = parse_stored_spec(parent["spec"])
         result = domain.request(spec.question, user, revision_of=lesson_id, operation=body.operation)
         if result["kind"] == "job":
             current = domain.job(str(result["job_id"]))
@@ -235,7 +255,7 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
 
     @app.get("/api/v1/jobs/{job_id}/events")
     async def progress(job_id: str, request: Request, user: Member) -> StreamingResponse:
-        domain.job(job_id)
+        owned_job(job_id, user)
 
         async def events() -> AsyncIterator[str]:
             import asyncio
@@ -244,7 +264,7 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
             for _ in range(110):
                 if await request.is_disconnected():
                     return
-                current = domain.job(job_id)
+                current = owned_job(job_id, user)
                 payload = json.dumps(current)
                 if payload != previous:
                     yield f"event: progress\ndata: {payload}\n\n"
@@ -263,19 +283,23 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
         return {"ok": True}
 
     @app.get("/api/v1/lessons/{lesson_id}/video")
-    async def video(lesson_id: str, request: Request, user: Member) -> Response:
-        record = store.snapshot().lessons.get(lesson_id)
-        if not record or not record.get("video"):
+    async def video(lesson_id: str, request: Request, user: Reader) -> Response:
+        state = store.snapshot()
+        record = state.lessons.get(lesson_id)
+        if not record or not record.get("video") or not native_visible(state, lesson_id, user.owner):
             raise HTTPException(404, "Narrated video isn't available yet")
         data = await assets.read(str(record["video"]))
+        if parse_stored_spec(record["spec"]).version == 3 and hashlib.sha256(data).hexdigest() != record.get("video_sha256"):
+            raise HTTPException(404, "The narrated artifact no longer matches this revision")
         return video_response(data, request.headers.get("range"))
 
     @app.get("/api/v1/lessons/{lesson_id}/captions")
-    def captions(lesson_id: str, user: Member) -> Response:
-        record = store.snapshot().lessons.get(lesson_id)
-        if not record:
+    def captions(lesson_id: str, user: Reader) -> Response:
+        state = store.snapshot()
+        record = state.lessons.get(lesson_id)
+        if not record or not native_visible(state, lesson_id, user.owner):
             raise HTTPException(404, "Explanation not found")
-        spec = LessonSpec.model_validate(record["spec"])
+        spec = parse_stored_spec(record["spec"])
 
         def timestamp(seconds: float) -> str:
             milliseconds = round(seconds * 1000)
@@ -342,5 +366,15 @@ def create_app(settings: Settings | None = None, *, enqueue: Enqueue | None = No
             "members": [{"id": u["id"], "name": u["name"]} for u in db.users.values()],
         }
 
-    register_teaching_routes(app, store, member)
+    @app.get("/api/v1/owner/lessons/{lesson_id}/public-preview")
+    def preview_status(lesson_id: str, user: Member) -> dict[str, object]:
+        return PublicPreviews(store).status(lesson_id, user)
+
+    @app.put("/api/v1/owner/lessons/{lesson_id}/public-preview")
+    def public_preview(lesson_id: str, body: PreviewSubmission, user: Member) -> dict[str, object]:
+        return PublicPreviews(store).set(lesson_id, body, user)
+
+    register_teaching_routes(app, store, member, config, dispatch, reader=reader)
+    from .interest_routes import register_interest_routes
+    register_interest_routes(app, store, config, member, dispatch)
     return app

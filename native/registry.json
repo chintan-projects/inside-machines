@@ -1,0 +1,153 @@
+{
+  "schema_version": "native-renderers-1",
+  "renderers": [
+    {
+      "id": "refrigerator-native-r2",
+      "lessons": [
+        "refrigerator-r2-core",
+        "refrigerator-r2-energy",
+        "refrigerator-r2-phase"
+      ],
+      "sources": [
+        {
+          "path": "experiments/refrigerator-study/model.ts",
+          "sha256": "52acdc3834193ef1be06fb1606fcc5db087c560369909520569aca0410e70435"
+        },
+        {
+          "path": "experiments/refrigerator-study/narration.ts",
+          "sha256": "82d2ed3da3839e5dc1f803b19120300765c4d016a5c0845461b15c7e6e1cb708"
+        },
+        {
+          "path": "experiments/refrigerator-study/path.json",
+          "sha256": "c0aa59cf011bdbfeec3cc5aa41e370512585a49e23e38fc9ba108e9ae865f011"
+        },
+        {
+          "path": "experiments/refrigerator-study/r2/artwork.ts",
+          "sha256": "df61fbf6d6885a04be96e27db927310b256bb36ea2642d5453c23dd3883748b2"
+        },
+        {
+          "path": "experiments/refrigerator-study/r2/geometry.ts",
+          "sha256": "cf078c1df25ae0e1566853fcc952aa56418f543386cd3cbfadec7b01e4425337"
+        },
+        {
+          "path": "experiments/refrigerator-study/r2/index.ts",
+          "sha256": "faa49b144feed332409baf5433a1049ab76d9d2144008c0c67d8401ee0673091"
+        },
+        {
+          "path": "experiments/refrigerator-study/r2/lessons.ts",
+          "sha256": "c042d3ce604bbb123c46c1e09432434847e812266c8342940a51127e44353edc"
+        },
+        {
+          "path": "experiments/refrigerator-study/r2/metadata.ts",
+          "sha256": "cdd93e6563a15d2a5e3192090c1bfd8a50b1ecaa92739c50163ff48feba4dd65"
+        },
+        {
+          "path": "experiments/refrigerator-study/r2/model.ts",
+          "sha256": "691d252c39386fafc5c8df9dddf23da1b17308c8a08be5c8a10077cf2663ebaf"
+        },
+        {
+          "path": "experiments/refrigerator-study/r2/sections.ts",
+          "sha256": "2d7a4f3ea3c056df6db74333b6f4f06e56b475fa0171d65b05e610e5599fc73e"
+        },
+        {
+          "path": "experiments/visual-studio/narration.ts",
+          "sha256": "0df30a9eff326df13c5b33ed59d56280bb2ddbed2f3e03b3173b87c8deb86ffd"
+        },
+        {
+          "path": "public/fonts/Inter.ttf",
+          "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031"
+        },
+        {
+          "path": "vendor/anatomy/kit/iso-kit.mjs",
+          "sha256": "6d3ecc725d30c3b0346da309cf61dfa5a65017c23620bbd4093009d4fb104018"
+        },
+        {
+          "path": "vendor/anatomy/kit/iso-kit.ts",
+          "sha256": "e9fc988c61a11bfac1f097e62419915ea86b2130ab091f1b50c0e019c907e253"
+        },
+        {
+          "path": "vendor/anatomy/kit/lathe.mjs",
+          "sha256": "a4e7e974b1a37e603ad2b76363b6f9815cc101dfff0ad277a5d4e8f1dc56fccb"
+        },
+        {
+          "path": "vendor/anatomy/kit/tube.mjs",
+          "sha256": "bcb3cc360f6d83e6a5753f4c464b4587ab7965028b05a5d58e285abce58667c9"
+        },
+        {
+          "path": "web/studio/drawing.ts",
+          "sha256": "7e95810a68cc704d2f5a6bbe4187255cc75c38493081c00fb99443e9a3a2206e"
+        },
+        {
+          "path": "web/studio/narration.ts",
+          "sha256": "7caf5598df81f47e6fc1b59bbf388fe2090c0c7067214812022c9d5bf055c5e2"
+        }
+      ],
+      "fingerprint": "eea7acc7105c81bc378a837e4b38f1d2866ed5e937df94af3ed1b9f4393876f6",
+      "spec_sha256": {
+        "refrigerator-r2-core": "37e5e8b9e3eed3d793e4ac3b848010fef20ff17414937541cf6958baff589c15",
+        "refrigerator-r2-energy": "bd1ad1dee195990b9f5500f8de0fa2e6c201f8b8e66c52e3d8f59551346097bf",
+        "refrigerator-r2-phase": "81aa52595b8a8d1885385c3d2a7ca0b54b5bf4602959ccbfa8a5f62e35584412"
+      }
+    },
+    {
+      "id": "gpu-memory-native-r1",
+      "lessons": [
+        "gpu-memory-native-r1"
+      ],
+      "sources": [
+        {
+          "path": "experiments/gpu-study/depth-lessons.ts",
+          "sha256": "3efcb9437654b3c9705650af9958b4346b8be0f9c5cd4256e8e92a2f8133b74e"
+        },
+        {
+          "path": "experiments/gpu-study/depth-model.ts",
+          "sha256": "8c74e400b07c85dd908ef10e95be1f6bb831f588801b0ab4338fac80b2436425"
+        },
+        {
+          "path": "experiments/gpu-study/depth-narration.ts",
+          "sha256": "d2ab7c6e3b3037d4380f84268b4936101c9ad1891849e18a1700247ae001afe1"
+        },
+        {
+          "path": "experiments/gpu-study/depth-scenes.ts",
+          "sha256": "83428343b5e5a058959a7a167832538c599bbde1e1d3fb07951fef937f264ab6"
+        },
+        {
+          "path": "experiments/gpu-study/model.ts",
+          "sha256": "360e3ae3880686b2504f328be6f77002224e6720fea1edc68b914d9a751b1956"
+        },
+        {
+          "path": "experiments/shared/geometry.ts",
+          "sha256": "d73f5eceaea14133cba66ef48f1c44d647e35dbfd6c9551c3238cdd6e3e367bf"
+        },
+        {
+          "path": "experiments/visual-studio/drawing.ts",
+          "sha256": "bb2e6e0d7b6b86dde11a799418ef25ca68ba02daf0e17beca0b2bb1bcc9d7a07"
+        },
+        {
+          "path": "experiments/visual-studio/narration.ts",
+          "sha256": "0df30a9eff326df13c5b33ed59d56280bb2ddbed2f3e03b3173b87c8deb86ffd"
+        },
+        {
+          "path": "native/gpu-memory-r1.ts",
+          "sha256": "43f8e028a2388b968ad166325e8329a62bf371f34540835ede72ec52f3a3ca6c"
+        },
+        {
+          "path": "public/fonts/Inter.ttf",
+          "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031"
+        },
+        {
+          "path": "web/studio/drawing.ts",
+          "sha256": "7e95810a68cc704d2f5a6bbe4187255cc75c38493081c00fb99443e9a3a2206e"
+        },
+        {
+          "path": "web/studio/narration.ts",
+          "sha256": "7caf5598df81f47e6fc1b59bbf388fe2090c0c7067214812022c9d5bf055c5e2"
+        }
+      ],
+      "fingerprint": "e1abc03aa4f3562cc286257c9ee22682e13c31320522933c3cba4e629f54419b",
+      "spec_sha256": {
+        "gpu-memory-native-r1": "547d6184272302210299a88fb5226243f19c884c59c72a1f2ca52fb529ab2dcc"
+      }
+    }
+  ]
+}

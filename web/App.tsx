@@ -1,41 +1,21 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { FormEvent, ReactElement } from 'react';
 import { ArrowLeft, ArrowUpRight, Box, Check, ChevronRight, Download, LogOut, Search, WifiOff } from 'lucide-react';
-import { api, ApiError, errorMessage } from './api';
-import type { CatalogEntry, Job, Lesson, Member, RequestResult } from './contracts';
-import { clearOffline, offlineCatalog, offlineMember, rememberMember, savedLesson } from './offline';
-import { Scene } from './Scene';
+import { api, errorMessage } from './api';
+import type { CatalogEntry, Job, Lesson, RequestResult } from './contracts';
+import { offlineCatalog, savedLesson } from './offline';
+import { CatalogArtwork } from './studio/CatalogArtwork';
 import { LessonView } from './LessonView';
 import { OwnerView } from './OwnerView';
+import { Requests } from './Requests';
+import { Login } from './Access';
+import { useSession } from './useSession';
+import { entryPage } from './session';
+import { reviewLabel } from './review-label';
 
 interface InstallEvent extends Event { prompt: () => Promise<void> }
 const route = (): string => decodeURIComponent(location.hash.replace(/^#\/?/, ''));
 export function navigate(path = ''): void { location.hash = path ? `/${path}` : '/'; }
-
-function Login({ onLogin }: { readonly onLogin: (member: Member) => void }): ReactElement {
-  const [name, setName] = useState(''), [code, setCode] = useState('');
-  const [busy, setBusy] = useState(false), [error, setError] = useState('');
-  async function login(event: FormEvent): Promise<void> {
-    event.preventDefault(); setBusy(true); setError('');
-    try {
-      const member = await api<Member>('/auth/login', { name: name.trim(), code });
-      if (offlineMember()?.id !== member.id) await clearOffline();
-      rememberMember(member); onLogin(member);
-    } catch (error) { setError(errorMessage(error)); } finally { setBusy(false); }
-  }
-  return <main id="main" tabIndex={-1} className="welcome"><div className="welcome-mark"><Box size={34} strokeWidth={1.5} /></div>
-    <h1>Look inside.<br />Understand what happens.</h1>
-    <p>Explore how things work, from everyday machines to computing.</p>
-    <form onSubmit={event => void login(event)} className="invite-form">
-      <h2>Join the family alpha</h2><p className="muted">Use the invite code shared with you.</p>
-      <label>Your name<input autoComplete="given-name" required maxLength={60} value={name} onChange={e => setName(e.target.value)} placeholder="What should we call you?" /></label>
-      <label>Invite code<input autoComplete="off" type="password" required maxLength={180} value={code} onChange={e => setCode(e.target.value)} /></label>
-      {error && <p role="alert" className="error">{error}</p>}
-      <button className="primary" disabled={busy || !name.trim()}>{busy ? 'Joining…' : 'Explore Inside'}<ChevronRight size={18} /></button>
-      <small>No customer API key needed. Your conversations stay private.</small>
-    </form>
-  </main>;
-}
 
 function JobProgress({ id, onReady }: { readonly id: string; readonly onReady: (id: string) => void }): ReactElement {
   const [job, setJob] = useState<Job | null>(null), [error, setError] = useState('');
@@ -60,9 +40,11 @@ function JobProgress({ id, onReady }: { readonly id: string; readonly onReady: (
 }
 
 export function App(): ReactElement {
-  const [member, setMember] = useState<Member | null>(null), [loading, setLoading] = useState(true);
   const [online, setOnline] = useState(navigator.onLine), [path, setPath] = useState(route);
+  const session=useSession(online),{member,loading,publicAccess}=session;
   const [catalog, setCatalog] = useState<CatalogEntry[]>([]), [lesson, setLesson] = useState<Lesson | null>(null);
+  const [catalogFor,setCatalogFor]=useState(''),[lessonFor,setLessonFor]=useState('');
+  const [catalogLoading,setCatalogLoading]=useState(true);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [error, setError] = useState(''), [notice, setNotice] = useState(''), [busy, setBusy] = useState(false);
   const [question, setQuestion] = useState(''), [scope, setScope] = useState<'general' | 'specific'>('general');
@@ -74,49 +56,24 @@ export function App(): ReactElement {
     const change = (): void => setPath(route());
     const network = (): void => setOnline(navigator.onLine);
     const installable = (event: Event): void => { event.preventDefault(); setInstall(event as InstallEvent); };
-    const expired = (): void => {
-      setMember(null); setLesson(null); setCatalog([]); localStorage.removeItem('inside.member');
-      void clearOffline().catch(error => setError(errorMessage(error)));
-    };
     const offlineUnavailable = (): void => setError('The browser couldn’t prepare offline access. Online lessons still work. Reload to try setting up offline access again.');
     window.addEventListener('inside:offline-unavailable', offlineUnavailable);
-    window.addEventListener('inside:unauthorized', expired);
     window.addEventListener('hashchange', change); window.addEventListener('online', network); window.addEventListener('offline', network);
     window.addEventListener('beforeinstallprompt', installable);
-    return () => { window.removeEventListener('hashchange', change); window.removeEventListener('online', network); window.removeEventListener('offline', network); window.removeEventListener('beforeinstallprompt', installable); window.removeEventListener('inside:unauthorized', expired); window.removeEventListener('inside:offline-unavailable', offlineUnavailable); };
+    return () => { window.removeEventListener('hashchange', change); window.removeEventListener('online', network); window.removeEventListener('offline', network); window.removeEventListener('beforeinstallprompt', installable); window.removeEventListener('inside:offline-unavailable', offlineUnavailable); };
   }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    async function restore(): Promise<void> {
-      try {
-        let current: Member | null = null;
-        if (online) {
-          if (localStorage.getItem('inside.revoke-pending')) {
-            await api('/auth/logout', {}); localStorage.removeItem('inside.revoke-pending');
-          }
-          current = await api<Member>('/auth/me'); rememberMember(current);
-        } else current = offlineMember();
-        if (!cancelled) { setMember(current); setError(''); }
-      } catch (error) {
-        if (!cancelled) {
-          if (error instanceof ApiError && error.status === 401) { setMember(null); localStorage.removeItem('inside.member'); await clearOffline(); }
-          else setError('Couldn’t reach Inside. Check your connection and reload to try again.');
-        }
-      } finally { if (!cancelled) setLoading(false); }
-    }
-    void restore(); return () => { cancelled = true; };
-  }, [online]);
 
   useEffect(() => {
     if (!member) return;
     let cancelled = false;
     async function load(): Promise<void> {
+      setCatalogLoading(true);
       try {
         const entries = online ? await api<CatalogEntry[]>('/lessons') : await offlineCatalog(member!.id);
-        const saved = online ? await offlineCatalog(member!.id) : entries;
-        if (!cancelled) { setCatalog(entries); setSavedIds(saved.map(e => e.id)); }
+        const saved = online ? await offlineCatalog(member!.id).catch(()=>{if(!cancelled)setNotice('Your offline saves could not be read. Online explanations still work.');return [];}) : entries;
+        if (!cancelled) { setCatalog(entries.filter(entry => !entry.depth_parent)); setCatalogFor(member!.id);setSavedIds(saved.map(e => e.id)); }
       } catch (error) { if (!cancelled) setError(errorMessage(error)); }
+      finally{if(!cancelled)setCatalogLoading(false);}
     }
     void load(); return () => { cancelled = true; };
   }, [member, online, path]);
@@ -128,19 +85,16 @@ export function App(): ReactElement {
       try {
         const result = online ? await api<Lesson>(`/lessons/${encodeURIComponent(id)}`) : (await savedLesson(member!.id, id))?.lesson;
         if (!result) throw new Error('This explanation hasn’t been saved on this device. Reconnect to open it.');
-        if (!cancelled) { setLesson(result); setError(''); }
+        if (!cancelled) { setLesson(result);setLessonFor(member!.id);setError(''); }
       } catch (error) { if (!cancelled) { setLesson(null); setError(errorMessage(error)); } }
     }
     void load(); return () => { cancelled = true; };
   }, [member, online, path]);
 
   async function logout(): Promise<void> {
-    setBusy(true); localStorage.setItem('inside.revoke-pending', '1');
+    setBusy(true);
     try {
-      if (online) { await api('/auth/logout', {}); localStorage.removeItem('inside.revoke-pending'); }
-      localStorage.removeItem('inside.member'); await clearOffline();
-      for (const key of Object.keys(sessionStorage)) if (key.startsWith('inside.chat.')) sessionStorage.removeItem(key);
-      setMember(null); setLesson(null); setCatalog([]); setError(''); navigate();
+      await session.logout();setLesson(null);setCatalog([]);setError('');setQuestion('');setModel('');setScope('general');setFilter('All');setNotice('');navigate();
     } catch (error) { setError(`Couldn’t finish signing out: ${errorMessage(error)}`); }
     finally { setBusy(false); }
   }
@@ -154,33 +108,42 @@ export function App(): ReactElement {
     } catch (error) { setError(errorMessage(error)); } finally { setBusy(false); }
   }
 
-  const categories = ['All', 'Saved', ...new Set(catalog.map(e => e.category))];
-  const entries = catalog.filter(e => filter === 'All' || (filter === 'Saved' ? savedIds.includes(e.id) : filter === e.category));
-  return <><a className="skip-link" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a><header className={lesson?.id === "air-conditioner-craft" && path.startsWith("lesson/") ? "topbar studio-nav" : "topbar"}><a href="#/" className="brand" aria-label="Inside home"><Box size={25} strokeWidth={1.6} />inside<span>family alpha</span></a>
-    <nav aria-label="Main navigation">{member && <><a href="#/" aria-current={!path ? 'page' : undefined}>Library</a>{member.owner && online && <a href="#/owner" aria-current={path === 'owner' ? 'page' : undefined}>Alpha insights</a>}</>}
+  const learningPage=path.startsWith('lesson/')&&lesson?.spec.version!==1;
+  const page=entryPage(path,member,publicAccess,loading,online,!!session.error);
+  const visibleCatalog=catalogFor===member?.id?catalog:[];
+  const categories = ['All', 'Saved', ...new Set(visibleCatalog.map(e => e.category))];
+  const entries = visibleCatalog.filter(e => filter === 'All' || (filter === 'Saved' ? savedIds.includes(e.id) : filter === e.category));
+  return <><a className="skip-link" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a><header className={learningPage?'topbar learning-nav':lesson?.id === "air-conditioner-craft" && path.startsWith("lesson/") ? "topbar studio-nav" : "topbar"}><a href="#/" className="brand" aria-label="Inside home"><Box size={25} strokeWidth={1.6} />inside<span>{publicAccess?'visual explanations':'family alpha'}</span></a>
+    <nav aria-label="Main navigation">{member && <><a href="#/" aria-current={!path ? 'page' : undefined}>Library</a><a href="#/requests" aria-current={path==='requests'?'page':undefined}>{learningPage?'Updates':'Your updates'}</a>{member.owner && online && <a href="#/owner" aria-current={path === 'owner' ? 'page' : undefined}>{learningPage?'Owner':'Owner workspace'}</a>}</>}
       <button aria-label="Install Inside" onClick={() => { if (install) void install.prompt(); else setHelp(!help); }}><Download size={18} /><span className="install-label">Install</span></button>
-      {member && <button onClick={() => void logout()} disabled={busy} aria-label={`Sign out ${member.name}`}><LogOut size={17} /></button>}</nav>
+      {member&&!member.guest && <button onClick={() => void logout()} disabled={busy} aria-label={`Sign out ${member.name}`}><LogOut size={17} /></button>}</nav>
     </header>
     {help && <aside className="install-help"><strong>Keep Inside close.</strong><p>On iPhone or iPad, open in Safari, tap Share, then Add to Home Screen. On Android or desktop, choose Install app from your browser menu.</p><button onClick={() => setHelp(false)}>Got it</button></aside>}
     {!online && <div className="offline-banner" role="status"><WifiOff size={16} />Offline · Saved explanations work. New lessons, feedback and live chat need a connection.</div>}
-    {loading ? <main id="main" tabIndex={-1} className="loading" aria-live="polite">Opening Inside…</main> : !member ? <>{error && <p role="alert" className="error shell-error">{error}</p>}<Login onLogin={setMember} /></> : <main id="main" tabIndex={-1} className={lesson?.id === "air-conditioner-craft" && path.startsWith("lesson/") ? "app-shell studio-shell" : "app-shell"}>
+    {page==='opening'?<main id="main" tabIndex={-1} className="loading" aria-live="polite">Opening Inside…</main>:
+      page==='owner-login'||page==='join'?<Login owner={page==='owner-login'} onLogin={async next=>{await session.adopt(next);if(page==='owner-login'&&next.owner)navigate('owner');}}/>:
+      page==='offline'||page==='unavailable'?<main id="main" tabIndex={-1} className="welcome"><h1>{online?'Inside could not open':'You’re offline'}</h1><p>{session.error||(online?'Please try opening Inside again.':'Reconnect to open the library, or use a browser where you have saved an explanation.')}</p><button onClick={session.retry}>Try again</button><p><a href="#/">Return to the library</a></p></main>:
+      member&&<main id="main" tabIndex={-1} className={learningPage?'app-shell learning-shell':lesson?.id === "air-conditioner-craft" && path.startsWith("lesson/") ? "app-shell studio-shell" : "app-shell"}>
+      {session.error&&<p role="alert" className="error">{session.error}<button onClick={session.retry}>Try opening again</button></p>}
+      {session.notice&&<p role="status" className="notice">{session.notice}</p>}
       {error && <div role="alert" className="error">{error}<button onClick={() => setError('')} aria-label="Dismiss error">Dismiss</button></div>}
-      {path.startsWith('job/') ? <JobProgress id={path.slice(4)} onReady={ready} /> : path === 'owner' ? <OwnerView /> : path.startsWith('lesson/') ? <>
+      {page==='owner'?<OwnerView/>:path.startsWith('job/') ? <JobProgress id={path.slice(4)} onReady={ready} /> : path==='requests'? <Requests online={online} guest={member.guest}/> : path.startsWith('lesson/') ? <>
         <button className="back" onClick={() => navigate()}><ArrowLeft size={16} />All explanations</button>
-        {lesson && lesson.id === path.slice(7) ? <LessonView key={lesson.id} lesson={lesson} member={member} online={online} /> : !error && <p role="status">Opening the explanation…</p>}
+        {lessonFor===member.id&&lesson && lesson.id === path.slice(7) ? <LessonView key={`${member.id}:${lesson.id}`} lesson={lesson} member={member} online={online} /> : !error && <p role="status">Opening the explanation…</p>}
       </> : <>
-        <section className="library-intro"><div><p className="eyebrow">Curiosity, made visible</p><h1>How does it work?</h1><p>Look inside the things around you.<br className="desktop-only" /> Follow the parts. Understand the principle.</p></div><div className="library-count"><strong>{catalog.length}</strong><span>{online ? 'shared explanations' : 'saved on this device'}</span></div></section>
+        <section className="library-intro"><div><p className="eyebrow">Curiosity, made visible</p><h1>How does it work?</h1><p>Look inside the things around you.<br className="desktop-only" /> Follow the parts. Understand the principle.</p></div><div className="library-count"><strong>{catalogLoading?'…':visibleCatalog.length}</strong><span>{online ? 'shared explanations' : 'saved on this device'}</span></div></section>
         <form className="ask-machine" onSubmit={event => void request(event)}><label htmlFor="machine-question">What would you like to understand?</label>
-          <div className="search-row"><Search size={21} /><input id="machine-question" required minLength={3} maxLength={180} value={question} onChange={e => setQuestion(e.target.value)} placeholder="An air conditioner, a GPU, a language model…" /><button className="primary" disabled={busy || !online}>{busy ? 'Looking…' : 'Explain it'}<ArrowUpRight size={18} /></button></div>
+          <div className="search-row"><Search size={21} /><input id="machine-question" required minLength={3} maxLength={180} value={question} onChange={e => setQuestion(e.target.value)} placeholder="A car, a refrigerator, a microwave…" /><button className="primary" disabled={busy || !online}>{busy ? 'Checking…' : 'Find or request'}<ArrowUpRight size={18} /></button></div>
           <div className="scope-row"><label><input type="radio" name="scope" checked={scope === 'general'} onChange={() => setScope('general')} />Understand the principles</label><label><input type="radio" name="scope" checked={scope === 'specific'} onChange={() => setScope('specific')} />A specific model</label></div>
           {scope === 'specific' && <label className="model-field">Model, if you know it<input value={model} onChange={e => setModel(e.target.value)} maxLength={120} placeholder="Model name or version" /><small>Exact-model documentation is planned. Choose Understand the principles to explore the general concept and its limits.</small></label>}
-          <p className="search-note">We look in the library first. A missing topic becomes a new teaching draft using the family’s AI budget.</p>
+          <p className="search-note">We look in the library first. If it’s missing, we save your request and post an update when it’s ready. Requesting a topic never starts paid AI generation.</p>
           {notice && <p role="status" className="notice">{notice}</p>}
         </form>
         <section aria-label="Explanation library" className="library"><div className="section-heading"><h2>{online ? 'Inside the library' : 'Your saved explanations'}</h2><div className="filters" aria-label="Filter by category">{categories.map(category => <button key={category} aria-pressed={filter === category} onClick={() => setFilter(category)}>{category}</button>)}</div></div>
-          {!entries.length && <div className="empty"><Box size={28} /><h3>{online && filter !== 'Saved' ? 'The library starts with a question.' : 'Nothing saved here yet.'}</h3><p>{online && filter !== 'Saved' ? 'Ask about a concept above. New teaching drafts appear here when generation succeeds.' : 'Open an explanation while connected and choose Save offline.'}</p></div>}
-          <div className="catalog">{entries.map((entry, i) => <a className="catalog-row" key={entry.id} href={`#/lesson/${entry.id}`}><div className="catalog-art"><Scene spec={entry.preview} preview /></div><div className="catalog-copy"><div className="catalog-meta"><span>{entry.category}</span><span>{Math.round(entry.duration)} sec · {entry.preview.stages.length} steps</span></div><h3>{entry.title}</h3><p>{entry.question}</p><small>{entry.family}{entry.review_needed && <span className="draft-marker"> · Learning draft</span>}</small></div><span className="open-lesson">Explore<ChevronRight size={18} /></span><span className="catalog-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span></a>)}</div>
-        </section><footer className="library-footer">Built for curious people. Schematic explanations, clear assumptions, room for questions.</footer>
+          {catalogLoading&&<p role="status">Opening the library…</p>}
+          {!catalogLoading&&!entries.length && <div className="empty"><Box size={28} /><h3>{online && filter !== 'Saved' ? 'What would you like to understand?' : 'Nothing saved here yet.'}</h3><p>{online && filter !== 'Saved' ? 'Send a request above. We curate new explanations and let requesters know when they are ready.' : 'Open an explanation while connected and choose Save offline.'}</p></div>}
+          <div className="catalog">{entries.map((entry, i) => <a className="catalog-row" key={entry.id} href={`#/lesson/${entry.id}`}><div className="catalog-art" aria-hidden="true"><CatalogArtwork spec={entry.preview}/></div><div className="catalog-copy"><div className="catalog-meta"><span>{entry.category}</span><span>{Math.round(entry.duration)} sec · {entry.preview.stages.length} steps</span></div><h3>{entry.title}</h3><p>{entry.question}</p><small>{entry.family}{reviewLabel(entry)&&<span className="draft-marker"> · {reviewLabel(entry)}</span>}</small></div><span className="open-lesson">Explore<ChevronRight size={18} /></span><span className="catalog-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span></a>)}</div>
+        </section><footer className="library-footer">Built for curious people. Visual explanations, clear assumptions, room for questions.{publicAccess&&!member.owner&&<p><a href="#/owner/login">Owner access</a></p>}</footer>
       </>}
     </main>}</>;
 }

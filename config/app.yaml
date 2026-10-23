@@ -1,4 +1,12 @@
 model: gpt-6.1-sol
+authoring_provider: openai
+anthropic_model: claude-sonnet-5-5
+anthropic_input_usd_per_million: 2.0
+anthropic_output_usd_per_million: 10.0
+# Conservative one-hour cache-write rate; requests do not enable prompt caching.
+anthropic_cache_write_usd_per_million: 4.0
+anthropic_cache_read_usd_per_million: 0.10
+anthropic_max_input_bytes: 100000
 reasoning_effort: low
 provider_timeout_seconds: 210
 speech_model: gpt-4o-mini-tts

@@ -24,8 +24,8 @@ bugs:
     title: Appliance explanations lack visible component labels and beginner causal staging
     severity: high
     status: open
-    evidence: Human review of AC screenshots finds unlabeled narrated parts and confusing four-stage cycle
-    fix: CE-1 causal insets, shared media, prediction/transfer and evidence gates deployed for protected review; independent technical, actual-phone and beginner acceptance pending
+    evidence: Owner rejects the studio interface as poor and distasteful after GPU-S4; teaching and interface quality acceptance remain open
+    fix: Complete core/depth paths and a shared D1 interface implemented locally with Claude + Anatomy selected; owner design, independent truth, actual-phone and beginner acceptance remain pending
     regression: tests/backend/test_learning_quality.py; docs/QUALITY-BAR.md
   - id: BUG-005
     title: SVG rasterizer frame dimensions corrupt raw MP4 timing
@@ -55,3 +55,52 @@ bugs:
     evidence: Gmail CLI Git reconnect returned Add a Login Connection; manual deployment succeeds but automatic Git deployment is not linked
     fix: Owner connects chintan-projects GitHub to Gmail Vercel; then reconnect original private repository and verify a Git-triggered deployment
     regression: docs/DEPLOYMENT-OWNERSHIP.md
+  - id: BUG-009
+    title: Local GPU example has no audio track despite expected narration
+    severity: high
+    status: fixed
+    evidence: Owner reported silence; GPU-S1 had no media and denied media in CSP
+    fix: Embedded computer narration, media-clock captions/scenes, explicit sound controls and scenario interruption; browser playback verified, physical-device audibility pending
+    regression: experiments/visual-studio/narration.test.mjs; journal/2026-10-19-gpu-study.md
+  - id: BUG-010
+    title: Muted narration button loses text contrast against transparent timeline background
+    severity: medium
+    status: fixed
+    evidence: Phone render showed white Unmute text on paper because timeline background overrode the pressed state
+    fix: Explicit solid green pressed background; browser computed white on rgb(49 106 87) verified
+    regression: journal/2026-10-20-gpu-depth.md; private gpu-s3-phone-matrix-changed.jpg
+  - id: BUG-011
+    title: Depth lookup rejects ordinary phrasing and gives a generic error at the final node
+    severity: medium
+    status: fixed
+    evidence: Browser reproduced can-you-dive-deeper rejection at core and exact dive-deeper rejection at matrix
+    fix: Bounded depth intent, visible depth action, explicit submit guidance and honest leaf response with saved alternatives
+    regression: experiments/visual-studio/path-contract.test.mjs; journal/2026-10-20-gpu-depth.md S4
+  - id: BUG-012
+    title: Claude rejects the production lesson grammar before authoring
+    severity: high
+    status: fixed
+    evidence: Nested grammar returned400 even after SDK simplification; bounded envelope accepted the real compact schema and returned6284input/1output tokens with complete billing
+    fix: Explicit json-document-1 encoding avoids nested provider grammar while complete domain, evidence, quality and hash checks remain; one-token acceptance is not a complete lesson benchmark
+    regression: tests/backend/test_anthropic_authoring.py
+  - id: BUG-013
+    title: Hosted source upload omits the native Anatomy drawing kit
+    severity: high
+    status: fixed
+    evidence: Missing-kit failure reproduced; corrected hosted upload includes429files and production f32225d reaches Ready
+    fix: Include the unsuffixed parent directory and descendants; prebuild checks every required source ancestor; clean dependencies pinned
+    regression: tests/deployment-sources.test.mjs and actual hosted build; local packaging alone misses upload pruning
+  - id: BUG-014
+    title: One-node path recomposition erased a public-preview artifact rejection
+    severity: high
+    status: fixed
+    evidence: Independent synthetic repro returned preview enable success after attaching the identical rejected spec and video as a one-node graph
+    fix: Latest same-artifact gate decisions survive composition changes and immediately close ongoing preview access on rejection
+    regression: tests/backend/test_public_access.py and independent409 recomposition repro
+  - id: BUG-015
+    title: Telemetry rotation reset active anonymous and chat admission limits
+    severity: high
+    status: fixed
+    evidence: Independent synthetic repro issued another guest after10000 ordinary reads evicted same-hour admission telemetry; global budget ceiling remained intact
+    fix: Bounded durable opaque counters share Store transactions and migrate active historical admissions before telemetry trimming; active buckets are never evicted
+    regression: tests/backend/test_rate_limits.py and tests/backend/test_public_postgres.py

@@ -1,31 +1,27 @@
-goal: Build the growing visual concept library and validate learning quality
-status: quality_revision
+goal: Build the curated visual concept library and validate learning quality
+status: public_preview_deployed_quality_open
 current:
-- CE-1 contracts, causal player and shared video/static rendering implemented
-- Trusted guides extend the deployed shared engine to physical, GPU and LLM explanations
-- AC, washer and cooker have distinct prediction-to-transfer draft storyboards
-- Artifact-bound review workbench; AC agent engineering passed; human gates pending
-- Gmail owns the live app, Neon and private Blob; GitHub login connection pending
-- All 17 assets copied and verified; nine hosted videos retain their byte hashes
+- Public visitor sessions, protected owner tools and private chats implemented
+- Exact native artifact previews remain separate from human quality approval and activation
+- Shared player covers progressive depth, narration, experiments, offline paths and feedback
+- README refreshed with live links, three public visitor screenshots and truthful limitations
+- Gmail production31a9360 Ready; all4aliases public without cookies or bypass headers
+- Repository default branch and public visibility publication in progress
 needs_input:
-- Connect personal GitHub login to Gmail Vercel account to restore automatic deployments
-- Independent technical review of consequential claims and qualitative models
-- Owner actual-phone craft/accessibility walkthrough
-- Five initially unfamiliar beginners for causal and transfer evaluation
+- Connect personal GitHub login to Gmail Vercel for automatic deployments (BUG-008)
+- Independent technical review, real-phone accessibility and five unfamiliar beginner checks
+- Owner taste/release approval and stronger craft for sixteen older schematic cores
 verification:
-- 163 backend tests including three disposable Postgres tests pass; coverage 86.89 percent
-- Ruff and strict mypy pass; TypeScript, ESLint, ten JS tests and production build pass
-- Real MP4 revision test preserves parent content and private conversations
-- JS and Python sample the same piecewise path through the actual drain pump
-- Authored narration/video uses local computer speech and no paid model calls
-- Evidence, typed repairs and SHA-bound review completed one live CE-1 media revision
-- App-AI ceiling remains 50 USD; BUG-004 remains open; family release held
-- Computing guide routing and zero-cost alias reuse tested; actual GPU/LLM lessons unbuilt
-- Migration preserves specs, private history and ledger; protected runtime and media checks pass
+- Fresh public guest phone, tablet and desktop journeys observed locally
+- Typed dive deeper and complete refrigerator path work after offline save and reload
+- Owner preview controls and public/private session switching exercised locally
+- 390 backend tests,89.77 percent coverage;10 real disposable Postgres regressions pass
+- Frontend types, lint,41 JavaScript tests and production build pass
+- Linux package verifies2functions, durable queue, encoder, CDN and private-input exclusions
+- All-history credential audit found only one artwork-SHA false positive
+- Personal Gmail, Owner scope, Neon and private Blob ownership reverified
+- Hosted22roots,4native media hashes/ranges/captions and30revision history preservation pass
+- Ledger5.988598 USD,0reserved under unchanged50 USD cap; no paid calls or invented reviews
 sessions:
-- date: 2026-10-19
-  result: Owner rejected craft; adopted teaching ADR, worksheet and CE requirements
-- date: 2026-10-19
-  result: Implemented CE-1 vertical slice and separate review gates; acceptance pending
-- date: '2026-10-19'
-  result: Computing guidance deployed on verified Gmail resources; GitHub authorization handoff pending
+- date: '2026-10-22'
+  result: No-login preview deployed and verified; README screenshots ready; human quality remains open
