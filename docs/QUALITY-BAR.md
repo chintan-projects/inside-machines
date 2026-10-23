@@ -6,8 +6,8 @@ Feynman's plain causal explanations, Veritasium's prediction/misconception work
 and Anatomy's connected physical craft are build/review requirements. They are
 not endorsements or a substitute for observed learning.
 
-**Current status:** the web framework is implemented and the owner has requested
-a public learning preview with no visitor login. Explicit preview exposure is
+**Current status:** the web framework is implemented and the public learning
+preview is available with no visitor login. Explicit preview exposure is
 separate from acceptance of a lesson's quality. The
 quality bar is not yet accepted. The owner gave positive craft feedback on the
 later local Claude/Anatomy vacuum candidate; independent technical, actual-device

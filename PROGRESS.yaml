@@ -1,11 +1,12 @@
 goal: Build the curated visual concept library and validate learning quality
-status: public_preview_ready_for_hosted_release
+status: public_preview_deployed_quality_open
 current:
 - Public visitor sessions, protected owner tools and private chats implemented
 - Exact native artifact previews remain separate from human quality approval and activation
 - Shared player covers progressive depth, narration, experiments, offline paths and feedback
 - README refreshed with live links, three public visitor screenshots and truthful limitations
-- Repository visibility and hosted no-login release verification still pending
+- Gmail production31a9360 Ready; all4aliases public without cookies or bypass headers
+- Repository default branch and public visibility publication in progress
 needs_input:
 - Connect personal GitHub login to Gmail Vercel for automatic deployments (BUG-008)
 - Independent technical review, real-phone accessibility and five unfamiliar beginner checks
@@ -19,7 +20,8 @@ verification:
 - Linux package verifies2functions, durable queue, encoder, CDN and private-input exclusions
 - All-history credential audit found only one artwork-SHA false positive
 - Personal Gmail, Owner scope, Neon and private Blob ownership reverified
-- No paid calls, synthetic human acceptance or quality activation in this iteration
+- Hosted22roots,4native media hashes/ranges/captions and30revision history preservation pass
+- Ledger5.988598 USD,0reserved under unchanged50 USD cap; no paid calls or invented reviews
 sessions:
 - date: '2026-10-22'
-  result: Public access and README ready; independent bypass regressions fixed; Linux packaging passes; hosted release pending
+  result: No-login preview deployed and verified; README screenshots ready; human quality remains open

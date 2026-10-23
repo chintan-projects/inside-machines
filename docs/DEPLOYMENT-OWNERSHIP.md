@@ -10,6 +10,29 @@ curated-library releases and paid verification attempts are recorded in the
 [native production journal](../journal/2026-10-22-native-integration.md); use the owner
 workspace for current spending.
 
+## Public preview update — 2026-10-22
+
+The owner explicitly requested public visitor access. Production now runs
+`31a9360` at Ready deployment `dpl_5dk1png3msomcnr21wSfLuALeHjG` under the same
+verified Gmail identity and resources. Vercel Authentication now covers **preview
+deployments only** (`deploymentType=preview`); no plan upgrade was needed.
+All four production aliases were checked without cookies or bypass headers and
+return the current public shell and `public_access=true`. Owner administration
+and private conversations retain application authorization. Private Blob URLs
+still reject anonymous access; public lesson media is served through the app.
+
+The app's $50 ceiling is unchanged. The observed ledger remains $5.988597538461539
+with zero reservations, including earlier conservative uncertain-billing
+allowances. No paid call was made for public access or verification. Thirty prior
+lesson revisions and existing private histories were preserved. Exact native
+preview permissions expose the refrigerator path and GPU insight with draft
+labels; they do not activate replacements, approve quality or send release notices.
+See the [public preview journal](../journal/2026-10-22-public-preview.md).
+
+The migration snapshot below retains its historical protection/spend values.
+GitHub's login connection is still required for automatic Git deployments; the
+current production build was deployed explicitly with the isolated personal CLI.
+
 ## Verified ownership
 
 | Item | Verified destination |

@@ -89,3 +89,36 @@ The sanitized Linux/amd64 build with public mode enabled completed. The deployme
 verifier confirms two Python functions, the durable queue trigger, shared services,
 Linux encoder, versioned CDN/PWA assets and exclusion of private inputs.
 The staged credential scan has zero findings.
+
+## Observed hosted release
+
+Commit31a9360 reached Ready in deployment dpl_5dk1png3msomcnr21wSfLuALeHjG,
+inside-machines-alpha-dujr2tdqx-cdt9s-projects.vercel.app, under the verified
+Gmail scope. Vercel Authentication was changed to preview deployments only with
+no paid plan upgrade. All four existing production aliases now point to this
+same owned deployment and returned the new shell and public health flag using
+bare HTTP clients with no cookies or bypass headers.
+
+Explicit owner preview operations exposed the refrigerator's exact three-node
+path and the standalone GPU memory insight. Cookieless catalog, path, lesson,
+video and captions reads pass. All four real hosted native MP4 hashes match;
+byte ranges return206 and captions are present. The catalog has22roots. Two
+independent guest sessions receive unique IDs; cross-guest and prior private
+chats are hidden, job/SSE access is protected, owner operations are denied and
+car lookup reuses the library without paid work. Verification sessions were
+revoked. Anonymous direct private-Blob access still fails.
+
+All30 prior revisions, specs/media identities, old chats, reviews, jobs, feedback,
+requests, notifications and usage receipts were preserved. The ledger is unchanged
+at5.988597538461539USD, reserved0, with the existing50USD ceiling. No quality
+passes, native replacement activations or release notifications were written.
+Postgres admission tests used synthetic provider answers; hosted verification
+made zero paid model calls.
+
+The deployed app was also reloaded in a previously unauthenticated browser tab:
+the invite form was replaced by a direct public refrigerator lesson. At375px,
+the draft label, all six labels, depth selector and narration control are visible.
+The README phone screenshot was refreshed from this actual deployed visitor view.
+Temporary local servers, browser network overrides and viewport overrides were
+removed; the live app tab remains available. Repository publication is recorded
+below after the default branch is updated.

@@ -1,6 +1,6 @@
 # ADR 0008: public learning previews with private anonymous sessions
 
-Date: 2026-10-22. Status: implemented and locally verified; hosted publication verification pending.
+Date: 2026-10-22. Status: implemented; local and hosted public-access verification passed.
 
 The owner explicitly requests a public repository and app with no visitor login,
 invite or special access. The previous family gate prevents that experience.
