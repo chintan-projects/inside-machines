@@ -6,7 +6,9 @@ Feynman's plain causal explanations, Veritasium's prediction/misconception work
 and Anatomy's connected physical craft are build/review requirements. They are
 not endorsements or a substitute for observed learning.
 
-**Current status:** CE-1 capabilities are implemented for protected review. The
+**Current status:** the web framework is implemented and the owner has requested
+a public learning preview with no visitor login. Explicit preview exposure is
+separate from acceptance of a lesson's quality. The
 quality bar is not yet accepted. The owner gave positive craft feedback on the
 later local Claude/Anatomy vacuum candidate; independent technical, actual-device
 and beginner-learning gates remain pending. BUG-004 remains open.
@@ -73,5 +75,11 @@ hosted generation/cost and private-history evidence remains in
 [LIVE-BENCHMARK.md](LIVE-BENCHMARK.md), but does not automatically validate CE-1.
 
 No independent technical, actual-phone or beginner-learning pass is recorded for
-CE-1. Family release remains held. A functioning deployment is a review preview,
+CE-1. Quality release remains held. A functioning public deployment is a review preview,
 not completion of the agreed quality goal.
+
+The owner's 2026-10-22 public-demo request permits explicit artifact-bound preview
+access under [ADR 0008](architecture-decisions/0008-public-preview-and-anonymous-sessions.md).
+This records permission to see a draft, not evidence of technical correctness,
+accessibility, learning or human approval. Changed or revoked bindings stop preview
+access; owner-only draft production and actual release decisions remain protected.

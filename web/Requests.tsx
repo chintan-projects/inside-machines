@@ -3,7 +3,7 @@ import type { ReactElement } from 'react';
 import { api, errorMessage } from './api';
 export interface TopicRequest { id:string;question:string;status:'requested'|'planned'|'working'|'available'|'declined';lesson_id:string|null;updated_at:number }
 interface Update {id:string;title:string;question:string;lesson_id:string|null;available:boolean;read:boolean;at:number}
-export function Requests({online}:{readonly online:boolean}):ReactElement {
+export function Requests({online,guest=false}:{readonly online:boolean;readonly guest?:boolean}):ReactElement {
   const [requests,setRequests]=useState<TopicRequest[]>([]),[updates,setUpdates]=useState<Update[]>([]);
   const [error,setError]=useState(''),[loading,setLoading]=useState(true),[refresh,setRefresh]=useState(0);
   useEffect(()=>{
@@ -17,6 +17,7 @@ export function Requests({online}:{readonly online:boolean}):ReactElement {
   if(!online)return <section><h1>Your requests and updates</h1><p>Reconnect to check progress. Saved explanations still work offline.</p></section>;
   return <section className="request-inbox"><h1>Your requests and updates</h1>
     <p>Requests help us choose what to explain next. They never spend your AI credits.</p>
+    {guest&&<p className="muted">Your requests and updates are saved for this browser. Return here to check them.</p>}
     <button disabled={loading} onClick={()=>{setLoading(true);setError('');setRefresh(value=>value+1);}}>Refresh updates</button>
     {error&&<p role="alert" className="error">{error}</p>}{loading&&<p role="status">Checking your updates…</p>}
     <h2>Updates</h2>{!loading&&!error&&!updates.length&&<p className="muted">We’ll post an update here when an explanation you requested is released.</p>}

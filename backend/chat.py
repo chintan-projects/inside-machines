@@ -13,6 +13,7 @@ from .accounting import charge, reserve
 from .contracts import AnswerSpec
 from .domain import Domain, User
 from .provider import UsageReceipt, model_text, receipt_context
+from .rate_limits import take_rate
 from .settings import Settings
 from .store import Database, Store
 from .stored_lessons import StoredSpec, component_ids, components_for, native_visible, parse_stored_spec
@@ -69,6 +70,8 @@ class Chats:
         def write(db: Database) -> Conversation:
             if lesson_id not in db.lessons or not native_visible(db, lesson_id, user.owner):
                 raise HTTPException(404, "Lesson not found")
+            if user.guest:
+                take_rate(db, "conversation", user.id, 20, "The public demo limits new conversations; continue an existing chat")
             chat = Conversation(
                 id=secrets.token_urlsafe(18), lesson_id=lesson_id, user_id=user.id, messages=[]
             )
@@ -109,18 +112,19 @@ class Chats:
                 raise HTTPException(
                     503, "Live chat isn't connected yet. The lesson's suggested questions work offline."
                 )
-            recent = sum(
-                e["kind"] == "chat_requested"
-                and e.get("user_id") == user.id
-                and float(str(e["at"])) > time.time() - 3600
-                for e in db.events
-            )
-            if recent >= self.settings.hourly_requests * 3:
-                raise HTTPException(429, "You've reached the hourly alpha chat limit.")
+            take_rate(db, "chat-browser", user.id, min(6, self.settings.hourly_requests * 3) if user.guest
+                      else self.settings.hourly_requests * 3, "You've reached the hourly chat limit.")
+            address_hash = ""
+            if user.guest:
+                address_hash = str(db.users.get(user.id, {}).get("address_hash", ""))
+                if not address_hash:
+                    raise HTTPException(403, "Start a public browser session before asking a question")
+                take_rate(db, "chat-network", address_hash, 12,
+                          "The public demo allows twelve questions per network each hour.")
             reserve(db, self.settings.chat_reserve, self.settings)
             chat.pending, chat.pending_at = key, time.time()
             db.chats[chat_id] = chat.model_dump(mode="json")
-            Domain.event(db, "chat_requested", user, lesson_id=chat.lesson_id)
+            Domain.event(db, "chat_requested", user, lesson_id=chat.lesson_id, **({"address": address_hash} if address_hash else {}))
             return chat, spec, True
 
         chat, spec, admitted = self.store.transaction(admit)

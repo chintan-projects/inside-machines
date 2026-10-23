@@ -90,3 +90,17 @@ bugs:
     evidence: Missing-kit failure reproduced; corrected hosted upload includes429files and production f32225d reaches Ready
     fix: Include the unsuffixed parent directory and descendants; prebuild checks every required source ancestor; clean dependencies pinned
     regression: tests/deployment-sources.test.mjs and actual hosted build; local packaging alone misses upload pruning
+  - id: BUG-014
+    title: One-node path recomposition erased a public-preview artifact rejection
+    severity: high
+    status: fixed
+    evidence: Independent synthetic repro returned preview enable success after attaching the identical rejected spec and video as a one-node graph
+    fix: Latest same-artifact gate decisions survive composition changes and immediately close ongoing preview access on rejection
+    regression: tests/backend/test_public_access.py and independent409 recomposition repro
+  - id: BUG-015
+    title: Telemetry rotation reset active anonymous and chat admission limits
+    severity: high
+    status: fixed
+    evidence: Independent synthetic repro issued another guest after10000 ordinary reads evicted same-hour admission telemetry; global budget ceiling remained intact
+    fix: Bounded durable opaque counters share Store transactions and migrate active historical admissions before telemetry trimming; active buckets are never evicted
+    regression: tests/backend/test_rate_limits.py and tests/backend/test_public_postgres.py

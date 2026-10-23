@@ -67,7 +67,10 @@ suite when modifying transactions. Run `npm run build` for frontend changes and
 the Linux deployment packaging verifier for deployment changes. Record skipped
 external checks honestly. Keep `PROGRESS.yaml` below 50 lines.
 
-Secrets, local data, screenshots and generated artifacts stay ignored. Git pushes
+Secrets, local data, raw screenshots and generated artifacts stay ignored. The
+owner explicitly authorizes sanitized public README screenshots under
+`docs/images/readme/`; exclude conversations, credentials and private owner data.
+Git pushes
 on the linked main branch may trigger Vercel builds; verify readiness first and
 report deployment failures rather than implying a successful release.
 
@@ -87,7 +90,21 @@ pending GitHub login connection. A CLI deployment does not prove Git automation
 is connected. Preserve data, environment configuration and protection; granting
 viewer access or changing the work account's email does not transfer ownership.
 
+The owner's 2026-10-22 public-app request overrides the earlier production
+Vercel-login restriction. Production links must open without Vercel sign-in,
+invite codes or bypass headers. Preview deployment protection may remain when
+it does not gate production. Preserve application owner authorization, private
+storage and server credentials; public browsing does not make administration public.
+
 ## Learning publication contract
+
+The owner explicitly requested a public, no-login app on 2026-10-22. Public
+browsing and per-browser anonymous sessions must preserve private conversations
+and authenticated owner operations. Native review drafts may be exposed only by
+an explicit artifact-bound public-preview operation under ADR 0008; exposure does
+not pass human quality gates, activate replacements or send release notifications.
+Keep review labels and reject stale or revoked preview bindings. Do not restore
+visitor invite requirements when public access is configured.
 
 Concept reuse follows [ADR 0003](docs/architecture-decisions/0003-extensible-concept-lessons.md).
 Progressive depth follows [ADR 0004](docs/architecture-decisions/0004-progressive-learning-paths.md):

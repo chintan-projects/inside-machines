@@ -8,6 +8,7 @@ import time
 from fastapi import HTTPException
 
 from .domain import Domain, User
+from .rate_limits import take_rate
 from .settings import Settings
 from .store import Database, Store
 
@@ -27,21 +28,16 @@ class Auth:
 
     def login(self, name: str, code: str, address: str) -> tuple[User, str]:
         """Validate a family or owner invite and issue a fresh opaque session."""
-        if not self.settings.session_secret or not self.settings.invite_code:
+        if not self.settings.session_secret or not (self.settings.invite_code or self.settings.public_access and self.settings.owner_code):
             raise HTTPException(503, "Family access hasn't been configured by the owner yet.")
         address_hash = self.digest(address)
 
         def attempt(db: Database) -> tuple[User, str] | None:
-            recent = sum(
-                e.get("kind") == "login_failed"
-                and e.get("address") == address_hash
-                and float(str(e["at"])) > time.time() - 900
-                for e in db.events
-            )
-            if recent >= 10:
-                raise HTTPException(429, "Too many invite attempts. Please try again in 15 minutes.")
+            message = "Too many invite attempts. Please try again in 15 minutes."
+            take_rate(db, "login", address_hash, 10, message, seconds=900, consume=False)
             owner = bool(self.settings.owner_code and secrets.compare_digest(code, self.settings.owner_code))
-            if not owner and not secrets.compare_digest(code, self.settings.invite_code):
+            if not owner and not (self.settings.invite_code and secrets.compare_digest(code, self.settings.invite_code)):
+                take_rate(db, "login", address_hash, 10, message, seconds=900)
                 db.events.append({"kind": "login_failed", "address": address_hash, "at": time.time()})
                 return None
             token = secrets.token_urlsafe(40)
@@ -74,6 +70,41 @@ class Auth:
             return User.model_validate(user)
 
         return self.store.transaction(read, write=False)
+
+    def reader(self, token: str | None) -> User:
+        """Public reads never mint a shared session or identify unrelated visitors together."""
+        if token or not self.settings.public_access:
+            try:
+                return self.user(token)
+            except HTTPException as exc:
+                if not self.settings.public_access or exc.status_code != 401:
+                    raise
+        return User(id="", name="Visitor", owner=False, guest=True)
+
+    def guest(self, token: str | None, address: str) -> tuple[User, str | None]:
+        """Reuse a valid browser session or issue a unique, rate-limited anonymous one."""
+        if not self.settings.public_access:
+            raise HTTPException(404, "Public access is not enabled")
+        if not self.settings.session_secret:
+            raise HTTPException(503, "Public browser sessions are not configured")
+        if token:
+            try:
+                return self.user(token), None
+            except HTTPException as exc:
+                if exc.status_code != 401:
+                    raise
+        address_hash = self.digest(address)
+
+        def issue(db: Database) -> tuple[User, str]:
+            take_rate(db, "guest", address_hash, 20, "Too many new browser sessions. Please try again later.")
+            fresh = secrets.token_urlsafe(40)
+            user = User(id=secrets.token_urlsafe(18), name="Visitor", owner=False, guest=True)
+            db.users[user.id] = {**user.model_dump(), "address_hash": address_hash}
+            db.sessions[self.digest(fresh)] = {"user_id": user.id, "expires": time.time() + self.settings.session_days * 86400}
+            Domain.event(db, "guest_started", user, address=address_hash)
+            return user, fresh
+
+        return self.store.transaction(issue)
 
     def logout(self, token: str | None) -> None:
         """Revoke this browser's session without affecting other family members."""

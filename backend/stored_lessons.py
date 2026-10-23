@@ -39,7 +39,8 @@ def native_visible(db: Database, lesson_id: str, owner: bool) -> bool:
     if owner or parse_stored_spec(record["spec"]).version != 3:
         return True
     from .learning_reviews import native_release_identity
-    return native_release_identity(db, lesson_id)
+    from .public_preview import public_preview_identity
+    return native_release_identity(db, lesson_id) or public_preview_identity(db, lesson_id)
 
 
 def current_lesson(db: Database, lesson_id: str, owner: bool) -> dict[str, object] | None:

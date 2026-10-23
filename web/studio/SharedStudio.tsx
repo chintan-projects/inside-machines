@@ -17,6 +17,7 @@ import { mountPreservedLesson } from './preserved-player';
 import { discussionCheckpoint } from './discussion-checkpoint';
 import { progressWriter } from './progress-writer';
 import theme from './theme.css?inline';
+import { reviewLabel } from '../review-label';
 
 interface Props { readonly lesson: Lesson; readonly member: Member; readonly online: boolean }
 interface Discussion { readonly lesson: Lesson; readonly stage: number }
@@ -152,7 +153,7 @@ export function SharedStudio({lesson, member, online}: Props): ReactElement {
   }
   const active = discussion.lesson;
   return <article className="shared-learning"><div className="shared-meta">
-    {active.review_needed && <p className="draft-marker" title="Independent technical review, craft review and beginner testing are still pending.">Teaching draft · review pending</p>}
+    {reviewLabel(active)&&<p className="draft-marker" title="Independent technical review, craft review and beginner testing are still pending.">{reviewLabel(active)}</p>}
   </div>
     {lesson.superseded_by && <p>This earlier revision keeps your original conversation. <a href={`#/lesson/${lesson.superseded_by}`}>Open the revised explanation</a></p>}
     {loading && <p role="status">Opening the explanation…</p>}

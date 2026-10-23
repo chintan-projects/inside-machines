@@ -118,6 +118,7 @@ export async function offlineCatalog(user: string): Promise<CatalogEntry[]> {
     accent: lesson.spec.accent, duration: lesson.spec.stages.reduce((n, s) => n + s.duration, 0),
     parts: componentIds(lesson.spec).length, quality: lesson.quality, created_at: saved / 1000,
     views: 0, video_ready: lesson.video_ready, preview: lesson.spec,
+    review_needed:lesson.review_needed,public_preview:lesson.public_preview,
   }));
 }
 
@@ -140,7 +141,7 @@ export function offlineMember(): Member | null {
   try {
     const raw: unknown = JSON.parse(localStorage.getItem('inside.member') || 'null');
     if (raw && typeof raw === 'object' && 'id' in raw && 'name' in raw && typeof raw.id === 'string' && typeof raw.name === 'string')
-      return { id: raw.id, name: raw.name, owner: false };
+      return { id: raw.id, name: raw.name, owner: false,guest:'guest' in raw&&raw.guest===true };
   } catch { /* Corrupt metadata has no authority to establish a session. */ }
   return null;
 }

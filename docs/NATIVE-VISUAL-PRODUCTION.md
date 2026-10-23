@@ -56,6 +56,24 @@ does not activate a replacement. Old aliases then resolve to the new active head
 while earlier media and private conversations remain available at their original
 IDs. Unreleased or stale replacements are rejected.
 
+## Public learning previews
+
+The owner separately authorized a no-login public demo on2026-10-22. In public
+mode, use the owner path editor's Public Preview control to expose a completed
+native core and its exact attached nodes as review drafts. This permission binds
+the current spec/video/bundle and node artifacts; it does not fabricate human
+review passes, activate a replacement or send release notifications. Revocation
+or a changed binding removes preview access. Owner administration stays protected.
+See [ADR0008](architecture-decisions/0008-public-preview-and-anonymous-sessions.md).
+
+The same operation is available through authenticated
+`GET /api/v1/owner/lessons/{id}/public-preview` and
+`PUT /api/v1/owner/lessons/{id}/public-preview`. GET returns the current candidate
+and saved permission. PUT requires `enabled` and the exact `spec_sha256`,
+`video_sha256` and `bundle_sha256`; revocation uses the saved permission's binding
+so it remains possible after artwork changes. Public preview is an explicit
+owner operation, never an automatic side effect of import.
+
 ## Evidence and limits
 
 The exporter uses actual factory checkpoints, including each reduced-motion

@@ -6,6 +6,7 @@ import type { LearningPath } from './studio/path-contract';
 import { parsePath } from './studio/path-contract';
 import { OwnerDepthDraft } from './OwnerDepthDraft';
 import { OwnerNativeActivation } from './OwnerNativeActivation';
+import { OwnerPublicPreview } from './OwnerPublicPreview';
 
 interface PathRecord {bundle_sha256:string;path_sha256:string;path:LearningPath;created_at:number}
 interface History {root_lesson_id:string;current_bundle_sha256:string;records:PathRecord[]}
@@ -53,7 +54,7 @@ export function OwnerPaths({reserve}:{readonly reserve:number}):ReactElement {
       Each node keeps its own explanation, media and questions. A changed path requires fresh review of the complete bundle.</p>
     <details><summary>Owner path editor</summary>
       <label>Core revision<select value={selected} onChange={event=>{setHistory(null);setSource('');setError('');setNotice('');setAllowDrafts(false);setSelected(event.target.value);}} disabled={busy||depthBusy}>
-        <option value="">Choose a core lesson</option>{lessons.map(lesson=><option key={lesson.id} value={lesson.id}>{lesson.title} · {lesson.id}</option>)}
+        <option value="">Choose a core lesson</option>{lessons.filter(lesson=>!lesson.depth_parent).map(lesson=><option key={lesson.id} value={lesson.id}>{lesson.title} · {lesson.id}</option>)}
       </select></label>
       {error&&<p role="alert" className="error">{error}</p>}{notice&&<p role="status">{notice}</p>}
       {selected&&!history&&!error&&<p role="status">Loading the current path and its immutable history…</p>}
@@ -73,6 +74,7 @@ export function OwnerPaths({reserve}:{readonly reserve:number}):ReactElement {
       </>}
       {lessons.find(lesson=>lesson.id===selected)?.preview.version===3 ? <>
         <OwnerNativeActivation key={selected} lesson={lessons.find(lesson=>lesson.id===selected)!} candidates={lessons}/>
+        <OwnerPublicPreview key={`public-preview-${selected}`} lessonId={selected}/>
         <p>Additional native artwork and depth use the local production workflow. Import the new held revision, then compose it above.</p>
       </> : <OwnerDepthDraft rootId={selected} rootTitle={lessons.find(lesson=>lesson.id===selected)?.title??selected} reserve={reserve} onBusy={setDepthBusy}/>}
     </details>

@@ -31,6 +31,7 @@ class User(BaseModel):
     id: str
     name: str
     owner: bool
+    guest: bool = False
 
 
 class Domain:
@@ -50,6 +51,7 @@ class Domain:
 
         def read(db: Database) -> list[dict[str, object]]:
             from .learning_reviews import review_state
+            from .public_preview import public_preview_identity
 
             result = []
             for lesson in db.lessons.values():
@@ -77,6 +79,7 @@ class Domain:
                         "duration": sum(s.duration for s in spec.stages),
                         "parts": len(components_for(spec)),
                         "quality": lesson.get("quality", "generated"),
+                        "public_preview": public_preview_identity(db, str(lesson["id"])),
                         "review_needed": bool(learning_issues(spec))
                         or not review_state(db, str(lesson["id"]))["ready"],
                         "created_at": lesson.get("created_at", 0),
@@ -96,6 +99,8 @@ class Domain:
     ) -> dict[str, object]:
         """Return a cached lesson, attach to a pending job, or atomically admit new work."""
         canonical = canonicalize(question)
+        if user.guest:
+            raise HTTPException(403, "Public visitors can request curated topics; only the owner can authorize a build")
         if owner_build and not user.owner:
             raise HTTPException(403, "Owner access is required")
         if owner_build and (revision_of or node_parent or node_role

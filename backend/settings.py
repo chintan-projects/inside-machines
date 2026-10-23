@@ -55,6 +55,7 @@ class Settings:
     anthropic_cache_write_rate: float = 4.0
     anthropic_cache_read_rate: float = 0.10
     anthropic_max_input_bytes: int = 100000
+    public_access: bool = False
 
     def __post_init__(self) -> None:
         """Reject unsafe limits rather than silently accepting an unbounded budget."""
@@ -195,4 +196,5 @@ def load_settings() -> Settings:
         anthropic_cache_write_rate=number("anthropic_cache_write_usd_per_million"),
         anthropic_cache_read_rate=number("anthropic_cache_read_usd_per_million"),
         anthropic_max_input_bytes=int(number("anthropic_max_input_bytes")),
+        public_access=get_env("INSIDE_PUBLIC_ACCESS", "false") == "true",
     )

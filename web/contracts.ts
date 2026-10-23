@@ -18,16 +18,16 @@ export interface LessonSpec {
   prediction: string; prediction_answer: string;
   teaching?: TeachingSpec|null; graphics?:Part[];
 }
-export interface Member { id: string; name: string; owner: boolean }
+export interface Member { id: string; name: string; owner: boolean; guest?: boolean }
 export interface Feedback { value: 'up' | 'down'; reason: string }
-export interface Lesson<S extends StoredSpec = StoredSpec> { id: string; spec: S; quality: string; review_needed?: boolean; superseded_by?: string | null; video_ready: boolean; feedback: Feedback | null }
+export interface Lesson<S extends StoredSpec = StoredSpec> { id: string; spec: S; quality: string; review_needed?: boolean; public_preview?:boolean; superseded_by?: string | null; video_ready: boolean; feedback: Feedback | null }
 export type LegacyLesson = Lesson<LessonSpec>;
 export interface CatalogEntry {
   depth_parent?: string | null;
   depth_role?: 'insight' | 'model' | null;
   id: string; title: string; canonical: string; family: string; question: string;
   summary: string; category: string; accent: string; duration: number; parts: number;
-  quality: string; review_needed?: boolean; created_at: number; views: number; video_ready: boolean; preview: StoredSpec;
+  quality: string; review_needed?: boolean; public_preview?:boolean; created_at: number; views: number; video_ready: boolean; preview: StoredSpec;
 }
 export interface Job { pipeline_version?: 'evidence-first-1' | null; id: string; canonical: string; status: string; phase: string; message: string; error: string | null; lesson_id?: string }
 export interface RequestResult { kind: 'lesson' | 'job' | 'unavailable' | 'budget' | 'specific' | 'interest'; lesson_id?: string; job_id?: string; message?: string; reused?: boolean; interest_id?:string;status?:string }

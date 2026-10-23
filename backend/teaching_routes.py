@@ -37,10 +37,12 @@ class DepthDraftBody(BaseModel):
 
 
 def register_teaching_routes(app: FastAPI, store: Store, member: Callable[..., User],
-                             settings: Settings, dispatch: Callable[[str, str], Awaitable[None]]) -> None:
+                             settings: Settings, dispatch: Callable[[str, str], Awaitable[None]],
+                             *, reader: Callable[..., User] | None = None) -> None:
     """Attach authenticated teaching endpoints without a duplicate auth system."""
     reviews = LearningReviews(store)
     paths = PathPublication(store)
+    read_member = reader or member
 
     @app.post("/api/v1/owner/lessons/{lesson_id}/activate")
     def activate_native(lesson_id: str, body: NativeActivationBody,
@@ -69,14 +71,14 @@ def register_teaching_routes(app: FastAPI, store: Store, member: Callable[..., U
         return paths.attach(lesson_id, body, user)
 
     @app.get("/api/v1/learning-paths/{lesson_id}")
-    def path_bundle(lesson_id: str, user: Annotated[User, Depends(member)]) -> dict[str, object]:
+    def path_bundle(lesson_id: str, user: Annotated[User, Depends(read_member)]) -> dict[str, object]:
         from .learning_bundle import learning_bundle
         return store.transaction(lambda db: learning_bundle(db, lesson_id, user), write=False)
 
     @app.get("/api/v1/lessons/{lesson_id}/checkpoint")
     def checkpoint(
         lesson_id: str,
-        user: Annotated[User, Depends(member)],
+        user: Annotated[User, Depends(read_member)],
         seconds: Annotated[float, Query(ge=0, le=180, allow_inf_nan=False)] = 0,
         scenario: Annotated[str | None, Query(max_length=40)] = None,
     ) -> Response:

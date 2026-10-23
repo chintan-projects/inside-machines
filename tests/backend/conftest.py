@@ -27,6 +27,7 @@ def settings(tmp_path: Path) -> Settings:
         session_secret="test-only-session-secret",
         budget_usd=20,
         production=False,
+        public_access=False,
         video_width=320,
         video_height=240,
         video_fps=2,
