@@ -122,3 +122,25 @@ The README phone screenshot was refreshed from this actual deployed visitor view
 Temporary local servers, browser network overrides and viewport overrides were
 removed; the live app tab remains available. Repository publication is recorded
 below after the default branch is updated.
+
+## Public repository
+
+PR1 was merged to main at a8dd941c964dfe4eb45267b13c39775c613645ca. The repository
+is public at https://github.com/chintan-projects/inside-machines and its homepage
+points to https://inside-machines-alpha.vercel.app. Unauthenticated GitHub API
+and raw-content clients confirm public visibility, the current main revision,
+the exact README with the live link and all three screenshot byte hashes.
+The final all-ref credential scan covered45commits before the merge and found
+only the same previously reviewed artwork digest alert; the staged new-source
+scan found zero alerts. No history rewrite or root-license invention was needed.
+
+A fresh personal-profile Git connect attempt after visibility changed still
+returned Add a Login Connection. Automatic Git deployment remains BUG008; this
+does not affect the already verified live public build. The owner can connect
+GitHub in the Gmail Vercel account's Authentication settings when available.
+The global work CLI login and unrelated work projects were not changed.
+
+The remaining product work is substantive lesson craft for sixteen older cores,
+independent technical review, actual-phone accessibility and initially unfamiliar
+beginner teach-back/transfer evidence. Public access is complete; those quality
+outcomes are not claimed as complete or inferred from engineering tests.

@@ -52,8 +52,8 @@ bugs:
     title: GitHub login connection is missing after cross-account project claim
     severity: medium
     status: open
-    evidence: Gmail CLI Git reconnect returned Add a Login Connection; manual deployment succeeds but automatic Git deployment is not linked
-    fix: Owner connects chintan-projects GitHub to Gmail Vercel; then reconnect original private repository and verify a Git-triggered deployment
+    evidence: Gmail CLI reconnect still returns Add a Login Connection after the repo became public on2026-10-22; current manual production deployment is Ready
+    fix: Owner connects chintan-projects GitHub to Gmail Vercel; then reconnect the original repository and verify a Git-triggered deployment
     regression: docs/DEPLOYMENT-OWNERSHIP.md
   - id: BUG-009
     title: Local GPU example has no audio track despite expected narration

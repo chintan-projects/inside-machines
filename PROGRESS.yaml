@@ -6,7 +6,7 @@ current:
 - Shared player covers progressive depth, narration, experiments, offline paths and feedback
 - README refreshed with live links, three public visitor screenshots and truthful limitations
 - Gmail production31a9360 Ready; all4aliases public without cookies or bypass headers
-- Repository default branch and public visibility publication in progress
+- Public GitHub main includes current framework, README,3screenshots and live Vercel links
 needs_input:
 - Connect personal GitHub login to Gmail Vercel for automatic deployments (BUG-008)
 - Independent technical review, real-phone accessibility and five unfamiliar beginner checks
@@ -24,4 +24,4 @@ verification:
 - Ledger5.988598 USD,0reserved under unchanged50 USD cap; no paid calls or invented reviews
 sessions:
 - date: '2026-10-22'
-  result: No-login preview deployed and verified; README screenshots ready; human quality remains open
+  result: Public app and GitHub main verified without login; human craft and learning quality remain open

@@ -135,10 +135,11 @@ inventories remain ignored by Git and excluded from deployment packaging.
 
 ## Remaining GitHub authorization
 
-Cross-account claiming cleared the Git repository link. The original private
-repository is still `chintan-projects/inside-machines`; its contents and history
-were not rewritten. Reconnecting it through the Gmail CLI returned Vercel's
-explicit **Add a Login Connection** requirement.
+Cross-account claiming cleared the Git repository link. The original
+repository is now public at `chintan-projects/inside-machines`; its history
+was preserved and the current framework merged to `main`. Reconnecting it again
+after publication through the Gmail CLI still returned Vercel's explicit
+**Add a Login Connection** requirement.
 
 The owner must connect GitHub account `chintan-projects` in the Gmail Vercel
 account's [Authentication settings][connections]. This is separate from CLI
