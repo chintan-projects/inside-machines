@@ -1,0 +1,6 @@
+interface:
+  display_name: "Explain Visually"
+  short_description: "Understand concepts with interactive visuals or video"
+  default_prompt: "Use $explain-visually to help me understand this concept with a clear visual, then let me explore deeper."
+policy:
+  allow_implicit_invocation: true

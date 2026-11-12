@@ -1,0 +1,16 @@
+{
+  "name": "inside-explain",
+  "version": "1.0.3",
+  "description": "Interactive visual explanations and optional narrated videos.",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Inside Explain",
+    "shortDescription": "Interactive explanations and narrated videos",
+    "developerName": "Inside Machines",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ]
+  }
+}

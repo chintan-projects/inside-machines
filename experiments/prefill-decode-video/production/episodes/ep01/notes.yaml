@@ -1,0 +1,273 @@
+chapters:
+  - id: ch_question
+    title: A parallel GPU still streams its answer one piece at a time
+    scenes:
+      - id: hook
+        title: Streaming answers seem to clash with parallel hardware
+        summary: >-
+          A chat answer arrives a piece at a time although the GPU does thousands of calculations at once. The episode
+          follows one toy request to find out why the whole answer does not come out in one go.
+        key_frame: prediction
+        cards:
+          - id: hook_streaming
+            leads_to: [whole_answer_mistake, toy_example]
+            content: |
+              # A chat answer streams out piece by piece even though the GPU computes thousands of things at once
+              1. You ask a question and the answer arrives one piece at a time, at a steady rhythm.
+              2. The GPU running the model does <hepta-color type="background" color="yellow">thousands of calculations at the same moment</hepta-color>.
+              3. That makes a tempting guess: the model could write the whole answer in one go.
+          - id: whole_answer_mistake
+            color: red
+            leads_to: [chain_dependency]
+            content: |
+              # A parallel GPU does not let the model write the whole answer in one pass
+              1. The guess reasons from the hardware: if the GPU does so much at once, the answer could come out at once.
+              2. The GPU really is parallel inside each step of the work.
+              3. But the answer is made by <hepta-color type="background" color="yellow">a chain of steps, each needing the previous step's output</hepta-color>, and a chain cannot be done all at once.
+          - id: toy_example
+            leads_to: [tokens_layers]
+            content: |
+              # This lesson follows one toy request, not a measured model
+              1. The prompt is "The sky is" and the answer is "blue and clear ." followed by an end marker.
+              2. The token split, the ID numbers, the next-token scores and the three drawn layers are <hepta-color type="background" color="yellow">illustrative</hepta-color>.
+              3. No run was timed, so the lesson gives no latency numbers.
+
+  - id: ch_prefill
+    title: Prefill processes the known prompt together, picks the first token and fills the KV cache
+    scenes:
+      - id: prompt
+        title: Known prompt tokens go through each layer together, each looking only back
+        summary: >-
+          Because the whole prompt is known, its tokens enter each layer at the same time, while the layers still go in
+          order. In attention each token gathers only from itself and earlier tokens: the causal mask.
+        key_frame: parallel_conclusion
+        cards:
+          - id: tokens_layers
+            leads_to: [prompt_together]
+            content: |
+              # A model reads text as tokens that climb through a stack of layers
+              1. A **token** is an ID number standing for a piece of text; a token is roughly four English characters on average.
+              2. Each token climbs through a stack of **layers**; the video draws three, a schematic count.
+              3. Each layer does math with the model's **weights**, the <hepta-color type="background" color="yellow">learned numbers</hepta-color> that make up the trained model.
+          - id: prompt_together
+            color: yellow
+            leads_to: [attention_causal]
+            content: |
+              # The prompt's tokens enter each layer together because the whole prompt is already known
+              1. Nothing in the prompt has to be waited for: all three tokens exist before the model starts.
+              2. So "The", "sky" and "is" <hepta-color type="background" color="yellow">enter layer 1 at the same moment</hepta-color>, a highly parallel kind of work.
+              3. The layers still go in order: layer 2 needs layer 1's results, and layer 3 needs layer 2's.
+              4. "Together" means across the known tokens, not across the layers.
+          - id: attention_causal
+            leads_to: [parallel_no_future, qkv]
+            content: |
+              # In each layer a token gathers only from itself and earlier tokens
+              1. **Attention** is the step in each layer where a token gathers information from tokens of the sequence.
+              2. "is" gathers from "The", "sky" and itself.
+              3. A token never gathers from later tokens: "sky" sees "The" and itself, not "is".
+              ![A token may look back and at itself, never ahead](frame:no_future)
+              4. The **causal mask** is this rule: <hepta-color type="background" color="yellow">itself and earlier only</hepta-color>.
+              5. The model was built for writing, where later words do not exist yet, so it keeps the rule even on a known prompt.
+          - id: parallel_no_future
+            color: red
+            leads_to: [first_token_from_prefill]
+            content: |
+              # Processing the prompt together does not let a token see the words after it
+              1. It is easy to read "in parallel" as "every word sees every other word".
+              2. The prompt's tokens are computed at the same time, but each still looks only back, by the causal mask.
+              3. <hepta-color type="background" color="yellow">Known tokens: together, none looking ahead.</hepta-color>
+
+      - id: first_token
+        title: The prefill pass yields the first answer token and saves keys and values
+        summary: >-
+          The last prompt token's final-layer result scores the possible next tokens, so the first answer token comes
+          from the same pass. That pass also saves each processed token's key and value in every layer: the KV cache.
+        key_frame: prefill_name
+        cards:
+          - id: first_token_from_prefill
+            color: yellow
+            leads_to: [qkv]
+            content: |
+              # The first answer token comes from the same pass that processed the prompt
+              1. Only the last prompt token, "is", has gathered from the whole prompt.
+              2. Its final-layer result is turned into a score for each possible next token (illustrative: "blue", "clear", "gray").
+              3. One token is picked, "blue": the answer's first word, <hepta-color type="background" color="yellow">with no extra step after the prompt pass</hepta-color>.
+              ![The first answer token picked from the prompt pass](frame:pick_blue)
+          - id: qkv
+            leads_to: [kv_cache]
+            content: |
+              # In each layer every token makes a query, a key and a value
+              1. A **query** is what the token is looking for.
+              2. A **key** is what the token offers to be matched.
+              3. A **value** is what the token hands over.
+              4. Attention <hepta-color type="background" color="yellow">compares a token's query with the keys of earlier tokens and its own</hepta-color>, and takes most from the values whose keys match.
+              5. Example (illustrative): the query of "is" matches the key of "sky" strongly, so "is" takes much of the value of "sky".
+          - id: kv_cache
+            leads_to: [cache_not_answers, prefill_def]
+            content: |
+              # The keys and values of processed tokens are saved as the KV cache
+              1. A token's key and value depend only on itself and earlier tokens, so nothing added later changes them.
+              2. Later tokens will compare their queries with these keys and take these values.
+              3. Old queries are never needed again, so only keys and values are kept.
+              4. The **KV cache** holds <hepta-color type="background" color="yellow">one key and one value per processed token, in every layer</hepta-color>: here 3 tokens × 3 layers = 9 cells.
+          - id: cache_not_answers
+            color: red
+            leads_to: [prefill_def, feed_back]
+            content: |
+              # The KV cache stores keys and values, not text, answers or weights
+              1. The word "cache" suggests stored answers that the model could look up.
+              2. Each cell is one token's key and value in one layer, <hepta-color type="background" color="yellow">no text, no answers, no weights</hepta-color>.
+              3. The picked token "blue" has no cells yet: it was picked, not processed.
+              4. A picked token gets its keys and values only when it is fed back in as input.
+          - id: prefill_def
+            color: green
+            leads_to: [feed_back]
+            content: |
+              # Prefill is one pass: prompt in, first token out, cache filled
+              1. **Prefill** is the first pass of a request over the prompt.
+              2. All prompt tokens go through each layer together, each attending to itself and earlier positions.
+              3. The last prompt token's scores pick the first answer token.
+              4. The pass leaves <hepta-color type="background" color="yellow">a key and value for every prompt token in every layer</hepta-color>.
+              ![Prefill: three columns processed and saved](frame:prefill_name)
+
+  - id: ch_decode
+    title: Decode is a chain of small steps, often limited by memory reads
+    scenes:
+      - id: decode
+        title: Each decode step feeds back the newest token and appends its keys and values
+        summary: >-
+          The picked token becomes the only new input; its query uses the saved keys and values plus its own, its key
+          and value join the cache, and it scores the next token. Each output is the next step's input, so the answer
+          comes one token at a time.
+        key_frame: dependency_conclusion
+        cards:
+          - id: feed_back
+            leads_to: [decode_step]
+            content: |
+              # A picked token must be fed back as input before the next token can be scored
+              1. Scores come from the top of the newest token, so "blue" needs its own climb through the layers.
+              2. "blue" becomes the next input, <hepta-color type="background" color="yellow">carried from the top back to the bottom</hepta-color>.
+              3. Only "blue" is processed: the prompt's keys and values are already saved.
+              ![The picked token carried back down as the next input](frame:blue_input)
+          - id: decode_step
+            color: yellow
+            leads_to: [chain_dependency, memory_reads]
+            content: |
+              # A decode step processes one new token against the cache and appends its key and value
+              1. In each layer "blue" makes its own query, key and value.
+              2. Its query is compared with the saved keys and its own key, and it takes from those values.
+              3. Its key and value then join the cache, layer by layer.
+              4. Old tokens are not recomputed, but <hepta-color type="background" color="yellow">every step still reads the whole cache</hepta-color>.
+              5. At the top, "blue" scores the next token, "and".
+              6. A **decode** step is this: one token in, one token out. Step 2 does the same with "and" and gives "clear".
+          - id: chain_dependency
+            color: green
+            leads_to: [whole_timeline, reframe]
+            content: |
+              # Each new token is the next step's input, so the answer comes one token at a time
+              1. Step 2 could not start until step 1 had produced "and".
+              2. <hepta-color type="background" color="yellow">Each output is the next step's input.</hepta-color>
+              3. The GPU is parallel within a step; the chain of steps is not.
+              ![Each output is the next step's input](frame:dependency_conclusion)
+
+      - id: work_shape
+        title: One request's decode steps tend to wait on memory reads
+        summary: >-
+          Every pass reads weights and the KV cache from GPU memory. Prefill gets lots of math per read and tends to keep
+          the compute busy; one request's decode step gets little and is often memory-bound. Batching uses reads better
+          but each answer still moves one step at a time.
+        key_frame: decode_waiting
+        cards:
+          - id: memory_reads
+            leads_to: [prefill_compute, decode_memory]
+            content: |
+              # Every pass reads the weights and the KV cache from GPU memory into the compute units
+              1. In the GPU, the weights and the KV cache sit in memory, apart from the compute units.
+              2. Every pass reads them from memory into the compute units, and <hepta-color type="background" color="yellow">reading takes time too</hepta-color>.
+          - id: prefill_compute
+            leads_to: [tendencies]
+            content: |
+              # Prefill of a long prompt tends to keep the compute busy
+              1. In prefill, one read of the weights serves many prompt tokens.
+              2. That is <hepta-color type="background" color="yellow">lots of math per read</hepta-color>, so the compute units have plenty to do.
+          - id: decode_memory
+            color: yellow
+            leads_to: [batching]
+            content: |
+              # Decode of one request is often limited by memory reads
+              1. In decode, one request brings one new token per step.
+              2. In an ordinary model, that one token still needs all the weights read, plus its cache.
+              3. Little math per read: the compute finishes fast, then waits for the next read.
+              4. **Memory-bound** means <hepta-color type="background" color="yellow">speed limited by memory reads rather than by math</hepta-color>.
+              ![Decode: one token per big read](frame:decode_waiting)
+          - id: batching
+            leads_to: [tendencies]
+            content: |
+              # Batching uses each read better but does not shorten any one answer's chain
+              1. A real server answers many people at once.
+              2. **Batching** bundles one decode step from each request, so one read of the weights feeds them all.
+              3. Each request keeps its own cache.
+              4. <hepta-color type="background" color="yellow">Each person's answer still moves one step at a time.</hepta-color>
+          - id: tendencies
+            color: red
+            content: |
+              # Compute-busy prefill and memory-bound decode are tendencies, not laws
+              1. Treating "decode is memory-bound" as a law overgeneralises.
+              2. <hepta-color type="background" color="yellow">Four things shift the balance</hepta-color>:
+                 1. Cache length: a long cache makes every decode read bigger, and a short new prompt over a long saved cache behaves like decode.
+                 2. Batch size: more requests per read means more math per read.
+                 3. Model design: how attention is built changes how much is read per token.
+                 4. Hardware: the balance of memory speed and compute speed differs between GPUs.
+
+  - id: ch_whole
+    title: A longer answer means more steps in order; the cache removes repeated work, not the wait
+    scenes:
+      - id: whole_request
+        title: The whole request is one prefill and a chain of decode steps
+        summary: >-
+          A request is one prefill pass and then one decode step per further pick until an end marker or a length limit.
+          10 picks need 9 decode steps and 100 need 99, but an exact time ratio cannot be inferred; the cache spares repeated
+          past work, not the wait for the previous token.
+        key_frame: cache_limit
+        cards:
+          - id: whole_timeline
+            leads_to: [step_count]
+            content: |
+              # A request is one prefill pass followed by a chain of decode steps
+              1. Prefill takes "The sky is" and gives "blue"; then "blue" → "and", "and" → "clear", "clear" → ".", "." → end.
+              2. Generation stops at an **end marker**, a special token meaning "done", or at a length limit.
+              3. The last pick is never processed: it is never fed back.
+              4. <hepta-color type="background" color="yellow">5 picks = 1 from prefill + 4 decode steps.</hepta-color>
+          - id: step_count
+            color: yellow
+            leads_to: [not_ten_times, cache_limit]
+            content: |
+              # An answer of N picked tokens needs N − 1 decode steps after prefill
+              1. For the same prompt and model, prefill stays the same: one pass over the prompt.
+              2. Count every token the model picks, the end marker included.
+              3. The first pick comes from prefill, so <hepta-color type="background" color="yellow">10 picks need 9 decode steps, and 100 need 99</hepta-color>.
+              4. The longer answer adds 90 steps, each waiting for the one before.
+              ![1 + 9 against 1 + 99](frame:transfer_step_count)
+          - id: not_ten_times
+            color: red
+            content: |
+              # A ten-times longer answer does not imply exactly ten times the total time
+              1. Prefill costs the same in both answers. That alone does not determine the total-time ratio.
+              2. Later steps read a longer cache, so the cost of an individual step can change.
+              3. Certain: more steps and a bigger cache. The exact time <hepta-color type="background" color="yellow">cannot be inferred from the step count</hepta-color>.
+          - id: cache_limit
+            color: green
+            leads_to: [reframe]
+            content: |
+              # The KV cache removes repeated past work, not the wait for the previous token
+              1. Without a cache, a simple version would redo the old tokens' keys and values at every step.
+              2. With the cache, each step computes keys and values only for its one new token.
+              3. Each step still needs the previous token, so <hepta-color type="background" color="yellow">the chain stays in order</hepta-color>.
+              ![Cache: no repeated past work; still the wait](frame:cache_limit)
+          - id: reframe
+            color: green
+            content: |
+              # The prompt goes through together because it is known; the answer comes one token at a time because each token is the next input
+              1. Prefill: the known prompt's tokens go through each layer together, each attending to itself and earlier positions.
+              2. Decode: <hepta-color type="background" color="yellow">each answer token must exist before it can be the next input</hepta-color>.
+              3. Not covered here: speculative decoding, which drafts a few tokens and then checks them in one pass, and other architectures.

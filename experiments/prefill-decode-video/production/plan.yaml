@@ -1,0 +1,80 @@
+title: Prefill versus Decode
+sources:
+  - sources/claims.md
+language_code: en
+narration_budget_usd: 0
+narration:
+  provider_name: macos-say
+  voice: Samantha
+  words_per_minute: 165
+has_end_credits: true
+audience:
+  description: |
+    A technically curious adult beginner: a product leader who knows that a language model runs on a GPU and that
+    GPUs do a great deal of arithmetic at once, and who wants the mechanism rather than the vocabulary. No linear
+    algebra. They have watched chat answers stream out piece by piece and liked a token timeline, so they picture
+    "the model writing", but not what goes in and out of each step. Evidence: the owner's brief (BRIEF.md) describing
+    this viewer; no live probes were run, so their reactions are not yet confirmed.
+    Where they will get stuck: (1) "parallel GPU" suggests the whole answer could come out at once; (2) key, value and
+    query are three new words at once; (3) a "cache" sounds like stored answers or stored text; (4) "memory-bound"
+    is unfamiliar and easy to over-generalise into a law. They like one concrete worked example, a picture that shows
+    each step's input and output, and a prediction they can test.
+  unfamiliar_terms: [token, attention, causal mask, key, value, query, KV cache, prefill, decode, memory-bound]
+  misconceptions:
+    - id: whole_answer_at_once
+      belief: Because a GPU does so much at once, a model could produce the whole answer in one pass if it wanted to.
+      evidence: The owner's brief names this as the opening prediction to pose and overturn (not yet observed in a probe).
+    - id: parallel_sees_future
+      belief: Processing the prompt "in parallel" means each word can see the words after it.
+      evidence: The owner's brief requires stating that parallel never means future leakage (anticipated, not observed).
+    - id: cache_stores_answers
+      belief: The KV cache stores text, answers or the model's weights, so a cached model just looks things up.
+      evidence: The owner's brief lists this as a confusion to rule out (anticipated, not observed).
+    - id: ten_times_tokens_ten_times_time
+      belief: A ten-times longer answer takes exactly ten times as long.
+      evidence: The owner's brief sets this as the transfer question's tempting wrong answer (anticipated, not observed).
+goal: >-
+  Trace one short prompt through the first answer token and two decode steps, and predict what a longer answer
+  changes.
+rationale: |
+  One episode, as the owner asked: a local comparison draft. Everything turns on one toy request so the viewer sees
+  each step's real input and output; numbers, token splits and scores are illustrative, not a measured run.
+episodes:
+  - id: ep01
+    title: Why does AI write one token at a time?
+    question: >-
+      Why can a language model process a known prompt together, but usually generate its answer one new token at a
+      time?
+    question_type: mechanism
+    presenter_name: theo
+    estimated_duration_seconds: 380
+    source_scope: >-
+      HF "How caching works" (Attention matrices, Cache class, generation loop); NVIDIA "Mastering LLM Techniques:
+      Inference Optimization" (Understanding LLM inference, Batching, Key-value caching); NVIDIA "Co-Designing AI
+      Model Attention" (How are prefill and decode two different problems?, Sequence length) for caveats only.
+    taught_terms: [token, causal mask, key, value, query, KV cache, prefill, decode, memory-bound]
+    takeaway: >-
+      The prompt is known, so its tokens go through together, each looking only back; each answer token must exist
+      before it can be the next input, so the answer comes one step at a time, with saved keys and values sparing
+      repeated past work but not the wait.
+    outline:
+      - "Pose the prediction: if the GPU does so much at once, why not emit the whole answer at once?"
+      - Split the toy prompt "The sky is" into tokens and send all known positions into the layers together, each
+        looking only back; layers still go in order.
+      - The last prompt position's scores pick the first new token; the same pass saved a key and value per token per
+        layer (prefill, KV cache); the sampled token has no saved state yet.
+      - Feed the sampled token back as the next input; its query uses the saved keys and values plus its own; append;
+        repeat for two visible decode steps.
+      - Why the two phases stress the GPU differently, as conditional tendencies (memory reads versus arithmetic,
+        batching and other caveats).
+      - Rejoin the whole request on a timeline; transfer to 10 versus 100 output tokens; what the cache does and does
+        not remove; close with a reframe.
+excluded_topics:
+  - topic: Training, gradients and fine-tuning
+    reason: The episode is about answering a request with an already-trained model.
+  - topic: Speculative decoding, multi-token prediction and non-transformer architectures
+    reason: They change the one-token-per-step picture; the owner scoped them out of this episode.
+  - topic: KV cache size formulas, GQA/MQA, head dimension, tensor parallelism, PagedAttention
+    reason: Engineering detail for a later, separate lesson; this one keeps workload claims qualitative.
+  - topic: Measured latency, throughput or benchmark numbers
+    reason: No controlled run exists; every number shown is illustrative.

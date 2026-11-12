@@ -18,3 +18,5 @@ research/refs/
 shots/
 .vercel
 .env*.local
+# Local projects created by the shared explainer skill (private drafts/media).
+.explainers/

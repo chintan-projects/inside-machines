@@ -1,0 +1,280 @@
+scenes:
+  - id: hook
+    purpose: "Make the viewer feel the question before any answer, from something they have watched happen."
+    beats:
+      - id: stream
+        narration_text: "You ask a question, and the answer streams back a piece at a time."
+        visual: "T1. Blue chips 'The' 'sky' 'is' on the left of a row; gold chips 'blue' 'and' 'clear' '.' appear one by one to their right, with a steady rhythm."
+      - id: gpu_parallel
+        narration_text: "Yet the GPU behind it does thousands of calculations at once."
+        visual: "Below the row, a grey rectangle labelled 'GPU' fills with a grid of many small squares flashing together."
+      - id: prediction
+        narration_text: "So why not write the whole answer in one go?"
+        visual: "The gold chips fade; a single dashed gold box 'whole answer at once?' spans where they were. Held through the pause."
+        pause_duration_seconds: 2.5
+      - id: promise
+        narration_text: "Let's follow one tiny request through, and check your guess."
+        visual: "The GPU and box leave; the blue prompt chips slide to the centre."
+      - id: illustrative
+        narration_text: "It's a toy example: illustrative, not a measured run."
+        visual: "A small grey label under the chips 'Toy example: illustrative, not a measured model'."
+        citation: "BRIEF.md scope; no controlled run exists."
+
+  - id: prompt
+    purpose: "The known prompt can go through each layer together, each token looking only back, layer after layer."
+    beats:
+      - id: tokens
+        narration_text: "The model takes in tokens: ID numbers standing for pieces of text."
+        visual: "The words 'The sky is' split into three blue chips at the bottom; a small ID number under each chip; label 'tokens (illustrative split and IDs)'."
+        citation: "NVIDIA, Inference Optimization, 'Understanding LLM inference', para 2."
+      - id: layers
+        narration_text: "Each token climbs through a stack of layers. We'll draw three."
+        visual: "Above each chip a column of three dashed cells rises; rows labelled 'layer 1' 'layer 2' 'layer 3' on the left, with a small note '3 layers (schematic)'. The main-question line fades in small at the top."
+      - id: weights
+        narration_text: "Each layer does math with the model's learned numbers, its weights."
+        visual: "A small grey tag 'weights (learned numbers)' appears beside the layer labels, linked to all three rows."
+      - id: known
+        narration_text: "The whole prompt is known, so all three tokens enter a layer together."
+        visual: "The three layer-1 cells flash white at the same moment, with small arrows up from the three chips."
+        citation: "NVIDIA, Inference Optimization, 'Prefill phase'."
+      - id: look_back
+        narration_text: "In each layer, a token gathers from itself and earlier tokens. That's attention."
+        visual: "Curved arrows from the layer-1 cell of 'is' back to the cells of 'sky' and 'The', and a small loop on itself. Label 'attention' beside them."
+      - id: no_future
+        narration_text: "But never from later ones. “sky” sees “The” and itself, not “is”."
+        visual: "A curved arrow from 'sky' forward to 'is' turns red and gets a red cross."
+        citation: "HF, How caching works, 'Attention matrices' para 2."
+      - id: why_no_future
+        narration_text: "The model was built for writing, where later words don't exist yet."
+        visual: "The 'is' column dims briefly, as if not written yet; the red cross stays."
+      - id: mask_name
+        narration_text: "So it keeps that rule even on a known prompt: a causal mask."
+        visual: "The 'is' column returns; the label 'causal mask: itself and earlier only' appears beside the red cross."
+      - id: layer_order
+        narration_text: "And layers go in order. Layer two needs layer one's results."
+        visual: "Row 1 cells flash, short up-arrows to row 2, row 2 flashes, then row 3. Arrows leave."
+      - id: parallel_conclusion
+        narration_text: "So “together” means across known tokens, never looking ahead."
+        visual: "Conclusion sentence at the bottom 'Known tokens: together, none looking ahead.' All nine cells are now outlined solid white."
+        pause_duration_seconds: 1.2
+
+  - id: first_token
+    purpose: "The same pass yields the first answer token and leaves saved keys and values; the picked token has none yet."
+    beats:
+      - id: seam
+        narration_text: "The prompt has climbed to the top. Where does the answer begin?"
+        visual: "The grid as left by the previous scene (three columns, cells outlined white). A small '?' above the grid."
+      - id: why_last
+        narration_text: "Only the last token, “is”, has gathered from the whole prompt."
+        visual: "The 'is' column is boxed in yellow; faint arrows from its cells to every earlier cell."
+      - id: last_position
+        narration_text: "Its final-layer result is turned into a score for each possible next token."
+        visual: "From the top of the 'is' column an arrow to a small bar panel on the right, three bars 'blue' 'clear' 'gray', titled 'next-token scores (illustrative)'."
+        citation: "HF generation loop (logits of the last position); NVIDIA 'Prefill phase'."
+      - id: pick_blue
+        narration_text: "One gets picked: “blue”, the answer's first word, from this same pass."
+        visual: "The 'blue' bar turns gold; a gold chip 'blue' appears above the 'is' column. The bar panel leaves; a small brace under the three columns 'one pass'."
+      - id: reuse_question
+        narration_text: "What from this pass can later steps reuse? Look inside a layer."
+        visual: "One cell (layer 1, 'sky') copies out to the right, enlarged, with three empty slots."
+      - id: kv_link
+        narration_text: "Each token made a query there: what it's looking for."
+        visual: "The first slot lights yellow, labelled 'Q  query: what it looks for'."
+        citation: "HF, How caching works, 'Attention matrices' (Q, K, V are projections of each token)."
+      - id: key_value
+        narration_text: "And a key: what it offers to be matched. And a value: what it hands over."
+        visual: "The second slot lights teal 'K  key: what it offers to match', the third teal 'V  value: what it hands over'."
+      - id: match_rule
+        narration_text: "Gathering means comparing your query with earlier keys, and your own."
+        visual: "Back on the grid, layer 1: a yellow Q tag on the 'is' cell; arrows from it to the cells of 'The', 'sky' and itself."
+      - id: kv_example
+        narration_text: "Say the query of “is” matches the key of “sky”. Then “is” takes much of its value."
+        visual: "The arrow to 'sky' thickens, label 'strong match (illustrative)'; a teal dot travels from 'sky' to 'is'."
+      - id: never_change
+        narration_text: "A token's key and value depend only on itself and earlier tokens. Nothing added later changes them."
+        visual: "The nine cells fill teal row by row."
+        citation: "HF, How caching works, 'Attention matrices' para 2."
+      - id: why_keep
+        narration_text: "Later tokens will compare their queries with these keys, and take these values."
+        visual: "A faint dashed column to the right of the grid, with dotted arrows from it back to the teal cells."
+      - id: saved
+        narration_text: "Old queries are never needed again. The kept keys and values are the KV cache."
+        visual: "The yellow Q tags fade away. A teal bracket around the nine cells labelled 'KV cache (saved)'. The enlarged cell leaves."
+        spoken_text_override: "Old queries are never needed again. The kept keys and values are the K V cache."
+        citation: "NVIDIA, Inference Optimization, 'Key-value caching'; HF per-layer caching."
+      - id: cache_misread
+        narration_text: "“Cache” might suggest stored answers."
+        visual: "A claim card on the right, tagged 'Intuition', 'The cache holds answers'."
+      - id: cache_truth
+        narration_text: "But each cell is one token's key and value in one layer. No answers, no weights."
+        visual: "The claim is struck through in red; beside it 'Saved: keys and values of processed tokens'."
+      - id: blue_empty
+        narration_text: "And “blue” has no cells yet. It was picked, not processed."
+        visual: "A fourth column of three dashed empty cells appears in the next position; yellow outline around the empty column."
+      - id: prefill_name
+        narration_text: "This first pass, prompt in, first token out, cache filled, is called prefill."
+        visual: "A label 'PREFILL' over the three teal columns. Held through the pause."
+        pause_duration_seconds: 1.2
+        citation: "NVIDIA, Inference Optimization, 'Prefill phase'."
+
+  - id: decode
+    purpose: "The picked token is fed back as the only new input; query, match, append; repeat; the chain is sequential."
+    beats:
+      - id: seam_decode
+        narration_text: "Prefill gave us one token and a full cache. Now, the next token?"
+        visual: "Same grid; 'PREFILL' label fades. Gold 'blue' chip pulses above the grid."
+      - id: why_feed_back
+        narration_text: "Scores come from the top of the newest token, so “blue” needs its own climb."
+        visual: "The empty dashed column above where 'blue' will enter pulses; a yellow '?' at its top."
+      - id: blue_input
+        narration_text: "So “blue” becomes the next input, carried from the top back to the bottom."
+        visual: "The gold chip arcs around the right side of the grid and lands under column 4, with a yellow box. This move is the visual payoff."
+        citation: "HF generation loop (inputs = next_token_ids)."
+      - id: only_new
+        narration_text: "Only “blue” is processed. The earlier work is already saved."
+        visual: "The three blue prompt chips dim; their teal cells stay bright."
+      - id: query
+        narration_text: "In layer one, “blue” makes its own query, key and value."
+        visual: "The layer-1 cell of column 4 gets a yellow outline with three small tags 'Q' 'K' 'V' ('query' and its own key and value)."
+      - id: match_cache
+        narration_text: "Its query is compared with the saved keys and its own, and takes from those values."
+        visual: "Arrows from the column-4 layer-1 cell back to the three teal cells of layer 1, which flash, plus a small loop on itself."
+        citation: "HF, 'Attention matrices' (q_t with cached k, v)."
+      - id: append
+        narration_text: "Then its key and value join the cache."
+        visual: "The column-4 layer-1 cell fills teal. Then the same happens quickly in layers 2 and 3."
+      - id: still_work
+        narration_text: "Old tokens aren't recomputed, but every step still reads the whole cache."
+        visual: "A faint sweep across all teal cells of each row; label 'reads all saved keys and values'."
+      - id: next_and
+        narration_text: "At the top, “blue” scores the next token: “and”."
+        visual: "Arrow up from column 4 to a gold chip 'and' above column 4."
+      - id: decode_name
+        narration_text: "One token in, one token out: one decode step."
+        visual: "Label 'DECODE step 1' above the grid."
+        citation: "NVIDIA, Inference Optimization, 'Decode phase'."
+      - id: step_two
+        narration_text: "Again: “and” goes in, reads the cache, adds its key and value, and gives “clear”."
+        visual: "The 'and' chip arcs down to column 5; its three cells fill teal one after another; gold 'clear' appears above column 5. Label 'DECODE step 2'."
+      - id: dependency
+        narration_text: "Here's the catch. Step two couldn't start until step one produced “and”."
+        visual: "The two arcs (blue to col 4, and to col 5) glow yellow in order, with '1' and '2' tags."
+      - id: dependency_conclusion
+        narration_text: "Each new token is the next step's input. So the answer comes one at a time."
+        visual: "Conclusion sentence at the bottom 'Each output is the next step's input.' Held through the pause."
+        pause_duration_seconds: 1.5
+      - id: hook_payoff
+        narration_text: "The GPU really is parallel. This chain of steps isn't."
+        visual: "The opening box 'whole answer at once?' returns small, struck through."
+
+  - id: work_shape
+    purpose: "Why the small decode steps are often hard to speed up: one request's decode often waits on memory reads; tendencies only."
+    beats:
+      - id: seam_shape
+        narration_text: "So: one wide pass for the prompt, then a chain of small steps."
+        visual: "New composition. Left: three blue columns under 'prefill: one wide pass'. Right: one gold column under 'decode: one token per step'."
+      - id: shape_question
+        narration_text: "Each small step adds to your wait. So what limits one step's speed?"
+        visual: "The two small pictures move up and shrink; the question line 'what limits one step?' sits under them."
+      - id: gpu_picture
+        narration_text: "In the GPU, weights and KV cache sit in memory, apart from the compute units."
+        visual: "A GPU outline with a purple 'GPU memory: weights + KV cache' block on the left and a grey 'compute' block on the right."
+        spoken_text_override: "In the GPU, weights and K V cache sit in memory, apart from the compute units."
+      - id: read_cost
+        narration_text: "Every pass, they're read from memory into the compute units, and reading takes time too."
+        visual: "A purple arrow 'read' grows from memory to compute; a pulse travels along it."
+      - id: prefill_shape
+        narration_text: "In prefill, each read of the weights serves many prompt tokens: lots of math per read."
+        visual: "One purple read pulse feeds a row of eight blue dots in the compute block."
+        citation: "NVIDIA, Inference Optimization, 'Prefill phase'; NVIDIA, Co-Designing Attention, Table 2."
+      - id: prefill_busy
+        narration_text: "So a long prompt tends to keep the compute busy."
+        visual: "A meter under compute fills high, label 'math per read: high'."
+      - id: decode_shape
+        narration_text: "In decode, one request brings one new token per step."
+        visual: "Same GPU; the purple read pulse feeds a single gold dot."
+        citation: "NVIDIA, Inference Optimization, 'Decode phase'."
+      - id: whole_read
+        narration_text: "Yet in an ordinary model like ours, that token still needs all the weights read, plus its cache."
+        visual: "The read arrow stays just as thick; label 'same big read'."
+      - id: decode_little_math
+        narration_text: "Little math per read: the compute finishes fast, then waits for the next read."
+        visual: "The meter drops low; the compute block blinks idle while a purple pulse crawls along the read arrow."
+      - id: decode_waiting
+        narration_text: "So decode is often limited by memory reads. That's called memory-bound."
+        visual: "Label 'often limited by memory reads' and a small tag 'memory-bound'."
+        citation: "NVIDIA, Inference Optimization, 'Decode phase'; NVIDIA, Co-Designing Attention, Table 2."
+      - id: many_users
+        narration_text: "A real server answers many people at once."
+        visual: "Three more small request chips ('request 2', 'request 3', 'request 4') appear beside the GPU."
+      - id: batching
+        narration_text: "It can bundle one decode step from each person, so one read of the weights feeds them all."
+        visual: "Their gold dots join the single one in compute; the meter rises a bit; small purple chips 'own cache' on each request."
+        citation: "NVIDIA, Inference Optimization, 'Batching'."
+      - id: batching_chain
+        narration_text: "That uses each read better. But each person's answer still moves one step at a time."
+        visual: "Each request chip shows a short chain of gold steps, one after another."
+      - id: caveat_list
+        narration_text: "These are tendencies: cache length, batch size, model design and hardware shift the balance."
+        visual: "Small label 'tendencies, not laws'; four small chips around the GPU 'long cache' 'batch size' 'model design' 'hardware'."
+        citation: "NVIDIA, Co-Designing Attention, Table 2 and the prefix-caching note; 'Sequence length'."
+        pause_duration_seconds: 1.0
+  - id: whole_request
+    purpose: "Rejoin the whole request, test transfer on a longer answer, say what the cache does not remove, reframe."
+    beats:
+      - id: rejoin
+        narration_text: "Here's the whole request."
+        visual: "A horizontal timeline. A wide blue block 'prefill: The sky is → blue', then narrow gold blocks 'blue → and', 'and → clear', 'clear → .', '. → end', each after the previous."
+      - id: end_token
+        narration_text: "It stops at an end marker or a length limit. The last pick is never processed."
+        visual: "The 'end' chip at the end has no block after it; small label 'never fed back'. Under the timeline: '5 picks = 1 from prefill + 4 decode steps'."
+        citation: "NVIDIA, Inference Optimization, 'Understanding LLM inference' para 1 (stopping criteria)."
+      - id: transfer_q
+        narration_text: "Same prompt, same model. The answer runs 10 tokens, or 100."
+        visual: "Timeline shrinks to the top; two empty rows labelled '10 tokens' and '100 tokens'."
+      - id: transfer_ask
+        narration_text: "What must grow? And would the time grow ten times?"
+        visual: "Question card with the two questions, held through the pause."
+        pause_duration_seconds: 3.0
+      - id: transfer_more_steps
+        narration_text: "Prefill stays the same: still one pass over the prompt."
+        visual: "Both rows get the same blue prefill block."
+      - id: count_rule
+        narration_text: "Now count every token the model picks, the end marker included."
+        visual: "Small rule under the rows 'count: every pick, end marker included'."
+      - id: transfer_step_count
+        narration_text: "The first pick comes from prefill. So 10 picks need 9 decode steps, and 100 need 99."
+        visual: "Row one gets 9 narrow gold blocks, row two 99 thin blocks running far right (compressed). Counts '1 + 9' and '1 + 99'."
+      - id: transfer_sequential
+        narration_text: "Ninety more steps, each waiting for the one before."
+        visual: "A brace over the extra blocks '+90 steps, in order'."
+        pause_duration_seconds: 1.0
+      - id: time_less
+        narration_text: "And time? Prefill costs the same in both. That alone doesn't tell us the total-time ratio."
+        visual: "A '10x?' tag; the two equal prefill blocks flash; label 'prefill: unchanged'. No numeric ratio is asserted."
+      - id: time_more
+        narration_text: "Later steps also read a longer cache, so their individual cost can change."
+        visual: "The far end of row two glows; label 'longer cache to read'. No fixed per-token time is assumed."
+      - id: transfer_step_cost
+        narration_text: "So more steps is certain, and a bigger cache. Exactly ten times? We can't say."
+        visual: "'10x?' is struck through; beside it 'certain: more steps, bigger cache. exact time: depends'."
+        pause_duration_seconds: 1.0
+      - id: no_cache_baseline
+        narration_text: "Without a cache, a simple version would redo old tokens' work every step."
+        visual: "A small hypothetical panel labelled 'Hypothetical: no cache': each decode block shows the old columns recomputed (grey)."
+        citation: "HF, How caching works, intro and 'without caching' table."
+      - id: cache_limit
+        narration_text: "The cache removes that repeat, not the wait for the previous token."
+        visual: "Conclusion line 'Cache: no repeated past work. Still: wait for the previous token.'"
+        pause_duration_seconds: 1.2
+      - id: scope
+        narration_text: "Tricks like speculative decoding draft a few tokens, then check them in one pass. That's for another day."
+        visual: "Small grey label 'Not covered: speculative decoding, other architectures'."
+        citation: "NVIDIA, Co-Designing Attention, note on speculative decoding."
+      - id: reframe_known
+        narration_text: "The prompt goes through together because it's already known."
+        visual: "The grid returns small, prompt columns light together."
+      - id: reframe_chain
+        narration_text: "The answer comes one token at a time because each token is the next input."
+        visual: "A gold chip makes the top-to-bottom trip once more and lands. Held."
+        pause_duration_seconds: 2.0

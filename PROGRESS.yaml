@@ -1,6 +1,8 @@
 goal: Build the curated visual concept library and validate learning quality
 status: public_preview_deployed_quality_open
 current:
+- Versioned local Explain Visually skill/plugin supports interactive, video and continuation
+- Canonical source and sanitized prefill/decode video source are tracked; live app routes unchanged
 - Public visitor sessions, protected owner tools and private chats implemented
 - Exact native artifact previews remain separate from human quality approval and activation
 - Shared player covers progressive depth, narration, experiments, offline paths and feedback

@@ -46,6 +46,28 @@ Public preview permission is separate from quality acceptance. Draft labels rema
 visible; no human review result is invented to make an explanation accessible.
 See the [quality bar](docs/QUALITY-BAR.md) and [current progress](PROGRESS.yaml).
 
+## Create your own local explanation
+
+Use **[Inside Explain](plugins/inside-explain/README.md)** from Claude Code or
+Codex/ChatGPT desktop. One skill creates interactive visuals by default, adds
+optional narrated video, and keeps a local project for follow-up questions.
+
+```sh
+node scripts/install-explainer-skill.mjs
+```
+
+Then ask `/explain-visually How does this work?` in Claude Code or
+`$explain-visually Explain this concept visually` in Codex. Follow with “dive
+deeper” or “turn this into a short narrated video”. The package also includes
+Claude/OpenAI plugin manifests and local marketplace entries; see its README for
+plugin installation and chat-only handoff. It has no account connection or hidden
+paid API call. Free local speech is the default where available; host-model usage
+still counts against the selected account.
+
+The [editable prefill/decode example](experiments/prefill-decode-video/README.md)
+documents the video workflow and its unresolved learning/craft evidence. These
+local authoring tools do not automatically add content to the live library.
+
 ## How it works
 
 A complete causal story comes first; optional insight and model views follow.

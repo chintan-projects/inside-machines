@@ -19,3 +19,9 @@ vendor/anatomy/*
 .pytest_cache/
 .coverage
 htmlcov/
+# Local authoring tooling and drafts are not production function inputs.
+.explainers/
+plugins/
+.agents/
+.claude-plugin/
+experiments/prefill-decode-video/

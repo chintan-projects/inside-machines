@@ -1,0 +1,12 @@
+{
+  "name": "inside-explain",
+  "version": "1.0.3",
+  "description": "Interactive visual explanations and optional narrated videos with one reusable teaching workflow.",
+  "author": {
+    "name": "Inside Machines"
+  },
+  "homepage": "https://github.com/chintan-projects/inside-machines/tree/main/plugins/inside-explain",
+  "repository": "https://github.com/chintan-projects/inside-machines",
+  "license": "MIT",
+  "skills": "./skills/"
+}

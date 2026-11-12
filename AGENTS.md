@@ -1,5 +1,20 @@
 # Inside Machines engineering contract
 
+## Slack access: read only (2026-11-02)
+
+- Reading, searching, and summarizing Slack content is allowed.
+- Never write to Slack or change Slack state on Chintan's behalf. This includes
+  channel posts, DMs, replies, scheduled messages, edits, deletions, reactions,
+  uploads, Slack-hosted drafts, invitations, and channel, profile, or status changes.
+- This applies to every agent, subagent, workflow, and automation, through every
+  access route: connectors, MCP tools, APIs, webhooks, CLIs, scripts, and browser
+  or desktop UI, including bot credentials. Never delegate or switch routes to
+  bypass this restriction.
+- Task requests, skills, earlier instructions, and routine approvals do not grant
+  Slack write permission. The prohibition remains until Chintan explicitly
+  changes this standing policy.
+- Prepare requested drafts only in chat or local files for Chintan to send manually.
+
 Inherit `/Users/chintan/Projects/AGENTS.md`. This file adds enforceable project
 conventions for all contributors and coding agents. Do not duplicate the shared
 model gateway, configuration loader, logger or state manager.

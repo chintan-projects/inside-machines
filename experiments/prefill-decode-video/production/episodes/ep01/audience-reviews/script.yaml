@@ -1,0 +1,349 @@
+# Historical simulated-reader feedback; not human approval. The round-3 below-ten
+# timing claim was subsequently corrected in script and cards; see the example README.
+rounds:
+  - scene_ids: [hook, prompt, first_token, decode, work_shape, whole_request]
+    reviewer_summary:
+      question: "Why can a language model take in my whole prompt at once, but has to write its answer one token at a time?"
+      takeaway: "The prompt is already known, so its tokens go through each layer together; but each new answer token must be fed back in before the next one can be picked, so the steps form a chain, and the cache only spares re-doing old work."
+      explained_terms: ["token", "layer", "attention", "KV cache", "prefill", "decode step", "memory-bound"]
+      lost_beat_id: key_value
+      most_engaging_beat_id: dependency
+    findings:
+      - scene_id: decode
+        beat_id: blue_input
+        kind: lost
+        problem: "I am told 'blue' has to go in, but never why. The missing link is that the next scores come from the top of the newest token, so 'blue' needs its own climb. Without it I still wonder why 'is' couldn't just give scores for two words at once."
+        resolution:
+          action: fixed
+          note: "New beat why_feed_back before blue_input: scores come from the top of the newest token, so 'blue' needs its own climb. Also new beat why_last in first_token (only the last token has looked back over the whole prompt)."
+      - scene_id: first_token
+        beat_id: key_value
+        kind: lost
+        problem: "Key and value arrive together, and 'match against' and 'what to take' are abstract with no example. Nobody says this is the same thing as the 'gathering information' I saw called attention, so I am holding two separate ideas."
+        resolution:
+          action: fixed
+          note: "New beat kv_link ties the cell to what attention needs; new beat kv_example works one illustrative case ('is' matches the key of 'sky' and takes its value) on the grid."
+      - scene_id: work_shape
+        beat_id: gpu_picture
+        kind: lost
+        problem: "'Weights' is used here for the first time and never explained. I don't know what they are, or why they have to be read for every step, so 'each read of the weights' in the next beats means nothing concrete to me."
+        resolution:
+          action: fixed
+          note: "New beat weights in the prompt scene (each layer's math uses learned numbers, called weights); new beat whole_read in work_shape (even one token needs every layer, so all the weights are read)."
+      - scene_id: work_shape
+        beat_id: seam_shape
+        kind: lost
+        problem: "The main question was just answered. 'Different shapes of work' is abstract, and nothing says what new question this scene answers or why I should care, for example why decode is slow."
+        resolution:
+          action: fixed
+          note: "seam_shape now says what is established (a chain of small steps vs one wide pass); new beat shape_question states the scene's question (why are small steps hard to speed up)."
+      - scene_id: whole_request
+        beat_id: transfer_not_10x
+        kind: wrong
+        problem: "99 steps against 9 is eleven times as many decode steps, and later steps read a longer history. The only reason given is that prefill doesn't grow, so I conclude it takes less than ten times as long, when it could take more."
+        resolution:
+          action: fixed
+          note: "Rewritten: not simply ten times; prefill doesn't grow while later steps read a longer history; transfer_step_cost now says it could be less or more."
+      - scene_id: whole_request
+        beat_id: transfer_more_steps
+        kind: minor
+        problem: "The timeline I just saw had four answer words plus 'end', with four decode blocks. Now 10 tokens need only 9 steps. I can't tell whether the end marker counts as one of the tokens, and the arithmetic feels inconsistent."
+        resolution:
+          action: fixed
+          note: "Visual only: the rejoin timeline now carries '5 tokens out = 1 from prefill + 4 decode steps', the same rule as 10 → 9. No narration added."
+      - scene_id: prompt
+        beat_id: why_no_future
+        kind: minor
+        problem: "In the prompt, 'is' already exists, so 'matches writing' doesn't explain why 'sky' may not look at it. I ask 'wait, why?' and get no answer."
+        resolution:
+          action: fixed
+          note: "Missing link, so given its own beat: why_no_future (built for writing, where later words don't exist) + mask_name (so it keeps the rule even on a known prompt)."
+      - scene_id: decode
+        beat_id: match_cache
+        kind: minor
+        problem: "'Query' is the third abstract word, and the match is never shown on a concrete case (for example, what 'blue' finds in 'sky'), so matching stays vague for me."
+        resolution:
+          action: kept
+          note: "The concrete match is now worked once in first_token/kv_example; repeating it here would add a sentence to a minor finding."
+      - scene_id: work_shape
+        beat_id: batching
+        kind: minor
+        problem: "The memory block was labelled 'weights + KV cache', so I take this to mean one read serves every request's cache too. But each request's history is its own; only the weight read seems shareable. This isn't said."
+        resolution:
+          action: fixed
+          note: "Treated as a correctness issue: the sentence now says one read of the weights is shared and each request still reads its own cache."
+      - scene_id: work_shape
+        beat_id: decode_shape
+        kind: minor
+        problem: "'The reads stay large' is stated, not explained. Why does one token need the whole set of weights read?"
+        resolution:
+          action: fixed
+          note: "Missing link: 'The reads stay large' removed; new beat whole_read gives the reason."
+      - scene_id: first_token
+        beat_id: last_position
+        kind: minor
+        problem: "'Position' is new. I don't know why only the last one gives scores, what the other tokens' tops do, or how 'one gets picked' (the highest score?)."
+        resolution:
+          action: fixed
+          note: "'position' replaced by the token name; why_last beat gives the reason only the last token's top is used. How it is picked is left as 'one gets picked' (sampling detail out of scope)."
+      - scene_id: first_token
+        beat_id: cache_truth
+        kind: minor
+        problem: "'No weights' uses a word I haven't learned yet. Also, the belief that the cache stores answers is only struck through here. The concrete break comes later, in decode."
+        resolution:
+          action: fixed
+          note: "Weights are now taught in the prompt scene before this beat. The concrete break staying in decode is kept."
+      - scene_id: prompt
+        beat_id: no_future
+        kind: minor
+        problem: "'Causal mask' appears only on screen and is never said, so I don't know it is the name for 'only look back'."
+        resolution:
+          action: fixed
+          note: "mask_name beat says 'called a causal mask' aloud."
+      - scene_id: hook
+        beat_id: illustrative
+        kind: minor
+        problem: "'Token pieces and scores' are used before I know what either word means."
+        resolution:
+          action: fixed
+          note: "Deleted the words: 'It's a toy example: illustrative, not a measured run.'"
+      - scene_id: whole_request
+        beat_id: scope
+        kind: minor
+        problem: "'Speculative decoding' is an unexplained name, and 'change this picture' doesn't say how. It reopens the 'whole answer at once?' question without even a one-line shape of the answer."
+        resolution:
+          action: kept
+          note: "The owner's brief requires naming speculative decoding as out of scope; a minor finding may not add an explanation sentence."
+      - scene_id: whole_request
+        beat_id: reframe_chain
+        kind: minor
+        problem: "Summary mismatch: the reviewer's explained terms omit causal mask, key, value and query, which the plan lists as taught."
+        resolution:
+          action: fixed
+          note: "Causal mask now said aloud (mask_name); key and value worked on an example (kv_link, kv_example). Query stays a one-line term in decode/query."
+  - scene_ids: [prompt, first_token, decode, work_shape, whole_request]
+    reviewer_summary:
+      question: "Why can a language model take in a prompt it already has all at once, but usually has to write its answer one token at a time?"
+      takeaway: "The prompt is already known, so its tokens go through each layer together. Each new answer token is the input to the next step, so the steps form a chain that cannot run in parallel; the cache only saves the model from redoing past work."
+      explained_terms: ["token", "weights", "attention", "causal mask", "key", "value", "KV cache", "prefill", "query", "decode step"]
+      lost_beat_id: kv_example
+      most_engaging_beat_id: blue_input
+    findings:
+      - scene_id: work_shape
+        beat_id: shape_question
+        kind: lost
+        problem: "The main question was just answered, and now a new one starts. Nobody ever said the small steps are slow or hard to speed up, so I don't know why I'm being asked why they are. It feels like a second episode starting."
+        resolution:
+          action: fixed
+          note: "shape_question now gives the reason first: each small step adds to your wait; then asks what limits one step's speed."
+      - scene_id: work_shape
+        beat_id: decode_waiting
+        kind: lost
+        problem: "Going from 'little math per read' to 'limited by how fast memory can be read' skips a step. Nobody says aloud that the compute finishes quickly and then sits waiting for the next read. 'Memory-bound' only appears on screen and is never spoken."
+        resolution:
+          action: fixed
+          note: "New beat decode_little_math (compute finishes fast, then waits for the next read); decode_waiting says 'memory-bound' aloud."
+      - scene_id: first_token
+        beat_id: key_value
+        kind: lost
+        problem: "'A tag later tokens match against.' Match using what? The thing that does the matching (the query) only arrives in the next scene. So in kv_example, 'the key of sky matched well' hangs: matched what? I followed the arrow, not the mechanism."
+        resolution:
+          action: fixed
+          note: "Second loss at this step: rewritten a different way. Query, key and value are introduced together (kv_link, key_value), matching is defined as query against keys (match_rule), shown once (kv_example), and never_change says why keys/values can be kept."
+      - scene_id: whole_request
+        beat_id: transfer_not_10x
+        kind: lost
+        problem: "One line gives two reasons that push in opposite directions. Fixed prefill makes it less than ten times, longer history makes it more. Nobody says which pushes which. Also, 9 versus 99 steps is eleven times as many, not ten, which made me doubt my counting."
+        resolution:
+          action: fixed
+          note: "Split into time_less (prefill doesn't grow: pulls it down), time_more (longer cache: pushes it up) and transfer_step_cost (steps certain, time depends). The beat transfer_not_10x no longer exists."
+      - scene_id: work_shape
+        beat_id: batching
+        kind: lost
+        problem: "Two new ideas in one beat: one GPU serving many people's requests at once (new to me), and each request still reading its own cache. I didn't know a single GPU handles other users at the same moment, and I'm not told whether this fixes the slowness."
+        resolution:
+          action: fixed
+          note: "Split: many_users (a server answers many people at once) then batching (bundled decode steps share one read of the weights). The own-cache detail moved to the picture only."
+      - scene_id: first_token
+        beat_id: kv_link
+        kind: minor
+        problem: "'It's what attention needs' comes after the vague 'left something behind'. 'It' and 'something' point at nothing I can name yet, and there are three beats in a row before I find out."
+        resolution:
+          action: fixed
+          note: "left_behind deleted; kv_link names the three things directly."
+      - scene_id: prompt
+        beat_id: mask_name
+        kind: minor
+        problem: "'Built for writing' doesn't tell me why the model can't peek ahead when the prompt is fully known. I'm left asking: why keep the rule if the future words exist?"
+        resolution:
+          action: kept
+          note: "The consequence of keeping the rule (keys and values never change, so they can be saved) is now its own beat, first_token/never_change; no sentence added to the prompt scene."
+      - scene_id: decode
+        beat_id: query
+        kind: minor
+        problem: "The query is introduced as something 'blue' makes. That makes me think the prompt tokens didn't make queries when they looked back in the prompt scene. Nothing says they did the same thing."
+        resolution:
+          action: fixed
+          note: "Query is now introduced for every prompt token in first_token; decode/query shortened to 'its own query, key and value'."
+      - scene_id: work_shape
+        beat_id: whole_read
+        kind: wrong
+        problem: "'Reads all the weights' for every token is stated flatly. Some model designs read only part of the weights per token. The 'model design' caveat comes two beats later and doesn't say it applies to this claim."
+        resolution:
+          action: fixed
+          note: "Qualified in the sentence itself: 'in an ordinary model like ours'."
+      - scene_id: decode
+        beat_id: decode_name
+        kind: minor
+        problem: "'That loop is called a decode step' mixes 'loop' and 'step'. I can't tell whether a decode step is one pass or the whole repeating process."
+        resolution:
+          action: fixed
+          note: "Now 'One token in, one token out: one decode step.'"
+      - scene_id: whole_request
+        beat_id: rejoin
+        kind: minor
+        problem: "The timeline shows new tokens ('.' and 'end') and the sum '1 from prefill + 4 decode steps' while the narration only says 'put it back together'. I'm reading an unexplained equation and an 'end' chip before the next beat explains it."
+        resolution:
+          action: fixed
+          note: "The count line moved to the end_token beat's picture."
+      - scene_id: decode
+        beat_id: still_work
+        kind: minor
+        problem: "'The whole history' is a new name for the saved keys and values. It's used again later ('longer history', 'very long histories') without ever being said to mean the cache."
+        resolution:
+          action: fixed
+          note: "'history' replaced by 'cache' everywhere."
+      - scene_id: work_shape
+        beat_id: gpu_picture
+        kind: minor
+        problem: "The picture says 'weights + KV cache' but the narration says only weights. I wasn't sure whether the cache is something separate from GPU memory until whole_read."
+        resolution:
+          action: fixed
+          note: "Narration now names both."
+      - scene_id: whole_request
+        beat_id: scope
+        kind: minor
+        problem: "'Speculative decoding' is a name with no plain meaning. I don't know whether it means the model can write several tokens at once after all, which is my opening belief."
+        resolution:
+          action: fixed
+          note: "Scene is re-read in round 3, so given a plain gloss: 'guesses ahead and checks'."
+      - scene_id: prompt
+        beat_id: look_back
+        kind: minor
+        problem: "'Gathers information' is vague. I don't know what kind of information a token takes from earlier ones until keys and values appear a scene later."
+        resolution:
+          action: kept
+          note: "Deliberate: name after understanding; the 'what' is filled by values in first_token two beats after the seam."
+  - scene_ids: [first_token, work_shape, whole_request]
+    reviewer_summary:
+      question: "Why can a model take in my whole prompt at once but has to write its answer one token after another, even on a very parallel GPU?"
+      takeaway: "Each new token has to be fed back in before the next one can be scored, so the answer is a chain of steps; the saved keys and values stop old work from being redone, but they do not remove the wait for the previous token."
+      explained_terms: ["query", "key", "value", "KV cache", "prefill", "memory-bound", "end marker"]
+      lost_beat_id: never_change
+      most_engaging_beat_id: transfer_ask
+    findings:
+      - scene_id: first_token
+        beat_id: never_change
+        kind: lost
+        problem: "I don't see why 'nothing looks ahead' means the keys and values never change. The missing step is that a token's key and value depend only on itself and earlier tokens, so later tokens can't alter them. Also, 'as later tokens arrive' refers to answer tokens being fed in, which I haven't seen happen yet."
+        resolution:
+          action: fixed
+          note: "Now says the missing step directly: a token's key and value depend only on itself and earlier tokens; nothing added later changes them. Settled after three rounds; not re-read."
+      - scene_id: first_token
+        beat_id: saved
+        kind: lost
+        problem: "Nobody says why queries get dropped and keys and values get kept. I need to hear that later tokens will compare their own queries against these keys and take from these values, and that the old queries are never needed again. Without that, 'that's the KV cache' sounds like a rule I'm told rather than a reason."
+        resolution:
+          action: fixed
+          note: "New beat why_keep (later tokens compare their queries with these keys and take these values); saved now says old queries are never needed again. Settled; not re-read."
+      - scene_id: first_token
+        beat_id: kv_link
+        kind: lost
+        problem: "We had just picked 'blue', and then the narration goes back inside the pass without saying why. I can't tell in one sentence what this detour is for. 'Query' arrives here, with key and value right behind it, and 'what it's looking for' is still abstract until kv_example."
+        resolution:
+          action: fixed
+          note: "New seam beat reuse_question (what from this pass can later steps reuse?) before kv_link. Settled; not re-read."
+      - scene_id: first_token
+        beat_id: last_position
+        kind: lost
+        problem: "The 'So' skips a step. Having gathered from the whole prompt doesn't by itself tell me why the top of 'is' turns into scores. I also don't know what 'the top' is or how a column becomes scores."
+        resolution:
+          action: fixed
+          note: "'the top' replaced by 'its final-layer result is turned into a score'. How the scores are computed stays out of scope. Settled; not re-read."
+      - scene_id: work_shape
+        beat_id: gpu_picture
+        kind: lost
+        problem: "I'm never told that weights must be moved from memory to the compute units for every pass, or that moving them is slow compared with the math. Without that, 'math per read' and 'waits for the next read' have nothing under them. I thought the weights already sat inside the GPU and were ready to use."
+        resolution:
+          action: fixed
+          note: "gpu_picture places memory apart from compute; new beat read_cost: every pass they are read into the compute units, and reading takes time too. Settled; not re-read."
+      - scene_id: work_shape
+        beat_id: batching
+        kind: lost
+        problem: "'One read feeds many tokens' made me think again: so why not feed many tokens of MY answer? Nobody says that these are other people's tokens and that each request's chain still goes one step at a time. 'Own cache' appears only on screen. It also doesn't answer the question asked, which was what limits one step's speed."
+        resolution:
+          action: fixed
+          note: "batching now says one decode step from each person; new beat batching_chain: it uses each read better, but each person's answer still moves one step at a time. Settled; not re-read."
+      - scene_id: whole_request
+        beat_id: transfer_more_steps
+        kind: lost
+        problem: "This beat packs two ideas into one sentence: a counting rule (every pick, end marker included) and 'the first comes from prefill'. I lost the count. I was counting answer words, and the whole prediction depends on this rule."
+        resolution:
+          action: fixed
+          note: "Split into transfer_more_steps (prefill same), count_rule (count every pick, end marker included) and transfer_step_count (first pick from prefill; 9 and 99). Settled; not re-read."
+      - scene_id: whole_request
+        beat_id: time_less
+        kind: lost
+        problem: "'Pulls it down': I'm not sure what 'it' is. Prefill can't make the total time smaller. It means the ratio comes out under ten times, but that is only shown as '10x?' on screen and is never said aloud."
+        resolution:
+          action: fixed
+          note: "Now 'pushes the ratio below ten'; time_more 'pushes it back up'. Settled; not re-read."
+      - scene_id: whole_request
+        beat_id: transfer_step_cost
+        kind: lost
+        problem: "The narration never says the answer to my guess, 'not exactly ten times'. Only the strike-through on screen says it. 'What has to grow?' is answered only by steps, although the cache grows too."
+        resolution:
+          action: fixed
+          note: "Now says aloud: more steps and a bigger cache are certain; exactly ten times, we can't say. Settled; not re-read."
+      - scene_id: whole_request
+        beat_id: transfer_ask
+        kind: minor
+        problem: "Two questions are asked at once, so I'm holding two guesses through the pause. The word 'exactly' also gives away the answer to the second one."
+        resolution:
+          action: fixed
+          note: "'exactly' deleted. Two questions kept: the brief asks for both (what must grow, what cannot be inferred)."
+      - scene_id: whole_request
+        beat_id: end_token
+        kind: wrong
+        problem: "'It stops when the model picks an end marker' is stated as the only way an answer ends. Generation also stops at a length limit or a stop sequence. The '.' token also appears here for the first time, after the answer had been 'blue and clear'."
+        resolution:
+          action: fixed
+          note: "Now 'It stops at an end marker or a length limit' (NVIDIA 'Understanding LLM inference' stopping criteria). The '.' chip already appears in the hook's streamed answer."
+      - scene_id: work_shape
+        beat_id: whole_read
+        kind: minor
+        problem: "'An ordinary model like ours' suggests there are unusual models that work differently, but I'm never told what they are or how they differ."
+        resolution:
+          action: kept
+          note: "The qualifier is a required accuracy hedge (round 2 'wrong' finding); naming the alternatives would add a sentence to a minor finding."
+      - scene_id: work_shape
+        beat_id: caveat_list
+        kind: minor
+        problem: "'Bottleneck' is a new word. The four factors are just listed, and I'm not shown how any one of them shifts the bottleneck."
+        resolution:
+          action: fixed
+          note: "'bottleneck' replaced by 'balance'; caveat_tendency merged into this beat. How each factor acts stays out of scope (excluded topics)."
+      - scene_id: whole_request
+        beat_id: scope
+        kind: minor
+        problem: "A new name arrives in the close, and 'guesses ahead' seems to contradict the 'must wait' I just learned. 'Bends this picture' doesn't tell me how. 'Other architectures' appears only on screen."
+        resolution:
+          action: fixed
+          note: "Now 'draft a few tokens, then check them in one pass', which states the shape without contradicting the chain; scope_later merged in."
+      - scene_id: first_token
+        beat_id: cache_truth
+        kind: minor
+        problem: "'No answers, no weights' is only asserted. The 'just looks things up' belief is never broken on a concrete case here. 'No weights' also answers a belief the intuition card never raised."
+        resolution:
+          action: kept
+          note: "The concrete break comes in decode, where 'blue' must still be processed through every layer; minor findings may not add sentences."

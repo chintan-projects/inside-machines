@@ -1,0 +1,15 @@
+# Keep this editable example source-only, including after local Studio validation.
+explainer-studio-versions.json
+explainer-studio-versions.json.lock
+*.mp4
+*.wav
+*.aiff
+*.srt
+*.vtt
+__pycache__/
+logs/
+**/narration/
+**/preview/
+**/render/
+**/delivery/
+.env*

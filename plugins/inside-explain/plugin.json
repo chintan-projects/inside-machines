@@ -1,0 +1,26 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "inside-explain",
+  "version": "1.0.3",
+  "description": "Understand concepts with interactive visuals or narrated videos, then keep exploring.",
+  "license": "MIT",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Inside Explain",
+        "shortDescription": "Interactive explanations and narrated videos",
+        "longDescription": "One reusable teaching workflow for interactive HTML/SVG and optional Heptabase/ManimGL video. Local rendering requires shell access; chat-only sessions provide portable content and an honest handoff.",
+        "developerName": "Inside Machines",
+        "category": "Productivity",
+        "capabilities": [
+          "Read",
+          "Write"
+        ],
+        "defaultPrompt": [
+          "Help me understand this concept visually.",
+          "Turn this explanation into a short narrated video."
+        ]
+      }
+    }
+  }
+}

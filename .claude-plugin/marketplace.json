@@ -1,0 +1,6 @@
+{
+  "name": "inside-machines",
+  "owner": {"name": "Inside Machines"},
+  "metadata": {"description": "Local visual learning tools from Inside Machines"},
+  "plugins": [{"name": "inside-explain", "source": "./plugins/inside-explain", "description": "Interactive explanations and narrated videos"}]
+}
