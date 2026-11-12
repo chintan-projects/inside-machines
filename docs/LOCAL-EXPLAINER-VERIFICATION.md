@@ -25,6 +25,11 @@ paid model generation or paid speech was invoked. The earlier rendered video and
 its unresolved review findings are recorded in the
 [example](../experiments/prefill-decode-video/README.md).
 
+The final output audit found that the local packaging harness initially copied
+the source-only example without applying upload exclusions. The harness now uses
+the shared upload-rule checker, and the output verifier rejects local authoring
+inputs in either packaged function. This does not change production app routes.
+
 The personal Gmail Vercel identity, owner membership, project, Neon and private
 Blob ownership were checked before the push. The app had no Git repository link;
 this implementation does not establish automatic deployment. No Vercel deployment,

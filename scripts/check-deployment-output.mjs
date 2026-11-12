@@ -16,6 +16,8 @@ assert.ok(functions.some(f => f.config.experimentalTriggers?.some(t => t.type ==
 for (const { path, config } of functions) {
   const names = Object.keys(config.filePathMap || {});
   assert.ok(!names.some(name => name === '.env.local' || name.startsWith('.data/') || name === '.vercel/alpha-access.json'), `${path}: private local inputs must be excluded`);
+  const localAuthoring = ['plugins/', '.agents/', '.claude-plugin/', '.explainers/', 'experiments/prefill-decode-video/'];
+  assert.ok(!names.some(name => localAuthoring.some(prefix => name.startsWith(prefix))), `${path}: local authoring inputs must be excluded`);
   assert.ok(names.some(name => name.endsWith('public/fonts/Inter.ttf')), `${path}: the diagram font must be bundled`);
   assert.ok(names.some(name => name.endsWith('native/registry.json')), `${path}: native artwork identities must be bundled`);
   for (const asset of ['ac-outside.svg', 'ac-inside.svg', 'vacuum-fan.svg', 'vacuum-nozzle.svg', 'vacuum-bag.svg', 'vacuum-context.svg']) assert.ok(names.some(name => name.endsWith(`public/figures/${asset}`)), `${path}: immutable cutaway sources must be bundled`);
