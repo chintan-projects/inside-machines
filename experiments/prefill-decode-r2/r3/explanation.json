@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "d5649dd0-0717-44b6-aefd-855e327eba2e",
+  "revision": 3,
+  "status": "interactive_automated_learning_passed_video_held",
+  "mode": "both",
+  "question": "Why does a chatbot need its last chosen text piece before choosing the next one, and what work does caching save?",
+  "authoring": {
+    "model": "claude-opus-5-5",
+    "authentication": "claude.ai Max subscription (observed CLI)",
+    "invoice_verified": false,
+    "api_equivalent_usd": 0.9042344000000001,
+    "revision_editor": "Codex host; usage not measured"
+  },
+  "narration": {
+    "provider_name": "elevenlabs",
+    "model_id": "eleven_v4",
+    "voice_id": "EXAVITQu4vr4xnSDxMaL"
+  },
+  "costs": {
+    "speech_budget_usd": 1,
+    "speech_charged_usd": null,
+    "api_equivalent_usd": 0.9042344000000001,
+    "speech_this_revision_usd": 0
+  },
+  "outputs": {
+    "interactive": "interactive/index.html",
+    "video": "video"
+  },
+  "review": {
+    "engineering": "passed_local_checks",
+    "technical": "computed_toy_invariants_passed_human_pending",
+    "craft": "browser_checked_owner_pending",
+    "learning": "self_paced_automated_reader_passed_after_layer_help",
+    "narration": "held_unresolved_source_read_findings"
+  },
+  "teaching_gate": "review/core-readiness.json"
+}

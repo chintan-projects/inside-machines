@@ -5,6 +5,7 @@ import {access, mkdir, mkdtemp, readFile, readdir, rename, rm, stat, writeFile} 
 import {homedir, platform} from 'node:os';
 import {isAbsolute, join, relative, resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
+import {enforceTeachingReadiness} from './teaching-readiness.mjs';
 
 const modes = new Set(['interactive', 'video', 'both']);
 const help = `Explain Visually projects (init/status/doctor make no model/API calls)
@@ -138,6 +139,7 @@ export async function createProject(options, os = platform(), preference = null)
       costs: {speech_budget_usd: selected?.budget_usd ?? 0, speech_charged_usd: null, api_equivalent_usd: null},
       outputs: {interactive: 'interactive/index.html', video: 'video'},
       review: {engineering: 'not_run', technical: 'not_run', craft: 'not_run', learning: 'not_run'},
+      ...(options.mode!=='interactive'?{teaching_gate:'review/core-readiness.json'}:{}),
     };
     await writeFile(join(temporary, 'explanation.json'), JSON.stringify(manifest, null, 2) + '\n');
     await writeFile(join(temporary, 'BRIEF.md'), `# Learning brief\n\nQuestion: ${options.topic || 'To be filled from the request.'}\n\n- Audience and starting-level assumption:\n- One observable learner outcome:\n- Falsifiable learning hypothesis:\n- Complete input → operations/dependencies → useful output:\n- Prediction and reveal:\n- Transfer question, answer and 0/1/2 rubric:\n- Scope and omitted optional depth:\n- Intended viewing size and static alternative:\n`);
@@ -205,6 +207,7 @@ export async function main(args) {
   if (options.command === 'studio') {
     const allowed = ['doctor', 'guide', 'plan', 'script', 'narrate', 'preview', 'render', 'notes', 'deliver', 'video'];
     if (!allowed.includes(options.args[0])) throw new Error('Unsupported Studio command. Use the Studio CLI directly for setup.');
+    await enforceTeachingReadiness(options.args);
     const preference = await loadNarrationPreference();
     const needsSpeech = options.args[0] === 'narrate' && !options.args.some(arg => ['--help', '-h'].includes(arg));
     const env = needsSpeech && preference ? studioEnvironment(preference) : process.env;

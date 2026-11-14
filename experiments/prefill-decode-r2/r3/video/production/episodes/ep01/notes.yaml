@@ -1,0 +1,72 @@
+chapters:
+- id: ch1
+  title: One position, one next-slot task
+  scenes:
+  - id: tasks
+    title: One position, one next-slot task
+    summary: The supplied prompt is The / sky / is. Each position targets just the slot after it.
+    key_frame: slot_targets
+    cards:
+    - id: prefill_r3_tasks
+      content: '# One position, one next-slot task
+
+
+        The supplied prompt is The / sky / is. Each position targets just the slot after it.
+
+
+        ![Working example](frame:slot_targets)
+
+        '
+- id: ch2
+  title: Build a result. Then choose.
+  scenes:
+  - id: first_choice
+    title: Build a result. Then choose.
+    summary: "Layers change a position\u2019s working numbers. Choosing a word happens after the last\
+      \ layer."
+    key_frame: core_layer
+    cards:
+    - id: prefill_r3_first_choice
+      content: "# Build a result. Then choose.\n\nLayers change a position\u2019s working numbers. Choosing\
+        \ a word happens after the last layer.\n\n![Working example](frame:core_layer)\n"
+- id: ch3
+  title: The choice becomes the next input
+  scenes:
+  - id: feed_back
+    title: The choice becomes the next input
+    summary: "To fill the slot after blue, the model needs a result at blue\u2019s position."
+    key_frame: simple_feed
+    cards:
+    - id: prefill_r3_feed_back
+      content: "# The choice becomes the next input\n\nTo fill the slot after blue, the model needs a\
+        \ result at blue\u2019s position.\n\n![Working example](frame:simple_feed)\n"
+- id: ch4
+  title: Use earlier work instead of doing it again
+  scenes:
+  - id: second_choice
+    title: Use earlier work instead of doing it again
+    summary: "Prepared lists come from each layer\u2019s inputs. Keep them separately from the layer\u2019\
+      s finished output."
+    key_frame: core_valid
+    cards:
+    - id: prefill_r3_second_choice
+      content: "# Use earlier work instead of doing it again\n\nPrepared lists come from each layer\u2019\
+        s inputs. Keep them separately from the layer\u2019s finished output.\n\n![Working example](frame:core_valid)\n"
+- id: ch5
+  title: 'Replay the same pass: keep or clear'
+  scenes:
+  - id: whole
+    title: 'Replay the same pass: keep or clear'
+    summary: Compare the same input The / sky / is / blue. Count positions processed, not elapsed time.
+    key_frame: replay_predict
+    cards:
+    - id: prefill_r3_whole
+      content: '# Replay the same pass: keep or clear
+
+
+        Compare the same input The / sky / is / blue. Count positions processed, not elapsed time.
+
+
+        ![Working example](frame:replay_predict)
+
+        '

@@ -1,0 +1,69 @@
+title: One choice leads to the next
+sources:
+- ../../CLAIMS.md
+- ../../BRIEF.md
+language_code: en
+narration_budget_usd: 1
+narration:
+  provider_name: elevenlabs
+  voice_id: EXAVITQu4vr4xnSDxMaL
+  model_id: eleven_v4
+  voice_settings:
+    stability: 0.5
+    similarity_boost: 0.75
+background_music:
+  provider_name: none
+has_end_credits: true
+audience:
+  description: 'A curious beginner who has watched a chatbot stream text but does not know tokens, layers,
+    attention, keys or values. Inferred starting point, not a human study. Capacity: one next-slot dependency,
+    one distinction between chosen and processed, one saved preparation tray with two jobs.'
+  unfamiliar_terms:
+  - token
+  - layer
+  - key
+  - value
+  - KV cache
+  misconceptions:
+  - id: chosen_is_processed
+    belief: Choosing blue means blue has already gone through the layers.
+    evidence: Question and visual state transition in the brief.
+  - id: cache_is_answer
+    belief: A cache stores the answer; clearing it loses the original text.
+    evidence: Transfer case in the brief.
+goal: Each position's result can only fill the slot right after it. So a chosen word must go back in as
+  input and be processed before the slot after it can be filled. Lists saved from earlier positions let
+  that pass process only the new word, while it still reads all the earlier text.
+episodes:
+- id: ep01
+  title: One choice leads to the next
+  question: Why can't the model pick its second word until the first word has been worked through, and
+    what does saving earlier work skip?
+  question_type: mechanism
+  presenter_name: theo
+  estimated_duration_seconds: 190
+  source_scope: "CLAIMS C1\u2013C4, C7; declared two-layer toy from lesson/mechanism.js."
+  taught_terms:
+  - token
+  - layer
+  - key
+  - value
+  - KV cache
+  takeaway: Each position's result can only fill the slot right after it. So a chosen word must go back
+    in as input and be processed before the slot after it can be filled. Lists saved from earlier positions
+    let that pass process only the new word, while it still reads all the earlier text.
+  outline:
+  - 'tasks: One position, one next-slot task'
+  - 'first_choice: Build a result. Then choose.'
+  - 'feed_back: The choice becomes the next input'
+  - 'second_choice: Use earlier work instead of doing it again'
+  - 'whole: Replay the same pass: keep or clear'
+rationale: Self-paced core with guided numerical detail. Once-heard narration remains blocked by unresolved
+  source-only findings; no speech run is authorized by the self-paced product result.
+excluded_topics:
+- topic: Detailed layer arithmetic and query/key matching
+  reason: Guided interactive depth, one operation at a time; not required before following the core next-slot
+    dependency.
+- topic: Real model performance and accelerated decoders
+  reason: Counts are positions, not timings. Scope is ordinary next-token generation with fixed greedy
+    toy choices.

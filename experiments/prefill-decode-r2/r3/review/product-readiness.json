@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "revision": 3,
+  "review_kind": "fresh_self_paced_automated_product_reader",
+  "reviewer_id": "prefill_r3_product_reader_17",
+  "core_without_help": [
+    "next-slot feedback dependency",
+    "per-layer saved data versus completed output",
+    "five supplied pieces: one kept versus six rebuilt",
+    "append-only validity; earlier edits invalidate blanket reuse"
+  ],
+  "help_used": [
+    "layers: distinguish attention from the local update and understand key/value jobs"
+  ],
+  "remaining_lost": [],
+  "human_acceptance": false,
+  "input_hashes": {
+    "help-cache.md": "de1708a2ec284f86bf47bf35c68dad4fa640cce170ef56aa315fdd9581d1ed33",
+    "help-layers.md": "fe636d38e3a01bc4217d31c7bad87d50e6810b407d8a712ce01563c82c95b48d",
+    "help-scoring.md": "c33111f983ab7ba6b61d1a44b4277ca9a6673d8c0dafc4bef6dcba0c9b1216ae",
+    "core.md": "b772502c9a5a7fec5710ceedc099f1005949677cfbf67f9ed4ef6d4ccf771deb",
+    "START.md": "a651d1e3e2e52339da1615a7527a5e07455e19928e65fa4bd42564d1e47eb434"
+  },
+  "html_sha256": "d163cbf9b8984ff0d0fda17d4932189c2af62e23a644983c98028aa3f4819f37",
+  "rubric_scoring": {
+    "scorer": "parent agent against brief rubric, not a human",
+    "teachback": 2,
+    "transfer": 2
+  },
+  "non_teaching_changes_after_review": [
+    "Hidden media sources load only when matching delivered media is available; reviewed text unchanged."
+  ]
+}

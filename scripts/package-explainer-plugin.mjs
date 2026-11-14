@@ -11,6 +11,8 @@ const allowedSkills = new Set([
   'explain-visually/references/computing.md', 'explain-visually/references/interactive.md',
   'explain-visually/references/video.md', 'explain-visually/references/chat.md',
   'explain-visually/scripts/project.mjs',
+  'explain-visually/scripts/teaching-readiness.mjs',
+  'explain-visually/references/teaching-repairs.md',
 ]);
 
 async function copySkill(source, destination, prefix = '') {

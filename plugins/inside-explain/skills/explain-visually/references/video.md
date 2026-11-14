@@ -80,7 +80,9 @@ distinction applies to Codex/ChatGPT plan usage versus API billing.
    Agent; in another capable host use its equivalent. If unavailable, record the
    missing check and stop before a gate that requires it; never fabricate records.
    Keep automated review distinct from a real learner test. Three rounds do not
-   mean unresolved confusion is accepted.
+   mean unresolved confusion is accepted. Follow [teaching-repairs.md](teaching-repairs.md):
+   fix unresolved core lost/wrong findings, record causal teach-back and novel transfer,
+   and bind the review to the current script before paid narration or handoff.
 4. Narrate with the explicitly selected voice/provider; author scenes/cover/credits/cards using
    the actual ManimGL scene kit. Use `preview`, inspect every listed sheet/frame,
    fix errors, then `render`. No copied replacement renderer or invented success.

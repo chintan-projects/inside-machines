@@ -68,12 +68,15 @@ The [editable prefill/decode example](experiments/prefill-decode-video/README.md
 documents the video workflow and its unresolved learning/craft evidence. These
 local authoring tools do not automatically add content to the live library.
 
-The [complete prefill/decode reference draft](experiments/prefill-decode-r2/README.md)
-adds a shared computed toy, interactive depth, a full ElevenLabs narration workflow,
-actual-timeline video chapters and a local review server. Human quality acceptance
-remains pending; generated media and private sessions stay local.
+The latest [self-paced prefill/decode reference](experiments/prefill-decode-r2/r3/README.md)
+adds a shorter core, current-step “I’m lost” recovery and guided layer, cache and
+word-scoring calculations. A fresh automated reader answered all five causal and
+changed-case questions after using layer help. The separate narration review still
+has open findings, so new speech is held. Human quality acceptance remains pending.
+The [previous r2 reference and film workflow](experiments/prefill-decode-r2/README.md)
+are preserved; generated media and private sessions stay local.
 
-![Prefill/decode local reference draft](docs/images/readme/prefill-decode-reference.png)
+![Prefill/decode self-paced local reference](docs/images/readme/prefill-decode-r3.png)
 
 ## How it works
 

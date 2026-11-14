@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "episode": "ep01",
+  "script_sha256": "b1619085dc85a6b74dc5bf9019ee5242ea24a9ad4251aec0c3232281e35d6ceb",
+  "review_kind": "fresh_automated_reader",
+  "reviewer_id": "prefill_r3_studio_reader_16",
+  "causal_teachback": "not_run",
+  "novel_transfer": "not_run",
+  "findings": [
+    {
+      "kind": "lost",
+      "scope": "core",
+      "status": "open",
+      "beat": "core_preparation",
+      "evidence": "Two prepared lists are distinguished from the finished result before their separate reading jobs are demonstrated."
+    },
+    {
+      "kind": "lost",
+      "scope": "core",
+      "status": "open",
+      "beat": "core_layer",
+      "evidence": "The layer uses operation labels rather than a concrete numerical reading and update instance."
+    },
+    {
+      "kind": "lost",
+      "scope": "core",
+      "status": "open",
+      "beat": "core_valid",
+      "evidence": "The spoken causal chain through two layers is hard to retain once."
+    },
+    {
+      "kind": "lost",
+      "scope": "core",
+      "status": "open",
+      "beat": "core_stages",
+      "evidence": "Parallel positions, stage outputs/inputs and new preparation are coupled in one line."
+    },
+    {
+      "kind": "lost",
+      "scope": "core",
+      "status": "open",
+      "beat": "simple_choice",
+      "evidence": "The numerical scoring operation is in guided detail rather than demonstrated in the spoken core."
+    },
+    {
+      "kind": "lost",
+      "scope": "core",
+      "status": "open",
+      "beat": "core_reuse",
+      "evidence": "The two-list reading operation is still a box in the spoken core."
+    },
+    {
+      "kind": "lost",
+      "scope": "core",
+      "status": "open",
+      "beat": "core_cache_name",
+      "evidence": "The distinct key and value jobs are in guided detail rather than the closing narration."
+    }
+  ]
+}

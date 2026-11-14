@@ -28,6 +28,14 @@ Then say **“dive deeper into why that happens”**, **“show a concrete calcu
 or **“turn this into a short narrated video”**. The agent inspects the existing
 project and preserves its example, claims and sources instead of starting over.
 
+Version 1.1.1 adds [contextual teaching repairs](skills/explain-visually/references/teaching-repairs.md):
+“I’m lost” follows the current concept and returns to the same place. New video
+projects block wrapper narration/delivery until a fresh, script-bound automated
+read records successful causal teach-back and novel transfer, with no unresolved
+core confusion. This guard checks recorded evidence; human acceptance remains
+separate. The [r3 reference](../../experiments/prefill-decode-r2/r3/) shows the full
+local implementation.
+
 Interactive drawings use the actual [Anatomy](https://github.com/wheresryan22/anatomy)
 kit for physical mechanisms. Computation uses appropriate data and dependency
 views. Video uses [Heptabase Explainer Studio](https://github.com/heptameta/heptabase-explainer-studio)

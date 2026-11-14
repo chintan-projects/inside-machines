@@ -1,27 +1,27 @@
 goal: Build the curated visual concept library and validate learning quality
 status: public_preview_deployed_quality_open
 current:
-- 'Local prefill/decode r2 reference implemented: interactive core, computed depth and full ElevenLabs film'
-- Canonical Explain Visually skill/plugin supports both Claude Code and Codex; private voice preference persists
-- Public app framework and deployed visitor experience unchanged by the local reference
-- Reference source, real automated review history, cost receipt and sanitized screenshot prepared for Git
-- 'Quality remains open: automated readers retain confusion in layers, selection, saved K/V and cache'
-- Refrigerator reuse follows acceptance of this reference; sixteen older schematic cores still need craft
+- Local prefill/decode r3:392-word self-paced core, current-step repairs and computed layer/cache/word-score detail
+- Fresh product reader answers five causal/novel questions after layer help; no remaining loss in that path
+- Continuous narration remains held with open source-only findings; no new ElevenLabs calls
+- Explain Visually1.1.1 installed for Claude/Codex; script-bound review guard blocks before speech credentials
+- Live app unchanged; source-only local reference is excluded from Vercel packaging
+- Refrigerator reuse and sixteen older schematic cores still require craft and learning acceptance
 needs_input:
 - Connect personal GitHub login to Gmail Vercel for automatic deployments (BUG-008)
 - Independent technical review, real-phone accessibility and five unfamiliar beginner checks
 - Owner taste/release approval and stronger craft for sixteen older schematic cores
 verification:
-- Reference:19 checks;390 backend tests pass,10 external Postgres cases skipped;55 JavaScript tests pass
-- Ruff, strict mypy, frontend types/lint, production build and actual Linux packaging pass
-- Independent automated toy audit:4696 requests,3596852 scalar comparisons; human truth review pending
-- 390/768/1440 journeys pass:core, depth, literal dive deeper, reset, keyboard, reduced motion and local controls
-- 379.2s1080p H264/AAC film;38 speech segments,166 captions; canonical text and timing parity pass
-- Actual HTTP playback, unmuted audio decoding, captions, chapter seek, mute, ranges and private-path refusal pass
-- ElevenLabs estimate0.37176 USD under separate1 USD speech-estimate cap; actual invoice unverified
-- Initial Claude authoring API-equivalent5.5935764 USD is not an invoice; host editing/review usage unmeasured
-- Personal Gmail Owner, project, Neon and Blob reverified; Git link remains absent; no live deployment
+- Five reference invariants;390 backend pass,10 external Postgres skipped;59 root JavaScript pass
+- Ruff, strict mypy, frontend types/lint and production build pass; clean plugin package validates
+- Chrome390/768/1440 all core states, contextual help, scoring, exact return, cache replay, keyboard and reset pass
+- Product reader17:feedback/cache transfer correct without help; layer help resolves deeper local-update questions
+- Source-only movie reader16 retains confusion; narration deliberately blocked, human acceptance unmeasured
+- Initial Claude API-equivalent0.9042344USD is not an invoice; host/reviewer usage unmeasured; no new speech spend
+- Personal Gmail Owner/project/Neon/Blob reverified; Git link absent and production deployment unchanged
 sessions:
+- date: '2026-11-13'
+  result: R3 self-paced recovery passes scoped automated learning check; movie and human gates remain open
 - date: '2026-11-13'
   result: Complete local prefill/decode review reference; real review concerns and human gates remain open
 - date: '2026-10-22'

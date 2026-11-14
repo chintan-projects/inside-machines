@@ -109,6 +109,12 @@ keyboard and sound-off behavior; review narrow layouts and reduced motion where
 supported. For video, follow Studio's screenshot and delivery checks. For Anatomy,
 run applicable kit checks before claiming geometry validation.
 
+For confusion or progressive depth, follow [teaching-repairs.md](references/teaching-repairs.md).
+“I’m lost” must have a useful current-context recovery route. Unresolved core
+lost/wrong findings block paid narration and a ready-for-review handoff; a round
+limit is never acceptance. New helper video projects enforce a revision-bound
+review record through the Studio wrapper.
+
 Fix the most consequential confusion first. Keep source correctness, engineering,
 craft/accessibility and beginner learning evidence separate. An automated review
 or three review rounds is not human acceptance. State any remaining confusion;

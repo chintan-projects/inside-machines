@@ -1,0 +1,53 @@
+rounds:
+- scene_ids:
+  - tasks
+  - first_choice
+  - feed_back
+  - second_choice
+  - whole
+  reviewer_summary:
+    question: Why must a chosen text piece go through the model before the next choice,
+      and what work can saved preparation avoid?
+    takeaway: Choosing blue leaves it unprocessed; processing it produces the next
+      choice, while saving earlier reading data avoids processing the earlier text
+      again.
+    explained_terms:
+    - token
+    - chosen versus processed
+    - KV cache
+    lost_beat_id: core_layer
+    most_engaging_beat_id: replay_predict
+  findings:
+  - scene_id: first_choice
+    beat_id: core_preparation
+    kind: lost
+    problem: Two prepared lists are distinguished from the finished result before
+      their separate reading jobs are demonstrated.
+  - scene_id: first_choice
+    beat_id: core_layer
+    kind: lost
+    problem: The layer uses operation labels rather than a concrete numerical reading
+      and update instance.
+  - scene_id: second_choice
+    beat_id: core_valid
+    kind: lost
+    problem: The spoken causal chain through two layers is hard to retain once.
+  - scene_id: first_choice
+    beat_id: core_stages
+    kind: lost
+    problem: Parallel positions, stage outputs/inputs and new preparation are coupled
+      in one line.
+  - scene_id: first_choice
+    beat_id: simple_choice
+    kind: lost
+    problem: The numerical scoring operation is in guided detail rather than demonstrated
+      in the spoken core.
+  - scene_id: second_choice
+    beat_id: core_reuse
+    kind: lost
+    problem: The two-list reading operation is still a box in the spoken core.
+  - scene_id: whole
+    beat_id: core_cache_name
+    kind: lost
+    problem: The distinct key and value jobs are in guided detail rather than the
+      closing narration.

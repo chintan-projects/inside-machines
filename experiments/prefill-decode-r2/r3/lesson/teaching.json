@@ -1,0 +1,330 @@
+{
+  "revision": 3,
+  "question": "Why can't the model pick its second word until the first word has been worked through, and what does saving earlier work skip?",
+  "takeaway": "Each position's result can only fill the slot right after it. So a chosen word must go back in as input and be processed before the slot after it can be filled. Lists saved from earlier positions let that pass process only the new word, while it still reads all the earlier text.",
+  "core": [
+    {
+      "id": "tasks",
+      "title": "One position, one next-slot task",
+      "copy": "The supplied prompt is The / sky / is. Each position targets just the slot after it.",
+      "concept": "next_slot_tasks",
+      "nextLabel": "Make the first choice",
+      "beats": [
+        {
+          "id": "slot_targets",
+          "narration": "Our prompt has three text pieces, called tokens: The, sky, is. Each position helps fill the slot right after it.",
+          "visual": "Five slots in a row: 1 The, 2 sky, 3 is, 4 blank, 5 blank. An arrow runs from each of the three prompt positions to the slot after it: The to 2, sky to 3, is to 4. The arrows show target slots, not predictions."
+        },
+        {
+          "id": "supplied_slots",
+          "narration": "Two of those slots are already filled by your text: sky follows The, and is follows sky.",
+          "visual": "The arrows into slots 2 and 3 land on words that are already there. Label: 'supplied by your text'. No candidate words appear on these arrows; sky and is are not in the toy's word list."
+        },
+        {
+          "id": "first_blank",
+          "narration": "Only the last position, is, points at a blank: slot four.",
+          "visual": "The is-to-slot-4 arrow lights up. Slot 4 shows an empty outline labelled 'first blank'."
+        }
+      ]
+    },
+    {
+      "id": "first_choice",
+      "title": "Build a result. Then choose.",
+      "copy": "Layers change a position\u2019s working numbers. Choosing a word happens after the last layer.",
+      "concept": "choice_and_saved_preparation",
+      "nextLabel": "Put blue back in",
+      "beats": [
+        {
+          "id": "core_layer",
+          "narration": "The model works on numbers for each text piece. A layer is one stage: read this position and the past, then update this position\u2019s working numbers.",
+          "visual": "Show one stage with two operations, read allowed positions \u2192 update this working result. Only itself and earlier positions feed the reading operation. A layer is explicitly one repeated processing stage. No attention arithmetic in this core.",
+          "concept": "layer_change"
+        },
+        {
+          "id": "core_preparation",
+          "narration": "To read a position, the layer first prepares two lists from that position\u2019s input. This reading data is separate from its finished working result.",
+          "visual": "At one layer show input The branching into two grouped prepared lists, labelled reading data. Separately show the working processing path read + update \u2192 finished result. Reading data was prepared from input, before the finished result. The exact two-list reading operation is available in the model detail.",
+          "concept": "process_new_input_with_saved_lists"
+        },
+        {
+          "id": "core_stages",
+          "narration": "Known positions run together inside a layer. Their finished results become the next layer\u2019s inputs. The next layer prepares its own reading data.",
+          "visual": "Three prompt lanes in layer1 thenlayer2, with a separate reading-data tray at each stage. Trace one position: layer1 input \u2192 prepare its layer1 read data; finished layer1 result \u2192 layer2 input \u2192 prepare its layer2 read data. Do not relabel finished results as saved reading data.",
+          "concept": "layer_change"
+        },
+        {
+          "id": "simple_choice",
+          "narration": "The final result at is gives a score for each possible next piece. Our fixed toy\u2019s highest score is blue. Choose blue outside the layers.",
+          "visual": "Computed candidate scores: blue3.00,clear2.04,dark\u22120.10,and\u22120.43,dot0.21. Label fixed toy scoring rule, not probabilities. Separate chosen-blue chip outside both layers. A source\u2192scorer\u2192candidate-score arrow shows where the scores came from. The formula is available in \u201cHow word scoring works\u201d, not a prerequisite to the loop.",
+          "concept": "word_scores"
+        },
+        {
+          "id": "simple_not_processed",
+          "narration": "The layers processed is, not the blue they just chose. Blue has no result of its own yet.",
+          "visual": "Keep input The/sky/is separate from selected output blue. Blue sits outside the processing box, labelled chosen, not processed. No blue preparation or layer-output entry exists.",
+          "concept": "chosen_vs_processed"
+        }
+      ]
+    },
+    {
+      "id": "feed_back",
+      "title": "The choice becomes the next input",
+      "copy": "To fill the slot after blue, the model needs a result at blue\u2019s position.",
+      "concept": "chosen_vs_processed",
+      "nextLabel": "See what blue can reuse",
+      "beats": [
+        {
+          "id": "simple_feed",
+          "narration": "Put blue back in as input. Its position targets slot five. The earlier positions targeted slots two, three, and four; none could read the later blue.",
+          "visual": "Move the selected blue along an outside return path into the input row after is. Then show task arrows The\u2192slot2,sky\u2192slot3,is\u2192slot4,blue\u2192slot5. Earlier information cannot receive blue. Blue is still not processed.",
+          "concept": "next_slot_tasks"
+        },
+        {
+          "id": "simple_new_pass",
+          "narration": "Blue must now pass through the layers to build the result for slot five. Choosing blue did not do this work.",
+          "visual": "A waiting blue input starts a fresh pass through Layer1 then Layer2. The original three inputs stay visible. The next choice is not present.",
+          "concept": "chosen_vs_processed"
+        }
+      ]
+    },
+    {
+      "id": "second_choice",
+      "title": "Use earlier work instead of doing it again",
+      "copy": "Prepared lists come from each layer\u2019s inputs. Keep them separately from the layer\u2019s finished output.",
+      "concept": "process_new_input_with_saved_lists",
+      "nextLabel": "Replay with the preparation cleared",
+      "beats": [
+        {
+          "id": "core_valid",
+          "narration": "Earlier positions cannot read blue. Their layer-one results stay unchanged; those unchanged results feed layer two. So their prepared reading data stays valid at both layers.",
+          "visual": "Show earlier input/result unchanged at layer1 \u2192 same layer2 input \u2192 same layer2 reading data. Future blue information is blocked from earlier positions. The saved lists remain a different object from the working results.",
+          "concept": "process_new_input_with_saved_lists"
+        },
+        {
+          "id": "core_reuse",
+          "narration": "Keep that earlier reading data. Now process only blue. At each layer, it prepares its own lists and reads the saved past plus itself.",
+          "visual": "A new blue lane passes layer1 thenlayer2. At each stage: three saved old reading-data pairs + one new blue pair feed blue\u2019s reading operation. Earlier positions stay idle. Stage2 blue preparation appears only after stage1 blue output has arrived.",
+          "concept": "process_new_input_with_saved_lists"
+        },
+        {
+          "id": "core_next",
+          "narration": "Blue\u2019s finished result scores the candidates for slot five. Choose the highest-scoring piece outside the layers. This chosen piece has not been processed yet.",
+          "visual": "Actual second-pass toy scores choose and outside the model. Blue is processed; and is selected but unprocessed, without a cache entry. No attention math or preparation motion in this choice beat.",
+          "concept": "word_scores"
+        }
+      ]
+    },
+    {
+      "id": "whole",
+      "title": "Replay the same pass: keep or clear",
+      "copy": "Compare the same input The / sky / is / blue. Count positions processed, not elapsed time.",
+      "concept": "cache_on_off",
+      "nextLabel": "Try a new case",
+      "beats": [
+        {
+          "id": "replay_predict",
+          "narration": "Rewind to before blue\u2019s pass. One copy keeps the three old pairs at each layer; another clears them. Both have The sky is blue. Predict what each must process.",
+          "pause": 3,
+          "visual": "REPLAY BEFORE BLUE IS PROCESSED. Two starting panels simultaneously: kept preparation shows The,sky,is entries in each layer, and blue\u2019s entry empty. Cleared preparation shows all four entries empty. Both retain input The sky is blue and have no next-word selection. Ask which positions each must process; hold before revealing counts."
+        },
+        {
+          "id": "empty_tray_count",
+          "narration": "The empty copy processes all four positions to rebuild preparation. The kept copy processes only blue. Both still read the past. These counts are not timings.",
+          "visual": "Explicit replay start: kept trays contain three entries per layer, for The/sky/is only; blue preparation empty. Compare processing blue alone versus all The/sky/is/blue with the tray emptied. Both routes add blue preparation and still read earlier positions. Count whole-model positions 1 vs4; not a timing ratio."
+        },
+        {
+          "id": "simple_same",
+          "narration": "Rebuilding from the same text gives the same preparation. Our deterministic toy chooses the same continuation again. Saving earlier work changes the work, not this choice.",
+          "visual": "Both routes use input The/sky/is/blue and end with the same and choice. Kept and rebuilt lists match at both layers; only the number of positions processed differs."
+        },
+        {
+          "id": "core_cache_name",
+          "narration": "These prepared lists are called keys and values. Keeping them is a KV cache: separate at each layer. It saves reprocessing the past, not reading it.",
+          "visual": "Name the already-familiar prepared reading-data pairs keys and values, and their per-layer trays KV cache. This is saved input-derived reading preparation, not finished layer outputs or selected answers. The distinct jobs of keys and values are demonstrated in the guided model detail."
+        }
+      ]
+    }
+  ],
+  "repairs": [
+    {
+      "id": "next_slot",
+      "concept": "next_slot_tasks",
+      "title": "Why earlier positions can't fill slot 5",
+      "explanation": "Each position's result is only for the slot right after it. The targets slot 2 and sky targets slot 3; your text already supplied both. is filled slot 4, which became blue. None of them points at slot 5, and none of them can read blue, because earlier positions never read later ones. The only position aimed at slot 5 is blue's, and it has a result only once blue has been processed.",
+      "visualFrame": "slot_tasks",
+      "question": "Which position's result can fill slot 5?",
+      "choices": [
+        {
+          "id": "the_position",
+          "label": "The's position",
+          "feedback": "The's task is slot 2, which your text already filled with sky. It also can't read blue, which came later.",
+          "correct": false
+        },
+        {
+          "id": "is_position",
+          "label": "is's position",
+          "feedback": "is's task was slot 4, which became blue. That result could not read blue, so it cannot account for blue when choosing what follows.",
+          "correct": false
+        },
+        {
+          "id": "blue_position",
+          "label": "Blue's position, once blue is processed",
+          "feedback": "Yes. Blue's position is the one aimed at slot 5, so blue has to go through the model first.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "feed_input",
+      "concept": "chosen_vs_processed",
+      "title": "Chosen is not the same as processed",
+      "explanation": "Blue is chosen in a step after the layers, by comparing scores. At that moment, no layer has worked on blue: it has no layer results and nothing in the tray. It goes back in as an input, and only the next pass processes it.",
+      "visualFrame": "feed_back",
+      "question": "Right after blue is chosen, what has the model done with blue?",
+      "choices": [
+        {
+          "id": "chosen_only",
+          "label": "Chosen it, but not processed it yet",
+          "feedback": "Right. Blue is just text in slot 4 until the next pass runs it through the layers.",
+          "correct": true
+        },
+        {
+          "id": "already_processed",
+          "label": "Already run it through every layer",
+          "feedback": "Blue came out after the layers finished. The layers worked on is, not blue. Blue gets its own turn in the next pass.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "saved_work",
+      "concept": "process_new_input_with_saved_lists",
+      "title": "Where the tray comes from, and why it can be rebuilt",
+      "explanation": "At each layer, each position turns its input to that layer into a pair of lists. Layer 1 starts from the word itself; layer 2 starts from layer 1's output at that position. So every tray entry traces back to the original text alone. If the tray is emptied, running The, sky, is and blue through the model again rebuilds exactly the same entries. Nothing later could have changed them, because earlier positions never read later ones.",
+      "visualFrame": "cache_sources",
+      "question": "The tray is emptied, but the text 'The sky is blue' is still there. What happens next?",
+      "choices": [
+        {
+          "id": "rebuild",
+          "label": "The next pass rebuilds the lists from the text, then carries on",
+          "feedback": "Yes. It costs more positions (4 instead of 1), and the result is the same.",
+          "correct": true
+        },
+        {
+          "id": "stuck",
+          "label": "The model can't continue without the tray",
+          "feedback": "The tray is a shortcut, not the only copy. Everything in it can be made again from the text.",
+          "correct": false
+        },
+        {
+          "id": "different_word",
+          "label": "It has to pick a different word",
+          "feedback": "The rebuilt lists match the old ones exactly, so this toy picks 'and' again.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "layers",
+      "concept": "layer_change",
+      "title": "What a layer changes",
+      "explanation": "Each position carries two numbers. In a layer, it first reads the lists of itself and earlier positions, and adds that weighted blend to its own two numbers. Then a small reworking step computes an adjustment and adds that too. The changed pair of numbers goes to the next layer. The toy's numbers don't stand for meanings; they are just what the declared toy weights produce.",
+      "visualFrame": "layer_flow",
+      "question": "What does a layer do to blue's position?",
+      "choices": [
+        {
+          "id": "changes_numbers",
+          "label": "Changes its two numbers: it adds a blend read from allowed positions, then adds a reworked adjustment",
+          "feedback": "Yes. Both steps add to the numbers already there, and the result feeds the next layer.",
+          "correct": true
+        },
+        {
+          "id": "passes_through",
+          "label": "Passes the word along unchanged",
+          "feedback": "The numbers do change in each layer. The layer view shows them before and after each step.",
+          "correct": false
+        },
+        {
+          "id": "swaps_word",
+          "label": "Replaces blue with another word",
+          "feedback": "Words are only chosen after the last layer. Inside a layer, only the numbers change.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "cache_count",
+      "concept": "cache_on_off",
+      "title": "What the 1-versus-4 comparison counts",
+      "explanation": "The comparison counts positions run through the whole model in the second pass: 1 with the tray kept, 4 with it emptied. It is not a time, speed or hardware measurement. In both cases, blue still reads the earlier positions' lists.",
+      "visualFrame": "whole",
+      "question": "With the tray kept, what does the second pass skip?",
+      "choices": [
+        {
+          "id": "skips_reprocessing",
+          "label": "Running The, sky and is through the layers again",
+          "feedback": "Yes. Their lists are already saved. Blue still reads them.",
+          "correct": true
+        },
+        {
+          "id": "skips_reading",
+          "label": "Looking at the earlier words at all",
+          "feedback": "Blue still reads the saved lists for The, sky and is at every layer. What it skips is rebuilding them.",
+          "correct": false
+        },
+        {
+          "id": "time_saving",
+          "label": "Three quarters of the time",
+          "feedback": "The lesson counts positions, not time. Real speed depends on the model, prompt length, batching and hardware.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "scoring",
+      "concept": "word_scores",
+      "title": "How word scoring works",
+      "explanation": "The last layer produces numbers for the current position. A fixed scoring direction for each candidate turns them into one score. The largest score wins in this toy.",
+      "visualFrame": "word_scoring",
+      "question": "Has the selected piece already been processed?",
+      "choices": [
+        {
+          "id": "not_yet",
+          "label": "No, it was selected after processing ended",
+          "correct": true,
+          "feedback": "Right. It goes back in to get its own result."
+        },
+        {
+          "id": "yes",
+          "label": "Yes",
+          "correct": false,
+          "feedback": "Processing produced the scores, then the text was chosen outside the layers."
+        }
+      ]
+    }
+  ],
+  "depth": [
+    {
+      "id": "layers",
+      "title": "Inside one layer, with the toy's real numbers",
+      "question": "What exactly happens to blue's position in layer 1 and layer 2?",
+      "summary": "Follow blue in pass 2, using the numbers mechanism.js computes. Reading: blue's input is turned into a query. The query is compared with the key of each allowed position (The, sky, is, blue), and each score is divided by the square root of 2. The scores become weights that add up to 1, and those weights blend the values. The blend is added to blue's input; this add-back is the residual. Reworking: the result goes through one matrix, negatives are set to zero, and a second matrix gives an adjustment. That adjustment is added back as well. Layer 2 repeats this with its own weights, starting from layer 1's output. Every number shown is computed, not typed in. The two coordinates have no meaning; the toy is untrained and declared."
+    },
+    {
+      "id": "cache",
+      "title": "The tray, by name: keys and values",
+      "question": "What are the saved lists, and what does each one do?",
+      "summary": "Each tray entry is a key and a value, computed from a position's input to that layer. When a newer position reads, it scores its query against every allowed key to decide how much to take from each position. It then blends those positions' values by those weights. Each layer has its own key-value store. Processing a position adds its entry to every layer's store; nothing already there is rewritten. With the cache kept, pass 2 builds 1 new entry per layer and reads 4. With the cache emptied, it rebuilds all 4 per layer from the text. The values match exactly, and so does the choice. Scope: ordinary next-token generation. This does not cover speculative or other accelerated methods, and counts are positions, not time or hardware load."
+    }
+  ],
+  "assessments": {
+    "teachback": {
+      "prompt": "Blue has just been chosen, and the layers never processed it. In your own words: what has to happen before the model can choose the next word, and what part of the earlier work doesn't have to be redone?",
+      "answer": "Blue has to go back in as input and run through the layers. Its position is the only one aimed at the next slot. Earlier positions aim at slots that are already full, and they can't read later words. The lists saved from The, sky and is during the first pass don't have to be rebuilt. Blue reads them at each layer. Score 2: both causes (blue must be processed as input, and the saved lists are reused and still read). Score 1: one cause. Score 0: neither, or a misconception such as 'the tray stores the answer' or 'blue was already processed when chosen'."
+    },
+    "transfer": {
+      "prompt": "A new prompt has SIX pieces. The first answer word has been chosen. Then the saved lists are cleared, but the original six-piece text and the chosen word are still there. What must the next pass do before choosing again? Would this deterministic toy choose differently than with the lists kept?",
+      "answer": "It must rebuild the lists for the six prompt positions from the text and also process the new word: seven positions through the whole model, instead of one with the lists kept. Then the new word reads all seven positions' lists, including its own, and the next word is chosen outside the layers. The choice doesn't change. Same text and same weights give the same lists, and earlier positions never read later words, so the rebuilt lists match the cleared ones exactly. Score 2: both causes (rebuild the past from the text, then process the new input). Score 1: one cause. Score 0: neither, or a claim that clearing loses the text or forces a different word."
+    }
+  }
+}
