@@ -74,3 +74,18 @@ Host manifests and actual local discovery are checked separately. None of these
 tests certify model output quality or accept a lesson for live publication.
 See the [current verification record](LOCAL-EXPLAINER-VERIFICATION.md) for observed
 checks and the remaining external and learner evidence.
+
+## Explicit local narrator selection (2026-11-13)
+
+Version 1.1.0 can read an owner-selected, credential-free narration preference
+from `~/.config/inside-explain/narration.json`. New video projects use its
+ElevenLabs model, voice and bounded speech budget; interactive projects do not
+acquire a speech budget. The portable default remains free when no preference
+exists. Invalid preferences stop video initialization instead of switching voices.
+
+The `project.mjs studio narrate` wrapper reads the existing macOS Keychain item
+`elevenlabs-api-key` directly into the Studio child environment. It does not copy
+the secret into project files or Studio's plaintext credential file. See the
+[package instructions](../plugins/inside-explain/README.md) for the schema and
+[video workflow](../plugins/inside-explain/skills/explain-visually/references/video.md)
+for the command. Existing plans and historical source examples are preserved.

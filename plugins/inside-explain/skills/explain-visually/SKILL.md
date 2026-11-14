@@ -96,8 +96,9 @@ change before invoking a different account/provider. No keys belong in prompts,
 HTML, receipts or logs. Never read `.env` merely to make a local explanation.
 
 Interactive playback and exported video playback make no AI calls. Default to
-free local narration on supported systems; paid speech requires an explicit
-provider and budget. Never infer an invoice from a CLI API-equivalent dollar
+free local narration on supported systems unless the owner has selected a local
+narration preference. Honor that saved provider and budget for video requests;
+paid speech requires an explicit provider and budget. Never infer an invoice from a CLI API-equivalent dollar
 estimate. Record subscription usage, API-equivalent estimates, verified charges
 and unknown billing separately. Never silently retry an uncertain paid call.
 

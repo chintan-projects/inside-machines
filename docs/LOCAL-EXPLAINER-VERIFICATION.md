@@ -41,3 +41,24 @@ host-model routing/quality evaluation, uncoached continuation test, real-device
 accessibility review and learner-transfer study were not run. Instructions cannot
 grant execution capabilities to chat-only sessions, and local installation does
 not publish a universal ChatGPT web/mobile listing.
+
+## 2026-11-13: selected local narration, version 1.1.0
+
+The suite passed all 55 JavaScript tests, including 14 workflow tests. New cases
+cover profile-driven CLI initialization, plan/receipt agreement, free interactive
+projects, invalid preferences failing closed, and Keychain-only credentials
+passing through a copied environment with sanitized failures. Skill validation
+and a newly configured ElevenLabs Studio plan passed. No backend/app renderer
+or deployment configuration changed in this iteration.
+
+One real ElevenLabs v4 speech call produced a 54.8-second, 44.1 kHz mono MP3.
+Decode and signal checks passed: mean volume -18.7 dB and maximum -1.2 dB.
+The 817-character request's configured list-price estimate was $0.06536; its
+actual account charge was not established. The credential could not read account
+or voice-list metadata; the speech endpoint succeeded. The key stayed in Keychain,
+and the source request, audio and receipt remain in ignored local files.
+
+These checks establish configuration and audible signal, not perceptual quality,
+pronunciation correctness or approval of a new lesson. The local preference uses
+a $1 per-series Studio speech-estimate budget, separate from authoring/account
+spending. Earlier model/provider comparisons and human quality gates remain open.

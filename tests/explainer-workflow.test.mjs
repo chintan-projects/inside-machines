@@ -4,7 +4,7 @@ import {execFileSync} from 'node:child_process';
 import {cp, lstat, mkdir, mkdtemp, readFile, realpath, readdir, rm, symlink, writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join, resolve} from 'node:path';
-import {createProject, projectOptions, projectStatus, studioPlan} from '../plugins/inside-explain/skills/explain-visually/scripts/project.mjs';
+import {createProject, projectOptions, projectStatus, studioPlan, loadNarrationPreference, parseNarrationPreference, studioEnvironment} from '../plugins/inside-explain/skills/explain-visually/scripts/project.mjs';
 import {installSkill, skillSource} from '../scripts/install-explainer-skill.mjs';
 import {packagePlugin} from '../scripts/package-explainer-plugin.mjs';
 
@@ -131,4 +131,68 @@ test('release builder refuses a secret-like unexpected file and symlink inside s
   await rm(bad);
   await symlink(join(root, 'outside'), bad);
   await assert.rejects(packagePlugin({source, output: join(root, 'bad.zip')}), /symlinks/);
+});
+
+const paidPreference = {schema_version: 1, provider_name: 'elevenlabs', model_id: 'eleven_v4',
+  voice_id: 'EXAVITQu4vr4xnSDxMaL', budget_usd: 1, credential_source: 'macos-keychain'};
+
+test('explicit local narration selection reaches the plan and receipt but does not enable speech for interactive mode', async t => {
+  const root = await temporary(t);
+  const video = await createProject(projectOptions(['init', 'selected', '--root', root, '--mode', 'video']), 'darwin', paidPreference);
+  const data = JSON.parse(await readFile(join(video.project, 'explanation.json'), 'utf8'));
+  assert.equal(data.costs.speech_budget_usd, 1);
+  assert.equal(data.narration.provider_name, 'elevenlabs');
+  assert.equal(data.narration.model_id, 'eleven_v4');
+  const plan = await readFile(join(video.project, 'video/production/plan.yaml'), 'utf8');
+  assert.match(plan, /narration_budget_usd: 1/);
+  assert.match(plan, /provider_name: elevenlabs/);
+  assert.doesNotMatch(plan, /macos-say/);
+  assert.equal(data.costs.speech_charged_usd, null);
+  const interactive = await createProject(projectOptions(['init', 'drawing', '--root', root]), 'darwin', paidPreference);
+  const plain = JSON.parse(await readFile(join(interactive.project, 'explanation.json'), 'utf8'));
+  assert.equal(plain.costs.speech_budget_usd, 0);
+  assert.equal(plain.narration, null);
+});
+
+test('absent preferences keep free defaults; malformed or secret-containing preferences fail closed', async t => {
+  const root = await temporary(t), file = join(root, 'narration.json');
+  assert.equal(await loadNarrationPreference(file), null);
+  await writeFile(file, JSON.stringify(paidPreference));
+  assert.deepEqual(await loadNarrationPreference(file), paidPreference);
+  for (const change of [{api_key: 'a-private-test-value'}, {model_id: 'untrusted-model'}, {budget_usd: 0},
+    {budget_usd: 1000}, {budget_usd: '1'}, {voice_id: '../private'}, {credential_source: 'arbitrary-command'}]) {
+    assert.throws(() => parseNarrationPreference({...paidPreference, ...change}), /Invalid local narration/);
+  }
+  await writeFile(file, '{invalid');
+  await assert.rejects(loadNarrationPreference(file), /No fallback/);
+});
+
+test('Keychain credential is passed only through a copied environment and takes precedence over inherited credentials', () => {
+  const inherited = {PATH: '/trusted/bin', ELEVENLABS_API_KEY: 'another-account-test-value'};
+  let reads = 0;
+  const child = studioEnvironment(paidPreference, inherited, 'darwin', () => {reads++; return 'selected-test-secret';});
+  assert.equal(reads, 1);
+  assert.equal(child.ELEVENLABS_API_KEY, 'selected-test-secret');
+  assert.equal(inherited.ELEVENLABS_API_KEY, 'another-account-test-value');
+  assert.equal(child.PATH, inherited.PATH);
+  assert.throws(() => studioEnvironment(paidPreference, inherited, 'linux', () => {throw new Error('unreachable');}), /requires macOS Keychain/);
+  assert.throws(() => studioEnvironment(paidPreference, {}, 'darwin', () => {throw new Error('sensitive raw diagnostic');}),
+    error => error.message.includes('No paid call') && !error.message.includes('sensitive'));
+});
+
+test('CLI video init reads its local preference while interactive init ignores an invalid paid preference', async t => {
+  const home = await temporary(t), root = join(home, 'outputs');
+  const directory = join(home, '.config/inside-explain');
+  await mkdir(directory, {recursive: true});
+  const file = join(directory, 'narration.json');
+  await writeFile(file, JSON.stringify(paidPreference));
+  const helper = resolve('plugins/inside-explain/skills/explain-visually/scripts/project.mjs');
+  const env = {...process.env, HOME: home};
+  execFileSync(process.execPath, [helper, 'init', 'movie', '--mode', 'video', '--root', root], {env, stdio: 'pipe'});
+  const data = JSON.parse(await readFile(join(root, 'movie/explanation.json'), 'utf8'));
+  assert.equal(data.narration.provider_name, 'elevenlabs');
+  await writeFile(file, '{invalid');
+  execFileSync(process.execPath, [helper, 'init', 'drawing', '--root', root], {env, stdio: 'pipe'});
+  assert.throws(() => execFileSync(process.execPath, [helper, 'init', 'rejected', '--mode', 'video', '--root', root], {env, stdio: 'pipe'}));
+  await assert.rejects(lstat(join(root, 'rejected')), {code: 'ENOENT'});
 });

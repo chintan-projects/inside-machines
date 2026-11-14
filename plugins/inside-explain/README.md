@@ -85,6 +85,27 @@ and macOS Samantha when available. Other platforms need an explicit local voice
 or an unrendered storyboard; paid speech never starts as a fallback. This speech
 budget does not cap all model/account spending. Playback makes no AI calls.
 
+An owner can explicitly select ElevenLabs locally with
+`~/.config/inside-explain/narration.json`:
+
+```json
+{
+  "schema_version": 1,
+  "provider_name": "elevenlabs",
+  "model_id": "eleven_v4",
+  "voice_id": "EXAVITQu4vr4xnSDxMaL",
+  "budget_usd": 1,
+  "credential_source": "macos-keychain"
+}
+```
+
+New video projects then use that voice and budget. The preference contains no API
+key and is not distributed with the plugin. Keep the credential in the macOS
+Keychain item `elevenlabs-api-key`; use the skill helper's `studio narrate` command
+to pass it directly to Studio without displaying it or copying it to a file.
+An existing project keeps its plan unless explicitly revised. See
+[video mode](skills/explain-visually/references/video.md) for the command and limits.
+
 No MCP server, Heptabase account, hosted backend or upload is required. The plugin
 does not install its rendering dependencies or change account/billing settings
 on load. Read [video mode](skills/explain-visually/references/video.md) for setup.

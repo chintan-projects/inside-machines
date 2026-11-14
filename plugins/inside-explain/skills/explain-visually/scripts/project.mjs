@@ -1,4 +1,4 @@
-/** Local project scaffolding and read-only inspection. Never calls a model or installs software. */
+/** Local project scaffolding, inspection and explicit Studio execution. Only Studio narration may call a paid speech API. */
 import {execFileSync} from 'node:child_process';
 import {randomUUID} from 'node:crypto';
 import {access, mkdir, mkdtemp, readFile, readdir, rename, rm, stat, writeFile} from 'node:fs/promises';
@@ -7,10 +7,11 @@ import {isAbsolute, join, relative, resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 
 const modes = new Set(['interactive', 'video', 'both']);
-const help = `Explain Visually projects (no model/API calls)
+const help = `Explain Visually projects (init/status/doctor make no model/API calls)
   init <slug> [--topic "question"] [--mode interactive|video|both] [--root DIR]
   status <project-directory>
   doctor
+  studio <command> [args...] (runs Studio; narrate may use the configured paid voice)
 Default root: .explainers/ in the current workspace. Existing projects are never replaced.
 The video budget covers speech only; host-model usage and account billing are separate.`;
 
@@ -23,8 +24,9 @@ export function projectOptions(args) {
   const [command, ...rest] = args;
   if (!command || command === '--help' || command === '-h') return {command: 'help'};
   if (command === 'doctor' && !rest.length) return {command};
+  if (command === 'studio' && rest.length) return {command, args: rest};
   if (command === 'status' && rest.length === 1) return {command, path: resolve(rest[0])};
-  if (command !== 'init') throw new Error('Use init, status, doctor or --help.');
+  if (command !== 'init') throw new Error('Use init, status, doctor, studio or --help.');
   const slug = rest.shift();
   if (!slug || !/^[a-z0-9][a-z0-9-]{0,62}$/.test(slug)) {
     throw new Error('Use a slug of 1–63 lowercase letters, digits and hyphens; no paths.');
@@ -46,15 +48,57 @@ export function projectOptions(args) {
   return options;
 }
 
-export function studioPlan(topic, os = platform()) {
-  const narration = os === 'darwin'
-    ? 'narration:\n  provider_name: macos-say\n  voice: Samantha\n  words_per_minute: 165'
-    : 'narration: null # Configure an available local voice explicitly before narration.';
+export const narrationPreferencePath = join(homedir(), '.config', 'inside-explain', 'narration.json');
+
+export function parseNarrationPreference(value) {
+  const fields = ['schema_version', 'provider_name', 'model_id', 'voice_id', 'budget_usd', 'credential_source'];
+  const models = ['eleven_v4', 'eleven_v4_turbo', 'eleven_multilingual_v2', 'eleven_v3'];
+  if (!value || typeof value !== 'object' || Array.isArray(value)
+    || Object.keys(value).some(key => !fields.includes(key)) || value.schema_version !== 1
+    || value.provider_name !== 'elevenlabs' || !models.includes(value.model_id)
+    || typeof value.voice_id !== 'string' || !/^[A-Za-z0-9_-]{20,64}$/.test(value.voice_id)
+    || typeof value.budget_usd !== 'number' || !Number.isFinite(value.budget_usd)
+    || value.budget_usd <= 0 || value.budget_usd > 10
+    || value.credential_source !== 'macos-keychain') {
+    throw new Error('Invalid local narration preference. Use ElevenLabs, a positive budget up to $10, and Keychain; never put keys in this file.');
+  }
+  return {...value};
+}
+
+export async function loadNarrationPreference(path = narrationPreferencePath) {
+  let raw;
+  try { raw = await readFile(path, 'utf8'); }
+  catch (error) { if (error.code === 'ENOENT') return null; throw error; }
+  let value;
+  try { value = JSON.parse(raw); }
+  catch { throw new Error('Local narration preference is not valid JSON. No fallback was selected.'); }
+  return parseNarrationPreference(value);
+}
+
+export function studioEnvironment(preference, env = process.env, os = platform(), readKey = () =>
+  execFileSync('/usr/bin/security', ['find-generic-password', '-s', 'elevenlabs-api-key', '-w'],
+    {encoding: 'utf8', timeout: 12000, stdio: ['ignore', 'pipe', 'pipe']}).trim()) {
+  parseNarrationPreference(preference);
+  if (os !== 'darwin') throw new Error('This narration preference requires macOS Keychain. Configure Studio explicitly on another platform; no fallback was selected.');
+  let key;
+  try { key = readKey(); }
+  catch { throw new Error('ElevenLabs Keychain credential is unavailable. No paid call or fallback was started.'); }
+  if (typeof key !== 'string' || !key.trim()) throw new Error('ElevenLabs Keychain credential is empty.');
+  return {...env, ELEVENLABS_API_KEY: key.trim()};
+}
+
+export function studioPlan(topic, os = platform(), preference = null) {
+  const selected = preference ? parseNarrationPreference(preference) : null;
+  const narration = selected
+    ? `narration:\n  provider_name: elevenlabs\n  voice_id: ${JSON.stringify(selected.voice_id)}\n  model_id: ${selected.model_id}\n  voice_settings:\n    stability: 0.5\n    similarity_boost: 0.75`
+    : os === 'darwin'
+      ? 'narration:\n  provider_name: macos-say\n  voice: Samantha\n  words_per_minute: 165'
+      : 'narration: null # Configure an available local voice explicitly before narration.';
   return `title: ${JSON.stringify(topic || 'Visual explanation')}
 sources:
   - ../../CLAIMS.md
 language_code: en
-narration_budget_usd: 0
+narration_budget_usd: ${selected?.budget_usd ?? 0}
 ${narration}
 background_music:
   provider_name: none
@@ -80,7 +124,8 @@ episodes:
 `;
 }
 
-export async function createProject(options, os = platform()) {
+export async function createProject(options, os = platform(), preference = null) {
+  const selected = options.mode !== 'interactive' && preference ? parseNarrationPreference(preference) : null;
   const destination = join(options.root, options.slug);
   await mkdir(options.root, {recursive: true});
   if (await exists(destination)) throw new Error('Project already exists. Use status and continue it.');
@@ -89,7 +134,8 @@ export async function createProject(options, os = platform()) {
     const manifest = {
       schema_version: 1, id: randomUUID(), revision: 1, status: 'draft', mode: options.mode,
       question: options.topic, authoring: {model: null, authentication: 'host-managed', invoice_verified: false},
-      costs: {speech_budget_usd: 0, speech_charged_usd: null, api_equivalent_usd: null},
+      narration: selected ? {provider_name: selected.provider_name, model_id: selected.model_id, voice_id: selected.voice_id} : null,
+      costs: {speech_budget_usd: selected?.budget_usd ?? 0, speech_charged_usd: null, api_equivalent_usd: null},
       outputs: {interactive: 'interactive/index.html', video: 'video'},
       review: {engineering: 'not_run', technical: 'not_run', craft: 'not_run', learning: 'not_run'},
     };
@@ -102,7 +148,7 @@ export async function createProject(options, os = platform()) {
     if (options.mode !== 'interactive') {
       const production = join(temporary, 'video', 'production');
       await mkdir(join(production, 'episodes', 'ep01', 'scenes'), {recursive: true});
-      await writeFile(join(production, 'plan.yaml'), studioPlan(options.topic, os));
+      await writeFile(join(production, 'plan.yaml'), studioPlan(options.topic, os, selected));
     }
     // mkdir claims the target first: a concurrent init cannot replace a project created since the initial check.
     await mkdir(destination);
@@ -137,6 +183,7 @@ export async function projectStatus(directory) {
 }
 
 export async function doctor() {
+  const preference = await loadNarrationPreference();
   let studio = null;
   try {
     studio = execFileSync('explainer-studio', ['--version'], {encoding: 'utf8', timeout: 5000, stdio: ['ignore', 'pipe', 'ignore']}).trim();
@@ -148,14 +195,25 @@ export async function doctor() {
   return {node: process.version, platform: platform(), interactive: 'HTML/SVG authoring available through host tools',
     anatomy_locations: anatomy, studio_version_probe: studio,
     studio_dependencies: 'Run explainer-studio doctor --json before video production.',
-    narration_default: platform() === 'darwin' ? 'macos-say, verify installed voice' : 'unset; choose a local voice explicitly',
+    narration_default: preference ?? (platform() === 'darwin' ? 'macos-say, verify installed voice' : 'unset; choose a local voice explicitly'),
     paid_calls: 0, model_authentication: 'host-managed; billing not queried'};
 }
 
 export async function main(args) {
   const options = projectOptions(args);
   if (options.command === 'help') { process.stdout.write(help + '\n'); return; }
-  const result = options.command === 'init' ? await createProject(options)
+  if (options.command === 'studio') {
+    const allowed = ['doctor', 'guide', 'plan', 'script', 'narrate', 'preview', 'render', 'notes', 'deliver', 'video'];
+    if (!allowed.includes(options.args[0])) throw new Error('Unsupported Studio command. Use the Studio CLI directly for setup.');
+    const preference = await loadNarrationPreference();
+    const needsSpeech = options.args[0] === 'narrate' && !options.args.some(arg => ['--help', '-h'].includes(arg));
+    const env = needsSpeech && preference ? studioEnvironment(preference) : process.env;
+    try { execFileSync('explainer-studio', options.args, {env, stdio: 'inherit'}); }
+    catch { throw new Error('Studio did not complete. Inspect its saved state before retrying narration; no fallback was selected.'); }
+    return;
+  }
+  const preference = options.command === 'init' && options.mode !== 'interactive' ? await loadNarrationPreference() : null;
+  const result = options.command === 'init' ? await createProject(options, platform(), preference)
     : options.command === 'status' ? await projectStatus(options.path) : await doctor();
   process.stdout.write(JSON.stringify(result, null, 2) + '\n');
 }

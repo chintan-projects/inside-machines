@@ -20,7 +20,30 @@ that this remains the newest version. Follow the current installer only after
 source inspection and authorization for the installation. Do not pipe unreviewed
 remote scripts into a shell or alter the app's Python environment.
 
-On macOS, the default zero-paid-speech plan is:
+Honor an existing owner-selected preference at
+`~/.config/inside-explain/narration.json` when initializing a new video project.
+The helper reads it automatically. An absent preference keeps the free defaults;
+a malformed preference stops initialization instead of selecting another voice.
+Existing projects retain their own plans and narration caches.
+
+For a preference using ElevenLabs and macOS Keychain, run narration through:
+
+```sh
+node <skill-directory>/scripts/project.mjs studio narrate ep01 --series <series-directory>
+```
+
+This wrapper reads the existing `elevenlabs-api-key` Keychain item into the child
+process environment. It never prints the key or copies it to a credential file.
+The explicitly selected Keychain credential takes precedence over an inherited
+ElevenLabs environment key. Missing access stops the call; no silent provider
+fallback or automatic paid retry is introduced. Other Studio commands can use the
+same wrapper without reading the credential. Studio doctor may report its optional
+ElevenLabs key as absent because the Keychain key is injected only for narration.
+Keep the plan's narration budget and
+provider aligned with the saved preference. The budget limits that series' Studio
+speech estimates, not all account spending or model authoring.
+
+Without an owner-selected preference, the macOS zero-paid-speech plan is:
 
 ```yaml
 narration_budget_usd: 0
@@ -58,7 +81,7 @@ distinction applies to Codex/ChatGPT plan usage versus API billing.
    missing check and stop before a gate that requires it; never fabricate records.
    Keep automated review distinct from a real learner test. Three rounds do not
    mean unresolved confusion is accepted.
-4. Narrate with the chosen local voice; author scenes/cover/credits/cards using
+4. Narrate with the explicitly selected voice/provider; author scenes/cover/credits/cards using
    the actual ManimGL scene kit. Use `preview`, inspect every listed sheet/frame,
    fix errors, then `render`. No copied replacement renderer or invented success.
 5. Check final media, narration, captions, cards and static explanation against
