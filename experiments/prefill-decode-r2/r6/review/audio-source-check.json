@@ -1,0 +1,16 @@
+{
+  "beats": 174,
+  "total_speech_seconds": 1520.16,
+  "median_written_wpm": 114.89569752281616,
+  "max_written_wpm": 169.81132075471697,
+  "all_beats_non_silent": true,
+  "sample_rates": [
+    48000
+  ],
+  "channels": [
+    1
+  ],
+  "provider": "elevenlabs",
+  "estimated_cost_usd": 1.32848,
+  "invoice_verified": false
+}

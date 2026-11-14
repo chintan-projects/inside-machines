@@ -1,0 +1,102 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word be processed before choosing the following word, and what earlier work can each layer reuse?",
+    "takeaway": "Choosing blue uses the previous word’s finished result; blue must then make its own result, while saved keys and values let it reuse earlier reading preparation.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "value",
+      "query",
+      "key",
+      "positive part",
+      "sharing amount",
+      "KV cache",
+      "prefill",
+      "decode step"
+    ],
+    "lost_beat_id": "sky_match_the",
+    "most_engaging_beat_id": "old_choice"
+  },
+  "findings": [
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_match_the",
+      "kind": "lost",
+      "problem": "The first multiplication and the separate input-dependency distinction arrive in the same beat.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Put the input-dependency explanation in a new beat after the multiplication, in the same persistent diagram."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_key_name",
+      "kind": "lost",
+      "problem": "Reader independence is stated before a second reader uses the source preparation.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Name the concrete key only. Demonstrate unchanged source preparation when is later reads The before drawing any independence conclusion."
+      }
+    },
+    {
+      "scene_id": "save_work",
+      "beat_id": "rewind",
+      "kind": "lost",
+      "problem": "The replay begins before its unanswered question is spoken.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Ask what work would have to be repeated without the saved entries before rewinding and comparing the two starting states."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "amount_rule_zero",
+      "kind": "lost",
+      "problem": "A hypothetical zero interrupts the incomplete actual reading and creates competing numbers.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Remove the hypothetical. Teach the zero-plus-one consequence on the actual negative-match case during blue’s reading."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_same_stage_total",
+      "kind": "minor",
+      "problem": "The total picture previews division while narration is adding.",
+      "resolution": {
+        "action": "fixed",
+        "note": "The total guide/note now describe addition only; division appears with the actual division beat."
+      }
+    },
+    {
+      "scene_id": "blue_input",
+      "beat_id": "same_preparation",
+      "kind": "minor",
+      "problem": "The proof picture announces blue reading valid preparation before that reading is shown.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Keep the proof picture to unchanged earlier inputs/entries only; demonstrate blue’s reading in its later actual pass."
+      }
+    },
+    {
+      "scene_id": "save_work",
+      "beat_id": "pass_names_transition",
+      "kind": "minor",
+      "problem": "Pass naming after the complete mechanism feels like a new lesson.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Attach prefill to the just-completed supplied-text pass and decode to the just-completed blue pass, separated by their actual work. Remove the late vocabulary transition."
+      }
+    }
+  ]
+}

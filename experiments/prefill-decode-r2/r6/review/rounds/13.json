@@ -1,0 +1,91 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word be processed before choosing the following word, and how do separate layer caches save work?",
+    "takeaway": "Choosing blue uses is’s finished number; processing blue makes its own finished number, while saved keys and values let it reuse earlier preparation.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "value",
+      "query",
+      "key",
+      "match",
+      "KV cache",
+      "prefill",
+      "decode step"
+    ],
+    "lost_beat_id": "sky_reading_goal",
+    "most_engaging_beat_id": "reuse_is_question"
+  },
+  "findings": [
+    {
+      "scene_id": "first_read",
+      "beat_id": "parts_actual_bridge",
+      "kind": "lost",
+      "problem": "The picture still refers to a removed 0.5/1.5 allocation practice, rather than the 0.25-to-1.25 calculation.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Delete the obsolete allocation view entirely and give the bridge a dedicated actual-input view."
+      }
+    },
+    {
+      "scene_id": "finish_first",
+      "beat_id": "is_one_shares_0",
+      "kind": "lost",
+      "problem": "Parts ambiguously refers to positive part versus the sharing amount after adding one.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Use sharing amount consistently in all repeated division narration and visual labels."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_reading_goal",
+      "kind": "lost",
+      "problem": "Positive relative amount and normalization appear before an amount exists.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Start with the concrete how-much-to-read question. Make the numerical output first, then name its sharing job in a separate beat."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_query_name",
+      "kind": "minor",
+      "problem": "The review description retains prepared while narration names query.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Share actual role labels with the renderer; query naming visibly relabels the same prepared 1."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_key_name",
+      "kind": "minor",
+      "problem": "The review description similarly fails to anchor the newly named key.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Key naming visibly relabels the same source-prepared 0.25 in both representations."
+      }
+    },
+    {
+      "scene_id": "finish_first",
+      "beat_id": "focus_is",
+      "kind": "minor",
+      "problem": "All three inputs can sound like directly combining raw starting numbers.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Say prepared values from all three supplied positions, preserving the input-versus-source-value distinction."
+      }
+    }
+  ]
+}

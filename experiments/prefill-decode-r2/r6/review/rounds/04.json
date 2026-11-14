@@ -1,0 +1,68 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word go through its own processing, and which earlier calculations can each layer reuse?",
+    "takeaway": "Choosing blue uses is’s finished result, while processing blue makes a new result using earlier keys and values that can stay saved because later words cannot change them.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "value",
+      "query",
+      "key",
+      "KV cache"
+    ],
+    "lost_beat_id": "sky_query_name",
+    "most_engaging_beat_id": "reuse_is_question"
+  },
+  "findings": [
+    {
+      "scene_id": "blue_input",
+      "beat_id": "blue_signed_matches",
+      "kind": "lost",
+      "problem": "The batch-match picture omits blue’s self multiplication; its match then appears only in sharing parts.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Removed the inherited earlier-only filter from all batch matches. Added a regression requiring every parallel operation to include all allowed sources and self."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_query_name",
+      "kind": "lost",
+      "problem": "Query is named and assigned a comparing job before that job is shown.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Moved query naming after the first explicit multiplication, which uses the concrete prepared numbers without technical names."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_key_name",
+      "kind": "lost",
+      "problem": "Key and source ownership are introduced before the comparison demonstrates their job.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Moved key naming/ownership after its first concrete multiplication."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_same_stage_parts_add_0",
+      "kind": "minor",
+      "problem": "Sharing parts sounds like a fixed source property although it changes by reader.",
+      "resolution": {
+        "action": "fixed",
+        "note": "The first concrete parts calculation now explicitly belongs to sky’s current reading."
+      }
+    }
+  ]
+}

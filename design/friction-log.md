@@ -515,3 +515,30 @@ disabled until artifact-bound human release gates pass. This is a publication
 control, not evidence that those gates have been satisfied. Sixteen newer
 schematic cores and the current native candidates still lack accepted craft and
 beginner-learning evidence; the whole product quality goal remains open.
+
+# Local prefill/decode narration · 2026-11-14
+
+Observed by fresh automated readers: disappearing operands, premature names,
+provided-number detours, silent multi-row arithmetic and an unexplained cache
+replay purpose interrupted the causal thread. R6 now keeps operands visible,
+completes the actual reading before naming query/key, groups only verified equal
+fractions and states why reconstruction is needed before doing it.
+
+Observed implementation defects, fixed: an inherited source filter omitted self;
+a broad condition leaked later fractions into the first example; phase enums and
+stale practice text polluted the review description; a restriction-only picture
+prematurely concluded unchanged K/V. Shared label/reveal data and fifteen semantic
+and mechanism regressions protect these boundaries.
+
+Fresh narration reader20 reports no findings; independent transfer reader05 answers
+all five unseen cases correctly on the exact frozen script. Generated media and
+its browser/parity checks are recorded separately in the R6 reference. Human
+learning, scientific acceptance and owner taste remain unmeasured. No hosted
+lesson was promoted; the broader catalog quality goal remains open.
+
+Actual delivery checks pass: all 584 caption cues match the frozen narration,
+the browser decodes advancing unmuted audio, all eight scene seeks finish and
+72 responsive experiment states work. Native controls exposed a stale playing
+message after pause/reset; its status now follows actual media events. The film
+is a 29:17 detailed model study. Short curiosity-first pacing and physical-phone
+readability have not been accepted.

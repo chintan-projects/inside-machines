@@ -1,0 +1,329 @@
+chapters:
+  - id: build_the_reading_rule
+    title: Each processing layer reads allowed sources and then updates its own number.
+    scenes:
+      - id: setup
+        title: Assigned numbers let us follow the order of work.
+        summary: This two-stage teaching calculator starts with The, sky and is. Its simple assigned arithmetic exposes dependencies; its numbers do not predict a real language model.
+        key_frame: lookup
+        cards:
+          - id: assigned_calculator
+            leads_to: [causal_sources]
+            content: |
+              # Assigned numbers let us follow a complete calculation without claiming to reproduce GPT.
+              1. Start with the supplied text The / sky / is, followed by a blank for a new piece. The question is why choosing a piece still leaves work before choosing what follows it.
+              2. This is a <hepta-color type="background" color="yellow">structural teaching calculator</hepta-color>: two processing stages, one number per piece and fixed rules chosen for teaching.
+              3. Look up the starting numbers: The = 1, sky = 2 and is = 1.5. The assignments are untrained and have no learned meanings.
+              ![The three supplied pieces and their assigned starting numbers](frame:lookup)
+              4. A **token** is a text piece. Each whole word is one token here; real tokens can also be parts of words.
+              5. Displays are rounded, while the calculator keeps all digits. Real language models use many trained values and a different sharing formula, so these results are illustrative rather than numerical predictions about GPT.
+          - id: causal_sources
+            leads_to: [sole_source]
+            content: |
+              # Each position reads itself and earlier positions through a fixed set of sources.
+              1. A position is a place in the ordered text. Here **reading** means combining numbers supplied by allowed positions; those supplying positions are the **sources**.
+              2. The can read only The; sky can read The and sky; is can read The, sky and is. A later position is outside an earlier position's allowed set.
+              3. The next choice will use is's finished number because is is immediately before our blank. Start with The's smallest one-source calculation, then build up through sky to is, following <hepta-color type="background" color="yellow">which number each operation needs</hepta-color>.
+              4. This is an order of computational dependencies. No count or displayed number measures the speed of a real model.
+      - id: one_source
+        title: One source makes the whole read and local update visible.
+        summary: The reads its only allowed source, adds that reading to its input, and reworks only its own working number. Its prepared source value stays separate from its finished result.
+        key_frame: the_one_done
+        cards:
+          - id: sole_source
+            leads_to: [local_finish]
+            content: |
+              # The takes its entire source value because it has only one allowed source.
+              1. The starts this stage with input 1. Prepare its source reading number by multiplying its input by 0.8: 1 × 0.8 = 0.8.
+              2. The can read only itself, so it takes <hepta-color type="background" color="yellow">all of that 0.8</hepta-color>. Its combined reading is 0.8.
+              3. A **share** is the fraction of a source number used in a reading. Taking the whole number is a share of 1, or 100 percent.
+              4. Add the reading to The's own input: 1 + 0.8 = 1.8. This sum is the mixed working number.
+          - id: local_finish
+            leads_to: [value_result]
+            content: |
+              # One layer reads allowed sources and then reworks only its own mixed number.
+              1. Keep The's original mixed number, 1.8, ready for a later addition. Start a separate calculation with a copy, also 1.8, without reading any other word again.
+              2. In the separate copy, replace a negative number with zero and otherwise keep it; here 1.8 stays 1.8. This separate result is the **positive part** of the mixed number, written max(0, mixed number).
+              3. Half of that separate result gives the local adjustment: 0.5 × 1.8 = 0.9. The original mixed number is still kept as 1.8.
+              4. Add the adjustment back to the kept mixed number: 1.8 + 0.9 = <hepta-color type="background" color="yellow">2.7, the finished stage result</hepta-color>.
+              ![The's mixed number and local adjustment produce its finished result](frame:the_one_done)
+              5. A **layer** is one processing stage: read allowed sources, add the reading to this position's input, then apply this position-only update. Our calculator has two such layers.
+          - id: value_result
+            color: yellow
+            leads_to: [match_factors]
+            content: |
+              # A prepared source value and a finished layer result have different jobs.
+              1. A **value** is the source number prepared for other allowed readers to use. The's first-layer value is input 1 × 0.8 = 0.8.
+              2. The's finished first-layer result is 2.7, obtained after the reading, mixing and local update. It is <hepta-color type="background" color="yellow">a different calculation from preparing the value</hepta-color>.
+              3. Keep the prepared value beside its own layer. The finished result will become The's own input to the next layer.
+      - id: first_read
+        title: Two sources make the sharing calculation visible.
+        summary: Follow the actual multiplication for The's source, then take the match's positive part and add one to make a sharing amount. Repeat for sky's own source, and divide each amount by their total to find the fraction taken of each source value.
+        key_frame: sky_same_stage_1
+        cards:
+          - id: match_factors
+            leads_to: [positive_parts]
+            content: |
+              # Sky multiplies its prepared reader number by a separately prepared number from each source.
+              1. Sky's first-layer input is 2, and it can read The and itself. We need to decide how much of each source value to use.
+              2. The's prepared value 0.8 waits ready for reading after the fractions are found. Keep it separate from The's finished first-layer result 2.7 and from the comparison number we will prepare next.
+              3. Halve sky's input: 0.5 × 2 = 1, the first number to multiply. Prepare the other number beside The from a quarter of The's input: 0.25 × 1 = 0.25.
+              4. Multiply those prepared numbers: 1 × 0.25 = 0.25. This product is called their **match**; the prepared source value <hepta-color type="background" color="yellow">0.8 remains available for reading</hepta-color>.
+          - id: positive_parts
+            leads_to: [source_amounts]
+            content: |
+              # The match's positive part plus one makes a sharing amount for sky's current reading.
+              1. The actual match for The's source is 0.25. It is positive, so its positive part stays 0.25.
+              2. Add one to that separate result: 0.25 + 1 = 1.25. This intermediate number is called a **sharing amount**; the fraction to take of a source value will be calculated after both source amounts exist.
+              ![The actual match's positive part plus one gives amount 1.25](frame:amount_rule_add)
+              3. The amount 1.25 belongs to <hepta-color type="background" color="yellow">sky's current reading from The</hepta-color>. Find the amount for sky's own source next, before calculating either fraction.
+          - id: source_amounts
+            leads_to: [weighted_read]
+            content: |
+              # Sky's two sharing amounts determine the fraction taken of each source value.
+              1. Now prepare sky's own source number: 0.25 × 2 = 0.5. Its prepared reader number 1 times its own prepared source number 0.5 gives the self-match, 0.5.
+              2. That match's positive part is 0.5; add one to get sky's sharing amount, 1.5. Add both source amounts: The's 1.25 + sky's 1.5 = 2.75.
+              3. Divide <hepta-color type="background" color="yellow">each sharing amount by their total</hepta-color>. Take 1.25 / 2.75, about 45.5 percent, of The's value and 1.5 / 2.75, about 54.5 percent, of sky's value.
+              ![The two sharing amounts set fractions of each source's own value](frame:sky_same_stage_1)
+              4. The fractions add to one whole before display rounding. Their amounts came from the two actual multiplications and the same positive-part-plus-one rule.
+              5. A fraction scales that source's value. It is not a claim about that source's percentage of the final combined reading.
+          - id: weighted_read
+            leads_to: [reading_number_names]
+            content: |
+              # Sky scales each source value by its share before adding and updating.
+              1. A **contribution** is one source's share multiplied by that source's value. The contributes about 45.5 percent of 0.8, or 0.364.
+              2. Prepare sky's value from its input: 2 × 0.8 = 1.6. Sky contributes about 54.5 percent of 1.6, or 0.873.
+              3. Add the full-precision contributions to get reading about 1.236. Then add sky's input: 2 + 1.236 gives mixed number about 3.236.
+              4. The mixed number is positive, so half its positive part gives adjustment about 1.618. Adding that adjustment finishes sky's first layer at about <hepta-color type="background" color="yellow">4.855</hepta-color>.
+              5. Rounded figures may not add to the rounded result exactly. The same input → read → mix → local update → result sequence will apply at every position and layer.
+          - id: reading_number_names
+            leads_to: [next_blank_route]
+            content: |
+              # The completed reading gives names to its prepared reader and source numbers.
+              1. Sky's first layer is finished at about 4.855, and that finished result stays ready. This is a naming recap of the reading just completed, not another processing pass.
+              2. The's prepared comparison number 0.25 used only The's own input. The match used both prepared numbers: sky's 1 and The's 0.25.
+              3. The prepared reader number doing the comparing is a **query**. Sky's query is <hepta-color type="background" color="yellow">the prepared 1</hepta-color>; the product 0.25 remains the match.
+              4. The prepared source number being compared against is a **key**. The's key is its prepared 0.25, while its separately prepared value 0.8 is the number scaled in the reading.
+              ![The finished Sky result stays ready while the completed calculation's prepared numbers receive names](frame:sky_key_name)
+      - id: finish_first
+        title: The last supplied position needs the same complete layer calculation.
+        summary: Is reads all three supplied positions and finishes its first layer at about 4.079. Its eventual two-layer result will supply the choice for the slot immediately after is.
+        key_frame: is_one_done
+        cards:
+          - id: next_blank_route
+            leads_to: [is_sources]
+            content: |
+              # The blank after is uses is's finished number after both layers.
+              1. Our next blank is immediately after is. The choosing rule uses the finished number of the piece immediately before that blank.
+              2. Follow the actual route: <hepta-color type="background" color="yellow">is → layer one → layer two → chooser → next blank</hepta-color>. Finishing only is's first layer does not yet supply the choosing number.
+              ![The actual is position must finish both layers before choosing the following slot](frame:choice_wire)
+              3. We have finished The and sky at layer one. Next finish is's first layer, then continue to layer two with the corresponding new inputs.
+          - id: is_sources
+            leads_to: [is_first_finish]
+            content: |
+              # Is uses all three supplied positions to form its first-layer reading.
+              1. Is can read <hepta-color type="background" color="yellow">The, sky and itself</hepta-color>, all three supplied positions. The and sky each have smaller allowed sets because they cannot read later positions.
+              2. Is starts at 1.5 and makes query 0.5 × 1.5 = 0.75. Reuse The's and sky's existing first-layer keys, 0.25 and 0.5, and prepare is's own key, 0.25 × 1.5 = 0.375.
+              3. Repeat the multiplication in each source row: The's match is about 0.188, sky's 0.375 and is's 0.281. Adding 1 to each positive part gives sharing amounts about 1.188, 1.375 and 1.281, totaling about 3.844.
+              4. Divide each row's sharing amount by that total. The fractions to take of each source value are The: about 30.9 percent; sky: 35.8 percent; is: 33.3 percent.
+          - id: is_first_finish
+            leads_to: [layer_handoff]
+            content: |
+              # Is finishes its first layer by adding the reading and its local adjustment.
+              1. Reuse The's value 0.8 and sky's value 1.6, and prepare is's value 1.5 × 0.8 = 1.2. Each source value belongs to its source at this layer, so is can read the same preparation using different shares, giving contributions about 0.247, 0.572 and 0.4.
+              2. Add contributions using all digits: reading is about 1.22. Add is's own input 1.5 to get mixed number about 2.72.
+              3. Its positive part remains about 2.72, and half gives adjustment about 1.36. Mixed number plus adjustment finishes is's first layer at about <hepta-color type="background" color="yellow">4.079</hepta-color>.
+              4. This result is ready for layer two. It is not yet the finished two-layer number used to score the next piece.
+  - id: finish_and_choose
+    title: The final supplied position's two-layer result scores the next slot.
+    scenes:
+      - id: first_choice
+        title: A new layer uses new inputs before the chooser selects blue.
+        summary: First-layer results become their own positions' second-layer inputs, producing separate source preparations. Is finishes both layers at about 10.936, which scores blue above and while leaving blue unprocessed.
+        key_frame: selected_blue
+        cards:
+          - id: layer_handoff
+            color: yellow
+            leads_to: [is_second_read]
+            content: |
+              # Each first-layer result becomes the same position's second-layer input.
+              1. Layer two starts with The about 2.7, sky about 4.855 and is about 4.079. Each number is the finished first-layer result for that same piece.
+              2. The earlier layer's keys and values <hepta-color type="background" color="yellow">stay with that layer</hepta-color>. The finished result crosses the boundary as the next input.
+              ![Is's finished first-layer result becomes its own second-layer input](frame:return_is)
+              3. Applying the same quarter-input key rule to these new inputs gives second-layer keys about 0.675, 1.214 and 1.02.
+              4. Applying the 0.8-input value rule gives second-layer values about 2.16, 3.884 and 3.263. Their origins differ from the first-layer values even though the preparation rules are the same.
+              5. The first layer alone cannot yet supply the chooser. We need is's finished second-layer result, so repeat the already-taught recipe with these new layer inputs.
+          - id: is_second_read
+            leads_to: [is_second_finish]
+            content: |
+              # Is's second-layer query reads only the second-layer source preparations.
+              1. Half of is's second-layer input, about 4.079, makes query about 2.04. Repeat the same operation across three source rows: multiply this query by each source's second-layer key.
+              2. In each row, keep the match's positive part and add one to get its sharing amount. Add all rows' amounts to get total about 8.932, then divide each row's amount by that total.
+              3. Each fraction says how much of <hepta-color type="background" color="yellow">that row's own source value</hepta-color> to take. The / sky / is have shares about 26.6 / 38.9 / 34.5 percent, applied to second-layer values about 2.16 / 3.884 / 3.263.
+              4. Multiplying each fraction by its source value gives that row's contribution. Add the full-precision contributions to get reading about 3.211; the rows repeat an operation we already learned.
+              ![Parallel source rows apply each share to that same source's second-layer value](frame:is_two_take_the)
+          - id: is_second_finish
+            leads_to: [first_selection]
+            content: |
+              # Is's second-layer reading and local update produce the number used for choosing.
+              1. Add its second-layer input, about 4.079, to reading about 3.211. The mixed working number is about 7.29.
+              2. The positive part stays about 7.29, and half makes adjustment about 3.645. Add the adjustment to finish at about <hepta-color type="background" color="yellow">10.936</hepta-color>.
+              3. This finished number belongs to is after both layers. It is now the chooser's input for the next blank after is.
+          - id: first_selection
+            color: red
+            leads_to: [prefill_pass]
+            content: |
+              # Choosing blue fills the next slot while leaving blue's processing unfinished.
+              1. A **candidate** is a possible next piece. This calculator considers only blue and the word and.
+              2. Multiply is's finished result, about 10.936, by the choosing rule's assigned factor +1 to get blue's score, about +10.936. Applying and's assigned factor −1 gives about −10.936; the highest-score rule selects blue.
+              3. Blue has been <hepta-color type="background" color="yellow">selected, but has passed through neither layer</hepta-color>. It has no finished result of its own.
+              ![Blue is selected after is, with its own processing still to come](frame:selected_blue)
+              4. The number 10.936 belongs to the earlier position is and supplied the choice after is. We still need to establish what work can supply the choice after blue.
+          - id: prefill_pass
+            leads_to: [append_prediction]
+            content: |
+              # Prefill processes the supplied text and supplies the first new choice.
+              1. The pass just completed processed The / sky / is through the layers and prepared reading data at each layer. This supplied-text pass is called **prefill**.
+              2. The last supplied position's finished number, is's about 10.936, supplied the choice of blue. The pass has <hepta-color type="background" color="yellow">chosen blue without processing blue</hepta-color>.
+  - id: process_the_new_piece
+    title: The newly selected piece needs its own processing before the following choice.
+    scenes:
+      - id: blue_input
+        title: A prediction about the earlier result motivates processing blue itself.
+        summary: Predict before checking the earlier position's dependencies. The unchanged earlier calculations then explain why blue needs its own input, preparations, reading and local update.
+        key_frame: blue_boundary
+        cards:
+          - id: append_prediction
+            leads_to: [invariant_prefix]
+            content: |
+              # Appending blue gives us a prediction to test before processing blue.
+              1. We have chosen blue after The / sky / is. We want the next choice to use blue as part of the input text.
+              2. <hepta-color type="background" color="yellow">Predict before reading the next card:</hepta-color> if we recomputed the earlier is position after appending blue, would its finished result change?
+              3. Explain which allowed sources and inputs that earlier position could use. You may also skip the prediction and follow the dependency trace on the next card.
+          - id: invariant_prefix
+            color: green
+            leads_to: [blue_start]
+            content: |
+              # Appending blue leaves earlier results and source preparations unchanged.
+              1. Reveal: earlier is can still read only The, sky and itself. Earlier positions cannot read later blue, and their original input lookups have not changed.
+              2. The same earlier inputs, allowed source sets and fixed rules reproduce the same first-layer results. Those results in turn reproduce the same second-layer inputs and each layer's keys and values.
+              3. Is therefore has the same second-layer query, about 2.04, and the same allowed keys and values. Its reading stays about 3.211, its mixed number about 7.29 and its local adjustment about 3.645.
+              4. Its finished result stays about <hepta-color type="background" color="yellow">10.936</hepta-color>. Repeating the chooser on that earlier result would choose blue again.
+              5. The reason for reuse is unchanged dependencies under appending. An edit to earlier text is a different intervention and needs a new dependency check.
+          - id: blue_start
+            leads_to: [blue_first_finish]
+            content: |
+              # Blue has a new input assignment and must prepare its own first-layer data.
+              1. To choose after blue using blue as input, we need blue's own finished number. Its starting input lookup is −2.
+              2. The +1 used to score candidate blue and the −2 used to process input blue have <hepta-color type="background" color="yellow">different jobs</hepta-color>. Selection did not turn the scoring multiplier into a processed result.
+              3. From input −2, prepare query −1, key −0.5 and value −1.6. The three earlier first-layer keys and values are still available, and blue's new source entry joins them.
+              4. The earlier-source matches are −0.25, −0.5 and −0.375. Blue's own query −1 times its own key −0.5 gives self-match +0.5, because multiplying two negatives gives a positive result.
+              ![Blue's own source has a positive match from multiplying its negative query and negative key](frame:blue_self_signed_match)
+              5. The's actual negative match has positive part zero, so adding one gives sharing amount 1. Sky and is also have amount 1, while blue has 1 + 0.5 = 1.5; the total is 4.5.
+              6. The three earlier sources have equal amounts, so one division, 1 / 4.5, gives about 22.2 percent of each one's own value. For blue separately, 1.5 / 4.5 gives about 33.3 percent of its own value.
+          - id: blue_first_finish
+            leads_to: [blue_second_read]
+            content: |
+              # Blue's first-layer reading finishes at a negative result that becomes its next input.
+              1. Apply the four shares to first-layer values 0.8, 1.6, 1.2 and −1.6. Their contributions are about 0.178, 0.356, 0.267 and −0.533.
+              2. The contributions sum to reading about 0.267. Add blue's own input −2 to get mixed number about −1.733.
+              3. The mixed number's positive part is zero, so the local adjustment is also zero. The finished result remains about −1.733.
+              4. That finished number becomes <hepta-color type="background" color="yellow">blue's second-layer input</hepta-color>. Blue's first-layer key −0.5 and value −1.6 stay in the first layer.
+              ![Blue's finished first-layer number crosses to its own second-layer input](frame:blue_boundary)
+      - id: next_choice
+        title: Blue's finished second-layer result selects and for the following slot.
+        summary: Blue reads earlier and self preparations at layer two, finishes at about −0.042 and then supplies the next choice. The newly chosen and remains unprocessed.
+        key_frame: selected_and
+        cards:
+          - id: blue_second_read
+            leads_to: [blue_second_finish]
+            content: |
+              # Blue's second layer prepares and reads a separate set of source numbers.
+              1. From input about −1.733, blue makes second-layer query about −0.867, key about −0.433 and value about −1.387. Earlier second-layer values are about 2.16, 3.884 and 3.263.
+              2. Follow four parallel source rows for The / sky / is / blue. Multiply blue's query by each source's second-layer key, keep each match's positive part, then add one to get that row's sharing amount.
+              3. The three earlier-source matches are negative, giving sharing amount one each; blue's positive self-match gives about 1.376. Their total is about 4.376.
+              4. The equal earlier amounts share one division: 1 / the full-precision total gives about 22.9 percent of each earlier source's own value. Divide blue's own amount by that same total separately to get about 31.4 percent of blue's value.
+              5. Each share scales its own row's source value. Adding those contributions at full precision produces <hepta-color type="background" color="yellow">reading about 1.691</hepta-color>, using the same operations as the earlier layers.
+              ![Each of blue's second-layer source rows produces a contribution from its own value](frame:blue_two_contributions)
+          - id: blue_second_finish
+            leads_to: [next_selection]
+            content: |
+              # Blue's finished two-layer result supplies the choice immediately after blue.
+              1. Add second-layer input about −1.733 and reading about 1.691. The mixed number is about −0.042.
+              2. Its positive part is zero and its local adjustment is zero, leaving finished result about −0.042. Blue has now completed both layers.
+              3. Candidate blue scores that result × +1, about −0.042. Candidate and scores it × −1, about +0.042, so the highest-score rule selects <hepta-color type="background" color="yellow">and</hepta-color>.
+              4. And is the newly selected piece and remains unprocessed. Continuing would look up its input and process it before choosing the following slot.
+          - id: next_selection
+            leads_to: [separate_caches]
+            content: |
+              # Processing blue and choosing the following piece completes one decode step.
+              1. The pass just completed processed the newly selected blue as input through both layers, then used blue's finished result to choose and. That pass is one **decode step**.
+              2. The word and remains newly selected and unprocessed. A further step would look up and's input, process it, then choose what follows it.
+              3. The recurring loop is <hepta-color type="background" color="yellow">choose → look up the new input → process → choose again</hepta-color>. Each newly selected piece needs its own finished result before it can supply the following choice.
+              ![Blue's completed pass supplies the next choice and receives the name decode step](frame:decode_name)
+  - id: keep_valid_preparation
+    title: Valid layer-specific preparation can be kept while the new piece still does its own work.
+    scenes:
+      - id: save_work
+        title: Keeping earlier keys and values saves preparation while preserving the result.
+        summary: Replay immediately after blue was chosen and before it was processed. One route keeps earlier keys and values; the other retains only text and fixed rules, rebuilding earlier working results and source preparations before processing blue.
+        key_frame: count_work
+        cards:
+          - id: separate_caches
+            color: yellow
+            leads_to: [replay_snapshot]
+            content: |
+              # Each layer keeps its own keys and values made from that layer's inputs.
+              1. A **KV cache** is a store of prepared keys and values at one layer. Each position contributes one key-and-value entry, made from its input to that layer.
+              2. The's expanded first-layer entry has key 0.25 and value 0.8, made from input 1. Its separate second-layer entry has key 0.675 and value 2.16, made from its finished first-layer result 2.7 used as the new input.
+              3. The, sky and is have earlier entries at both layers; blue's entry at each layer is marked new. Sky's, is's and blue's pairs stay compact in the view, but every pair still contains one key and one value made from its own layer's input.
+              ![Separate first-layer and second-layer stores keep different preparations](frame:separate_stores)
+              4. Blue added <hepta-color type="background" color="yellow">one new key-and-value entry at each layer</hepta-color>. Its new query read the earlier entries and itself; earlier entries were read rather than rebuilt.
+              5. A source entry holds a key and value, not a candidate word or that position's completed layer result. Keeping it does not finish the next selected piece.
+          - id: replay_snapshot
+            leads_to: [rebuild_retained_text]
+            content: |
+              # Both replay routes begin after blue is selected and before blue is processed.
+              1. What work would have to be repeated without the saved entries? Compare processing the same blue input from two starting states.
+              2. <hepta-color type="background" color="yellow">Rewind to that precise moment</hepta-color>: the text is The / sky / is / blue, but blue has no entry at either layer yet.
+              ![The replay begins with blue chosen, text retained and blue still unprocessed](frame:rewind)
+              3. Route A keeps the three earlier key-and-value entries at each layer. Route B retains only the text and fixed calculation rules, keeping neither earlier keys and values nor earlier finished working numbers.
+              4. Both routes retain the same text and assigned input lookup rules. Route B therefore can rebuild from the text, even though earlier computed numbers are absent.
+              5. Both routes still need to process blue. Route B must reconstruct the earlier working results needed to prepare later-layer entries; this replay compares these two retention policies only.
+          - id: rebuild_retained_text
+            leads_to: [same_result_less_preparation]
+            content: |
+              # Retained text and fixed rules reconstruct the same earlier preparations.
+              1. Route B has retained no earlier finished results to use as later-layer inputs. For The, look up original input 1 again and rebuild first-layer key 1 × 0.25 = 0.25 and value 1 × 0.8 = 0.8.
+              2. The first-layer entry is now rebuilt, but the second-layer entry needs The's finished first-layer number as input. Reconstruct that missing number by repeating the reading and local update next.
+              3. The reads only itself, giving reading 0.8. Input 1 plus reading gives mixed number 1.8; half its separate positive part gives adjustment 0.9; adding back to the kept mixed number yields finished first-layer result 2.7.
+              4. Use the reconstructed 2.7 as The's second-layer input, then prepare key 2.7 × 0.25 = 0.675 and value 2.7 × 0.8 = 2.16. This route needs the appropriate earlier-layer result because it did not retain one.
+              5. Repeating the fixed calculations for sky and is reconstructs their earlier inputs and preparations too. The finished first-layer numbers are again about 4.855 and 4.079.
+              6. The reconstruction uses <hepta-color type="background" color="yellow">retained text plus the same operations</hepta-color>. Other policies for retaining intermediate results are outside this replay; the demonstrated cache is a reusable prepared form alongside separately retained text.
+          - id: same_result_less_preparation
+            color: green
+            leads_to: [unseen_transfer]
+            content: |
+              # Keeping valid earlier entries saves preparation while both routes compute the same next choice.
+              1. Both routes give blue input −2 and identical allowed keys and values. Blue therefore repeats the same first-layer result about −1.733 and second-layer result about −0.042.
+              2. Only after blue finishes do both routes score its result and select and. The saved cache entries themselves did not select or process the answer.
+              3. Count making one key and one value for one position at one layer as **one preparation**. Route A keeps the earlier store and makes 1 new preparation per layer for blue; Route B's text-only replay, without earlier working results, makes 4 at each layer by rebuilding 3 earlier entries and adding blue.
+              ![The replay needs one versus four preparations at each layer](frame:count_work)
+              4. Both routes still compute blue's new query, read past and self, mix the reading with its input and apply the local update. <hepta-color type="background" color="yellow">Saved preparation is only part of the work</hepta-color>.
+              5. One versus four counts these preparations. It gives neither a count of all arithmetic nor an exact elapsed-time speedup.
+          - id: unseen_transfer
+            leads_to: [model_boundary]
+            content: |
+              # New cases test whether the dependency rule transfers beyond the demonstrated example.
+              1. Try this without an answer shown: with thirteen earlier processed pieces and one newly selected, unprocessed piece, how many preparations are needed at each layer if earlier entries are kept? What if the replay retains only text and fixed rules, clearing earlier entries and finished results?
+              2. Explain which reading and local-update work the new piece still performs. Does the preparation count alone establish an exact speed ratio?
+              3. Try a different intervention: edit only sky in The / sky / is. Which of The's two-layer entries, is's first-layer key/value, is's first-layer finished result and is's second-layer key/value can remain valid, and why?
+              4. <hepta-color type="background" color="yellow">Follow each value's inputs before claiming reuse</hepta-color>. These prompts deliberately withhold their answers; reason about dependencies rather than assuming every unchanged word has unchanged state.
+          - id: model_boundary
+            content: |
+              # The calculator teaches structural dependencies within an explicitly limited numerical model.
+              1. All numbers and rules come from this revision's untrained two-layer mechanism. Each sharing amount is 1 + max(0, query × source key), and its share is that amount divided by the total sharing amount over allowed sources.
+              2. Real standard transformer attention uses **softmax**, a different sharing formula based on exponentials, along with many trained values. We have followed the dependency pattern; these numerical outputs do not forecast a real model's words or quality.
+              3. This calculator leaves out vector geometry, positional encoding, normalization, biases and a real vocabulary. Appending reuse assumes unchanged earlier text, positions and fixed causal rules; other interventions require checking their dependencies.
+              4. The source basis and distinctions are recorded in the claim ledger: [the cache explanation](https://huggingface.co/docs/transformers/main/cache_explanation) describes layer-specific preparation and allowed sources; [Attention Is All You Need, section 3.2.1](https://arxiv.org/abs/1706.03762) specifies the different real attention formula.
+              5. Structural and arithmetic checks can establish consistency with this calculator. <hepta-color type="background" color="yellow">Independent technical acceptance and human learning remain unmeasured</hepta-color>; these cards do not supply that evidence.

@@ -1,0 +1,43 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word be processed before choosing the following word, and what preparation can each layer keep for reuse?",
+    "takeaway": "Choosing blue uses the preceding word’s finished result; blue must produce its own result, while each layer can reuse earlier keys and values because appending blue cannot change their inputs.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "query",
+      "key",
+      "value",
+      "match",
+      "positive part",
+      "sharing parts",
+      "KV cache",
+      "prefill",
+      "decode step"
+    ],
+    "lost_beat_id": "reading_number",
+    "most_engaging_beat_id": "old_choice"
+  },
+  "findings": [
+    {
+      "scene_id": "one_source",
+      "beat_id": "reading_number",
+      "kind": "lost",
+      "problem": "The first reading-number picture prematurely introduces supposedly previously computed fractions for The, sky and is. No fractions have been computed yet.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Ready-fraction reminders now require an explicit storyboard state flag on the three later value reminders. A regression requires an earlier fraction computation for that same position/pass/layer and forbids the early reminder."
+      }
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word be processed before choosing the following word, and what work do separate layer caches save?",
+    "takeaway": "Choosing blue uses is’s finished result, while processing blue creates its own finished result using earlier keys and values that each layer can retain.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "query",
+      "key",
+      "value",
+      "match",
+      "positive part",
+      "share",
+      "KV cache",
+      "prefill",
+      "decode step"
+    ],
+    "lost_beat_id": "rebuild_the_read",
+    "most_engaging_beat_id": "reuse_is_question"
+  },
+  "findings": [
+    {
+      "scene_id": "save_work",
+      "beat_id": "rebuild_the_read",
+      "kind": "lost",
+      "problem": "The reason for repeating The’s reading/update after its first-layer entry is rebuilt arrives only at the handoff.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Add the second-layer input-reconstruction goal before that work: first entry rebuilt; next entry requires the finished first-layer number."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_match_the",
+      "kind": "minor",
+      "problem": "Saying two equal numbers have different jobs leaves their jobs unspecified.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Explicitly distinguish the source preparation depending only on The from the match combining both pieces’ preparation."
+      }
+    },
+    {
+      "scene_id": "setup",
+      "beat_id": "question",
+      "kind": "minor",
+      "problem": "Unexplained full-precision/simplified-sharing labels compete with the opening question.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Use plain opening notes and simple rounded-display language after the explicit rounding explanation. No early technical metadata label."
+      }
+    }
+  ]
+}

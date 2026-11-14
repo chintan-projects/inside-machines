@@ -1,0 +1,83 @@
+{
+  "id": "setup",
+  "title": "Why the next word needs another pass",
+  "beats": [
+    {
+      "id": "question",
+      "narration": "A chatbot receives the supplied text The, sky, is. It then adds one new text piece, followed by another. Why does choosing one new piece not already give it the following piece?",
+      "view": "input",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "text",
+      "note": "A small teaching calculator. Follow what goes in and what changes."
+    },
+    {
+      "id": "toy",
+      "narration": "This is a two-stage teaching calculator with assigned numbers. It illustrates the order of work, using simpler arithmetic than a real language model.",
+      "view": "input",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "text",
+      "note": "A small teaching calculator. Follow what goes in and what changes."
+    },
+    {
+      "id": "lookup",
+      "narration": "Look up each piece’s starting number: The starts at 1, sky at 2, and the word is at 1.5. These numbers have no learned meanings.",
+      "view": "input",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "note": "A small teaching calculator. Follow what goes in and what changes."
+    },
+    {
+      "id": "tokens",
+      "narration": "A text piece is called a token. Here each whole word is one token; real tokens can be parts of words.",
+      "view": "input",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "note": "A small teaching calculator. Follow what goes in and what changes."
+    },
+    {
+      "id": "scope",
+      "narration": "Every displayed number is rounded. The calculations keep all digits. Watch which numbers must be made before others; these are not measurements of a real model’s speed.",
+      "view": "input",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1
+    },
+    {
+      "id": "allowed",
+      "narration": "This toy combines numbers. A piece can combine numbers supplied by itself and earlier pieces; we call that reading. It cannot use a later piece. These are the allowed source sets.",
+      "view": "allowed",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1
+    },
+    {
+      "id": "choosing_destination",
+      "narration": "The next choice will use the finished number of is, the piece immediately before our blank.",
+      "view": "choice_goal",
+      "position": 2,
+      "pass": 0,
+      "pause": 1,
+      "guide": "DESTINATION · IS’S FINISHED NUMBER → NEXT CHOICE"
+    },
+    {
+      "id": "first_demonstration",
+      "view": "input",
+      "part": "text",
+      "pause": 1,
+      "narration": "Is can read numbers supplied by The and sky. Start with The’s smallest, one-source calculation, then build up to sky and is."
+    }
+  ],
+  "guide": "SUPPLIED TEXT → FIRST CHOICE"
+}

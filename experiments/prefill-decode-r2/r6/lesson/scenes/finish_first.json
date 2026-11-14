@@ -1,0 +1,205 @@
+{
+  "id": "finish_first",
+  "title": "Three sources: finish the last supplied word",
+  "guide": "FIRST CHOICE · FINISH IS AT LAYER ONE",
+  "beats": [
+    {
+      "id": "choice_wire",
+      "view": "slot_goal",
+      "pause": 1,
+      "narration": "Our blank is immediately after is. The choosing rule uses the finished number of the piece immediately before the blank. So finish is through both stages.",
+      "guide": "IS → BOTH STAGES → CHOICE FOR THE NEXT BLANK"
+    },
+    {
+      "id": "focus_is",
+      "narration": "The word is can read prepared values from The, sky and itself: all three supplied positions. Earlier pieces cannot read all three.",
+      "view": "full_context_goal",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "guide": "IS CAN READ THE WHOLE SUPPLIED INPUT"
+    },
+    {
+      "id": "start_is",
+      "view": "input",
+      "narration": "Now build the last supplied word’s first layer. Its input is 1.5. Its allowed sources are The, sky and itself.",
+      "pause": 1
+    },
+    {
+      "id": "query_job",
+      "view": "prepare",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "query",
+      "narration_template": "prepare"
+    },
+    {
+      "id": "key_job",
+      "view": "prepare",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "key",
+      "narration_template": "prepare",
+      "source_index": 0,
+      "revisit": true
+    },
+    {
+      "id": "key_job_1",
+      "view": "prepare",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "key",
+      "narration_template": "prepare",
+      "source_index": 1,
+      "revisit": true
+    },
+    {
+      "id": "key_job_2",
+      "view": "prepare",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "key",
+      "narration_template": "prepare",
+      "source_index": 2
+    },
+    {
+      "id": "is_one_match_0",
+      "view": "matches",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 3,
+      "narration_template": "match_all"
+    },
+    {
+      "id": "is_one_shares_parts_add_0",
+      "view": "parts_all",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 3,
+      "narration_template": "parts_all"
+    },
+    {
+      "id": "is_one_shares_total",
+      "view": "parts",
+      "part": "total",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "parts_total",
+      "guide": "ADD THE COMPLETED SOURCE AMOUNTS"
+    },
+    {
+      "id": "is_one_shares_0",
+      "view": "shares_all",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 3,
+      "narration_template": "shares_all"
+    },
+    {
+      "id": "value_job",
+      "view": "prepare",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "value",
+      "narration_template": "prepare",
+      "source_index": 0,
+      "revisit": true,
+      "show_ready_fractions": true
+    },
+    {
+      "id": "value_job_1",
+      "view": "prepare",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "value",
+      "narration_template": "prepare",
+      "source_index": 1,
+      "revisit": true,
+      "show_ready_fractions": true
+    },
+    {
+      "id": "value_job_2",
+      "view": "prepare",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "value",
+      "narration_template": "prepare",
+      "source_index": 2,
+      "show_ready_fractions": true
+    },
+    {
+      "id": "is_one_take_0",
+      "view": "contribute",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 3,
+      "narration_template": "contribute_all"
+    },
+    {
+      "id": "is_one_blend",
+      "view": "blend",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "blend"
+    },
+    {
+      "id": "is_one_mix",
+      "view": "mix",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "mix"
+    },
+    {
+      "id": "is_one_positive",
+      "view": "positive",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "positive"
+    },
+    {
+      "id": "is_one_adjust",
+      "view": "adjust",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "adjust"
+    },
+    {
+      "id": "is_one_done",
+      "view": "done",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "done"
+    }
+  ]
+}

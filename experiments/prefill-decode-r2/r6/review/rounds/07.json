@@ -1,0 +1,62 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word go through processing before choosing another word, and which earlier calculations can a cache preserve?",
+    "takeaway": "Choosing blue uses is’s finished number; blue still needs its own pass, while each layer can reuse earlier keys and values because appending blue cannot change their inputs.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "value",
+      "query",
+      "key",
+      "match",
+      "positive part",
+      "KV cache",
+      "prefill",
+      "decode step"
+    ],
+    "lost_beat_id": "parts_actual_bridge",
+    "most_engaging_beat_id": "reuse_is_question"
+  },
+  "findings": [
+    {
+      "scene_id": "first_read",
+      "beat_id": "parts_actual_bridge",
+      "kind": "lost",
+      "problem": "The bridge previews a whole chain of new operations at once and the picture still labels the new calculation as practice.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Bridge now leaves the completed practice case, shows actual inputs, and starts only the next preparation. No advance dump of the unknown recipe."
+      }
+    },
+    {
+      "scene_id": "first_choice",
+      "beat_id": "candidate_multipliers",
+      "kind": "lost",
+      "problem": "Scoring multipliers appear before their operands or use and may be mistaken for input lookups.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Remove the multiplier-list beat. Show the finished is number multiplied by the assigned factor, then identify the resulting candidate score and choosing-rule role."
+      }
+    },
+    {
+      "scene_id": "finish_first",
+      "beat_id": "is_one_shares_total",
+      "kind": "minor",
+      "problem": "Individually narrated repeated three-source decimals displace the purpose.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Apply the same parallel operation-row representation already used at the other repeated reads; all inputs and results remain visible."
+      }
+    }
+  ]
+}

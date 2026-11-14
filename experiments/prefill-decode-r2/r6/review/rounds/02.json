@@ -1,0 +1,98 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a newly chosen word go through processing, and which earlier calculations can each layer keep for reuse?",
+    "takeaway": "Choosing blue uses the finished result for is; processing blue makes its own result, while separate layer caches let it reuse earlier keys and values.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "query",
+      "key",
+      "value",
+      "KV cache"
+    ],
+    "lost_beat_id": "reading_number",
+    "most_engaging_beat_id": "old_choice"
+  },
+  "findings": [
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_same_stage_0",
+      "kind": "lost",
+      "problem": "Percent of the reading can mean a source’s fraction of the final sum, rather than a fraction taken of its source value.",
+      "resolution": {
+        "action": "fixed",
+        "note": "All numerical share lines now explicitly say take this percentage of that source value."
+      }
+    },
+    {
+      "scene_id": "finish_first",
+      "beat_id": "key_job",
+      "kind": "lost",
+      "problem": "Making The’s key again for is suggests fresh source preparation for each reader.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Explicitly revisit the existing The and sky keys and values; source preparation belongs to its position/layer."
+      }
+    },
+    {
+      "scene_id": "one_source",
+      "beat_id": "reading_number",
+      "kind": "lost",
+      "problem": "Reading number is named before the multiplication creates its concrete instance.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Compute 1 times 0.8 first, then name the prepared reading number."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_key_the",
+      "kind": "lost",
+      "problem": "Source factor, arithmetic, key name and next multiplication arrive together.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Separate numerical preparation from key naming/job; also split query naming."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "parts_base",
+      "kind": "lost",
+      "problem": "General base/extra parts recipe precedes one concrete match becoming parts.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Remove that general beat. First calculate 0.25 plus one, then name its sharing parts."
+      }
+    },
+    {
+      "scene_id": "setup",
+      "beat_id": "toy",
+      "kind": "minor",
+      "problem": "Sharing arithmetic is named before anything is shared.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Opening now declares simpler arithmetic and the scope without introducing sharing vocabulary."
+      }
+    },
+    {
+      "scene_id": "save_work",
+      "beat_id": "close",
+      "kind": "minor",
+      "problem": "Feed back could mean sending the calculated number rather than looking up the chosen word.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Closing explicitly says choose a piece, look it up as next input, process it, then choose."
+      }
+    }
+  ]
+}

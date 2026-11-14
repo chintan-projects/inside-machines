@@ -1,0 +1,62 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word be processed before choosing another word, and which earlier calculations can each layer reuse?",
+    "takeaway": "Choosing blue uses is’s finished result; processing blue makes a new result, while each layer reuses earlier keys and values because appending blue does not change their inputs.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "key",
+      "value",
+      "query",
+      "match",
+      "KV cache",
+      "candidate",
+      "prefill",
+      "decode step"
+    ],
+    "lost_beat_id": "the_one_positive",
+    "most_engaging_beat_id": "old_choice"
+  },
+  "findings": [
+    {
+      "scene_id": "one_source",
+      "beat_id": "the_one_positive",
+      "kind": "lost",
+      "problem": "Copying, clipping negatives, naming the positive part and preserving the original are introduced together; position has an unclear referent.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Separate keeping the original, starting a copy, applying the rule and naming its result into four visible beats. Use the word The rather than an unexplained position reference."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_same_stage_total",
+      "kind": "lost",
+      "problem": "The addition beat also introduces the next general division rule before one division is shown.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Let the total beat only add amounts. The following beat shows one actual division and the resulting fraction."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "amount_rule_job",
+      "kind": "minor",
+      "problem": "Relative number is not concretely distinguishable from a fraction; 1.25 may mean 125 percent.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Explicitly identify the amount as an intermediate number; calculate shares only after both source amounts are ready."
+      }
+    }
+  ]
+}

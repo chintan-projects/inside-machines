@@ -1,0 +1,80 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a selected word become a new input, and how can saved data at each layer reduce the repeated work?",
+    "takeaway": "Choosing blue uses is’s finished result; processing blue produces a new result while reusing the earlier pieces’ unchanged keys and values.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "value",
+      "query",
+      "key",
+      "KV cache",
+      "prefill",
+      "decode step"
+    ],
+    "lost_beat_id": "sky_query",
+    "most_engaging_beat_id": "old_choice"
+  },
+  "findings": [
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_query",
+      "kind": "lost",
+      "problem": "Holding a half-input number through later operands/product/parts loses the connection to choosing the next word.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Replace disappearing operation cards with one persistent two-branch diagram. Keep both operands, reached results, target amount and completed prior source amount visible; move current focus while the diagram remains in place."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_same_stage_parts_add_0",
+      "kind": "minor",
+      "problem": "Fractional sharing parts differ from counting integer practice parts.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Name the result one and a quarter relative sharing parts and explain that recipe parts can be fractional amounts."
+      }
+    },
+    {
+      "scene_id": "first_choice",
+      "beat_id": "second_values",
+      "kind": "minor",
+      "problem": "Three silent new values compete with the prior layer values.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Name each second-layer key/value result and explicitly bind it to layer two, with longer inspection and row focus."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "parts_meaning",
+      "kind": "minor",
+      "problem": "The separate practice allocation can compete with the actual allocation in memory.",
+      "resolution": {
+        "action": "kept",
+        "note": "Retain the short prerequisite example because earlier readers could not connect parts to fractions without it. Clearly leave the practice case; the new persistent diagram parks actual operands/amounts so they need not be held against the practice numbers. Fresh recheck remains required."
+      }
+    },
+    {
+      "scene_id": "save_work",
+      "beat_id": "separate_stores",
+      "kind": "minor",
+      "problem": "Presentation instructions compete with learning why layer two has different data.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Narration now explains only separate second-layer inputs and source preparation; the compact display and old/new labels explain themselves visually."
+      }
+    }
+  ]
+}

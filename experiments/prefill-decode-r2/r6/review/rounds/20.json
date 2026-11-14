@@ -1,0 +1,34 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a selected word be processed before choosing what follows it, and how do separate caches at each layer save work?",
+    "takeaway": "Choosing blue uses is’s finished result; processing blue produces its own result while reusing unchanged earlier keys and values from each layer.",
+    "explained_terms": [
+      "token",
+      "reading",
+      "share",
+      "positive part",
+      "layer",
+      "value",
+      "query",
+      "key",
+      "match",
+      "candidate",
+      "prefill",
+      "decode step",
+      "KV cache"
+    ],
+    "lost_beat_id": null,
+    "most_engaging_beat_id": "reuse_is_question"
+  },
+  "findings": []
+}

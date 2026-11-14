@@ -1,0 +1,201 @@
+{
+  "id": "first_choice",
+  "title": "The second layer feeds the choosing calculator",
+  "beats": [
+    {
+      "id": "second_inputs",
+      "view": "second_inputs",
+      "pause": 1,
+      "narration_template": "second_inputs"
+    },
+    {
+      "id": "return_is",
+      "view": "boundary",
+      "pass": 0,
+      "position": 2,
+      "layer": 1,
+      "pause": 1,
+      "narration_template": "boundary"
+    },
+    {
+      "id": "second_stage_goal",
+      "narration": "The first layer is complete. We still need is’s second-layer result to supply the chooser. Repeat the same recipe with these new layer inputs.",
+      "view": "boundary",
+      "position": 2,
+      "layer": 1,
+      "pause": 2
+    },
+    {
+      "id": "is_two_query",
+      "view": "prepare",
+      "pass": 0,
+      "position": 2,
+      "layer": 1,
+      "pause": 1,
+      "part": "query",
+      "narration_template": "prepare"
+    },
+    {
+      "id": "second_keys",
+      "view": "prepare_sources",
+      "pass": 0,
+      "position": 2,
+      "layer": 1,
+      "pause": 3,
+      "part": "key",
+      "narration_template": "sources_summary"
+    },
+    {
+      "id": "second_values",
+      "view": "prepare_sources",
+      "pass": 0,
+      "position": 2,
+      "layer": 1,
+      "pause": 3,
+      "part": "value",
+      "narration_template": "sources_summary"
+    },
+    {
+      "id": "is_two_same_stage",
+      "view": "matches",
+      "layer": 1,
+      "pause": 3,
+      "narration_template": "match_all"
+    },
+    {
+      "id": "is_two_shares_parts_add_0",
+      "view": "parts_all",
+      "part": "add",
+      "pass": 0,
+      "position": 2,
+      "layer": 1,
+      "pause": 3,
+      "narration_template": "parts_all"
+    },
+    {
+      "id": "is_two_shares_total",
+      "view": "parts",
+      "part": "total",
+      "pass": 0,
+      "position": 2,
+      "layer": 1,
+      "pause": 1,
+      "narration_template": "parts_total",
+      "guide": "ADD THE COMPLETED SOURCE AMOUNTS"
+    },
+    {
+      "id": "is_two_shares_0",
+      "view": "shares_all",
+      "pass": 0,
+      "position": 2,
+      "layer": 1,
+      "pause": 3,
+      "narration_template": "shares_all"
+    },
+    {
+      "id": "is_two_take_the",
+      "view": "contribute",
+      "pause": 3,
+      "layer": 1,
+      "narration_template": "contribute_all"
+    },
+    {
+      "id": "is_two_blend",
+      "view": "blend",
+      "pause": 1,
+      "layer": 1,
+      "narration_template": "blend"
+    },
+    {
+      "id": "is_two_mix",
+      "view": "mix",
+      "pause": 1,
+      "layer": 1,
+      "narration_template": "mix"
+    },
+    {
+      "id": "is_two_positive",
+      "view": "positive",
+      "pause": 1,
+      "layer": 1,
+      "narration_template": "positive"
+    },
+    {
+      "id": "is_two_adjust",
+      "view": "adjust",
+      "pause": 1,
+      "layer": 1,
+      "narration_template": "adjust"
+    },
+    {
+      "id": "is_two_done",
+      "view": "done",
+      "pause": 1,
+      "layer": 1,
+      "narration_template": "done"
+    },
+    {
+      "id": "candidates",
+      "narration": "Now choose the next piece. A possible next piece is called a candidate. This toy has two: the word blue, and the word and.",
+      "view": "candidates",
+      "pass": 0,
+      "position": 2,
+      "layer": 1,
+      "pause": 1,
+      "part": "words"
+    },
+    {
+      "id": "blue_scores",
+      "view": "scores",
+      "pass": 0,
+      "position": 2,
+      "layer": 1,
+      "pause": 1,
+      "part": "blue",
+      "narration_template": "scores",
+      "first_score": true
+    },
+    {
+      "id": "and_first_score",
+      "view": "scores",
+      "pass": 0,
+      "position": 2,
+      "layer": 1,
+      "pause": 1,
+      "part": "and",
+      "narration_template": "scores"
+    },
+    {
+      "id": "choice_rule",
+      "view": "scores",
+      "pass": 0,
+      "position": 2,
+      "layer": 1,
+      "pause": 1,
+      "part": "preview",
+      "narration": "Select the candidate with the highest score. That is this teaching model’s fixed choosing rule."
+    },
+    {
+      "id": "selected_blue",
+      "view": "scores",
+      "pass": 0,
+      "position": 2,
+      "layer": 1,
+      "pause": 1,
+      "part": "choose",
+      "narration": "Blue is selected for the blank after is, but has not passed through either layer. It has no finished result of its own."
+    },
+    {
+      "id": "prefill_name",
+      "narration": "The supplied-text pass prepared the per-layer reading data and used is’s finished number to make the first choice. This pass is called prefill.",
+      "view": "pass_name",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 2,
+      "part": "prefill",
+      "guide": "NAME THE PASS JUST COMPLETED"
+    }
+  ],
+  "guide": "FINISH IS’S SECOND LAYER → CHOOSE THE NEXT PIECE"
+}

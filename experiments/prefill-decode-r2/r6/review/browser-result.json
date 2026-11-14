@@ -1,0 +1,252 @@
+{
+  "browser": "157.0.8103.51",
+  "media": {
+    "duration": 1757.4,
+    "time": 450.713053,
+    "width": 1920,
+    "height": 1080,
+    "muted": false,
+    "volume": 1,
+    "audio_decoded_bytes": 21246
+  },
+  "captions": {
+    "cues": 584,
+    "mode": "showing"
+  },
+  "chapter_seek_before_play": true,
+  "all_eight_chapters_seek": true,
+  "all_chapter_seek_decodes_complete": true,
+  "active_caption_during_playback": true,
+  "sound_and_pause_status_tracks_media": true,
+  "reset_seeks_and_pauses": true,
+  "computed_scenarios": [
+    [
+      "sky",
+      "0",
+      "0",
+      "blue chosen"
+    ],
+    [
+      "sky",
+      "0",
+      "1",
+      "blue chosen"
+    ],
+    [
+      "sky",
+      "1",
+      "0",
+      "and chosen"
+    ],
+    [
+      "sky",
+      "1",
+      "1",
+      "and chosen"
+    ],
+    [
+      "and",
+      "0",
+      "0",
+      "blue chosen"
+    ],
+    [
+      "and",
+      "0",
+      "1",
+      "blue chosen"
+    ],
+    [
+      "and",
+      "1",
+      "0",
+      "and chosen"
+    ],
+    [
+      "and",
+      "1",
+      "1",
+      "and chosen"
+    ],
+    [
+      "blue",
+      "0",
+      "0",
+      "blue chosen"
+    ],
+    [
+      "blue",
+      "0",
+      "1",
+      "blue chosen"
+    ],
+    [
+      "blue",
+      "1",
+      "0",
+      "and chosen"
+    ],
+    [
+      "blue",
+      "1",
+      "1",
+      "and chosen"
+    ],
+    [
+      "sky",
+      "0",
+      "0",
+      "blue chosen"
+    ],
+    [
+      "sky",
+      "0",
+      "1",
+      "blue chosen"
+    ],
+    [
+      "sky",
+      "1",
+      "0",
+      "and chosen"
+    ],
+    [
+      "sky",
+      "1",
+      "1",
+      "and chosen"
+    ],
+    [
+      "and",
+      "0",
+      "0",
+      "blue chosen"
+    ],
+    [
+      "and",
+      "0",
+      "1",
+      "blue chosen"
+    ],
+    [
+      "and",
+      "1",
+      "0",
+      "and chosen"
+    ],
+    [
+      "and",
+      "1",
+      "1",
+      "and chosen"
+    ],
+    [
+      "blue",
+      "0",
+      "0",
+      "blue chosen"
+    ],
+    [
+      "blue",
+      "0",
+      "1",
+      "blue chosen"
+    ],
+    [
+      "blue",
+      "1",
+      "0",
+      "and chosen"
+    ],
+    [
+      "blue",
+      "1",
+      "1",
+      "and chosen"
+    ],
+    [
+      "sky",
+      "0",
+      "0",
+      "blue chosen"
+    ],
+    [
+      "sky",
+      "0",
+      "1",
+      "blue chosen"
+    ],
+    [
+      "sky",
+      "1",
+      "0",
+      "and chosen"
+    ],
+    [
+      "sky",
+      "1",
+      "1",
+      "and chosen"
+    ],
+    [
+      "and",
+      "0",
+      "0",
+      "blue chosen"
+    ],
+    [
+      "and",
+      "0",
+      "1",
+      "blue chosen"
+    ],
+    [
+      "and",
+      "1",
+      "0",
+      "and chosen"
+    ],
+    [
+      "and",
+      "1",
+      "1",
+      "and chosen"
+    ],
+    [
+      "blue",
+      "0",
+      "0",
+      "blue chosen"
+    ],
+    [
+      "blue",
+      "0",
+      "1",
+      "blue chosen"
+    ],
+    [
+      "blue",
+      "1",
+      "0",
+      "and chosen"
+    ],
+    [
+      "blue",
+      "1",
+      "1",
+      "and chosen"
+    ]
+  ],
+  "responsive_states_checked": 72,
+  "widths": [
+    390,
+    768,
+    1440
+  ],
+  "keyboard_reset": true,
+  "mode_preserves_experiment": true,
+  "http_ranges_and_private_paths": true,
+  "page_errors": [],
+  "console_errors": [],
+  "no_external_requests": true
+}

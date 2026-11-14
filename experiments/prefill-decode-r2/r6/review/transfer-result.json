@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "script_sha256": "9a7d24342b7e59f134c387fba7f3553c410b359ab1eef512a79446d24998e944",
+  "reviewer_id": "/root/narration_r6_transfer_05",
+  "kind": "fresh_automated_uncoached_transfer",
+  "questions_withheld_from_core": true,
+  "rubric_predefined_in": "BRIEF.md",
+  "answers": {
+    "candidate_vs_input": "Blue’s +1 multiplies the preceding finished result for candidate scoring; −2 is its own input lookup when selected. Choosing does not calculate its finished result.",
+    "chosen_vs_processed": "Is cannot read later blue. Appending preserves is’s inputs and sources, so recomputing and scoring is repeats blue. The next choice needs blue’s finished result.",
+    "layer_and_reuse": "A layer prepares Q/K/V from its input, forms reading shares from Q and allowed K, combines the corresponding V, adds the reading to input, then adds half the mixed number’s positive part. Finished result becomes the next-layer input; K/V remain separately at the current layer. Unchanged prefix inputs and source sets preserve all earlier per-layer preparation.",
+    "longer_prefix": "With thirteen old processed pieces and a selected unprocessed piece, keeping K/V needs one new entry per layer; the text-only replay needs fourteen. The new position still reads all thirteen past positions and itself. No exact time ratio follows.",
+    "earlier_edit": "Editing only sky preserves The’s entries at both layers and is’s first-layer K/V. Is’s first-layer result and second-layer K/V lose the unchanged guarantee because the reading can depend on sky. Not every edit must numerically change every dependent value."
+  },
+  "scores": {
+    "candidate_vs_input": 2,
+    "chosen_vs_processed": 2,
+    "layer_and_reuse": 2,
+    "longer_prefix": 2,
+    "earlier_edit": 2
+  },
+  "score_maximum_per_question": 2,
+  "result": "pass",
+  "remaining_lost": [],
+  "reviewer_assessment": "The explanation supplies the dependencies needed for all five answers. No relevant contradiction or missing causal dependency. Automated comprehension, not human learning evidence."
+}

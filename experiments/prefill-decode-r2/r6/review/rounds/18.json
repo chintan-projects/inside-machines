@@ -1,0 +1,83 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word be processed before choosing the following word, and what earlier work can each layer’s cache save?",
+    "takeaway": "Choosing blue uses is’s result; processing blue makes a new result, while separate layer caches supply earlier keys and values without rebuilding them.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "value",
+      "query",
+      "key",
+      "match",
+      "positive part",
+      "candidate",
+      "KV cache",
+      "prefill",
+      "decode step"
+    ],
+    "lost_beat_id": "amount_rule_job",
+    "most_engaging_beat_id": "reuse_is_question"
+  },
+  "findings": [
+    {
+      "scene_id": "first_read",
+      "beat_id": "amount_rule_job",
+      "kind": "lost",
+      "problem": "Too many names and intermediate numbers appear before the first concrete fraction is used.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Move query/key naming and the input-dependency recap after the completed Sky layer; remove the intermediate-number naming detour. Keep the first read in plain numerical language."
+      }
+    },
+    {
+      "scene_id": "blue_input",
+      "beat_id": "same_restriction",
+      "kind": "lost",
+      "problem": "The allowed-source proof picture prematurely concludes unchanged K/V.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Fix the restriction variant explicitly, showing only the three actual unchanged source sets. Reject unknown proof variants and add a regression for this semantic stage."
+      }
+    },
+    {
+      "scene_id": "setup",
+      "beat_id": "first_demonstration",
+      "kind": "minor",
+      "problem": "Finishing The before Sky suggests Sky uses The’s finished result.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Explicitly remind that Sky reads The’s prepared value0.8 while The’s finished2.7 stays separate."
+      }
+    },
+    {
+      "scene_id": "blue_input",
+      "beat_id": "blue_shares_0",
+      "kind": "minor",
+      "problem": "Four percentages in one spoken list are hard to attach to source rows.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Show one actual division for the three mathematically equal source fractions, then a separate division for blue’s own fraction. Validate equality before grouping."
+      }
+    },
+    {
+      "scene_id": "save_work",
+      "beat_id": "count_work",
+      "kind": "minor",
+      "problem": "The second route’s four preparations could mean a total over both stores.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Repeat four at each layer in the second route’s count narration."
+      }
+    }
+  ]
+}

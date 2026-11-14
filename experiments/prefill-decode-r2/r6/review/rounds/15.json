@@ -1,0 +1,72 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word be processed before choosing the following word, and how do saved keys and values reduce repeated work?",
+    "takeaway": "Choosing blue uses is’s finished result; processing blue makes its own result while reusing unchanged earlier reading data separately at each layer.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "value",
+      "query",
+      "key",
+      "match",
+      "sharing amount",
+      "KV cache",
+      "prefill",
+      "decode step"
+    ],
+    "lost_beat_id": "amount_rule_input",
+    "most_engaging_beat_id": "old_choice"
+  },
+  "findings": [
+    {
+      "scene_id": "first_read",
+      "beat_id": "amount_rule_input",
+      "kind": "lost",
+      "problem": "A supplied practice input interrupts the actual word-input-to-reading path.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Remove the supplied-function detour. Keep the actual word inputs, prepared operands and match visible, then clip/add/name its amount inline. Hide future operation labels until the operation is taught."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_match_the",
+      "kind": "minor",
+      "problem": "The source-prepared number, product and practice input all equal 0.25, making jobs hard to distinguish.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Remove the extra practice input; explain that the source-prepared number depends only on The, while the match uses both reader and source preparation."
+      }
+    },
+    {
+      "scene_id": "first_choice",
+      "beat_id": "second_stage_goal",
+      "kind": "minor",
+      "problem": "Another full layer of arithmetic crowds out the opening question before a word is chosen.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Retain the complete requested mechanism, with the stable concrete guide Finish is’s second layer → choose the next piece, and parallel known-operation rows instead of serial re-teaching."
+      }
+    },
+    {
+      "scene_id": "save_work",
+      "beat_id": "count_work",
+      "kind": "minor",
+      "problem": "The preparation comparison must retain the extra condition that prior finished results were also discarded.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Repeat text-only replay without earlier working results in both the count narration and displayed route label."
+      }
+    }
+  ]
+}

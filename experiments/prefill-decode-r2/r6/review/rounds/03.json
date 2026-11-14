@@ -1,0 +1,61 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word be processed before choosing what follows it, and what repeated work can each layer’s cache save?",
+    "takeaway": "Choosing blue uses the earlier word’s finished result; processing blue creates its own result, while saved keys and values let it read earlier pieces without preparing them again.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "value",
+      "query",
+      "key",
+      "share",
+      "positive part",
+      "candidate",
+      "KV cache"
+    ],
+    "lost_beat_id": "is_two_same_stage",
+    "most_engaging_beat_id": "reuse_is_question"
+  },
+  "findings": [
+    {
+      "scene_id": "save_work",
+      "beat_id": "rebuild_the_read",
+      "kind": "lost",
+      "problem": "It is unclear whether the earlier finished number was also discarded; retaining it could avoid rebuilding it for the second-layer preparation.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Explicitly compare a kept-K/V route with a replay retaining only text and fixed rules, without earlier working results."
+      }
+    },
+    {
+      "scene_id": "first_choice",
+      "beat_id": "is_two_same_stage",
+      "kind": "lost",
+      "problem": "Another complete decimal sequence displaces the opening question and its reason for a second layer.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Motivate the second-layer result as the chooser input. Repeated known operations now appear as parallel source rows per operation; the rule and all operands/results remain visible."
+      }
+    },
+    {
+      "scene_id": "blue_input",
+      "beat_id": "blue_shares_parts_clip_0",
+      "kind": "minor",
+      "problem": "Extra sharing parts sounds like another quantity rather than the already-taught positive part.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Use positive part consistently in narration and labels."
+      }
+    }
+  ]
+}

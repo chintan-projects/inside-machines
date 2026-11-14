@@ -68,15 +68,23 @@ The [editable prefill/decode example](experiments/prefill-decode-video/README.md
 documents the video workflow and its unresolved learning/craft evidence. These
 local authoring tools do not automatically add content to the live library.
 
-The latest [self-paced prefill/decode reference](experiments/prefill-decode-r2/r3/README.md)
-adds a shorter core, current-step “I’m lost” recovery and guided layer, cache and
-word-scoring calculations. A fresh automated reader answered all five causal and
-changed-case questions after using layer help. The separate narration review still
-has open findings, so new speech is held. Human quality acceptance remains pending.
+The latest [prefill/decode worked-model reference](experiments/prefill-decode-r2/r6/README.md)
+follows one calculation through layers, next-word scoring and per-layer cache
+reuse. Its frozen narration passed a fresh automated reader with zero findings and
+an independent five-case transfer check. The locally delivered 29-minute movie has
+verified audio, captions and chapter seeking. A computed experiment and transcript
+share its source. This is a detailed teaching calculator with explicitly simplified
+arithmetic; human learning, independent technical review and taste acceptance remain
+unmeasured. Movies and private sessions stay local; the live app is unchanged.
+
+The [earlier self-paced reference](experiments/prefill-decode-r2/r3/README.md)
+preserves a shorter core and current-step “I’m lost” recovery. Its product-with-help
+result did not pass its separate continuous-narration review; that old narration
+remains held.
 The [previous r2 reference and film workflow](experiments/prefill-decode-r2/README.md)
 are preserved; generated media and private sessions stay local.
 
-![Prefill/decode self-paced local reference](docs/images/readme/prefill-decode-r3.png)
+![Computed prefill/decode reference showing the selected input, layer results and separate source entries](docs/images/readme/prefill-decode-r6.png)
 
 ## How it works
 

@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "revision": 6,
+  "script_sha256": "9a7d24342b7e59f134c387fba7f3553c410b359ab1eef512a79446d24998e944",
+  "automated_narration": {
+    "reviewer": "narration_r6_reader_20",
+    "all_scenes_read": 8,
+    "findings": 0,
+    "lost_beat_id": null
+  },
+  "independent_transfer": {
+    "reviewer": "narration_r6_transfer_05",
+    "correct_cases": 5,
+    "total_cases": 5,
+    "points": 10,
+    "maximum_points": 10,
+    "uncoached": true
+  },
+  "mechanism_tests": {
+    "passed": 15,
+    "failed": 0
+  },
+  "runtime": {
+    "explainer_studio": "1.3.0",
+    "manimgl": "1.7.2",
+    "ffmpeg": "8.0.1"
+  },
+  "delivery_record": "2026-11-14T231447Z",
+  "media": {
+    "script_sha256": "9a7d24342b7e59f134c387fba7f3553c410b359ab1eef512a79446d24998e944",
+    "video_sha256": "bb4b7c07249d1f070fd3c2c5cc568f7be3fa234b8e5827d4fc61099546372ccb",
+    "duration_seconds": 1757.4,
+    "narration_beats": 174,
+    "caption_cues": 584,
+    "all_caption_words_match_frozen_script": true,
+    "srt_vtt_text_and_timestamps_identical": true,
+    "all_caption_times_valid_and_nonoverlapping": true,
+    "video_dimensions": [
+      1920,
+      1080
+    ],
+    "audio_codec": "aac",
+    "audio_sample_rate": 48000,
+    "delivered_script_matches_gate": true
+  },
+  "source_hashes": {
+    "lesson/mechanism.mjs": "cbaeb5427cd56df53cae8831fb5c8a4a3a359320107b2de296ad75dfb56d810e",
+    "lesson/panels.mjs": "1c1ab35ae02cda79b2f01c7c3a63acd4038c8d93f52117164cd1ead60066a25a",
+    "lesson/narrate.mjs": "e6f2eb13ec5d4ce61a21891821954613d98439902e7e141fcf688d42fd8d10ba",
+    "video/production/shared/series.py": "a28fde2c4ee25a732d5dfccf02fdbfcbed482aab92bbd97ededb9a08b65e88e0",
+    "video/production/shared/workbench.py": "e336cd11cb2722c40e6f0b95898793a45f176c772eb0d2429052bc6397c1f65c",
+    "video/production/episodes/ep01/notes.yaml": "998f119dbc3960f3aec5d9de4c633811857e2cfd21ff2674765610f181dc072e",
+    "interactive/index.html": "effa58b631d7871167191f92ec310f5ea8c608b0685dfee03dbfed1bd44c9186"
+  },
+  "narration_audio": {
+    "beats": 174,
+    "total_speech_seconds": 1520.16,
+    "median_written_wpm": 114.89569752281616,
+    "max_written_wpm": 169.81132075471697,
+    "all_beats_non_silent": true,
+    "sample_rates": [
+      48000
+    ],
+    "channels": [
+      1
+    ],
+    "provider": "elevenlabs",
+    "estimated_cost_usd": 1.32848,
+    "invoice_verified": false
+  },
+  "render": {
+    "automatic_issues": [],
+    "mastered_lufs": -16.0,
+    "true_peak_dbtp": -2.4,
+    "mean_volume_dbfs": -19.8,
+    "max_volume_dbfs": -2.4
+  },
+  "visual": {
+    "corrected_preview_images_inspected": 101,
+    "final_render_contact_sheets_inspected": 54,
+    "full_size_frames_independently_decoded_and_inspected": 6,
+    "remaining_in_movie_findings": 0,
+    "review_sheet_only_findings": [
+      "Detached possessive suffix in tool-generated sheet narration font",
+      "One sheet timestamp shows 24:60.0 rather than 25:00.0"
+    ],
+    "continuous_human_viewing": false
+  },
+  "notes_check": "pass",
+  "native_video_open_no_browser": "pass",
+  "browser": {
+    "browser": "157.0.8103.51",
+    "media": {
+      "duration": 1757.4,
+      "time": 450.713053,
+      "width": 1920,
+      "height": 1080,
+      "muted": false,
+      "volume": 1,
+      "audio_decoded_bytes": 21246
+    },
+    "captions": {
+      "cues": 584,
+      "mode": "showing"
+    },
+    "chapter_seek_before_play": true,
+    "all_eight_chapters_seek": true,
+    "all_chapter_seek_decodes_complete": true,
+    "active_caption_during_playback": true,
+    "sound_and_pause_status_tracks_media": true,
+    "reset_seeks_and_pauses": true,
+    "responsive_states_checked": 72,
+    "widths": [
+      390,
+      768,
+      1440
+    ],
+    "keyboard_reset": true,
+    "mode_preserves_experiment": true,
+    "http_ranges_and_private_paths": true,
+    "page_errors": [],
+    "console_errors": [],
+    "no_external_requests": true
+  },
+  "source_publication_parity": {
+    "status": "pass",
+    "byte_identical": [
+      "video/production/episodes/ep01/script.yaml",
+      "interactive/index.html",
+      "video/production/shared/narration.json"
+    ]
+  },
+  "human_acceptance": false,
+  "independent_technical_acceptance": false,
+  "physical_device_acceptance": false,
+  "live_app_changed": false,
+  "scope": "Detailed 29:17 structural teaching-calculator study, not a validated short curiosity introduction.",
+  "repository_checks": {
+    "ruff": "pass",
+    "mypy_strict_files": 127,
+    "backend_passed": 390,
+    "external_postgres_skipped": 10,
+    "frontend_types": "pass",
+    "frontend_lint": "pass",
+    "javascript_passed": 59
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "episode": "ep01",
+  "script_sha256": "9a7d24342b7e59f134c387fba7f3553c410b359ab1eef512a79446d24998e944",
+  "review_kind": "fresh_automated_reader",
+  "reviewer_id": "/root/narration_r6_reader_20; /root/narration_r6_transfer_05",
+  "causal_teachback": "pass",
+  "novel_transfer": "pass",
+  "findings": []
+}

@@ -1,0 +1,196 @@
+{
+  "id": "next_choice",
+  "title": "Blue finishes, then and is chosen",
+  "beats": [
+    {
+      "id": "blue_two_query",
+      "view": "prepare",
+      "pass": 1,
+      "position": 3,
+      "layer": 1,
+      "pause": 1,
+      "part": "query",
+      "narration_template": "prepare"
+    },
+    {
+      "id": "blue_two_key",
+      "view": "prepare",
+      "pass": 1,
+      "position": 3,
+      "layer": 1,
+      "pause": 1,
+      "part": "key",
+      "narration_template": "prepare"
+    },
+    {
+      "id": "blue_two_value",
+      "view": "prepare",
+      "pass": 1,
+      "position": 3,
+      "layer": 1,
+      "pause": 1,
+      "part": "value",
+      "narration_template": "prepare"
+    },
+    {
+      "id": "blue_two_sources",
+      "narration": "At layer two, use the separate earlier entries made from The’s, sky’s and is’s first-layer results. Include blue’s new second-layer entry too.",
+      "view": "stage_sources",
+      "pass": 1,
+      "position": 3,
+      "layer": 1,
+      "pause": 2
+    },
+    {
+      "id": "blue_two_matches",
+      "view": "matches",
+      "pass": 1,
+      "layer": 1,
+      "pause": 3,
+      "narration_template": "match_all"
+    },
+    {
+      "id": "blue_two_shares_parts_add_0",
+      "view": "parts_all",
+      "part": "add",
+      "pass": 1,
+      "position": 3,
+      "layer": 1,
+      "pause": 3,
+      "narration_template": "parts_all"
+    },
+    {
+      "id": "blue_two_shares_total",
+      "view": "parts",
+      "part": "total",
+      "pass": 1,
+      "position": 3,
+      "layer": 1,
+      "pause": 1,
+      "narration_template": "parts_total",
+      "guide": "ADD THE COMPLETED SOURCE AMOUNTS"
+    },
+    {
+      "id": "blue_two_shares_0",
+      "view": "share",
+      "pass": 1,
+      "position": 3,
+      "layer": 1,
+      "pause": 2,
+      "narration_template": "shared_fraction",
+      "source_index": 0,
+      "shared_sources": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "blue_two_own_fraction",
+      "view": "share",
+      "source_index": 3,
+      "position": 3,
+      "pass": 1,
+      "layer": 1,
+      "narration_template": "share",
+      "pause": 2,
+      "guide": "BLUE’S OWN SECOND-LAYER FRACTION · SAME TOTAL"
+    },
+    {
+      "id": "blue_two_contributions",
+      "view": "contribute",
+      "pass": 1,
+      "layer": 1,
+      "pause": 3,
+      "narration_template": "contribute_all"
+    },
+    {
+      "id": "blue_two_read_sum",
+      "view": "blend",
+      "pass": 1,
+      "layer": 1,
+      "pause": 1,
+      "narration_template": "blend"
+    },
+    {
+      "id": "blue_two_mix",
+      "view": "mix",
+      "pass": 1,
+      "layer": 1,
+      "pause": 1,
+      "narration_template": "mix"
+    },
+    {
+      "id": "blue_two_positive",
+      "view": "positive",
+      "pass": 1,
+      "layer": 1,
+      "pause": 1,
+      "narration_template": "positive"
+    },
+    {
+      "id": "blue_two_adjust",
+      "view": "adjust",
+      "pass": 1,
+      "layer": 1,
+      "pause": 1,
+      "narration_template": "adjust"
+    },
+    {
+      "id": "blue_two_done",
+      "view": "done",
+      "pass": 1,
+      "layer": 1,
+      "pause": 1,
+      "narration_template": "done"
+    },
+    {
+      "id": "blue_next_score",
+      "view": "scores",
+      "part": "blue",
+      "pass": 1,
+      "layer": 1,
+      "pause": 1,
+      "narration_template": "scores"
+    },
+    {
+      "id": "and_next_score",
+      "view": "scores",
+      "part": "and",
+      "pass": 1,
+      "layer": 1,
+      "pause": 1,
+      "narration_template": "scores"
+    },
+    {
+      "id": "and_scores",
+      "view": "scores",
+      "pass": 1,
+      "position": 3,
+      "layer": 1,
+      "pause": 1,
+      "narration": "The highest score wins. Here the candidate word and has it."
+    },
+    {
+      "id": "selected_and",
+      "view": "scores",
+      "pass": 1,
+      "position": 3,
+      "layer": 1,
+      "pause": 1,
+      "narration": "The word and is selected for the next blank. It remains unprocessed. Continuing would process its own input next."
+    },
+    {
+      "id": "decode_name",
+      "narration": "The next pass processed blue as a new input and chose what followed it. That is one decode step.",
+      "view": "pass_name",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 2,
+      "part": "decode",
+      "guide": "NAME THE PASS JUST COMPLETED"
+    }
+  ],
+  "guide": "FINISH BLUE → CHOOSE AGAIN"
+}

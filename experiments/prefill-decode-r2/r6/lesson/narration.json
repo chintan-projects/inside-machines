@@ -1,0 +1,17 @@
+{
+  "revision": 6,
+  "title": "A reading calculator: process a new piece, reuse the prepared past",
+  "question": "Why does a chosen word still need processing, and what work can a separate cache at each layer save?",
+  "takeaway": "The next choice reads the chosen word's finished number and the entries it stores at each layer, so the chosen word must go through every layer first. Earlier words never read later ones, so their stored entries stay the same. Saving those entries means each new word prepares only its own entry at each layer, and every result stays exactly the same.",
+  "model_scope": "Structural teaching calculator with positive-part-plus-one sharing, not literal transformer softmax.",
+  "scene_files": [
+    "scenes/setup.json",
+    "scenes/one_source.json",
+    "scenes/first_read.json",
+    "scenes/finish_first.json",
+    "scenes/first_choice.json",
+    "scenes/blue_input.json",
+    "scenes/next_choice.json",
+    "scenes/save_work.json"
+  ]
+}

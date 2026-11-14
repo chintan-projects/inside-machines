@@ -1,0 +1,329 @@
+{
+  "id": "first_read",
+  "title": "Two sources: calculate their shares",
+  "guide": "FIRST CHOICE · SKY READS THE AND ITSELF",
+  "beats": [
+    {
+      "id": "sky_goal",
+      "view": "allowed",
+      "narration": "Next build sky’s first layer. It can read The and itself. These allowed pieces are its reading sources.",
+      "pause": 1
+    },
+    {
+      "id": "sky_source_value",
+      "narration": "The’s prepared value, 0.8, is what sky will read. The finished first-layer result, 2.7, stays separate.",
+      "view": "first_result",
+      "position": 0,
+      "layer": 0,
+      "pause": 1,
+      "guide": "SKY READS THE’S VALUE · THE FINISHED RESULT STAYS SEPARATE"
+    },
+    {
+      "id": "sky_reading_goal",
+      "view": "reading_goal",
+      "narration": "Sky can read two sources. Calculate how much of The’s value it takes, and how much of sky’s own value it takes.",
+      "pause": 1,
+      "position": 1
+    },
+    {
+      "id": "sky_query",
+      "view": "prepare",
+      "pause": 1,
+      "part": "query",
+      "position": 1,
+      "guide": "SKY READS THE · PREPARE TWO NUMBERS, THEN MULTIPLY",
+      "narration_template": "prepare",
+      "first_definition": true,
+      "use_plain_names": true,
+      "workbench": {
+        "reader_position": 1,
+        "source_index": 0,
+        "phase": "query",
+        "known_labels": "plain"
+      }
+    },
+    {
+      "id": "the_source_two_jobs",
+      "narration": "The’s value, 0.8, stays ready for reading after the fractions are found. Now prepare a separate number for the multiplication.",
+      "view": "source_two_jobs",
+      "position": 1,
+      "layer": 0,
+      "source_index": 0,
+      "pause": 1,
+      "guide": "KEEP THE VALUE · PREPARE A SEPARATE COMPARISON NUMBER"
+    },
+    {
+      "id": "sky_key_the",
+      "view": "prepare",
+      "pause": 1,
+      "part": "key",
+      "position": 1,
+      "source_index": 0,
+      "guide": "SKY READS THE · PREPARE TWO NUMBERS, THEN MULTIPLY",
+      "narration_template": "prepare",
+      "first_definition": true,
+      "use_plain_names": true,
+      "workbench": {
+        "reader_position": 1,
+        "source_index": 0,
+        "phase": "key",
+        "known_labels": "plain"
+      }
+    },
+    {
+      "id": "sky_match_the",
+      "view": "matches",
+      "pause": 1,
+      "position": 1,
+      "source_index": 0,
+      "guide": "SKY READS THE · PREPARE TWO NUMBERS, THEN MULTIPLY",
+      "narration_template": "match",
+      "plain_match": true,
+      "use_plain_names": true,
+      "workbench": {
+        "reader_position": 1,
+        "source_index": 0,
+        "phase": "match",
+        "known_labels": "plain"
+      },
+      "name_equal_product": true
+    },
+    {
+      "id": "amount_rule_positive",
+      "narration_template": "amount_rule_demo",
+      "part": "positive",
+      "view": "amount_rule_demo",
+      "position": 1,
+      "layer": 0,
+      "pause": 1,
+      "guide": "CONTINUE THIS SAME READING CALCULATION",
+      "workbench": {
+        "reader_position": 1,
+        "source_index": 0,
+        "phase": "amount_positive",
+        "known_labels": "plain"
+      }
+    },
+    {
+      "id": "amount_rule_add",
+      "narration_template": "amount_rule_demo",
+      "part": "add",
+      "view": "amount_rule_demo",
+      "position": 1,
+      "layer": 0,
+      "pause": 1,
+      "guide": "CONTINUE THIS SAME READING CALCULATION",
+      "workbench": {
+        "reader_position": 1,
+        "source_index": 0,
+        "phase": "amount_add",
+        "known_labels": "plain"
+      }
+    },
+    {
+      "id": "sky_key_self",
+      "view": "prepare",
+      "pause": 1,
+      "part": "key",
+      "position": 1,
+      "source_index": 1,
+      "guide": "CONTINUE THIS SAME READING CALCULATION",
+      "narration_template": "prepare",
+      "workbench": {
+        "reader_position": 1,
+        "source_index": 1,
+        "phase": "key",
+        "known_labels": "plain"
+      },
+      "use_plain_names": true
+    },
+    {
+      "id": "sky_match_self",
+      "view": "matches",
+      "pause": 1,
+      "position": 1,
+      "source_index": 1,
+      "guide": "CONTINUE THIS SAME READING CALCULATION",
+      "narration_template": "match",
+      "workbench": {
+        "reader_position": 1,
+        "source_index": 1,
+        "phase": "match",
+        "known_labels": "plain"
+      },
+      "use_plain_names": true
+    },
+    {
+      "id": "sky_same_stage_parts_add_1",
+      "view": "parts",
+      "part": "add",
+      "source_index": 1,
+      "pass": 0,
+      "position": 1,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "parts_add",
+      "guide": "CONTINUE THIS SAME READING CALCULATION",
+      "workbench": {
+        "reader_position": 1,
+        "source_index": 1,
+        "phase": "parts",
+        "known_labels": "plain"
+      }
+    },
+    {
+      "id": "sky_same_stage_total",
+      "view": "parts",
+      "part": "total",
+      "pass": 0,
+      "position": 1,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "parts_total",
+      "guide": "ADD THE COMPLETED SOURCE AMOUNTS"
+    },
+    {
+      "id": "sky_same_stage_0",
+      "view": "share",
+      "source_index": 0,
+      "pass": 0,
+      "position": 1,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "share"
+    },
+    {
+      "id": "sky_same_stage_1",
+      "view": "share",
+      "source_index": 1,
+      "pass": 0,
+      "position": 1,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "share"
+    },
+    {
+      "id": "sky_take_the",
+      "view": "contribute",
+      "pause": 1,
+      "source_index": 0,
+      "position": 1,
+      "guide": "USE THE SHARES · COMBINE THE READING",
+      "narration_template": "contribute"
+    },
+    {
+      "id": "sky_value",
+      "view": "prepare",
+      "pause": 1,
+      "part": "value",
+      "position": 1,
+      "source_index": 1,
+      "guide": "USE THE SHARES · COMBINE THE READING",
+      "narration_template": "prepare"
+    },
+    {
+      "id": "sky_take_self",
+      "view": "contribute",
+      "pause": 1,
+      "source_index": 1,
+      "position": 1,
+      "guide": "USE THE SHARES · COMBINE THE READING",
+      "narration_template": "contribute"
+    },
+    {
+      "id": "sky_read_sum",
+      "view": "blend",
+      "pause": 1,
+      "position": 1,
+      "guide": "USE THE SHARES · COMBINE THE READING",
+      "narration_template": "blend"
+    },
+    {
+      "id": "sky_mix",
+      "view": "mix",
+      "pause": 1,
+      "position": 1,
+      "narration_template": "mix"
+    },
+    {
+      "id": "sky_positive",
+      "view": "positive",
+      "pause": 1,
+      "position": 1,
+      "narration_template": "positive"
+    },
+    {
+      "id": "sky_local",
+      "view": "adjust",
+      "pause": 1,
+      "position": 1,
+      "narration_template": "adjust"
+    },
+    {
+      "id": "sky_one_done",
+      "view": "done",
+      "pause": 1,
+      "position": 1,
+      "narration_template": "done"
+    },
+    {
+      "id": "sky_number_names",
+      "narration": "Sky’s whole first layer is finished. Before using this stage again, name two prepared numbers from the reading we just completed.",
+      "view": "first_result_recap",
+      "position": 1,
+      "layer": 0,
+      "pause": 1,
+      "guide": "NAMING RECAP · THE FINISHED RESULT STAYS READY"
+    },
+    {
+      "id": "sky_match_inputs",
+      "narration": "The’s prepared number used only The’s input. The match used both pieces’ prepared numbers.",
+      "view": "matches",
+      "position": 1,
+      "source_index": 0,
+      "workbench": {
+        "reader_position": 1,
+        "source_index": 0,
+        "phase": "match_inputs",
+        "naming_recap": true,
+        "known_labels": "plain"
+      },
+      "pause": 2,
+      "guide": "RECAP OF THE COMPLETED READING · NAMES FOR PREPARED NUMBERS"
+    },
+    {
+      "id": "sky_query_name",
+      "narration": "Sky’s prepared 1, the first number we multiplied, is called sky’s query. The product 0.25 remains the match.",
+      "view": "name",
+      "part": "query",
+      "position": 1,
+      "layer": 0,
+      "pause": 1,
+      "guide": "RECAP OF THE COMPLETED READING · NAMES FOR PREPARED NUMBERS",
+      "workbench": {
+        "reader_position": 1,
+        "source_index": 0,
+        "phase": "query_name",
+        "naming_recap": true,
+        "known_labels": "query"
+      }
+    },
+    {
+      "id": "sky_key_name",
+      "narration": "The’s prepared 0.25, the other number we multiplied, is called The’s key.",
+      "view": "name",
+      "part": "key",
+      "position": 0,
+      "layer": 0,
+      "pause": 1,
+      "guide": "RECAP OF THE COMPLETED READING · NAMES FOR PREPARED NUMBERS",
+      "workbench": {
+        "reader_position": 1,
+        "source_index": 0,
+        "phase": "key_name",
+        "naming_recap": true,
+        "known_labels": "both"
+      }
+    }
+  ]
+}

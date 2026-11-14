@@ -1,0 +1,71 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word be processed before choosing the following word, and how do separate layer caches save work?",
+    "takeaway": "Choosing blue uses is’s finished result; processing blue creates its own result, while saved keys and values let it reuse earlier preparation at each layer.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "value",
+      "query",
+      "key",
+      "positive part",
+      "KV cache",
+      "prefill",
+      "decode step"
+    ],
+    "lost_beat_id": "sky_key_the",
+    "most_engaging_beat_id": "reuse_is_question"
+  },
+  "findings": [
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_key_the",
+      "kind": "lost",
+      "problem": "The source’s prepared value0.8 and its new multiplication number0.25 have no explicit separate-job reminder.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Keep The’s value0.8 visible and introduce the separate multiplication-number job before quarter preparation."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_match_inputs",
+      "kind": "minor",
+      "problem": "The naming recap reopens question marks/future calculation instructions.",
+      "resolution": {
+        "action": "fixed",
+        "note": "A recap shows only its completed input/product focus and explicitly preserves the ready layer result; its note no longer promises future arithmetic."
+      }
+    },
+    {
+      "scene_id": "blue_input",
+      "beat_id": "blue_one_sources",
+      "kind": "minor",
+      "problem": "The new entry could seem to contain the query as well as key/value.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Explicitly define the entry as the new key and value, while the query performs the reading."
+      }
+    },
+    {
+      "scene_id": "next_choice",
+      "beat_id": "blue_two_shares_0",
+      "kind": "minor",
+      "problem": "Four percentages with three identical ones are difficult to bind by source.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Use the validated common-amount division for the three equal old-source fractions, then a separate self-source division at layer two too."
+      }
+    }
+  ]
+}

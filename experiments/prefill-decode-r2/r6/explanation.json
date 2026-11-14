@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "id": "35ea437e-1ed0-4881-b658-f56f235ecdef",
+  "revision": 6,
+  "status": "local_review_ready_automated_floor_passed",
+  "mode": "both",
+  "question": "Why does choosing a word still leave processing to do, and what work does a per-layer cache save?",
+  "authoring": {
+    "originating_draft": "Claude Opus 5.5 personal subscription r5 draft",
+    "originating_api_equivalent_usd": 0.509916,
+    "invoice_verified": false,
+    "current_model_and_story_editor": "Codex host, unmeasured usage",
+    "model_scope": "Simplified teaching calculator; positive-part sharing, not literal transformer softmax."
+  },
+  "narration": {
+    "provider_name": "elevenlabs",
+    "model_id": "eleven_v4",
+    "voice_id": "EXAVITQu4vr4xnSDxMaL"
+  },
+  "costs": {
+    "speech_budget_usd": 2,
+    "speech_charged_usd": null,
+    "speech_estimate_usd": 1.32848,
+    "budget_scope": "Local r6 series under the owner-authorized $50 work budget; saved global $1 preference unchanged.",
+    "successful_speech_calls": 174,
+    "speech_characters": 16606,
+    "speech_retries": 0,
+    "invoice_verified": false
+  },
+  "outputs": {
+    "interactive": "interactive/index.html",
+    "video": "video"
+  },
+  "review": {
+    "engineering": "15 mechanism tests; source-bound AV/caption parity; 72 responsive states; actual sound, all chapter seeks, reset and private-path checks pass",
+    "technical": "source/code consistency checked; independent technical acceptance unmeasured",
+    "craft": "101 corrected preview images, 54 final contact sheets and six independently decoded full-size frames inspected; zero remaining in-movie findings; human taste/accessibility unmeasured",
+    "learning": "fresh narration reader20: no findings; independent transfer05: five of five correct; human learning unmeasured"
+  },
+  "teaching_gate": "review/core-readiness.json",
+  "delivery": {
+    "duration_seconds": 1757.4,
+    "scene_count": 8,
+    "narration_beats": 174,
+    "caption_cues": 584,
+    "script_sha256": "9a7d24342b7e59f134c387fba7f3553c410b359ab1eef512a79446d24998e944",
+    "video_sha256": "bb4b7c07249d1f070fd3c2c5cc568f7be3fa234b8e5827d4fc61099546372ccb",
+    "scope": "Detailed model walkthrough; playback and experiment make no AI calls; no live-app update."
+  }
+}

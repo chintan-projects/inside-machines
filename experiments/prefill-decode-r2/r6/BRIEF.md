@@ -1,0 +1,17 @@
+# Follow the work before the next choice
+
+Question: Why does a chosen word still need processing, and what work can a separate cache at each layer save?
+
+Audience: a curious novice comfortable with basic arithmetic, with no transformer vocabulary or optional help prerequisite. One observable outcome: explain chosen versus processed, layer-input-derived key/value versus finished result, and why valid past preparation can be kept while the new piece still reads and updates.
+
+This is a **structural teaching calculator**, not literal transformer arithmetic. It keeps The / sky / is → blue → and, two causal layers and per-layer preparation. Its sharing rule is deliberately simple: one base part plus the positive part of each query–key product; divide each source's parts by all source parts. Actual transformer softmax uses exponentials. The order of work, arguments read and reusable preparation follow the same dependency pattern; the numerical results differ. The standard-softmax r5 draft is preserved and remains held for its novice narration findings. No old draft is relabeled passed.
+
+Hypothesis: removing the exponential prerequisite while exposing every step of this simpler, declared rule will let a fresh basic-arithmetic reader explain the complete read/update/score loop and novel reuse cases without an unresolved core lost/wrong finding. Numerical narration is now compiled from the authoritative model, preventing stale manually copied values.
+
+Model: query = 0.5 × layer input; key = 0.25 × layer input; value = 0.8 × layer input. Allowed sources are self and earlier positions. Parts = 1 + max(0, query × source key), share = parts / total parts. Reading = sum(share × source value). Mixed = own input + reading. Local adjustment = 0.5 × max(0, mixed); output = mixed + adjustment. Output becomes the next layer's input; key/value remain at their layer. The final supplied position feeds the chooser for the following slot. Candidate blue uses +1; candidate and uses −1; highest score wins. Blue's own input lookup is −2, a different job from its +1 candidate multiplier.
+
+Misconceptions: choosing a word creates its finished result; the cache stores the selected answer; the cache is the only retained copy of the input text; first-layer and second-layer entries have the same origin. Counterfactual: append blue and recompute earlier is—predict whether that earlier result changes, before tracing the invariant inputs, reading and local update.
+
+Independent transfer rubric, withheld from readers: with thirteen earlier processed pieces and one new unprocessed choice, keeping preparation needs 1 new key/value entry at each layer, clearing it with text retained needs 14. The new query still reads past and self; no exact time ratio follows. Editing only sky preserves The at both layers and is's first-layer key/value, but can change is's first-layer contextual result and its second-layer key/value. Coincidental numerical equality is possible.
+
+Scope: source-only local prototype first. Same mechanism drives numerical words, drawing and experiment. No paid narration until a genuine fresh core read and unseen transfer pass on the exact script. Owner-selected ElevenLabs Sarah / eleven_v4; local speech-estimate cap $2 under the previously authorized $50 work budget. Saved global $1 preference remains unchanged. No live-app changes, implicit AI playback calls, silent paid retries or invented human acceptance.

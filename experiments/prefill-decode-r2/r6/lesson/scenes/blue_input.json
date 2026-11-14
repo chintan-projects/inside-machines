@@ -1,0 +1,368 @@
+{
+  "id": "blue_input",
+  "title": "Choosing blue does not process blue",
+  "beats": [
+    {
+      "id": "need_next_goal",
+      "view": "old_goal",
+      "pause": 1,
+      "narration": "We need a number for choosing what follows blue. The finished number we already have belongs to the earlier word is. Check whether that earlier position can incorporate blue."
+    },
+    {
+      "id": "reuse_is_question",
+      "view": "prior_question",
+      "pause": 7,
+      "guide": "PREDICT · CAN LATER BLUE CHANGE THE EARLIER IS RESULT?",
+      "narration": "Append blue to the text. If we recomputed the earlier word is’s finished result, would it change? Predict, then follow what that earlier position can read."
+    },
+    {
+      "id": "old_scope",
+      "narration": "Is could read The, sky and itself. It could not read later blue.",
+      "view": "prior",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "scope"
+    },
+    {
+      "id": "same_restriction",
+      "narration": "Earlier pieces cannot read later blue. They still have exactly the same allowed reading sets.",
+      "view": "unchanged",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "restriction"
+    },
+    {
+      "id": "same_inputs",
+      "narration": "Appending blue also leaves their original input lookups unchanged.",
+      "view": "unchanged",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "inputs"
+    },
+    {
+      "id": "same_first",
+      "narration": "Same inputs, same allowed sources, and fixed rules give the same earlier first-layer results.",
+      "view": "unchanged",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "layer1"
+    },
+    {
+      "id": "same_second",
+      "narration": "Those unchanged results are their second-layer inputs. So the earlier inputs to layer two are unchanged too.",
+      "view": "unchanged",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "layer2"
+    },
+    {
+      "id": "same_preparation",
+      "narration": "The same inputs and fixed rules give the same earlier keys and values at each layer.",
+      "view": "unchanged",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "saved"
+    },
+    {
+      "id": "same_is_query",
+      "view": "prepare",
+      "position": 2,
+      "layer": 1,
+      "pause": 1,
+      "guide": "EARLIER IS · SAME SECOND-LAYER COMPUTATION",
+      "part": "query",
+      "narration_template": "same_prepare"
+    },
+    {
+      "id": "same_is_read",
+      "view": "blend",
+      "position": 2,
+      "layer": 1,
+      "pause": 1,
+      "guide": "EARLIER IS · SAME SECOND-LAYER COMPUTATION",
+      "narration_template": "same_blend"
+    },
+    {
+      "id": "same_is_mix",
+      "view": "mix",
+      "position": 2,
+      "layer": 1,
+      "pause": 1,
+      "guide": "EARLIER IS · SAME SECOND-LAYER COMPUTATION",
+      "narration_template": "same_mix"
+    },
+    {
+      "id": "same_is_adjust",
+      "view": "adjust",
+      "position": 2,
+      "layer": 1,
+      "pause": 1,
+      "guide": "EARLIER IS · SAME SECOND-LAYER COMPUTATION",
+      "narration_template": "same_adjust"
+    },
+    {
+      "id": "same_is_done",
+      "view": "done",
+      "position": 2,
+      "layer": 1,
+      "pause": 1,
+      "guide": "EARLIER IS · SAME SECOND-LAYER COMPUTATION",
+      "narration_template": "same_done"
+    },
+    {
+      "id": "old_result",
+      "view": "prior",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "result",
+      "narration_template": "prior_result"
+    },
+    {
+      "id": "old_choice",
+      "narration": "Scoring that unchanged number again would choose blue again.",
+      "view": "prior",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "score"
+    },
+    {
+      "id": "blue_lookup",
+      "narration": "To choose using blue as part of the input text, process blue itself. It needs its own finished number.",
+      "view": "feed",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "part": "goal"
+    },
+    {
+      "id": "blue_fixed_input",
+      "narration": "Look up blue’s starting number: minus 2.",
+      "view": "feed",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "part": "lookup"
+    },
+    {
+      "id": "blue_two_jobs",
+      "narration": "Plus 1 scored blue as a candidate. Minus 2 starts processing blue as an input. The two assignments have different jobs.",
+      "view": "feed",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "part": "assignments"
+    },
+    {
+      "id": "blue_one_query",
+      "view": "prepare",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "part": "query",
+      "narration_template": "prepare"
+    },
+    {
+      "id": "blue_one_key",
+      "view": "prepare",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "part": "key",
+      "narration_template": "prepare"
+    },
+    {
+      "id": "blue_one_value",
+      "view": "prepare",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "part": "value",
+      "narration_template": "prepare"
+    },
+    {
+      "id": "blue_one_sources",
+      "narration": "Blue’s new key and value together form its entry at this layer. Blue’s query will read the three earlier entries and its own.",
+      "view": "stage_sources",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 2
+    },
+    {
+      "id": "blue_signed_matches",
+      "view": "matches",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 3,
+      "narration_template": "match_all"
+    },
+    {
+      "id": "blue_self_signed_match",
+      "narration_template": "self_negative_match",
+      "view": "matches",
+      "position": 3,
+      "pass": 1,
+      "layer": 0,
+      "source_index": 3,
+      "pause": 1,
+      "guide": "BLUE READS ITSELF TOO · TWO NEGATIVE FACTORS"
+    },
+    {
+      "id": "blue_shares_parts_clip_0",
+      "view": "parts",
+      "part": "clip",
+      "source_index": 0,
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "parts_clip"
+    },
+    {
+      "id": "blue_shares_parts_add_0",
+      "view": "parts_all",
+      "part": "add",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 3,
+      "narration_template": "parts_all"
+    },
+    {
+      "id": "amount_rule_zero",
+      "part": "add",
+      "view": "parts",
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "guide": "ACTUAL NEGATIVE MATCH · ZERO PLUS ONE IS POSITIVE",
+      "narration_template": "positive_after_negative",
+      "source_index": 0,
+      "pass": 1
+    },
+    {
+      "id": "blue_shares_total",
+      "view": "parts",
+      "part": "total",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "parts_total",
+      "guide": "ADD THE COMPLETED SOURCE AMOUNTS"
+    },
+    {
+      "id": "blue_shares_0",
+      "view": "share",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 2,
+      "narration_template": "shared_fraction",
+      "source_index": 0,
+      "shared_sources": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "blue_own_fraction",
+      "view": "share",
+      "source_index": 3,
+      "position": 3,
+      "pass": 1,
+      "layer": 0,
+      "narration_template": "share",
+      "pause": 2,
+      "guide": "BLUE’S OWN FRACTION · SAME TOTAL"
+    },
+    {
+      "id": "blue_take_0",
+      "view": "contribute",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 3,
+      "narration_template": "contribute_all"
+    },
+    {
+      "id": "blue_read_sum",
+      "view": "blend",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 2,
+      "narration_template": "blend"
+    },
+    {
+      "id": "blue_mix",
+      "view": "mix",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 2,
+      "narration_template": "mix"
+    },
+    {
+      "id": "blue_one_positive",
+      "view": "positive",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "positive"
+    },
+    {
+      "id": "blue_one_adjust",
+      "view": "adjust",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "adjust"
+    },
+    {
+      "id": "blue_one_done",
+      "view": "done",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "done"
+    },
+    {
+      "id": "blue_boundary",
+      "view": "boundary",
+      "pass": 1,
+      "position": 3,
+      "layer": 1,
+      "pause": 1,
+      "narration_template": "boundary"
+    }
+  ],
+  "guide": "NEW BLUE INPUT → BOTH STAGES"
+}

@@ -1,0 +1,92 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word be processed before choosing the following word, and how do separate stores at each layer save work?",
+    "takeaway": "Choosing blue uses the previous word’s finished number; processing blue makes its own number while reusing earlier keys and values that later text cannot change.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "value",
+      "query",
+      "key",
+      "match",
+      "positive part",
+      "KV cache",
+      "prefill",
+      "decode step"
+    ],
+    "lost_beat_id": "first_demonstration",
+    "most_engaging_beat_id": "old_choice"
+  },
+  "findings": [
+    {
+      "scene_id": "setup",
+      "beat_id": "first_demonstration",
+      "kind": "lost",
+      "problem": "The complete calculation starts before explaining why The’s result helps reach the next choice.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Show the destination is-finished-number-to-next-choice first, then motivate learning the reading rule from the smallest earlier source."
+      }
+    },
+    {
+      "scene_id": "finish_first",
+      "beat_id": "is_one_match_0",
+      "kind": "lost",
+      "problem": "Three silent products advance too quickly under general narration.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Name each source’s computed product, scan source rows calmly, and extend the batch pause."
+      }
+    },
+    {
+      "scene_id": "finish_first",
+      "beat_id": "is_one_shares_0",
+      "kind": "lost",
+      "problem": "Three silent fraction results must be retained through the following value reminders.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Name each source’s fraction, extend the pause, and retain computed fractions visibly during value reminders."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_query",
+      "kind": "minor",
+      "problem": "Temporary numbers obscure the target actual fractions.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Keep a stable calculate-parts-then-divide-by-total guide through the intermediate arithmetic."
+      }
+    },
+    {
+      "scene_id": "blue_input",
+      "beat_id": "blue_signed_matches",
+      "kind": "minor",
+      "problem": "The new signed multiplication case leaves the self product entirely to silent inspection.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Speak every named match result, including blue’s positive self product; all actual multiplications remain on screen."
+      }
+    },
+    {
+      "scene_id": "save_work",
+      "beat_id": "separate_stores",
+      "kind": "minor",
+      "problem": "Eight expanded key/value pairs compete with the old/new distinction.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Expand only The’s pair at both layers, keep other K/V entries compact, and explicitly label blue new versus earlier entries old."
+      }
+    }
+  ]
+}

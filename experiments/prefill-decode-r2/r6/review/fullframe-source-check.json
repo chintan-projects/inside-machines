@@ -1,0 +1,48 @@
+{
+  "all_six_frames_independently_decoded": true,
+  "note": "Independent RGB conversion/subframe selection can differ slightly; PSNR above40dB verifies agreement without requiring identical decoder rounding.",
+  "pixel_agreement_with_studio_captures": [
+    {
+      "beat_id": "blue_added",
+      "seconds": 1519.19999,
+      "mean_pixel_delta": 0.19245916923868311,
+      "max_pixel_delta": 3.0,
+      "psnr_db": 54.050648378022366
+    },
+    {
+      "beat_id": "blue_shares_parts_clip_0",
+      "seconds": 1150.5333233333333,
+      "mean_pixel_delta": 0.13869582690329219,
+      "max_pixel_delta": 3.0,
+      "psnr_db": 55.113217769395284
+    },
+    {
+      "beat_id": "cache_name",
+      "seconds": 1499.9666566666667,
+      "mean_pixel_delta": 0.12014853395061728,
+      "max_pixel_delta": 3.0,
+      "psnr_db": 55.92508556531298
+    },
+    {
+      "beat_id": "separate_stores",
+      "seconds": 1510.5333233333333,
+      "mean_pixel_delta": 0.19243232381687242,
+      "max_pixel_delta": 3.0,
+      "psnr_db": 54.05180268316542
+    },
+    {
+      "beat_id": "sky_same_stage_0",
+      "seconds": 332.0666566666667,
+      "mean_pixel_delta": 0.13804365997942386,
+      "max_pixel_delta": 3.0,
+      "psnr_db": 55.142059550939734
+    },
+    {
+      "beat_id": "sky_same_stage_1",
+      "seconds": 345.2666566666667,
+      "mean_pixel_delta": 0.13855307998971195,
+      "max_pixel_delta": 3.0,
+      "psnr_db": 55.12532693673712
+    }
+  ]
+}

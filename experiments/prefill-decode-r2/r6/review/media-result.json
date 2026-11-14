@@ -1,0 +1,17 @@
+{
+  "script_sha256": "9a7d24342b7e59f134c387fba7f3553c410b359ab1eef512a79446d24998e944",
+  "video_sha256": "bb4b7c07249d1f070fd3c2c5cc568f7be3fa234b8e5827d4fc61099546372ccb",
+  "duration_seconds": 1757.4,
+  "narration_beats": 174,
+  "caption_cues": 584,
+  "all_caption_words_match_frozen_script": true,
+  "srt_vtt_text_and_timestamps_identical": true,
+  "all_caption_times_valid_and_nonoverlapping": true,
+  "video_dimensions": [
+    1920,
+    1080
+  ],
+  "audio_codec": "aac",
+  "audio_sample_rate": 48000,
+  "delivered_script_matches_gate": true
+}

@@ -1,0 +1,88 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word go through processing before choosing the following word, and which earlier calculations can each layer keep?",
+    "takeaway": "Choosing blue uses is’s finished number; processing blue creates its own finished number, while separate layer caches save earlier keys and values without replacing the retained text.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "query",
+      "key",
+      "value",
+      "KV cache"
+    ],
+    "lost_beat_id": "the_whole_share",
+    "most_engaging_beat_id": "old_choice"
+  },
+  "findings": [
+    {
+      "scene_id": "one_source",
+      "beat_id": "the_whole_share",
+      "kind": "lost",
+      "problem": "Fractions, sum-to-one and the single-source 100 percent conclusion arrive before a concrete fractional reading.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Show taking the whole 0.8 reading number first; name its share afterward."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_same_stage_parts_clip_0",
+      "kind": "lost",
+      "problem": "Extra sharing parts precede the spoken rule; unclear whether a match of 0.25 is already 25 percent.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Removed this beat. Calculate a concrete positive match plus one, then name sharing parts."
+      }
+    },
+    {
+      "scene_id": "finish_first",
+      "beat_id": "focus_is",
+      "kind": "lost",
+      "problem": "That position seems to refer to the blank rather than is.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Explicitly name is and show each supplied word’s allowed set."
+      }
+    },
+    {
+      "scene_id": "save_work",
+      "beat_id": "rebuild_the_read",
+      "kind": "lost",
+      "problem": "Rebuilding value seems automatically to rebuild the reading.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Separate taking the whole rebuilt value from the subsequent addition to input."
+      }
+    },
+    {
+      "scene_id": "one_source",
+      "beat_id": "the_read",
+      "kind": "lost",
+      "problem": "Value is used before its prepared-reading-number definition.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Use plain reading number until value is named after the complete first stage."
+      }
+    },
+    {
+      "scene_id": "one_source",
+      "beat_id": "the_one_done",
+      "kind": "lost",
+      "problem": "Layer is used before stage and layer are connected.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Say stage on the first completed stage; define layer in the next beat."
+      }
+    }
+  ]
+}

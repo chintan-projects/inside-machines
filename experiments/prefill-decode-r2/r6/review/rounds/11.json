@@ -1,0 +1,52 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a selected word become a new input, and how can saved preparation at each layer reduce repeated work?",
+    "takeaway": "Choosing blue uses is’s finished number; processing blue makes its own finished number while reusing earlier keys and values that blue cannot change.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "value",
+      "query",
+      "key",
+      "match",
+      "positive part",
+      "KV cache",
+      "prefill",
+      "decode step"
+    ],
+    "lost_beat_id": "sky_query",
+    "most_engaging_beat_id": "reuse_is_question"
+  },
+  "findings": [
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_query",
+      "kind": "lost",
+      "problem": "The persistent diagram previews the positive-part-plus-one route before its sharing purpose is established.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Teach that small conversion rule first with a supplied numerical input, including why adding one yields a positive sharing amount; only then derive its actual input in the persistent diagram."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_same_stage_parts_add_0",
+      "kind": "lost",
+      "problem": "Fractional parts are introduced while the earlier practice case used discrete integer counts.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Use fractional relative amounts in the prerequisite practice case itself: 0.5 and 1.5 parts, summing to two. The actual calculation reuses the already demonstrated amount rule without a new fractional-parts detour."
+      }
+    }
+  ]
+}

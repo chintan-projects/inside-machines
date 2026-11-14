@@ -1,0 +1,125 @@
+{
+  "id": "one_source",
+  "title": "One source: a complete first stage",
+  "guide": "FIRST CHOICE · START WITH THE FIRST WORD",
+  "beats": [
+    {
+      "id": "start_the",
+      "view": "only_source",
+      "narration": "Start with The, whose first-stage input is 1. It can read only itself.",
+      "pause": 1
+    },
+    {
+      "id": "reading_number",
+      "view": "prepare",
+      "part": "value",
+      "source_index": 0,
+      "pause": 1,
+      "narration_template": "prepare",
+      "use_plain_names": true,
+      "show_creation_first": true
+    },
+    {
+      "id": "the_read",
+      "view": "single_read",
+      "pass": 0,
+      "position": 0,
+      "layer": 0,
+      "pause": 1,
+      "part": "reading",
+      "source_index": 0,
+      "narration_template": "single_read",
+      "plain_read": true
+    },
+    {
+      "id": "the_whole_share",
+      "narration": "Taking the entire source number is a one-hundred-percent share. A share means the fraction of a source number used in the reading.",
+      "view": "only_source",
+      "pass": 0,
+      "position": 0,
+      "layer": 0,
+      "pause": 1,
+      "part": "whole"
+    },
+    {
+      "id": "the_mix",
+      "view": "mix",
+      "pass": 0,
+      "position": 0,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "mix"
+    },
+    {
+      "id": "the_keep_mixed",
+      "narration": "Keep The’s mixed number, 1.8. We will calculate an extra amount separately, then add it to this kept number.",
+      "view": "local_copy",
+      "part": "goal",
+      "position": 0,
+      "layer": 0,
+      "pause": 1
+    },
+    {
+      "id": "the_separate_copy",
+      "narration": "Start that separate calculation with a copy of The’s mixed number: 1.8.",
+      "view": "local_copy",
+      "part": "copy",
+      "position": 0,
+      "layer": 0,
+      "pause": 1
+    },
+    {
+      "id": "the_one_positive",
+      "view": "positive",
+      "pass": 0,
+      "position": 0,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "positive",
+      "first_definition": true
+    },
+    {
+      "id": "the_positive_name",
+      "narration": "This separate result is called the positive part of the mixed number.",
+      "view": "local_copy",
+      "part": "name",
+      "position": 0,
+      "layer": 0,
+      "pause": 1
+    },
+    {
+      "id": "the_one_adjust",
+      "view": "adjust",
+      "pass": 0,
+      "position": 0,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "adjust"
+    },
+    {
+      "id": "the_one_done",
+      "view": "done",
+      "pass": 0,
+      "position": 0,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "done",
+      "before_layer_name": true
+    },
+    {
+      "id": "layer_name",
+      "view": "name",
+      "narration": "Reading, then updating only this word’s own number, makes one processing stage, called a layer.",
+      "pause": 1,
+      "part": "layer",
+      "position": 0
+    },
+    {
+      "id": "the_saved_reading",
+      "view": "first_result",
+      "pause": 1,
+      "position": 0,
+      "narration_template": "first_result"
+    }
+  ]
+}

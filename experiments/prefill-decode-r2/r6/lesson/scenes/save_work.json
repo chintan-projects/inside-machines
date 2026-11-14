@@ -1,0 +1,249 @@
+{
+  "id": "save_work",
+  "title": "What the cache can keep",
+  "beats": [
+    {
+      "id": "save_problem",
+      "narration": "Earlier we proved these preparations stay unchanged when blue is appended. Blue has now used them again. Keep them instead of rebuilding them.",
+      "view": "save_goal",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1
+    },
+    {
+      "id": "cache_name",
+      "narration": "Saved keys and values at one layer form a KV cache. Here is the first-layer store.",
+      "view": "cache",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "counts": [
+        4,
+        4
+      ],
+      "visible_layer": 0
+    },
+    {
+      "id": "separate_stores",
+      "narration": "Layer two keeps a separate store. Its inputs came from the first-layer results, so it prepared its own keys and values from those different inputs.",
+      "view": "cache",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "counts": [
+        4,
+        4
+      ]
+    },
+    {
+      "id": "blue_added",
+      "narration": "Blue added one new key-and-value entry at each layer. The earlier entries were read instead of rebuilt.",
+      "view": "cache",
+      "pass": 1,
+      "position": 3,
+      "layer": 0,
+      "pause": 1,
+      "counts": [
+        4,
+        4
+      ]
+    },
+    {
+      "id": "replay_question",
+      "narration": "What would have to be repeated without the saved entries? Compare processing blue from the two starting states.",
+      "view": "replay_question",
+      "position": 3,
+      "pass": 1,
+      "layer": 0,
+      "pause": 1
+    },
+    {
+      "id": "rewind",
+      "narration": "Rewind to just after blue was chosen, before blue is processed. The supplied text and chosen blue are still present.",
+      "view": "rewind",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 4,
+      "part": "checkpoint"
+    },
+    {
+      "id": "keep_route",
+      "view": "rewind",
+      "part": "keep",
+      "pause": 1,
+      "narration": "In the first replay route, keep the three earlier entries at each layer. Blue’s entries have not been prepared yet."
+    },
+    {
+      "id": "clear_route",
+      "view": "rewind",
+      "part": "clear",
+      "pause": 1,
+      "narration": "The other replay starts from retained text and fixed rules only. It keeps neither earlier keys and values nor earlier finished working numbers. Rebuild them from the text."
+    },
+    {
+      "id": "rebuild_the",
+      "view": "rebuild_step",
+      "pause": 1,
+      "part": "lookup",
+      "narration_template": "rebuild_step"
+    },
+    {
+      "id": "rebuild_the_first",
+      "view": "rebuild_step",
+      "pause": 1,
+      "part": "first",
+      "narration_template": "rebuild_step"
+    },
+    {
+      "id": "rebuild_second_input_goal",
+      "narration": "The’s first-layer entry is rebuilt. Its second-layer entry needs The’s finished first-layer number as input. Reconstruct that number next by repeating the reading and update.",
+      "view": "rebuild_second_input_goal",
+      "position": 0,
+      "pass": 0,
+      "layer": 0,
+      "pause": 2
+    },
+    {
+      "id": "rebuild_the_read",
+      "view": "single_read",
+      "pause": 1,
+      "position": 0,
+      "narration_template": "single_read",
+      "plain_read": false
+    },
+    {
+      "id": "rebuild_the_mix",
+      "view": "mix",
+      "position": 0,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "mix"
+    },
+    {
+      "id": "rebuild_the_positive",
+      "view": "positive",
+      "pause": 1,
+      "position": 0,
+      "narration_template": "positive"
+    },
+    {
+      "id": "rebuild_the_adjust",
+      "view": "adjust",
+      "pause": 1,
+      "position": 0,
+      "narration_template": "adjust"
+    },
+    {
+      "id": "rebuild_the_done",
+      "view": "done",
+      "pause": 1,
+      "position": 0,
+      "narration_template": "done"
+    },
+    {
+      "id": "rebuild_the_handoff",
+      "view": "boundary",
+      "pause": 1,
+      "position": 0,
+      "narration_template": "boundary"
+    },
+    {
+      "id": "rebuild_the_second",
+      "view": "rebuild_step",
+      "pause": 1,
+      "part": "second",
+      "narration_template": "rebuild_step"
+    },
+    {
+      "id": "rebuild_others",
+      "view": "rebuild",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "narration_template": "rebuild"
+    },
+    {
+      "id": "same_blue_input",
+      "view": "compare",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "input",
+      "narration_template": "compare"
+    },
+    {
+      "id": "same_blue_first",
+      "view": "compare",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "layer1",
+      "narration_template": "compare"
+    },
+    {
+      "id": "same_blue_second",
+      "view": "compare",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "layer2",
+      "narration_template": "compare"
+    },
+    {
+      "id": "same_next_choice",
+      "view": "compare",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "choice",
+      "narration_template": "compare"
+    },
+    {
+      "id": "count_unit",
+      "narration": "Count making one key and one value, for one position at one layer, as one preparation.",
+      "view": "counts",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1,
+      "part": "unit"
+    },
+    {
+      "id": "count_work",
+      "narration": "Keeping the earlier store needs one new preparation for blue per layer. The text-only replay, without earlier working results, rebuilds three old preparations and makes blue’s: four at each layer.",
+      "view": "counts",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1
+    },
+    {
+      "id": "not_time",
+      "narration": "Both routes still read the past and the current piece. One versus four counts these preparations, not all arithmetic or elapsed time.",
+      "view": "counts",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1
+    },
+    {
+      "id": "close",
+      "narration": "Choose a piece. Look it up as the next input, process it, then choose again. The cache lets the new piece read the prepared past without rebuilding that past.",
+      "view": "close",
+      "pass": 0,
+      "position": 2,
+      "layer": 0,
+      "pause": 1
+    }
+  ],
+  "guide": "COMPARE THE TWO PREPARATION ROUTES"
+}

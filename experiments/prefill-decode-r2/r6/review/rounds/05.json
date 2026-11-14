@@ -1,0 +1,68 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word become a new input, and how can saved reading data at each layer reduce the work?",
+    "takeaway": "Choosing blue uses the earlier word’s finished number; processing blue produces its own number, while separate layer caches let it reuse unchanged earlier keys and values.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "key",
+      "value",
+      "positive part",
+      "KV cache"
+    ],
+    "lost_beat_id": "sky_query",
+    "most_engaging_beat_id": "reuse_is_question"
+  },
+  "findings": [
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_query",
+      "kind": "lost",
+      "problem": "The new prepared number’s connection to the shares is not yet visible, and reader factor has no demonstrated job.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Explicitly prepare the first operand for the multiplication used to build The’s share; label it a prepared number to multiply."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_query_name",
+      "kind": "lost",
+      "problem": "That comparing number may refer to the just-calculated match rather than the earlier prepared 1.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Explicitly identify sky’s prepared 1 as the first operand and query, leaving the product named match."
+      }
+    },
+    {
+      "scene_id": "finish_first",
+      "beat_id": "focus_is",
+      "kind": "lost",
+      "problem": "The guide announces the last-position choosing rule before the narration explains it.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Replace this premature guide with only the currently taught allowed-reading fact."
+      }
+    },
+    {
+      "scene_id": "next_choice",
+      "beat_id": "prefill_name",
+      "kind": "minor",
+      "problem": "Two new pass names interrupt the transition from chosen-versus-processed into cache work.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Move both pass names to the end, after the full causal answer and cache comparison, with separate pauses."
+      }
+    }
+  ]
+}

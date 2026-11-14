@@ -1,0 +1,78 @@
+title: 'A reading calculator: process a new piece, reuse the prepared past'
+sources:
+- ../../CLAIMS.md
+language_code: en
+narration_budget_usd: 2
+narration:
+  provider_name: elevenlabs
+  voice_id: EXAVITQu4vr4xnSDxMaL
+  model_id: eleven_v4
+  voice_settings:
+    stability: 0.5
+    similarity_boost: 0.75
+background_music:
+  provider_name: none
+has_end_credits: true
+audience:
+  description: A curious novice comfortable with basic arithmetic, unfamiliar with
+    transformer vocabulary. No prior episodes or optional help paths. This is a declared
+    structural teaching calculator with one scalar per piece and simple positive-part
+    sharing, not literal GPT mathematics. Actual transformers use a different sharing
+    formula; this lesson teaches the flow and reuse of data.
+  unfamiliar_terms:
+  - token
+  - layer
+  - key
+  - value
+  - KV cache
+  misconceptions:
+  - id: chosen_is_processed
+    belief: Choosing blue means blue has already passed through the model.
+    evidence: The owner’s question and revision brief.
+  - id: cache_is_answer
+    belief: The cache stores the selected answer or is the only copy of the original
+      text.
+    evidence: The owner’s question and revision brief.
+goal: The next choice reads the chosen word's finished number and the entries it stores
+  at each layer, so the chosen word must go through every layer first. Earlier words
+  never read later ones, so their stored entries stay the same. Saving those entries
+  means each new word prepares only its own entry at each layer, and every result
+  stays exactly the same.
+episodes:
+- id: ep01
+  title: 'A reading calculator: process a new piece, reuse the prepared past'
+  question: Why does a chosen word still need processing, and what work can a separate
+    cache at each layer save?
+  question_type: mechanism
+  presenter_name: theo
+  estimated_duration_seconds: 1400
+  source_scope: Explicit positive-part-plus-one teaching model and exact traces in
+    lesson/mechanism.mjs; structural real-transformer references and distinctions
+    in CLAIMS.md.
+  taught_terms:
+  - token
+  - query
+  - key
+  - value
+  - layer
+  - KV cache
+  - prefill
+  - decode step
+  takeaway: The next choice reads the chosen word's finished number and the entries
+    it stores at each layer, so the chosen word must go through every layer first.
+    Earlier words never read later ones, so their stored entries stay the same. Saving
+    those entries means each new word prepares only its own entry at each layer, and
+    every result stays exactly the same.
+  outline:
+  - 'setup: Why the next word needs another pass'
+  - 'one_source: One source: a complete first stage'
+  - 'first_read: Two sources: calculate their shares'
+  - 'finish_first: Three sources: finish the last supplied word'
+  - 'first_choice: The second layer feeds the choosing calculator'
+  - 'blue_input: Choosing blue does not process blue'
+  - 'next_choice: Blue finishes, then and is chosen'
+  - 'save_work: What the cache can keep'
+rationale: Preserve the complete causal loop with a fully reproducible basic-arithmetic
+  model. Label the sharing simplification explicitly; retain the held standard-softmax
+  draft. Numerical narration and figures compile from one model. Fresh comprehension
+  and unseen transfer still gate speech.

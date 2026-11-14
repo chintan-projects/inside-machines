@@ -1,0 +1,79 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word be processed before choosing another, and which earlier calculations can each layer reuse?",
+    "takeaway": "Choosing blue uses is’s finished number; processing blue makes its own finished number, while saved keys and values let it reuse the unchanged earlier preparation.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "value",
+      "key",
+      "query",
+      "match",
+      "KV cache"
+    ],
+    "lost_beat_id": "amount_rule_input",
+    "most_engaging_beat_id": "old_choice"
+  },
+  "findings": [
+    {
+      "scene_id": "first_read",
+      "beat_id": "amount_rule_input",
+      "kind": "lost",
+      "problem": "The fraction-allocation practice followed by a supplied converter example leaves two unfinished connections.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Remove the separate allocation example; teach one small calculation and immediately derive its actual input in the same source reading."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_query",
+      "kind": "lost",
+      "problem": "The picture description leaks the internal active-step enum query before that name is taught.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Describe the active action in plain language; share user-facing role labels and reveal state between the renderer and native review description."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_key_the",
+      "kind": "lost",
+      "problem": "The picture description similarly leaks the internal key enum before the name is taught.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Use the same shared role-label state; first prepare concrete numbers, then anchor the new names after their multiplication."
+      }
+    },
+    {
+      "scene_id": "one_source",
+      "beat_id": "the_one_positive",
+      "kind": "minor",
+      "problem": "The first positive example does not distinguish a separate positive-part copy from overwriting the mixed number.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Explicitly copy the mixed number and retain the original for final addition; labels show original versus separate copy."
+      }
+    },
+    {
+      "scene_id": "finish_first",
+      "beat_id": "is_one_match_0",
+      "kind": "minor",
+      "problem": "Instruction plus three named results in one line still competes with source binding.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Speak only source-named results for repeated known multiplications. Add a separate concrete signed self-product example for blue."
+      }
+    }
+  ]
+}

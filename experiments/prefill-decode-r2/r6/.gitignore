@@ -1,0 +1,25 @@
+# Generated outputs, media and private runtime state
+/interactive/index.html
+/review-site/
+/video/production/shared/*.json
+/video/production/episodes/ep01/script.yaml
+**/narration/
+**/preview/
+**/render/
+**/delivery-records/
+**/*.lock
+*.mp4
+*.wav
+*.aiff
+*.srt
+*.vtt
+*.png
+.env*
+/review/product-input/core.md
+
+/video/production/episodes/ep01/audience-reviews/script.yaml
+/video/production/spending.jsonl
+**/explainer-studio-versions.json
+/review/qa/
+/review/*.log
+/review/*prompt*

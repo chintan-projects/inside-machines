@@ -1,0 +1,91 @@
+{
+  "scene_ids": [
+    "setup",
+    "one_source",
+    "first_read",
+    "finish_first",
+    "first_choice",
+    "blue_input",
+    "next_choice",
+    "save_work"
+  ],
+  "reviewer_summary": {
+    "question": "Why must a chosen word be processed before choosing the following word, and how can saved data at each layer reduce repeated work?",
+    "takeaway": "Choosing blue uses the preceding word’s result; processing blue makes its own result, while separate layer stores supply unchanged earlier keys and values.",
+    "explained_terms": [
+      "token",
+      "layer",
+      "query",
+      "key",
+      "value",
+      "share",
+      "positive part",
+      "candidate",
+      "KV cache"
+    ],
+    "lost_beat_id": "sky_query",
+    "most_engaging_beat_id": "blue_two_jobs"
+  },
+  "findings": [
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_query",
+      "kind": "lost",
+      "problem": "The connection between multiplication and finding a percentage is not yet established.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Add a concrete assigned-count warm-up showing one of four and three of four before the actual input-to-parts calculation."
+      }
+    },
+    {
+      "scene_id": "first_read",
+      "beat_id": "sky_same_stage_parts_add_0",
+      "kind": "lost",
+      "problem": "Sharing parts lacks an established meaning before adding one creates 1.25.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Build parts/whole/fractions first; explicitly bridge from practice counts to input-calculated actual counts."
+      }
+    },
+    {
+      "scene_id": "finish_first",
+      "beat_id": "focus_is",
+      "kind": "lost",
+      "problem": "The reason for processing the third word arrives after the scene boundary.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Open with the next-slot chooser rule and its is-to-both-stages route, then show why is can read the supplied context."
+      }
+    },
+    {
+      "scene_id": "save_work",
+      "beat_id": "prefill_name",
+      "kind": "lost",
+      "problem": "New vocabulary arrives after the closing recap without a spoken reason.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Motivate the two conventional names after the mechanism is complete and before the closing recap."
+      }
+    },
+    {
+      "scene_id": "finish_first",
+      "beat_id": "value_job",
+      "kind": "minor",
+      "problem": "The picture shows preparation arithmetic while narration says reuse an existing value.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Revisit panels now show existing source K/V, with no repeated preparation operation."
+      }
+    },
+    {
+      "scene_id": "finish_first",
+      "beat_id": "choice_wire",
+      "kind": "minor",
+      "problem": "Earlier-position choices appear to replace already supplied sky and is.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Show only the actual next blank and the immediately preceding is position; remove unused earlier-position choices."
+      }
+    }
+  ]
+}
