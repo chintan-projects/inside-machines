@@ -1,0 +1,125 @@
+title: Inside language models
+sources:
+- ../../CLAIMS.md
+- ../../BRIEF.md
+language_code: en
+narration_budget_usd: 1
+narration:
+  provider_name: elevenlabs
+  voice_id: EXAVITQu4vr4xnSDxMaL
+  model_id: eleven_v4
+  voice_settings:
+    stability: 0.5
+    similarity_boost: 0.75
+background_music:
+  provider_name: none
+has_end_credits: true
+audience:
+  description: 'The owner and curious adult beginners who have watched a chatbot''s
+    answer stream in, word by word, but cannot
+
+    trace one request through the model. They picture the model as either "reading
+    everything at once" or "typing
+
+    like a person". They know a GPU is a fast, parallel chip, which makes the one-at-a-time
+    answer feel like a
+
+    deliberate slowdown or a display effect. They do not know tokens, layers, attention,
+    keys, values or caches.
+
+    Not yet confirmed: the starting level is inferred from the brief, not tested with
+    a learner. Capacity: one causal
+
+    chain with about ten new terms, each shown on the running example "The sky is
+    → blue → and" before it is named.
+
+    '
+  unfamiliar_terms:
+  - token
+  - position
+  - layer
+  - attention
+  - causal mask
+  - feed-forward network
+  - decoding rule
+  - key
+  - value
+  - KV cache
+  - GPU
+  misconceptions:
+  - id: gpu_should_parallelize_answer
+    belief: A parallel GPU could produce all answer tokens at once; streaming is a
+      display choice.
+    evidence: Named in the brief's prediction and human-review baseline question as
+      the misconception to test.
+  - id: cache_stores_answers
+    belief: The KV cache stores answers or the model's weights, so turning it off
+      changes or loses the answer.
+    evidence: The brief's transfer rubric scores this answer 0; the brief bounds the
+      cache claim explicitly.
+  - id: picked_means_processed
+    belief: A token is part of the model's state as soon as it is picked.
+    evidence: The brief's core spine singles out "first token blue, still unprocessed"
+      as a step to teach.
+goal: Trace "The sky is → blue → and", tell picked from processed, say which computation
+  the KV cache saves, and predict that turning it off adds recomputation without changing
+  the deterministic toy's output.
+rationale: 'One mechanism episode. GPU batching and the worked attention numbers live
+  in the interactive''s optional depth, not
+
+  the film, so the film keeps one causal line.
+
+
+  Root revision after three genuine audience readings: numerical query/key matching
+  moves to optional interactive model depth. Core preserves concrete saved K/V, current
+  computation, unchanged past and input dependency. Earlier reviews remain recorded.'
+episodes:
+- id: ep01
+  title: Why does AI write one token at a time?
+  question: Why can a language model read the prompt together but must build its answer
+    one token at a time?
+  question_type: mechanism
+  presenter_name: theo
+  estimated_duration_seconds: 250
+  source_scope: CLAIMS.md C1–C4, C7 in the film; C5 and C6 only in the interactive
+    depth views. Toy numbers from lesson/mechanism.js.
+  taught_terms:
+  - token
+  - position
+  - layer
+  - causal mask
+  - attention
+  - feed-forward network
+  - decoding rule
+  - key
+  - value
+  - KV cache
+  - prefill
+  - decode
+  takeaway: The prompt's tokens are all known, so their positions go through each
+    layer together; an answer token does not exist until it is picked, and the next
+    pick needs it processed first, so the answer grows one token per trip. The KV
+    cache only spares rebuilding earlier positions' keys and values.
+  outline:
+  - 'hook: the stream the viewer has seen; the main question; guess whether a GPU
+    could pick both answer tokens in one trip.'
+  - 'known_positions: tokens and positions; lists of numbers; layers; causal look-back;
+    attention then feed-forward; known positions go through each layer together.'
+  - 'first_pick: the last position''s toy scores; a decoding rule picks blue; blue
+    is picked but not processed; the guess is settled.'
+  - 'feed_back: blue goes in at position 4; key and value; blue makes its own K/V
+    then its query reads allowed keys; position 4 picks and; the loop.'
+  - 'cache: the KV cache per layer; what it saved on the blue step (2 made, 6 read);
+    reading still happens; not answers or weights; and has no entry yet.'
+  - 'close: punchline; cache-off transfer question with a pause, then its answer;
+    reframe.'
+excluded_topics:
+- topic: GPU batching and which phase limits speed
+  reason: Depends on prompt length, batch, context, model and hardware (C5); covered
+    as logical counts in the interactive's optional "Show the insight" view, never
+    as timings.
+- topic: Worked attention arithmetic (softmax, scaling)
+  reason: The film says what attention does; the formula with editable numbers is
+    in the interactive's "Explain the model" view (C6).
+- topic: Speculative decoding, multi-token prediction and other non-ordinary decoders
+  reason: The brief scopes one ordinary causal decoder-only model and one request.

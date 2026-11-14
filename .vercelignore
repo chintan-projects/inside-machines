@@ -25,3 +25,4 @@ plugins/
 .agents/
 .claude-plugin/
 experiments/prefill-decode-video/
+experiments/prefill-decode-r2/

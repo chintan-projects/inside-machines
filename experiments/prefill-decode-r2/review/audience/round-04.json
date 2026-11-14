@@ -1,0 +1,146 @@
+{
+  "scene_ids": [
+    "hook",
+    "known_positions",
+    "first_pick",
+    "feed_back",
+    "cache",
+    "close"
+  ],
+  "reviewer_summary": {
+    "question": "Why can the model process the prompt together while choosing the answer one piece at a time?",
+    "takeaway": "The prompt pieces already exist, but each new answer choice must be fed back and processed before it can supply the following choice; saved intermediate results reduce repeated work.",
+    "explained_terms": [
+      "token",
+      "position",
+      "causal mask",
+      "prefill",
+      "decoding",
+      "KV cache"
+    ],
+    "lost_beat_id": "hook_guess",
+    "most_engaging_beat_id": "fp_not_processed"
+  },
+  "findings": [
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_lookback",
+      "kind": "lost",
+      "problem": "The arrows connect cells within the same layer, so I think the is cell needs the other cells to finish first. I cannot see how that fits the claim that all three cells can be computed together; the picture never distinguishes the numbers entering a layer from its newly computed results.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Arrows now go from known layer INPUTS to the is OUTPUT; no dependencies between neighboring freshly computed outputs. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_layers",
+      "kind": "lost",
+      "problem": "Layers are introduced as a stack of boxes without first showing what one box does to the numbers. I can follow upward movement, but I do not yet know what processing a position means.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Inputs are transformed into outputs, which feed the next layer, before introducing the stack. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_two_jobs",
+      "kind": "lost",
+      "problem": "Attention and a feed-forward network are named before I see either operation happen. The picture supplies two written definitions, but never shows numbers being mixed or reworked, so this beat adds two unfamiliar mechanisms together.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Actual computed vectors show input and attention result. Feed-forward now has its own separate beat and result; residual terminology moved out of the core. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "first_pick",
+      "beat_id": "fp_next_only",
+      "kind": "lost",
+      "problem": "The crucial restriction that a position scores only the next token is stated as a rule. Seeing is produce blue does not yet show why it cannot also produce the choice after blue, so part of the answer to the opening question still feels assumed.",
+      "resolution": {
+        "action": "fixed",
+        "note": "States the ordinary causal model training objective explicitly; visual labels the prefix-to-next-token training task rather than implying a hardware limitation. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_kv",
+      "kind": "lost",
+      "problem": "K and V appear on every processed cell, and key and value appear in the spotlight, before the narration introduces those names in the following beat. I am trying to decode these labels while also learning that every layer has kept a separate pair.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Adds a reuse roadmap, explains two extra lists derived from layer inputs during prefill; unlabelled saved bars appear before their K/V names. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_value",
+      "kind": "lost",
+      "problem": "I learn that keys and values are small lists, but not what distinguishes their jobs. When the next beats use both in attention, I cannot explain how this pair helps blue use the earlier positions.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Concrete lists are named with their two jobs, followed by the query and actual computed mixing weights. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "cache",
+      "beat_id": "kv_not",
+      "kind": "lost",
+      "problem": "Fixed weights appear without an explanation of what weights are. This sentence is meant to correct a cache misconception, but it introduces another kind of stored thing that I cannot identify.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Explains weights as learned calculation rules shared across requests; cache is request intermediate state. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "close",
+      "beat_id": "cl_transfer_reveal",
+      "kind": "lost",
+      "problem": "The question asks what must be made again, but the spoken reveal only says the calculation repeats and the work grows. The answer that the prompt positions' saved results must be rebuilt is left to flashing cells and a count.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Spoken reveal now explicitly rebuilds all three prompt positions plus blue, in both layers, then states same deterministic toy result. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "hook",
+      "beat_id": "hook_guess",
+      "kind": "lost",
+      "problem": "GPU is named before the explanation that it is the chip running the model. Under the unfamiliar vocabulary given for this viewer, I briefly lose the subject of the prediction before hearing its meaning.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Prediction now asks about choosing two answer pieces, without requiring prior understanding of layers or passes. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_tokens",
+      "kind": "lost",
+      "problem": "Tokens are named before the plain description of small text pieces. Position is then introduced in the same sentence, so I am attaching two new names while following the numbered example.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Plain description of pieces precedes token; positions are explicitly numbered. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "first_pick",
+      "beat_id": "fp_pick",
+      "kind": "lost",
+      "problem": "A decoding rule is named before the concrete action of taking the highest score. I hear an unfamiliar mechanism first and only learn what it does in the next sentence.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Highest-score action precedes the term greedy decoding. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "cache",
+      "beat_id": "kv_saves",
+      "kind": "minor",
+      "problem": "Two entries initially sounds like the key list and the value list, because those were introduced as a pair. The picture instead counts one pair in each of two layers; that change in counting units takes extra interpretation.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Explicitly counts one K/V PAIR per position per layer, with a non-timing caveat. Subsequent fresh read required; this edit is not acceptance."
+      }
+    }
+  ]
+}

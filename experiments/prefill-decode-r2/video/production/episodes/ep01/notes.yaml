@@ -1,0 +1,129 @@
+chapters:
+- id: ch1
+  title: The question
+  scenes:
+  - id: hook
+    title: The question
+    summary: 'Predict: can parallel hardware choose two dependent answer pieces together?'
+    key_frame: hook_guess
+    cards:
+    - id: prefill_r2_hook
+      content: '# Known prompt, streamed answer
+
+
+        Predict: can parallel hardware choose two dependent answer pieces together?
+
+
+        ![Known prompt, streamed answer](frame:hook_guess)
+
+        '
+- id: ch2
+  title: The known prompt
+  scenes:
+  - id: known_positions
+    title: The known prompt
+    summary: Each layer reads its already-known inputs under a causal mask. Attention
+      mixes context; the feed-forward block transforms each position. Outputs then
+      feed the next layer.
+    key_frame: kp_together
+    cards:
+    - id: prefill_r2_known_positions
+      content: '# Prefill processes known positions
+
+
+        Each layer reads its already-known inputs under a causal mask. Attention mixes
+        context; the feed-forward block transforms each position. Outputs then feed
+        the next layer.
+
+
+        ![Prefill processes known positions](frame:kp_together)
+
+        '
+- id: ch3
+  title: The first choice
+  scenes:
+  - id: first_pick
+    title: The first choice
+    summary: The last prompt position scores the next token. Greedy decoding chooses
+      blue; blue has not passed through a layer. The next choice needs blue as its
+      processed input.
+    key_frame: fp_not_processed
+    cards:
+    - id: prefill_r2_first_pick
+      content: '# Selected is not yet processed
+
+
+        The last prompt position scores the next token. Greedy decoding chooses blue;
+        blue has not passed through a layer. The next choice needs blue as its processed
+        input.
+
+
+        ![Selected is not yet processed](frame:fp_not_processed)
+
+        '
+- id: ch4
+  title: One decode pass
+  scenes:
+  - id: feed_back
+    title: One decode pass
+    summary: The new position creates its own query, key and value. Attention uses
+      allowed saved keys/values and its own; the feed-forward block produces a fresh
+      output for the next layer. Position four then chooses and.
+    key_frame: fb_ffn
+    cards:
+    - id: prefill_r2_feed_back
+      content: '# Feed the choice back
+
+
+        The new position creates its own query, key and value. Attention uses allowed
+        saved keys/values and its own; the feed-forward block produces a fresh output
+        for the next layer. Position four then chooses and.
+
+
+        ![Feed the choice back](frame:fb_ffn)
+
+        '
+- id: ch5
+  title: Reuse intermediate work
+  scenes:
+  - id: cache
+    title: Reuse intermediate work
+    summary: Two layers × one new position = two new K/V pairs; six earlier pairs
+      are reused. Cached K/V are intermediate lists derived from layer inputs. Weights
+      are shared calculation rules; the cache is request state.
+    key_frame: kv_saves
+    cards:
+    - id: prefill_r2_cache
+      content: '# The cache saves recomputation
+
+
+        Two layers × one new position = two new K/V pairs; six earlier pairs are reused.
+        Cached K/V are intermediate lists derived from layer inputs. Weights are shared
+        calculation rules; the cache is request state.
+
+
+        ![The cache saves recomputation](frame:kv_saves)
+
+        '
+- id: ch6
+  title: Bring it together
+  scenes:
+  - id: close
+    title: Bring it together
+    summary: 'With cache off, rebuild the prompt positions and blue in both layers:
+      eight pairs instead of two. The same exact toy calculations and fixed selection
+      rule give the same scores and choice. Counts are not timings.'
+    key_frame: cl_transfer_reveal
+    cards:
+    - id: prefill_r2_close
+      content: '# Same toy result, more work
+
+
+        With cache off, rebuild the prompt positions and blue in both layers: eight
+        pairs instead of two. The same exact toy calculations and fixed selection
+        rule give the same scores and choice. Counts are not timings.
+
+
+        ![Same toy result, more work](frame:cl_transfer_reveal)
+
+        '

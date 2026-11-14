@@ -1,0 +1,98 @@
+{
+  "scene_ids": [
+    "hook",
+    "known_positions",
+    "first_pick",
+    "feed_back",
+    "cache",
+    "close"
+  ],
+  "reviewer_summary": {
+    "question": "Why can the model process the prompt together but choose its answer only one token at a time?",
+    "takeaway": "The prompt is already known, but each answer choice must go back through the model before the following choice can be made, with saved earlier work reused along the way.",
+    "explained_terms": [
+      "token",
+      "position",
+      "GPU",
+      "causal mask",
+      "prefill",
+      "greedy decoding",
+      "decoding",
+      "KV cache"
+    ],
+    "lost_beat_id": "kp_layers",
+    "most_engaging_beat_id": "fp_not_processed"
+  },
+  "findings": [
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_layers",
+      "kind": "lost",
+      "problem": "A layer is introduced through transforming lists and passing outputs into another layer before I see any list change. The empty rows give me places to look, but I am being asked to hold the new operation and the connection between operations before either has happened on the example.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Shows actual is input and layer-one output as a concrete transformation before locating the stack. Visual reread required."
+      }
+    },
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_two_jobs",
+      "kind": "lost",
+      "problem": "I hear that context is mixed, but the picture only replaces one list with another. I cannot see what came from The and sky or how those inputs contributed to the changed numbers for is. Naming this attention leaves a causal step hidden; I could mistake it for simply adding the three lists.",
+      "resolution": {
+        "action": "kept",
+        "note": "Remaining beginner concern retained openly. This film scopes attention and feed-forward as blocks; the interactive model view exposes the full computed matching and feed-forward arithmetic. Automated takeaway is correct, but this is not human learning acceptance; owner and five-learner review remain pending."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_kv",
+      "kind": "lost",
+      "problem": "The completed prompt cells suddenly gain two extra lists that I never saw them make. I thought the earlier work meant the completed layer results already on screen. I now have to distinguish those results from a second kind of saved intermediate result without seeing their relationship.",
+      "resolution": {
+        "action": "kept",
+        "note": "Remaining beginner concern retained openly. This film scopes attention and feed-forward as blocks; the interactive model view exposes the full computed matching and feed-forward arithmetic. Automated takeaway is correct, but this is not human learning acceptance; owner and five-learner review remain pending."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_value",
+      "kind": "lost",
+      "problem": "Keys are said to be compared before I know what compares with them, and values are named before I see these particular lists being mixed. The two numeric lists alone do not show either job. The missing comparison input arrives only with query two beats later, so I am holding unexplained names during the explanation that depends on them.",
+      "resolution": {
+        "action": "kept",
+        "note": "Remaining beginner concern retained openly. This film scopes attention and feed-forward as blocks; the interactive model view exposes the full computed matching and feed-forward arithmetic. Automated takeaway is correct, but this is not human learning acceptance; owner and five-learner review remain pending."
+      }
+    },
+    {
+      "scene_id": "cache",
+      "beat_id": "kv_not",
+      "kind": "lost",
+      "problem": "Weights now means the model's learned calculation rules, but my only previous weights were the four mixing numbers made from blue's comparisons. I could understand this as saying those same mixing numbers are shared across requests. The narration does not distinguish these two uses of weights.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Distinguishes fixed learned model rules from newly computed attention mixing weights; no shared-weights ambiguity. Scene reread required."
+      }
+    },
+    {
+      "scene_id": "first_pick",
+      "beat_id": "fp_next_only",
+      "kind": "lost",
+      "problem": "The line introduces next-token scores from each position, although I have only seen scores from is. I cannot point to what the scores from The or sky would predict, so I do not yet see why those other positions cannot provide another answer piece alongside blue. The training-task label repeats the rule without showing that case.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Shows the slot scored by EACH prompt position, including two slots already supplied by the prompt; next answer is slot four."
+      }
+    },
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_ffn",
+      "kind": "minor",
+      "problem": "Feed-forward network is a new name heard before its job is stated, and the inset shows only another before-and-after list. Independently is the useful distinction, but with the next-layer handoff immediately following it, that distinction is easy to miss on one hearing.",
+      "resolution": {
+        "action": "kept",
+        "note": "Remaining beginner concern retained openly. This film scopes attention and feed-forward as blocks; the interactive model view exposes the full computed matching and feed-forward arithmetic. Automated takeaway is correct, but this is not human learning acceptance; owner and five-learner review remain pending."
+      }
+    }
+  ]
+}

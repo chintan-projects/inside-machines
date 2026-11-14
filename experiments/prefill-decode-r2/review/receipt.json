@@ -1,0 +1,121 @@
+{
+  "revision": "prefill-decode-r2",
+  "status": "human_review_pending",
+  "delivered_at": "2026-11-13T19:37:35-08:00",
+  "studio_version": "1.3.0",
+  "duration_seconds": 379.2,
+  "video_sha256": "15bc8ae8cc767a795d952a0dbc4bcf2488a8db55ae4ee3b5389c9d171e443e6a",
+  "html_sha256": "a84979885b6f241d3fc0b6dbe597549692daf6210f70296de286ae2018619d30",
+  "chapters": [
+    {
+      "title": "A prompt read at once, an answer written piece by piece",
+      "seconds": 1
+    },
+    {
+      "title": "Known positions go through each layer together",
+      "seconds": 34.167
+    },
+    {
+      "title": "The last position's scores pick the first answer token",
+      "seconds": 118.333
+    },
+    {
+      "title": "The picked token goes back in and reuses saved results",
+      "seconds": 178.3
+    },
+    {
+      "title": "The KV cache keeps earlier keys and values",
+      "seconds": 274.233
+    },
+    {
+      "title": "Known tokens go together; picked tokens go one at a time",
+      "seconds": 320.667
+    }
+  ],
+  "source_sha256": {
+    "lesson/mechanism.js": "69f6efd70017f5a18079984ceb2980844d04c8f9ddd998d2299bc32133dfb14b",
+    "lesson/checkpoints.js": "31eb4f06d4f6535dfeab896107f635423ff37c16a74fc1eb04cc59550ee711d7",
+    "lesson/story.js": "d4ea8600f10ce946c7a1e1a84cff4209316be2726a31c80cbd51af912aecc067",
+    "interactive/src/app.js": "0e9a241ff76464b2e7261edf3e2d368c1a9f03a0bf184886db72eafe0d1b0982",
+    "interactive/src/styles.css": "9d4e567e84f5336bdfcefeab60e120c0507459130037fe4b1cc9d6135aef2313",
+    "interactive/src/template.html": "b2b758bf357ddec7df845024893e0ec694984ccf999dafc1ed6362f090204c6e",
+    "build.mjs": "3463823631d1e18b5c8499d0ec1ea25abf2103e8a6205a7c30d2e020913e01ad",
+    "review.mjs": "01f1bdf5b0f1a6e2570acab44a971cbbf45260873bad43fcbc17aad04d918044",
+    "video/production/episodes/ep01/scenes/close.py": "be09f17f3d5f32d89e50c8cffe6a801e5006c4d429fab2fe42a736185e1696c8",
+    "video/production/episodes/ep01/scenes/cache.py": "92fb18b50b72cf128b26f04f85f4f133413aaf4829c24ea304fb0db72e536cd0",
+    "video/production/episodes/ep01/scenes/hook.py": "1e64cf97467e0895fe80f68427224bbe56a5a75ca281c1af6e01eb4350b615b5",
+    "video/production/episodes/ep01/scenes/first_pick.py": "362cf11318aff45f178c8a1a638f28a84eb23563f999f4f40fbd6ca9f05df77f",
+    "video/production/episodes/ep01/scenes/feed_back.py": "f64312a0614fefee6c992c90910e67bc5d5d666c2c5b3ecb5b9ec92dab42748e",
+    "video/production/episodes/ep01/scenes/known_positions.py": "21bf304f1ca20b26b5085d94189be4c1eade01f5550542be3dc75a1e1122ba98",
+    "video/production/shared/series.py": "738a6bebb351f9adf637f6e4212b27076ee40d372cd097c0b4193dc805204536",
+    "video/production/plan.yaml": "2c59385819b25d62b76cb5cbf26e1aa44f86cb347fe0201f7fcf0991f4333ecf",
+    "video/production/episodes/ep01/notes.yaml": "b40b437b0ba8b3f9ec12e61d5c13ad67ca08389af26a5bff1124b896c945ff8d",
+    "video/production/episodes/ep01/cover.py": "fb0f1cc4c50131e43f321d9c7ef45930323ee7e86c2a2e3bc4d2f5754687fa69",
+    "video/production/episodes/ep01/end_credits.py": "5145717c8f5fc72991f511eb61c4a0b5eff9a30b9a520cdf3e01ce6b60cccbf3"
+  },
+  "media_checks": {
+    "captions": 166,
+    "canonical_text_parity": true,
+    "all_cues_within_matching_beat": true,
+    "last_cue_end_seconds": 371.693,
+    "duration_seconds": 379.2,
+    "beat_count": 38,
+    "scene_count": 6,
+    "audio": "AAC; browser decoding and unmuted playback observed; human/device listening pending"
+  },
+  "costs": {
+    "successful_segments": 38,
+    "ledger_entries": 38,
+    "speech_characters": 4647,
+    "speech_estimate_usd": 0.37176,
+    "all_speech_costs_estimated": true,
+    "actual_speech_charge_verified": false,
+    "speech_estimate_budget_usd": 1,
+    "initial_claude_authoring_api_equivalent_usd": 5.593576399999999,
+    "authoring_invoice_verified": false,
+    "codex_host_usage_cost": "not_measured"
+  },
+  "engineering": {
+    "reference_invariants": 19,
+    "javascript_tests": 55,
+    "backend_passed": 390,
+    "backend_skipped": 10,
+    "skipped_scope": "external disposable Postgres regressions; transactions unchanged",
+    "types": "passed",
+    "lint": "passed",
+    "ruff": "passed",
+    "mypy": "passed",
+    "production_build": "passed",
+    "linux_packaging": "passed; two functions, queue, shared services, native encoder, exclusions and CDN shell",
+    "browser_widths": [
+      390,
+      768,
+      1440
+    ],
+    "javascript_errors": 0,
+    "page_overflow": false,
+    "media_browser": "unmuted advancing playback, caption cues, chapter seeking, mute/reset, byte ranges, private-path refusal and local-only requests verified"
+  },
+  "quality": {
+    "automated_script_review_rounds": 8,
+    "retained_confusion_scenes": [
+      "known_positions",
+      "first_pick",
+      "feed_back",
+      "cache"
+    ],
+    "independent_human_technical": "pending",
+    "physical_phone": "pending",
+    "owner_craft": "pending",
+    "five_unfamiliar_learners": "pending",
+    "release": "not_requested_or_granted",
+    "catalog_expansion": "held_until_reference_acceptance"
+  },
+  "plan_departures": {
+    "initial_duration_seconds": 250,
+    "delivered_duration_seconds": 379.2,
+    "words": 800,
+    "beats": 38,
+    "query": "concrete query/mixing weights in core; full arithmetic in optional depth"
+  }
+}

@@ -68,6 +68,13 @@ The [editable prefill/decode example](experiments/prefill-decode-video/README.md
 documents the video workflow and its unresolved learning/craft evidence. These
 local authoring tools do not automatically add content to the live library.
 
+The [complete prefill/decode reference draft](experiments/prefill-decode-r2/README.md)
+adds a shared computed toy, interactive depth, a full ElevenLabs narration workflow,
+actual-timeline video chapters and a local review server. Human quality acceptance
+remains pending; generated media and private sessions stay local.
+
+![Prefill/decode local reference draft](docs/images/readme/prefill-decode-reference.png)
+
 ## How it works
 
 A complete causal story comes first; optional insight and model views follow.

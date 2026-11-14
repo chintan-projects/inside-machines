@@ -16,6 +16,6 @@ test('actual upload rules include every registered native source while excluding
   assert.deepEqual(excludedUploadSources(rules,[...sources,'vendor/anatomy/LICENSE']),[]);
   for(const path of ['.env.local','.data/inside.sqlite3','.vercel/native-production/target-production.env','vendor/anatomy/.git/config',
     'plugins/inside-explain/skills/explain-visually/SKILL.md','.agents/plugins/marketplace.json','.claude-plugin/marketplace.json',
-    '.explainers/private/CLAIMS.md','experiments/prefill-decode-video/production/plan.yaml'])
+    '.explainers/private/CLAIMS.md','experiments/prefill-decode-video/production/plan.yaml','experiments/prefill-decode-r2/video/production/plan.yaml'])
     assert.equal(excludedUploadSources(rules,[path]).length,1,path);
 });

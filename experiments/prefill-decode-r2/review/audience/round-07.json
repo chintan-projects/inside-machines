@@ -1,0 +1,65 @@
+{
+  "scene_ids": [
+    "known_positions",
+    "first_pick",
+    "cache"
+  ],
+  "reviewer_summary": {
+    "question": "Why can the model process the prompt together while choosing the answer one token at a time?",
+    "takeaway": "The prompt pieces are already known, but choosing the next answer piece requires processing the previous choice, and saved keys and values avoid repeating earlier work.",
+    "explained_terms": [
+      "token",
+      "position",
+      "layer",
+      "causal mask",
+      "attention",
+      "prefill",
+      "greedy decoding",
+      "KV cache"
+    ],
+    "lost_beat_id": "kp_ffn",
+    "most_engaging_beat_id": "fp_not_processed"
+  },
+  "findings": [
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_together",
+      "kind": "lost",
+      "problem": "All layer inputs already exist sounds as though both layers already have their inputs. I was just told that layer two receives layer one's completed results. I need the claim to refer clearly to all three positions within the current layer, because deciding which calculations can happen together is the central explanation.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Names layer one first, then waits for its completed outputs before layer two; parallelism is explicitly within each current layer. Final focused fresh read follows; real learner acceptance pending."
+      }
+    },
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_ffn",
+      "kind": "lost",
+      "problem": "Feed-forward network is named before I have seen this second operation happen or heard what it does. The explanation follows the unfamiliar name, and the picture also names the block while revealing its result. Hearing this once, I pause over the name and miss that this operation works separately on each position's numbers.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Describes independent transformation before naming feed-forward network. Final focused fresh read follows; real learner acceptance pending."
+      }
+    },
+    {
+      "scene_id": "cache",
+      "beat_id": "kv_not",
+      "kind": "lost",
+      "problem": "The model's learned rules have not been given a concrete representation or distinguished from the numbers already on screen. This line introduces their persistence across requests, contrasts them with fresh attention mixing weights, and identifies the cache contents in one beat. I can point to the saved pairs, but I cannot yet explain which other numbers constitute the model or why saving the pairs is different.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Reduced to saved request state and same calculation rules with cache on/off; removed the cross-request/learned-rules/mixing-weight digression. Final focused fresh read follows; real learner acceptance pending."
+      }
+    },
+    {
+      "scene_id": "first_pick",
+      "beat_id": "fp_conclusion",
+      "kind": "lost",
+      "problem": "One trip is a new name in the sentence meant to settle the main question. I assume it means processing the available inputs through every layer and then selecting a token, but that equivalence is never said. I cannot confidently repeat this slogan without supplying its missing meaning.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Defines one trip as one complete layer pass followed by a selection before using the slogan. Final focused fresh read follows; real learner acceptance pending."
+      }
+    }
+  ]
+}

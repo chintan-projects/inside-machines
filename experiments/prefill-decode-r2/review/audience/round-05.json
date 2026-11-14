@@ -1,0 +1,109 @@
+{
+  "scene_ids": [
+    "hook",
+    "known_positions",
+    "first_pick",
+    "feed_back",
+    "cache",
+    "close"
+  ],
+  "reviewer_summary": {
+    "question": "Why can a chatbot process the known prompt together but choose its answer only one token at a time?",
+    "takeaway": "The next choice depends on processing the token just chosen, while cached intermediate results let the model reuse earlier work.",
+    "explained_terms": [
+      "token",
+      "position",
+      "layer",
+      "causal mask",
+      "prefill",
+      "greedy decoding",
+      "decoding",
+      "KV cache",
+      "weights"
+    ],
+    "lost_beat_id": "hook_guess",
+    "most_engaging_beat_id": "fp_not_processed"
+  },
+  "findings": [
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_query",
+      "kind": "lost",
+      "problem": "Blue's new numbers could mean its input list, its new key, or its new value: those are the numbers I have seen so far. I cannot identify which numbers get compared with the keys, so I may conclude that blue's key is what performs the comparison. The picture shows resulting weights without showing the missing comparison input.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Names blue’s fresh query and displays the actual query vector as comparison input; shows the resulting computed weights across all four values. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_kv",
+      "kind": "lost",
+      "problem": "The grid cells previously represented transformed position outputs; now those same cells contain two saved lists. Nobody says how the two lists relate to the output list I was following, or when they were made during prefill. I may mistake the cached pair for the complete output of a layer.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Adds a reuse roadmap, explains two extra lists derived from layer inputs during prefill; unlabelled saved bars appear before their K/V names. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_pick_and",
+      "kind": "lost",
+      "problem": "Layer two uses saved results, blue produces final scores, and the model chooses and in one beat. I have just followed a layer-one attention mixture, but its feed-forward operation and the result becoming layer two's input are skipped here. I cannot trace which fresh result moves upward to produce the next scores.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Added fb_ffn to show layer-one transformation and its fresh output going into layer two before next scores. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "hook",
+      "beat_id": "hook_guess",
+      "kind": "lost",
+      "problem": "The prediction asks about one pass through all the layers before I know what a layer is or what happens in a pass. I understand the question about parallel calculation, but cannot picture the condition I am being asked to predict.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Prediction now asks about choosing two answer pieces, without requiring prior understanding of layers or passes. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_kv",
+      "kind": "lost",
+      "problem": "After learning that blue must go back through the model, I suddenly start learning about saved numeric pairs. The narration has not said that we are now answering how the model processes blue while reusing the prompt's work, so I lose why this new mechanism belongs in the explanation.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Adds a reuse roadmap, explains two extra lists derived from layer inputs during prefill; unlabelled saved bars appear before their K/V names. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_two_jobs",
+      "kind": "lost",
+      "problem": "One beat introduces mixing, attention, an independent transformation, and a feed-forward network while three numeric states appear. Both transitions also include an unexplained residual operation in their labels. I cannot tell which changes demonstrate the two stated jobs and which come from the extra operation.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Actual computed vectors show input and attention result. Feed-forward now has its own separate beat and result; residual terminology moved out of the core. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_still_valid",
+      "kind": "lost",
+      "problem": "The crossed arrow goes from is to blue, although the earlier blocked connection ran from a later input to an earlier output. If these arrows still show information flowing between positions, the picture now seems to forbid blue from using is. The direction needs a clear meaning for the causal explanation to hold together.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Forbidden information-flow edge now runs from later blue INPUT toward earlier is OUTPUT, matching the earlier mask illustration. Subsequent fresh read required; this edit is not acceptance."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_value",
+      "kind": "minor",
+      "problem": "The saved lists are concrete, but deciding the mix remains abstract: I hear about comparing keys and mixing values before seeing either operation on those lists. I have names for two lists without yet being able to explain their different jobs.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Concrete lists are named with their two jobs, followed by the query and actual computed mixing weights. Subsequent fresh read required; this edit is not acceptance."
+      }
+    }
+  ]
+}

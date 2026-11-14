@@ -1,0 +1,16 @@
+interactive/index.html
+review-site/
+video/*.mp4
+video/*.srt
+video/*.png
+video/production/shared/lesson_states.json
+video/production/episodes/ep01/script.yaml
+video/production/episodes/ep01/narration/
+video/production/episodes/ep01/preview/
+video/production/episodes/ep01/render/
+video/production/episodes/ep01/delivery-records/
+video/production/episodes/ep01/explainer-studio-versions.json
+video/production/spending.jsonl
+video/production/credits.yaml
+video/production/episodes/ep01/audience-reviews/script.yaml
+video/production/**/*.lock

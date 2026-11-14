@@ -1,0 +1,10 @@
+# Claim ledger
+| ID | Claim | Primary source/section | Scope | Status |
+| --- | --- | --- | --- | --- |
+| C1 | Known prompt positions can be processed together within a layer; attention masks disallow later positions. | https://huggingface.co/docs/transformers/main/cache_explanation — Attention matrices; https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/ — Prefill | Same position and earlier allowed; layers sequential dependencies; not all generation parallel | Source checked, independent human pending |
+| C2 | Last prompt position's logits choose the first new token. | HF cache DynamicCache generation loop; NVIDIA Prefill | All tokens/counts illustrative; first choice follows prefill | Source checked, independent human pending |
+| C3 | The selected output becomes the next input; new K/V is appended as it is processed. | HF Cache class / generation loop; NVIDIA Decode / KV caching | Each layer has its own cache; no sampled token cache before processing | Source checked, independent human pending |
+| C4 | Caching reuses prior K/V, but new queries still read allowed past and current K/V. | HF Attention matrices / Cache class | No answer storage or model-weight replacement; exact toy equivalence is a mathematical illustration | Source checked, independent human pending |
+| C5 | Bottlenecks depend on prompt length, batching, context, model and hardware. | NVIDIA Understanding LLM inference / Batching | No measured time ratio, logical request lanes not physical GPU core counts | Source checked, independent human pending |
+| C6 | Attention combines values with weights from scaled query/key scores and a causal mask. | https://arxiv.org/abs/1706.03762 — Scaled Dot-Product Attention; HF cache explanation | Declared tiny vectors, values and layers; computed example not actual GPT internal values | Formula to verify with code |
+| C7 | N sampled tokens involve N selections; prefill supplies first selection, N−1 further decode steps. | C2/C3 plus counting arithmetic | Not milliseconds; end markers and stop choices must be stated; no 10× timing claim | Arithmetic to verify with code |

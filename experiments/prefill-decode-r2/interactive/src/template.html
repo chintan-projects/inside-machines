@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data:; media-src 'self'; connect-src 'none'">
+<link rel="icon" href="data:,">
+<title>Prompt together, answer one token at a time</title>
+<style>{{STYLE}}</style>
+</head>
+<body>
+<a class="skip" href="#stage">Skip to the explanation</a>
+<header class="masthead">
+  <h1>Why AI answers one token at a time</h1>
+  <p class="lede">Follow one prompt through a small, working model. See what the cache changes.</p>
+<nav class="experience-nav" aria-label="Choose an experience"><a href="#stage">Explore step by step</a><a href="#film">Watch the narrated film</a></nav>
+</header>
+<main>
+  <details id="predict" class="predict" aria-labelledby="predict-h">
+    <summary id="predict-h">Make a quick prediction <span>optional</span></summary>
+    <p id="predict-prompt"></p>
+    <div class="options" id="predict-options" role="group" aria-label="Your guess"></div>
+    <p id="predict-result" class="result" aria-live="polite"></p>
+  </details>
+
+  <section id="stage" class="stage" aria-labelledby="step-title">
+    <figure class="figure">
+      <svg id="board" viewBox="0 0 520 360" role="img" aria-labelledby="board-desc"><desc id="board-desc"></desc></svg>
+      <figcaption id="legend" class="legend"></figcaption>
+    </figure>
+    <div class="explain">
+      <p class="where" id="where"></p>
+      <h2 id="step-title" tabindex="-1"></h2>
+      <div id="caption" class="caption"></div>
+      <details class="full-line"><summary>Read this part in full</summary><div id="full-caption"></div></details>
+      <div id="scores" class="scores" hidden></div>
+      <p id="readout" class="readout" aria-live="polite"></p>
+      <div class="controls">
+        <button type="button" id="back">Back</button>
+        <button type="button" id="next" class="primary">Next step</button>
+        <button type="button" id="reset">Start over</button>
+        <button type="button" id="cache" role="switch" aria-checked="true">KV cache: on</button>
+      </div>
+      <p class="hint">Keys: left and right arrows step; Home starts over; C turns the cache on or off.</p>
+    </div>
+  </section>
+
+  <section class="deeper" aria-labelledby="deeper-h">
+    <h2 id="deeper-h">Go deeper (optional)</h2>
+    <div class="deeper-actions">
+      <button type="button" class="big" data-open="insight">Show the insight: many requests at once</button>
+      <button type="button" class="big" data-open="model">Explain the model: layers and attention, with numbers</button>
+    </div>
+    <form id="ask" class="ask" autocomplete="off">
+      <label for="ask-input">Dive deeper into…</label>
+      <div class="ask-row"><input id="ask-input" type="text" placeholder="e.g. attention math, batching, feed-forward, cache"><button type="submit">Open</button></div>
+      <p id="ask-result" class="result" aria-live="polite"></p>
+    </form>
+
+    <section id="panel-insight" class="panel" hidden aria-labelledby="insight-h">
+      <h3 id="insight-h">Many requests side by side</h3>
+      <p>A server usually runs several requests together (batching). Each row is one request. Each column is one trip through the model. The number is how many positions that trip processes for that request.</p>
+      <div class="knobs">
+        <label>Requests <input id="lanes-requests" type="number" min="1" max="4" value="2"></label>
+        <label>Prompt tokens <input id="lanes-prompt" type="number" min="1" max="8" value="3"></label>
+        <label>Answer tokens <input id="lanes-answer" type="number" min="1" max="6" value="2"></label>
+      </div>
+      <div id="lanes" class="lanes"></div>
+      <p id="lanes-summary"></p>
+      <p class="caveat">These are logical counts of positions, not GPU cores and not time. Which part limits speed depends on prompt length, batch size, context length, the model and the hardware; nothing here was measured.</p>
+    </section>
+
+    <section id="panel-model" class="panel" hidden aria-labelledby="model-h">
+      <h3 id="model-h">What one layer does, in toy numbers</h3>
+      <p>Toy model: 2 layers, each position is a list of just 2 numbers, weights declared in the source. Each layer: attention (look back and mix), then a feed-forward network (rework each position on its own). Pick which position to follow:</p>
+      <div class="knobs" role="group" aria-label="Position to follow">
+        <button type="button" data-trace="prefill" aria-pressed="true">“is”, choosing blue</button>
+        <button type="button" data-trace="decode" aria-pressed="false">“blue”, choosing and</button>
+      </div>
+      <div id="trace" class="table-wrap"></div>
+      <h3 id="attn-h">Attention, computed</h3>
+      <p>Layer 1. Score = query · key ÷ √2. Masked keys get no score. Softmax turns scores into weights that add up to 1; the output is the weighted sum of values. Edit the query or the mask and every number below is recomputed.</p>
+      <div class="knobs">
+        <label>Query position <select id="attn-pos"></select></label>
+        <label>query 1 <input id="attn-q0" type="number" step="0.1" min="-10" max="10"></label>
+        <label>query 2 <input id="attn-q1" type="number" step="0.1" min="-10" max="10"></label>
+        <button type="button" id="attn-causal">Restore causal mask</button>
+      </div>
+      <div id="attn" class="table-wrap"></div>
+      <p id="attn-out" aria-live="polite"></p>
+    </section>
+
+    <section id="panel-transfer" class="panel transfer" hidden aria-labelledby="transfer-h">
+      <h3 id="transfer-h">Check your understanding</h3>
+      <p>First explain it in your own words, then try a different request. Answer before revealing the guide.</p>
+      <label for="teachback-answer">Why can an ordinary causal model process a known prompt together, but must feed each selected answer token back in?</label>
+      <textarea id="teachback-answer" rows="3"></textarea>
+      <p id="transfer-prompt"></p>
+      <label for="transfer-answer">Your answer (stays on this page, never sent anywhere)</label>
+      <textarea id="transfer-answer" rows="4"></textarea>
+      <button type="button" id="transfer-reveal">Show the answer and scoring guide</button>
+      <div id="transfer-key" hidden>
+        <p class="answer">All prompt tokens are already known, so positions within a layer can be computed together under the causal mask. Each position scores the token immediately after it. The first choice comes from the last prompt position; that chosen token must become a new processed input before the next choice can be scored.</p>
+        <fieldset id="teachback-rubric"><legend>Score your explanation</legend></fieldset>
+        <p id="transfer-answer-text" class="answer"></p>
+        <fieldset id="transfer-rubric"><legend>Score your answer</legend></fieldset>
+        <button type="button" id="transfer-export" disabled>Download anonymous score (JSON)</button>
+        <p class="caveat">The file holds your two scores, guess choice and lesson revision only. No answer text, no name, no server.</p>
+      </div>
+    </section>
+  </section>
+  <section id="film" class="film" aria-labelledby="film-h">
+    <p class="where">The same example, narrated</p>
+    <h2 id="film-h">Watch the whole explanation</h2>
+    <p>Six short chapters, with ElevenLabs narration and English captions. Use the full-screen control for the drawings on a phone.</p>
+    <video id="lesson-film" controls playsinline preload="none" poster="poster.png" aria-label="Prefill versus decode, narrated">
+      <source src="film.mp4" type="video/mp4">
+      <track kind="captions" src="captions.vtt" srclang="en" label="English" default>
+      Your browser cannot play this video. The full transcript is below.
+    </video>
+    <button type="button" id="film-sound" aria-pressed="true">Sound on · mute</button>
+    <p id="film-status" role="status" class="caveat">Press Play to hear the narration.</p>
+    <div id="film-chapters" class="film-chapters" aria-label="Video chapters"></div>
+    <details class="transcript"><summary>Read the complete transcript</summary><div id="transcript"></div></details>
+  </section>
+</main>
+<footer class="foot">
+  <p>Sources: <a href="https://huggingface.co/docs/transformers/main/cache_explanation" target="_blank" rel="noreferrer">Hugging Face: caching</a>; <a href="https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/" target="_blank" rel="noreferrer">NVIDIA: inference optimization</a>; <a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noreferrer">Attention Is All You Need</a>. Scores, vectors and token pieces are illustrative toy values. The model runs entirely on this page. No AI calls, account or usage charges during playback. The film is a separate local file.</p>
+</footer>
+<script>{{SCRIPT}}</script>
+</body>
+</html>

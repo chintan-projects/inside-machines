@@ -1,0 +1,168 @@
+{
+  "scene_ids": [
+    "hook",
+    "known_positions",
+    "first_pick",
+    "feed_back",
+    "cache",
+    "close"
+  ],
+  "reviewer_summary": {
+    "question": "Why does a chatbot read my whole prompt in one go but write its answer one token at a time, even on a chip that does thousands of things at once?",
+    "takeaway": "The prompt's tokens are all known, so they go through the layers together; each answer token only exists once it is picked, and the next pick needs it processed first, so the answer comes one token per trip.",
+    "explained_terms": [
+      "token",
+      "position",
+      "layer",
+      "causal mask",
+      "decoding rule",
+      "query",
+      "KV cache",
+      "GPU"
+    ],
+    "lost_beat_id": "fb_kv",
+    "most_engaging_beat_id": "fp_not_processed"
+  },
+  "findings": [
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_reads",
+      "kind": "lost",
+      "problem": "I am told the old keys and values were not made again, but never why they are still valid. Now that 'blue' exists, I would expect 'is' to need updating. The reason, that earlier positions never look ahead so 'blue' cannot change them, was taught back at kp_lookback but is not linked here. The whole cache depends on this link.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Added beat fb_still_valid after fb_reads: earlier positions never look ahead, so blue can't change what is computed; red no-looking-ahead arrow is→blue on screen."
+      }
+    },
+    {
+      "scene_id": "first_pick",
+      "beat_id": "fp_settle",
+      "kind": "lost",
+      "problem": "Three links in one line: the token after 'blue' is scored at position four, position four is not computed, so one trip gives one token. The premise that each position scores only the very next token was never said. It was only implied when 'is' scored 'blue'. So I could ask why position three could not score two tokens ahead.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Premise given its own beat fp_next_only before fp_settle: each position scores only the token right after it."
+      }
+    },
+    {
+      "scene_id": "first_pick",
+      "beat_id": "fp_settle",
+      "kind": "wrong",
+      "problem": "'One trip picks one new token' and the episode question's 'must' are stated as universal. A careful expert would add that this holds for a model built to score only the next token. Some systems guess several tokens ahead and check them in one trip.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Sentence softened to 'So in an ordinary model, one trip picks one new token.' Multi-token schemes stay excluded in plan.yaml."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_kv",
+      "kind": "lost",
+      "problem": "Key and value arrive together as abstract definitions ('what it can be matched on', 'what it passes on') before I see any matching. They are also said to have been 'left behind' in a step I already watched with no mention of them, so I think I missed something. Two new terms, a general statement before the example, and no reason yet why I need them.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Line now opens with the purpose ('To be looked back at, each processed position keeps two lists in every layer') and drops 'left behind'; the matching follows in fb_own/fb_query on blue."
+      }
+    },
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_two_jobs",
+      "kind": "minor",
+      "problem": "Two new terms in one beat, both abstract ('mixes in what each position looked back at'). The feed-forward network is never used again, so I carry it without knowing why.",
+      "resolution": {
+        "action": "kept",
+        "note": "The brief requires the FFN/MLP step in the core; its numbers are in the interactive's 'Explain the model' view."
+      }
+    },
+    {
+      "scene_id": "first_pick",
+      "beat_id": "fp_scores",
+      "kind": "minor",
+      "problem": "Nothing says why only the last position's scores matter. 'The' and 'sky' also reached the top, so I wonder whether they score too and what happens to those scores.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Answered by the new fp_next_only beat (each position scores only the token right after it)."
+      }
+    },
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_lookback",
+      "kind": "minor",
+      "problem": "The narration explains the rule with 'is' in layer 1, but the forbidden arrow on screen goes from 'sky' in layer 2. 'is' has no later position, so the spoken example cannot show the rule. The picture shows a different token in a different layer.",
+      "resolution": {
+        "action": "kept",
+        "note": "Wording can't be changed by deletion alone; the forbidden arrow from sky shows the same rule for a position that has a later one. fb_still_valid now repeats it on 'is'→'blue'."
+      }
+    },
+    {
+      "scene_id": "cache",
+      "beat_id": "kv_saves",
+      "kind": "minor",
+      "problem": "'Its own two entries' clashes with 'two lists: a key and a value' from fb_kv. I first think the two are K and V, not one entry per layer, so 'six' takes a moment to add up.",
+      "resolution": {
+        "action": "kept",
+        "note": "Screen counts 'made: 2' on the two layer cells of blue; the cells make the per-layer reading visible."
+      }
+    },
+    {
+      "scene_id": "close",
+      "beat_id": "cl_transfer_reveal",
+      "kind": "minor",
+      "problem": "'With exact arithmetic' and 'our fixed rule' are new hedges. They suggest that real arithmetic or another rule could change the answer, which is close to my wrong belief, but neither is explained.",
+      "resolution": {
+        "action": "kept",
+        "note": "Required by the brief's boundary: toy equivalence, no real-model invariance claim."
+      }
+    },
+    {
+      "scene_id": "close",
+      "beat_id": "cl_transfer_ask",
+      "kind": "minor",
+      "problem": "'Switched off' is unclear. Are the stored entries thrown away, or does the model stop being able to make keys at all? 'What must be made again?' nearly gives its own answer, and two questions run at once.",
+      "resolution": {
+        "action": "kept",
+        "note": "Two questions match the 0/1/2 rubric's two parts; the screen shows the K V tags going grey (entries dropped)."
+      }
+    },
+    {
+      "scene_id": "hook",
+      "beat_id": "hook_guess",
+      "kind": "minor",
+      "problem": "'One trip through the model' is used before I know what a trip is. It only becomes clear around fp_settle, and the word is never defined as one pass up all the layers.",
+      "resolution": {
+        "action": "kept",
+        "note": "No deletion fixes it; 'through the model' carries the meaning until the board shows a trip."
+      }
+    },
+    {
+      "scene_id": "cache",
+      "beat_id": "kv_not",
+      "kind": "minor",
+      "problem": "My belief that the cache stores answers or weights is only struck through, not broken on a case. 'Doesn't replace the model' answers a different worry than 'it stores the weights'. The belief that turning it off changes the answer waits until the close.",
+      "resolution": {
+        "action": "kept",
+        "note": "The case that breaks it is the transfer reveal (same pick with cache off); kept there deliberately."
+      }
+    },
+    {
+      "scene_id": "hook",
+      "beat_id": "hook_question",
+      "kind": "minor",
+      "problem": "'The prompt you typed is read in one go' is stated as fact before anything shows it. I have to take it on trust, which is close to the 'reads everything at once' picture I already hold.",
+      "resolution": {
+        "action": "kept",
+        "note": "It is the claim the episode then shows (kp_together)."
+      }
+    },
+    {
+      "scene_id": "close",
+      "beat_id": "cl_reframe",
+      "kind": "minor",
+      "problem": "The closing line switches back from 'token' to 'word' after the episode taught 'token', which blurs the term I just learned.",
+      "resolution": {
+        "action": "kept",
+        "note": "Here each word is one token (kp_tokens); the reframe uses the everyday word on purpose."
+      }
+    }
+  ]
+}

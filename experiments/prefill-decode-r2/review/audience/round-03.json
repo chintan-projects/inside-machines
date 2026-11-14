@@ -1,0 +1,53 @@
+{
+  "scene_ids": [
+    "first_pick",
+    "feed_back",
+    "close"
+  ],
+  "reviewer_summary": {
+    "question": "Why can the model process the known prompt together but choose the answer only one token at a time?",
+    "takeaway": "Picking blue does not process it, so the model must feed it back through the layers before choosing and; keeping earlier keys and values saves repeated work.",
+    "explained_terms": [
+      "token",
+      "position",
+      "layer",
+      "causal mask",
+      "decoding rule",
+      "KV cache"
+    ],
+    "lost_beat_id": "fb_kv",
+    "most_engaging_beat_id": "fp_not_processed"
+  },
+  "findings": [
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_kv",
+      "kind": "lost",
+      "problem": "I lose the concrete example when the six K tags appear. A key supposedly says what a position is relevant to, but I have not seen blue looking for anything yet, or an example of what one earlier position offers it. I cannot connect these new lists to the looking back I previously understood as arrows between words.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Substantial rewrite after R3: show the actual saved numeric pair for The/layer 1, describe its role as an input to new computation; defer the matching formula to optional depth. New fresh review required."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_query",
+      "kind": "lost",
+      "problem": "The query is introduced and immediately compared with every allowed key, but the picture shows only arrows. I can see which positions are allowed, but not what blue is looking for or why one earlier position would contribute more than another. That leaves the comparison-to-mixing link in the next beat dependent on an unexplained idea of relevance.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Removed unexplained relevance metaphor and query terminology from core. State exactly which old and new numerical results are consumed; interactive depth shows the actual matching arithmetic. Fresh review required."
+      }
+    },
+    {
+      "scene_id": "close",
+      "beat_id": "cl_transfer_reveal",
+      "kind": "minor",
+      "problem": "With exact arithmetic introduces an unexplained condition during the answer to my prediction. I thought repeating the same calculations would produce the same result; now I wonder whether ordinary calculations might change the answer, and whether my prediction was supposed to account for that.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Rephrased the condition as in this exact toy, repeating the same calculation, preserving the qualification without unexplained floating-point terminology."
+      }
+    }
+  ]
+}

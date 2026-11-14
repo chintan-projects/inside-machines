@@ -1,0 +1,146 @@
+{
+  "scene_ids": [
+    "first_pick",
+    "feed_back"
+  ],
+  "reviewer_summary": {
+    "question": "Why can a language model read the whole prompt at once but still has to write its answer one token at a time?",
+    "takeaway": "Prompt tokens are all known, so they can be processed together. Each new answer token has to be picked and fed back in before the next one can be scored, so the model takes one trip per token.",
+    "explained_terms": [
+      "token",
+      "position",
+      "layer",
+      "causal mask",
+      "decoding rule",
+      "key",
+      "value",
+      "query",
+      "KV cache",
+      "GPU"
+    ],
+    "lost_beat_id": "fb_kv",
+    "most_engaging_beat_id": "fp_not_processed"
+  },
+  "findings": [
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_kv",
+      "kind": "lost",
+      "problem": "This line brings in keys, values and the idea of keeping them in a single sentence. I have not yet heard why a position would keep anything, or why anything needs matching. 'Matched on' and 'passes on' are vague. The reason for keeping them only comes two beats later.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Lost twice: rewritten one term per beat. fb_kv gives the premise first ('Looking back needs something to look at') and only the key; new beat fb_value gives the value."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_query",
+      "kind": "lost",
+      "problem": "Third new term in three beats. 'Asks a question' has no concrete content; it does not link back to the earlier look-back and attention beats.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Now 'Then it looks back, as is did. Its query, a list saying what it's looking for, is compared with every allowed key'."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_reads",
+      "kind": "lost",
+      "problem": "'The best matches pass on most of their value' could mean copied, averaged or chosen. 'Already there' is circular.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Now 'The more relevant a key, the more of its value gets mixed in. That's the attention from earlier.' The reuse reason moved to fb_still_valid."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_still_valid",
+      "kind": "lost",
+      "problem": "Packs three links into one beat and assumes I know a key or value comes from what that position computed; the question 'still right?' comes from nowhere.",
+      "resolution": {
+        "action": "fixed",
+        "note": "fb_own now says keys and values are made from the position's own numbers; fb_still_valid states the conclusion first ('The old keys and values aren't remade') then the one reason."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_own",
+      "kind": "minor",
+      "problem": "I do not know where a key or value comes from. 'Climbs the stack' is a figure of speech.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Rewritten with the lost-step fix: 'goes through layer one. From its own numbers, it makes its own key and value'."
+      }
+    },
+    {
+      "scene_id": "first_pick",
+      "beat_id": "fp_scores",
+      "kind": "minor",
+      "problem": "Not told why only the last position does this; nothing said aloud says a high score means the model prefers that token.",
+      "resolution": {
+        "action": "kept",
+        "note": "fp_pick says the rule takes the highest score; fp_next_only now says what each position scores."
+      }
+    },
+    {
+      "scene_id": "first_pick",
+      "beat_id": "fp_next_only",
+      "kind": "lost",
+      "problem": "Two ideas at once: what a position scores and what it cannot score; stated as a rule with no reason.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Lost twice at this step (fp_settle in round 1): now a single premise sentence, 'Each position scores only one token: the one that would come right after it.'"
+      }
+    },
+    {
+      "scene_id": "first_pick",
+      "beat_id": "fp_settle",
+      "kind": "lost",
+      "problem": "Chains three links. The sentence I would need is 'position four needs blue as its input, and blue only exists after the pick', and that is never said aloud.",
+      "resolution": {
+        "action": "fixed",
+        "note": "fp_settle now says exactly that sentence; the conclusion moved to its own beat fp_conclusion with a pause."
+      }
+    },
+    {
+      "scene_id": "first_pick",
+      "beat_id": "fp_not_processed",
+      "kind": "minor",
+      "problem": "'Picked but not processed' is only asserted; the picture does the work.",
+      "resolution": {
+        "action": "kept",
+        "note": "Picture shows the empty column; no deletion improves it."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_pick_and",
+      "kind": "minor",
+      "problem": "'The same happens in layer two' hides the key, value and query steps.",
+      "resolution": {
+        "action": "kept",
+        "note": "Compression is deliberate after one full worked layer."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_loop",
+      "kind": "minor",
+      "problem": "Says nothing about why the prompt did not need this loop; the on-screen arrows are not said aloud.",
+      "resolution": {
+        "action": "kept",
+        "note": "The contrast is the close's punchline (cl_known, cl_unknown)."
+      }
+    },
+    {
+      "scene_id": "feed_back",
+      "beat_id": "fb_input",
+      "kind": "minor",
+      "problem": "'So' suggests a reason I have not been given.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Now opens with the reason: 'To be scored from, position four must be computed.'"
+      }
+    }
+  ]
+}

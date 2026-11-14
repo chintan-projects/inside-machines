@@ -1,0 +1,2 @@
+# Substantial teaching revision after R3
+R3 was a genuine fresh automated audience reading and still lost at fb_kv/fb_query. It is preserved, not treated as acceptance. The revised core removes the unresolved relevance metaphor and instead shows a specific computed numeric pair, its use and why the causal rule keeps it valid. The full matching calculation remains in optional interactive depth. A fresh whole-script reading follows this structural change before paid narration. This does not replace human technical, craft or learning review.

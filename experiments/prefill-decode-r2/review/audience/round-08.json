@@ -1,0 +1,73 @@
+{
+  "scene_ids": [
+    "known_positions",
+    "first_pick",
+    "cache"
+  ],
+  "reviewer_summary": {
+    "question": "Why can the model process all the prompt pieces together but choose the answer only one piece at a time?",
+    "takeaway": "The prompt pieces are already available, whereas choosing the piece after blue requires putting blue through the layers first; the cache keeps earlier keys and values for reuse.",
+    "explained_terms": [
+      "token",
+      "position",
+      "causal mask",
+      "prefill",
+      "greedy decoding",
+      "KV cache"
+    ],
+    "lost_beat_id": "kp_layers",
+    "most_engaging_beat_id": "fp_not_processed"
+  },
+  "findings": [
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_layers",
+      "kind": "lost",
+      "problem": "A layer is named before I have seen the example of numbers entering and changing. The next sentence immediately adds outputs, inputs and another layer, so I am holding several unfamiliar relationships before I know what the first object does.",
+      "resolution": {
+        "action": "kept",
+        "note": "Retained beginner concern for the human review packet. Full attention arithmetic is optional depth, and cache-off recomputation is demonstrated in the closing worked case. All fresh readers gave the central dependency takeaway correctly. This closes the automated script cycle for a review draft only; no owner, human learner, or final quality acceptance is claimed."
+      }
+    },
+    {
+      "scene_id": "known_positions",
+      "beat_id": "kp_two_jobs",
+      "kind": "lost",
+      "problem": "Mix context is the explanation for attention, but I cannot point to the mix happening. The picture changes only the numbers for is; it does not show which numbers from The and sky contribute to that result. I understand that the numbers change, but not how this operation differs from the independent reworking that follows.",
+      "resolution": {
+        "action": "kept",
+        "note": "Retained beginner concern for the human review packet. Full attention arithmetic is optional depth, and cache-off recomputation is demonstrated in the closing worked case. All fresh readers gave the central dependency takeaway correctly. This closes the automated script cycle for a review draft only; no owner, human learner, or final quality acceptance is claimed."
+      }
+    },
+    {
+      "scene_id": "first_pick",
+      "beat_id": "fp_settle",
+      "kind": "lost",
+      "problem": "The narration says the next score must come from position four, but the picture draws an arrow from the unprocessed blue chip straight to the fifth slot. The central missing step is still position four being computed, and this arrow makes me picture blue directly producing the next answer.",
+      "resolution": {
+        "action": "fixed",
+        "note": "Replaced chip-to-fifth shortcut with a dashed route down to input slot four, arrows through both empty layer cells, then to the next-choice slot. Root will inspect the rendered path."
+      }
+    },
+    {
+      "scene_id": "cache",
+      "beat_id": "kv_not",
+      "kind": "lost",
+      "problem": "The claim that caching leaves the calculation rules unchanged is asserted without showing how the needed earlier results would be obtained with caching off. I can see that the cache holds keys and values, but I still cannot explain why losing those saved results would not lose something needed to choose the answer.",
+      "resolution": {
+        "action": "kept",
+        "note": "Retained beginner concern for the human review packet. Full attention arithmetic is optional depth, and cache-off recomputation is demonstrated in the closing worked case. All fresh readers gave the central dependency takeaway correctly. This closes the automated script cycle for a review draft only; no owner, human learner, or final quality acceptance is claimed."
+      }
+    },
+    {
+      "scene_id": "first_pick",
+      "beat_id": "fp_next_only",
+      "kind": "minor",
+      "problem": "Second-answer output is a new label whose meaning I have to infer from the table. I initially hear it as a second output of a layer, rather than a score for the token after blue.",
+      "resolution": {
+        "action": "kept",
+        "note": "Retained beginner concern for the human review packet. Full attention arithmetic is optional depth, and cache-off recomputation is demonstrated in the closing worked case. All fresh readers gave the central dependency takeaway correctly. This closes the automated script cycle for a review draft only; no owner, human learner, or final quality acceptance is claimed."
+      }
+    }
+  ]
+}
