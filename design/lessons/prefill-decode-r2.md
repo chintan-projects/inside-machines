@@ -32,3 +32,5 @@ Baseline understanding must be recorded; five learners must lack the target caus
 | Release | 15–18 | Revision-bound local receipt, public editable source only. | No live app update or lesson activation. |
 
 The [friction record](../../experiments/prefill-decode-r2/review/FRICTION.md) distinguishes observed corrections from inferred learning. The highest remaining risk is the transition from completed prompt processing to separate K/V intermediate state; optional arithmetic may not repair that for a first-time viewer. Human teach-back must establish whether the core gives a sufficient causal model. The owner has not made a release decision. Refrigerator reuse follows acceptance of this reference, without transferring its evidence automatically.
+
+The [iteration journal](../../journal/2026-11-13-prefill-reference.md) records execution, plan departures, observed failures, cost scope and the outstanding human decision.
